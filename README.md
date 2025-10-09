@@ -1,6 +1,32 @@
-Welcome to your new TanStack app! 
+# IMRS Biodiversity Explorer
 
-# Getting Started
+## Purpose
+This web application was created for students, researchers, and visitors interested in exploring the biodiversity of Indio Mountains Research Station (IMRS), owned and operated by The University of Texas at El Paso (UTEP).
+
+It combines modern observation data from iNaturalist with a digitized species list from the official IMRS handbook:
+
+“NATURAL RESOURCES AND PHYSICAL ENVIRONMENT OF INDIO MOUNTAINS RESEARCH STATION (IMRS), SOUTHEASTERN HUDSPETH COUNTY, TEXAS — A HANDBOOK FOR STUDENTS AND RESEARCHERS.”
+
+By making the handbook’s species records digitized, organized, searchable, and filterable, the app becomes a living reference for the Chihuahuan Desert.
+
+## Tech Stack
+*Frontend*
+- Frameworks: TanStack Start (React)
+- Routing: TanStack Router
+- Data Fetching/Caching: TanStack Query
+- Language/Build: TypeScript + Vite
+- Styling: Tailwind & TBD
+
+
+*Data Sources*
+- iNaturalist API - observation data for IMRS vicinity
+- IMRS Handbook - authoritative species list, normalized into SQL tables
+
+*Backend/Database*
+- Relational SQL (Postgres-compatible) for the digitized handbook data and any curated fields (e.g., local notes, synonyms, substrates, collectors, taxa metadata).
+
+
+## TanStack Start Stuffs:
 
 To run this application:
 
