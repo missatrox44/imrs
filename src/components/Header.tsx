@@ -1,12 +1,15 @@
-import { Link } from '@tanstack/react-router'
+// import { Link } from '@tanstack/react-router'
+import { Link, useRouterState } from '@tanstack/react-router'
+import { Button } from './ui/button'
 
 export default function Header() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname })
 
   const navItems = [
-    { href: "/", label: "Home" },
-    { href: "/observations", label: "Observations" },
-    { href: "/species", label: "Species Index" },
-  ];
+    { to: '/', label: 'Home' },
+    { to: '/observations', label: 'Observations' },
+    { to: '/species', label: 'Species Index' },
+  ]
 
   return (
     <header className="">
@@ -23,16 +26,20 @@ export default function Header() {
             </Link>
 
             <div className="flex items-center space-x-2">
-              {navItems.map((item) => (
-                <button
-                  key={item.href}
-                  // variant={location.pathname === item.href ? "default" : "ghost"}
-                  // asChild
-                  className="text-sm font-medium"
-                >
-                  <Link to={item.href}>{item.label}</Link>
-                </button>
-              ))}
+              {navItems.map((item) => {
+                const isActive =
+                  pathname === item.to || (item.to !== '/' && pathname.startsWith(item.to))
+                return (
+                  <Button
+                    key={item.to}
+                    variant={isActive ? "default" : "ghost"}
+                    asChild
+                    className="text-sm font-medium"
+                  >
+                    <Link to={item.to}>{item.label}</Link>
+                  </Button>
+                )
+              })}
             </div>
           </div>
         </div>
