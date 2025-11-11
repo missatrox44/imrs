@@ -5,7 +5,10 @@ export const Footer = () => {
     <footer className="border-t border-border bg-card/50 backdrop-blur-sm">
       <div className="container mx-auto px-4 py-6 text-center text-sm text-muted-foreground space-y-1">
         <p>
-          Prototype — For educational use at IMRS. This website is not officially affiliated with UTEP.
+          Prototype — For educational use at <a href="https://www.utep.edu/science/indio/" target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-foreground transition-colors"
+          >IMRS</a>. This website is not officially affiliated with UTEP.
         </p>
         <p>
           © {year} · {' '}
