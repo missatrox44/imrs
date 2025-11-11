@@ -6,12 +6,23 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 
-interface Species {
+type Species = {
   id: number
-  scientific_name: string
-  common_name: string
-  family: string
-  notes: string
+  scientific_name?: string
+  common_name?: string
+  family?: string
+  kingdom?: string
+  phylum?: string
+  sub_phylum?: string
+  class?: string
+  order?: string
+  genus?: string
+  species?: string
+  authorship?: string
+  collectors_field_numbers?: string
+  records?: string
+  note?: string
+  notes?: string
 }
 
 interface Observation {
@@ -36,13 +47,17 @@ export const Route = createFileRoute('/species/$speciesId')({
     let observations: Array<Observation> = []
     if (species) {
       try {
-        const obsRes = await fetch(
-          `https://api.inaturalist.org/v1/observations?taxon_name=${encodeURIComponent(
-            species.scientific_name,
-          )}&per_page=6`,
-        )
-        const obsJson = await obsRes.json()
-        observations = obsJson.results ?? []
+        if (species.scientific_name) {
+          const obsRes = await fetch(
+            `https://api.inaturalist.org/v1/observations?taxon_name=${encodeURIComponent(
+              species.scientific_name,
+            )}&per_page=6`,
+          )
+          const obsJson = await obsRes.json()
+          observations = obsJson.results ?? []
+        } else {
+          observations = []
+        }
       } catch {
         observations = []
       }
@@ -67,22 +82,20 @@ export const Route = createFileRoute('/species/$speciesId')({
   component: SpeciesDetailPage,
 })
 
-function SpeciesDetailPage() {
+export function SpeciesDetailPage() {
   const { species, observations } = Route.useLoaderData()
 
-  const getPhotoUrl = (photos?: Array<{ url: string }>) => {
-    if (!photos?.length) return null
-    return photos[0].url.replace('square', 'small')
-  }
+  const getPhotoUrl = (photos?: Array<{ url: string }>) =>
+    photos?.[0]?.url ? photos[0].url.replace('square', 'small') : null
 
-  const formatDate = (dateString?: string) => {
-    if (!dateString) return 'Unknown date'
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    })
-  }
+  const formatDate = (dateString?: string) =>
+    dateString
+      ? new Date(dateString).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      })
+      : 'Unknown date'
 
   const obsCount = useMemo(() => observations.length, [observations])
 
@@ -108,6 +121,9 @@ function SpeciesDetailPage() {
     )
   }
 
+  // const notes = species.note ?? '';
+  // const records = species.records ?? '';
+
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
@@ -119,33 +135,51 @@ function SpeciesDetailPage() {
         </Button>
 
         <div className="grid lg:grid-cols-3 gap-8">
+          {/* Main column */}
           <div className="lg:col-span-2 space-y-6">
             {/* Species Information */}
             <Card className="gradient-card shadow-card">
               <CardHeader>
                 <div className="space-y-2">
                   <h1 className="scientific-name text-2xl font-medium">
-                    {species.scientific_name}
+                    {species.genus}{" "}{species.species}
                   </h1>
-                  <h2 className="text-3xl font-bold text-foreground">
-                   Common Name: {species.common_name}
-                  </h2>
-                  <Badge variant="secondary" className="w-fit">
-                    {species.family}
-                  </Badge>
+                  {species.common_name && (
+                    <h2 className="text-3xl font-bold text-foreground">
+                      {species.common_name}
+                    </h2>
+                  )}
+                  {species.family && (
+                    <Badge variant="secondary" className="w-fit">
+                      {species.family}
+                    </Badge>
+                  )}
                 </div>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div>
+              <CardContent className="space-y-6">
+                {/* Notes/Records */}
+                {species.note && (
+                  <section>
                     <h3 className="font-semibold text-foreground mb-2">
-                      Description & Notes
+                      Notes
                     </h3>
                     <p className="text-muted-foreground leading-relaxed">
-                      {species.notes}
+                      {species.note}
                     </p>
-                  </div>
-                </div>
+                  </section>
+                )}
+
+                {species.records && (
+                  <section>
+                    <h3 className="font-semibold text-foreground mb-2">
+                      Record
+                    </h3>
+                    <p className="text-muted-foreground leading-relaxed">
+                      {species.records}
+                    </p>
+                  </section>
+                )}
+
               </CardContent>
             </Card>
 
@@ -158,7 +192,7 @@ function SpeciesDetailPage() {
                 {obsCount === 0 ? (
                   <div className="text-center py-8">
                     <p className="text-muted-foreground">
-                      No observations yet at IMRS for this species.
+                      No iNaturalist observations recorded for this species at IMRS yet.
                     </p>
                   </div>
                 ) : (
@@ -181,7 +215,6 @@ function SpeciesDetailPage() {
                               />
                             </div>
                           )}
-
                           <div className="space-y-2">
                             <div className="flex items-center gap-2 text-sm text-muted-foreground">
                               <User className="w-3 h-3" />
@@ -189,14 +222,12 @@ function SpeciesDetailPage() {
                                 {observation.user?.login || 'Anonymous'}
                               </span>
                             </div>
-
                             <div className="flex items-center gap-2 text-sm text-muted-foreground">
                               <Calendar className="w-3 h-3" />
                               <span>
                                 {formatDate(observation.observed_on_string)}
                               </span>
                             </div>
-
                             {observation.place_guess && (
                               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                                 <MapPin className="w-3 h-3" />
@@ -217,49 +248,52 @@ function SpeciesDetailPage() {
 
           {/* Sidebar */}
           <div className="space-y-6">
+            {/* Taxonomy card */}
             <Card className="gradient-card shadow-card">
               <CardHeader>
                 <CardTitle>Taxonomy</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div>
+                {[
+                  ['Kingdom', species.kingdom],
+                  ['Phylum', species.phylum],
+                  ['Subphylum', species.sub_phylum],
+                  ['Class', species.class],
+                  ['Order', species.order],
+                  ['Family', species.family],
+                  ['Genus', species.genus],
+                  ['Species', species.species],
+                ].map(([label, value]) =>
+                  value ? (
+                    <div key={label as string}>
+                      <div className="text-sm text-muted-foreground">
+                        {label}
+                      </div>
+                      <div className="font-medium">{value}</div>
+                    </div>
+                  ) : null
+                )}
+                {/* Always show scientific name row */}
+                {/* <div>
                   <div className="text-sm text-muted-foreground">
                     Scientific Name
                   </div>
                   <div className="scientific-name">
-                    {species.scientific_name}
+                    {species.genus} {species.species}
                   </div>
-                </div>
-                <div>
-                  <div className="text-sm text-muted-foreground">
-                    Common Name
+                </div> */}
+                {/* {species.authorship && (
+                  <div>
+                    <div className="text-sm text-muted-foreground">
+                      Authorship
+                    </div>
+                    <div className="font-medium">{species.authorship}</div>
                   </div>
-                  <div className="font-medium">{species.common_name}</div>
-                </div>
-                <div>
-                  <div className="text-sm text-muted-foreground">Family</div>
-                  <div className="font-medium">{species.family}</div>
-                </div>
+                )} */}
               </CardContent>
             </Card>
 
-            <Card className="gradient-card shadow-card">
-              <CardHeader>
-                <CardTitle>Research Status</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">
-                    Documentation Status
-                  </span>
-                  <Badge variant="secondary">Catalogued</Badge>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Observations</span>
-                  <span className="font-medium">{obsCount}</span>
-                </div>
-              </CardContent>
-            </Card>
+
           </div>
         </div>
       </div>
