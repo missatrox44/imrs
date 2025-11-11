@@ -14,6 +14,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SpeciesRouteImport } from './routes/species'
 import { Route as ObservationsRouteImport } from './routes/observations'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SpeciesIndexRouteImport } from './routes/species.index'
 import { Route as SpeciesSpeciesIdRouteImport } from './routes/species.$speciesId'
 import { Route as DemoStartServerFuncsRouteImport } from './routes/demo.start.server-funcs'
 import { Route as DemoStartApiRequestRouteImport } from './routes/demo.start.api-request'
@@ -35,6 +36,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const SpeciesIndexRoute = SpeciesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SpeciesRoute,
 } as any)
 const SpeciesSpeciesIdRoute = SpeciesSpeciesIdRouteImport.update({
   id: '/$speciesId',
@@ -62,14 +68,15 @@ export interface FileRoutesByFullPath {
   '/observations': typeof ObservationsRoute
   '/species': typeof SpeciesRouteWithChildren
   '/species/$speciesId': typeof SpeciesSpeciesIdRoute
+  '/species/': typeof SpeciesIndexRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/observations': typeof ObservationsRoute
-  '/species': typeof SpeciesRouteWithChildren
   '/species/$speciesId': typeof SpeciesSpeciesIdRoute
+  '/species': typeof SpeciesIndexRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
 }
@@ -79,6 +86,7 @@ export interface FileRoutesById {
   '/observations': typeof ObservationsRoute
   '/species': typeof SpeciesRouteWithChildren
   '/species/$speciesId': typeof SpeciesSpeciesIdRoute
+  '/species/': typeof SpeciesIndexRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
 }
@@ -89,14 +97,15 @@ export interface FileRouteTypes {
     | '/observations'
     | '/species'
     | '/species/$speciesId'
+    | '/species/'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/observations'
-    | '/species'
     | '/species/$speciesId'
+    | '/species'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
   id:
@@ -105,6 +114,7 @@ export interface FileRouteTypes {
     | '/observations'
     | '/species'
     | '/species/$speciesId'
+    | '/species/'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
   fileRoutesById: FileRoutesById
@@ -161,6 +171,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/species/': {
+      id: '/species/'
+      path: '/'
+      fullPath: '/species/'
+      preLoaderRoute: typeof SpeciesIndexRouteImport
+      parentRoute: typeof SpeciesRoute
+    }
     '/species/$speciesId': {
       id: '/species/$speciesId'
       path: '/$speciesId'
@@ -198,10 +215,12 @@ declare module '@tanstack/react-start/server' {
 
 interface SpeciesRouteChildren {
   SpeciesSpeciesIdRoute: typeof SpeciesSpeciesIdRoute
+  SpeciesIndexRoute: typeof SpeciesIndexRoute
 }
 
 const SpeciesRouteChildren: SpeciesRouteChildren = {
   SpeciesSpeciesIdRoute: SpeciesSpeciesIdRoute,
+  SpeciesIndexRoute: SpeciesIndexRoute,
 }
 
 const SpeciesRouteWithChildren =
