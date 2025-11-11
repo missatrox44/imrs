@@ -15,7 +15,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 } */
-/* Tailwind v4 theme tokens (so utilities like bg-background, text-foreground, etc. work) */
+
 @theme {
   --font-mono:
     'Courier Prime', 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo,
