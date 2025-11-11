@@ -2,9 +2,9 @@ import { useEffect, useMemo, useState } from "react";
 import { ChevronRight, Search } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger,  } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger, } from "@/components/ui/tabs";
 
 interface Species {
   id: number;
@@ -40,7 +40,7 @@ const SpeciesIndex = () => {
 
   const filteredSpecies = useMemo(() => {
     const searchLower = searchTerm.toLowerCase();
-    
+
     // If there's a search term, search across all species
     if (searchTerm) {
       return species.filter(
@@ -51,7 +51,7 @@ const SpeciesIndex = () => {
           s.notes.toLowerCase().includes(searchLower)
       );
     }
-    
+
     // Otherwise, filter by active tab category
     return species.filter((s) => s.category === activeTab);
   }, [species, searchTerm, activeTab]);
@@ -83,7 +83,7 @@ const SpeciesIndex = () => {
           <p className="text-muted-foreground mb-6">
             Comprehensive database of species documented at the Indio Mountains Research Station
           </p>
-          
+
           <div className="relative max-w-md mb-6">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
             <Input
@@ -104,7 +104,7 @@ const SpeciesIndex = () => {
             </TabsList>
 
             <div className="mt-6 mb-4 text-sm text-muted-foreground">
-              {searchTerm 
+              {searchTerm
                 ? `Showing ${filteredSpecies.length} matching results (from ${species.length} total)`
                 : `Showing ${filteredSpecies.length} ${activeTab}`
               }
@@ -116,8 +116,8 @@ const SpeciesIndex = () => {
                   <Card>
                     <CardContent className="text-center py-12">
                       <p className="text-muted-foreground">
-                        {searchTerm 
-                          ? `No species found matching "${searchTerm}"` 
+                        {searchTerm
+                          ? `No species found matching "${searchTerm}"`
                           : `No ${category} data available.`
                         }
                       </p>
@@ -126,7 +126,10 @@ const SpeciesIndex = () => {
                 ) : (
                   <div className="space-y-4">
                     {filteredSpecies.map((speciesItem) => (
-                      <Link key={speciesItem.id} to={`/species/${speciesItem.id}`}>
+                      <Link
+                        key={speciesItem.id}
+                        to="/species/$speciesId"
+                        params={{ speciesId: String(speciesItem.id) }}>
                         <Card className="gradient-card shadow-card hover:shadow-hover transition-all duration-300 group cursor-pointer">
                           <CardContent className="p-6">
                             <div className="flex items-center justify-between">
@@ -139,18 +142,18 @@ const SpeciesIndex = () => {
                                     {speciesItem.common_name}
                                   </span>
                                 </div>
-                                
+
                                 <div className="flex flex-wrap items-center gap-3 mb-3">
                                   <Badge variant="secondary">
                                     {speciesItem.family}
                                   </Badge>
                                 </div>
-                                
+
                                 <p className="text-muted-foreground text-sm line-clamp-2">
                                   {speciesItem.notes}
                                 </p>
                               </div>
-                              
+
                               <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors ml-4" />
                             </div>
                           </CardContent>
