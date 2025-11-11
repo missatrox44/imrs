@@ -8,6 +8,7 @@ import { Outlet, createFileRoute } from '@tanstack/react-router'
 // function RouteComponent() {
 //   return <div>Hello "/speciess"!</div>
 // }
+import SpeciesIndex from '@/components/SpeciesIndex'
 
 
 export const Route = createFileRoute('/species')({
@@ -16,10 +17,10 @@ export const Route = createFileRoute('/species')({
 
 function SpeciesLayout() {
   return (
-    <div>
-      <h1>Species</h1>
+    <>
+      <SpeciesIndex/>
       {/* child routes render here */}
-      <Outlet />
-    </div>
+      {/* <Outlet /> */}
+    </>
   )
 }
