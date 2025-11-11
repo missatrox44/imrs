@@ -3,13 +3,13 @@
 [Deployed Link (WIP)](https://imrs.vercel.app/)
 
 ## Purpose
-This web application was created for students, researchers, and visitors interested in exploring the biodiversity of Indio Mountains Research Station (IMRS), owned and operated by The University of Texas at El Paso (UTEP).
+This web application was created for students, researchers, and visitors interested in exploring the biodiversity of Indio Mountains Research Station (IMRS), managed by The University of Texas at El Paso (UTEP).
 
-It combines modern observation data from iNaturalist with a digitized species list from the official IMRS handbook:
+It combines modern observation data from iNaturalist with a digital species catalogue from the official IMRS handbook:
 
-“NATURAL RESOURCES AND PHYSICAL ENVIRONMENT OF INDIO MOUNTAINS RESEARCH STATION (IMRS), SOUTHEASTERN HUDSPETH COUNTY, TEXAS — A HANDBOOK FOR STUDENTS AND RESEARCHERS.”
+[NATURAL RESOURCES AND PHYSICAL ENVIRONMENT OF INDIO MOUNTAINS RESEARCH STATION (IMRS), SOUTHEASTERN HUDSPETH COUNTY, TEXAS — A HANDBOOK FOR STUDENTS AND RESEARCHERS.](https://www.utep.edu/science/indio/_files/docs/imrs%20natural%20resources.pdf)
 
-By making the handbook’s species records digitized, organized, searchable, and filterable, the app becomes a living reference for the Chihuahuan Desert.
+By making the handbook’s species records digital, organized, searchable, and filterable, the app becomes a living reference for the Chihuahuan Desert flora and fauna found on IMRS.
 
 
 
