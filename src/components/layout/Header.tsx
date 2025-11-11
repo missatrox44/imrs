@@ -1,6 +1,6 @@
 // import { Link } from '@tanstack/react-router'
 import { Link, useRouterState } from '@tanstack/react-router'
-import { Button } from './ui/button'
+import { Button } from '../ui/button'
 
 export default function Header() {
   const pathname = useRouterState({ select: (s) => s.location.pathname })

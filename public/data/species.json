@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "scientific_name": "Acarospora fuscata",
+    "common_name": "NCN",
+    "family": "Acarosporaceae",
+    "notes": "Volcanic rock substrate, common at higher elevations",
+    "category": "plants"
+  },
+  {
+    "id": 2,
+    "scientific_name": "Quercus gambelii", 
+    "common_name": "Gambel Oak",
+    "family": "Fagaceae",
+    "notes": "Deciduous oak species, found in canyon areas",
+    "category": "plants"
+  },
+  {
+    "id": 3,
+    "scientific_name": "Juniperus deppeana",
+    "common_name": "Alligator Juniper", 
+    "family": "Cupressaceae",
+    "notes": "Large juniper with distinctive checkered bark",
+    "category": "plants"
+  },
+  {
+    "id": 4,
+    "scientific_name": "Sceloporus jarrovii",
+    "common_name": "Yarrow's Spiny Lizard",
+    "family": "Phrynosomatidae", 
+    "notes": "Rock-dwelling lizard species endemic to sky islands",
+    "category": "reptiles"
+  },
+  {
+    "id": 5,
+    "scientific_name": "Micrathene whitneyi",
+    "common_name": "Elf Owl",
+    "family": "Strigidae",
+    "notes": "World's smallest owl, nests in saguaro cacti",
+    "category": "birds"
+  },
+  {
+    "id": 6,
+    "scientific_name": "Dasylirion wheeleri",
+    "common_name": "Desert Spoon",
+    "family": "Asparagaceae",
+    "notes": "Distinctive succulent with spoon-shaped leaves",
+    "category": "plants"
+  },
+  {
+    "id": 7,
+    "scientific_name": "Pinus cembroides",
+    "common_name": "Mexican Pinyon Pine",
+    "family": "Pinaceae", 
+    "notes": "Small pine producing edible seeds",
+    "category": "plants"
+  },
+  {
+    "id": 8,
+    "scientific_name": "Leptonycteris yerbabuenae",
+    "common_name": "Lesser Long-nosed Bat",
+    "family": "Phyllostomidae",
+    "notes": "Nectar-feeding bat, important agave pollinator",
+    "category": "mammals"
+  },
+  {
+    "id": 9,
+    "scientific_name": "Fouquieria splendens",
+    "common_name": "Ocotillo",
+    "family": "Fouquieriaceae",
+    "notes": "Distinctive desert shrub with red tubular flowers",
+    "category": "plants"
+  },
+  {
+    "id": 10,
+    "scientific_name": "Crotalus lepidus",
+    "common_name": "Rock Rattlesnake",
+    "family": "Viperidae",
+    "notes": "Small montane rattlesnake species",
+    "category": "reptiles"
+  }
+]
