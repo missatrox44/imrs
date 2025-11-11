@@ -141,14 +141,24 @@ export function SpeciesDetailPage() {
             <Card className="gradient-card shadow-card">
               <CardHeader>
                 <div className="space-y-2">
-                  <h1 className="scientific-name text-2xl font-medium">
-                    {species.genus}{" "}{species.species}
+                  {/* Scientific name + authorship */}
+                  <h1 className="scientific-name text-2xl font-medium flex flex-wrap items-baseline gap-2">
+                    <span>{species.genus} {species.species}</span>
+                    {species.authorship && (
+                      <span className="text-lg not-italic text-muted-foreground">
+                        {species.authorship}
+                      </span>
+                    )}
                   </h1>
+
+                  {/* Common name */}
                   {species.common_name && (
                     <h2 className="text-3xl font-bold text-foreground">
                       {species.common_name}
                     </h2>
                   )}
+
+                  {/* Family badge */}
                   {species.family && (
                     <Badge variant="secondary" className="w-fit">
                       {species.family}
@@ -156,30 +166,39 @@ export function SpeciesDetailPage() {
                   )}
                 </div>
               </CardHeader>
+
               <CardContent className="space-y-6">
-                {/* Notes/Records */}
+                {/* Collector's Field Number */}
+                {species.collectors_field_numbers && (
+                  <section>
+                    <h3 className="font-semibold text-foreground mb-1">
+                      Collector’s Field #
+                    </h3>
+                    <p className="text-muted-foreground leading-relaxed">
+                      {species.collectors_field_numbers}
+                    </p>
+                  </section>
+                )}
+
+                {/* Notes */}
                 {species.note && (
                   <section>
-                    <h3 className="font-semibold text-foreground mb-2">
-                      Notes
-                    </h3>
+                    <h3 className="font-semibold text-foreground mb-2">Notes</h3>
                     <p className="text-muted-foreground leading-relaxed">
                       {species.note}
                     </p>
                   </section>
                 )}
 
+                {/* Records */}
                 {species.records && (
                   <section>
-                    <h3 className="font-semibold text-foreground mb-2">
-                      Record
-                    </h3>
+                    <h3 className="font-semibold text-foreground mb-2">Records</h3>
                     <p className="text-muted-foreground leading-relaxed">
                       {species.records}
                     </p>
                   </section>
                 )}
-
               </CardContent>
             </Card>
 
@@ -273,27 +292,48 @@ export function SpeciesDetailPage() {
                     </div>
                   ) : null
                 )}
-                {/* Always show scientific name row */}
-                {/* <div>
-                  <div className="text-sm text-muted-foreground">
-                    Scientific Name
-                  </div>
-                  <div className="scientific-name">
-                    {species.genus} {species.species}
-                  </div>
-                </div> */}
-                {/* {species.authorship && (
-                  <div>
-                    <div className="text-sm text-muted-foreground">
-                      Authorship
-                    </div>
-                    <div className="font-medium">{species.authorship}</div>
-                  </div>
-                )} */}
               </CardContent>
             </Card>
 
+            {/* Extra Details */}
+            {/* <Card className="gradient-card shadow-card">
+              <CardHeader>
+                <CardTitle>Details</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">
+                    Documentation Status
+                  </span>
+                  <Badge variant="secondary">Catalogued</Badge>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Observations</span>
+                  <span className="font-medium text-right">{obsCount}</span>
+                </div>
+                {species.authorship && (
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">
+                      Authorship
+                    </span>
+                    <span className="font-medium text-right">
+                      {species.authorship}
+                    </span>
+                  </div>
+                )}
+                {species.collectors_field_numbers && (
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">
+                      Collector&#39;s Field #
+                    </span>
+                    <span className="font-medium text-right">
+                      {species.collectors_field_numbers}
+                    </span>
+                  </div>
+                )}
 
+              </CardContent>
+            </Card> */}
           </div>
         </div>
       </div>
