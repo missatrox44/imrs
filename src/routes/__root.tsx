@@ -2,9 +2,10 @@ import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanstackDevtools } from '@tanstack/react-devtools'
 
-import Header from '../components/Header'
-
 import appCss from '../styles.css?url'
+import Header from '../components/Header'
+import {Footer}  from '@/components/Footer'
+
 
 export const Route = createRootRoute({
   head: () => ({
@@ -17,7 +18,7 @@ export const Route = createRootRoute({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'TanStack Start Starter',
+        title: 'IMRS Biodiversity',
       },
     ],
     links: [
@@ -51,6 +52,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             },
           ]}
         />
+          <Footer />
         <Scripts />
       </body>
     </html>
