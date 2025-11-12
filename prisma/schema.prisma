@@ -10,3 +10,21 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
+model Specimen {
+  id                     Int      @id @default(autoincrement())
+  category               String
+  kingdom                String
+  phylum                 String
+  subPhylum              String?   
+  className              String     
+  orderName              String
+  family                 String
+  genus                  String
+  species                String
+  authorship             String?
+  collectorsFieldNumbers String?
+  note                   String?
+  commonName             String?
+  records                String?
+}
