@@ -89,10 +89,44 @@ SELECT COUNT(*) FROM specimen;
 SELECT genus, species, common_name FROM specimen LIMIT 10;
 ```
 
-## Quickstart Queries
-
 Check how many rows exist:
 `sqlite3 dev.db "SELECT COUNT(*) FROM specimen;"`
+
+## Turso
+```javascript
+//node.js
+import { createClient } from "@libsql/client";
+
+const client = createClient({
+  url: process.env.TURSO_DATABASE_URL,
+  authToken: process.env.TURSO_AUTH_TOKEN,
+});
+
+
+//edge ?
+import { createClient } from "@libsql/client/web";
+
+const client = createClient({
+  url: process.env.TURSO_DATABASE_URL,
+  authToken: process.env.TURSO_AUTH_TOKEN,
+});
+```
+
+```javascript
+//next example
+import { createClient } from '@libsql/client';
+import { NextResponse } from 'next/server';
+
+const client = createClient({
+  url: process.env.TURSO_DATABASE_URL,
+  authToken: process.env.TURSO_AUTH_TOKEN
+});
+
+export const POST = async () => {
+  // Fetch data from SQLite
+  const result = await client.execute("CREATE TABLE todos (description);");
+};
+```
 
 
 ## TanStack Start Stuffs:
