@@ -27,7 +27,72 @@ By making the handbook’s species records digital, organized, searchable, and f
 - IMRS Handbook - authoritative species list, normalized into SQL tables
 
 *Backend/Database*
-- Relational SQL (Postgres-compatible) for the digitized handbook data and any curated fields (e.g., local notes, synonyms, substrates, collectors, taxa metadata).
+- SQLite3
+
+### Install SQLite3 (Mac)
+Check if SQLite3 is installed first:
+`sqlite3 --version`
+If you see a version number, you're good! If not enter:
+`brew install sqlite3`
+
+1. Create database and table:
+
+`sqlite3 dev.db`
+
+```bash 
+Create table
+CREATE TABLE specimen (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  category TEXT,
+  kingdom TEXT,
+  phylum TEXT,
+  sub_phylum TEXT,
+  class_name TEXT,
+  order_name TEXT,
+  family TEXT,
+  genus TEXT,
+  species TEXT,
+  authorship TEXT,
+  collectors_field_numbers TEXT,
+  note TEXT,
+  common_name TEXT,
+  records TEXT
+);
+.quit
+```
+
+1. Insert a test row
+
+`sqlite3 dev.db "INSERT INTO specimen (category, kingdom, genus, species) VALUES ('Lichens', 'Fungi', 'Acarospora', 'fuscata');"`
+
+2. Query it
+
+`sqlite3 dev.db "SELECT * FROM specimen;"`
+
+3. 📊 **Import CSV**
+- go to terminal at root of project and enter:
+
+`sqlite3 dev.db`
+
+
+Then inside the SQLite prompt:
+```bash
+.mode csv
+.separator ,
+.headers on
+.import specimens.csv specimen
+```
+Check that it worked
+
+```bash
+SELECT COUNT(*) FROM specimen;
+SELECT genus, species, common_name FROM specimen LIMIT 10;
+```
+
+## Quickstart Queries
+
+Check how many rows exist:
+`sqlite3 dev.db "SELECT COUNT(*) FROM specimen;"`
 
 
 ## TanStack Start Stuffs:
