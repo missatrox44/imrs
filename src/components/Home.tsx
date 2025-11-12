@@ -61,7 +61,7 @@ export const Home = () => {
         <div className="mt-20 text-center">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-2xl mx-auto">
             <div>
-              <div className="text-3xl font-bold text-primary mb-2">150+</div>
+              <div className="text-3xl font-bold text-primary mb-2">1500+</div>
               <div className="text-sm text-muted-foreground">Species Documented</div>
             </div>
             <div>
@@ -69,8 +69,8 @@ export const Home = () => {
               <div className="text-sm text-muted-foreground">Observations</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-primary mb-2">25</div>
-              <div className="text-sm text-muted-foreground">Research Projects</div>
+              <div className="text-3xl font-bold text-primary mb-2">51</div>
+              <div className="text-sm text-muted-foreground">Publications</div>
             </div>
             <div>
               <div className="text-3xl font-bold text-primary mb-2">5,000</div>

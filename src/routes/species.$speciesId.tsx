@@ -1,4 +1,3 @@
-// src/routes/species.$speciesId.tsx
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { useMemo } from 'react'
 import { ArrowLeft, Calendar, MapPin, User } from 'lucide-react'
