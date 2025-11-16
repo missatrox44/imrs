@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Calendar, MapPin, User, } from "lucide-react";
+import { Link } from '@tanstack/react-router';
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 // import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +16,7 @@ interface Observation {
     url: string;
   }>;
   place_guess?: string;
+  uri?: string;
 }
 
 const Observations = () => {
@@ -31,6 +33,7 @@ const Observations = () => {
         );
         const data = await response.json();
         setObservations(data.results || []);
+        // console.log('data', data.results);
       } catch (error) {
         console.error('Error fetching observations:', error);
         setObservations([]);
@@ -106,52 +109,54 @@ const Observations = () => {
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {observations.map((observation) => (
-              <Card
-                key={observation.id}
-                className="gradient-card shadow-card hover:shadow-hover transition-all duration-300 overflow-hidden"
-              >
-                {getPhotoUrl(observation.photos) && (
-                  <div className="aspect-square overflow-hidden">
-                    <img
-                      src={getPhotoUrl(observation.photos)!}
-                      alt={observation.species_guess || 'Unknown species'}
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).style.display = 'none';
-                      }}
-                    />
-                  </div>
-                )}
-
-                <CardHeader className="pb-3">
-                  <h3 className="font-semibold text-foreground line-clamp-2">
-                    {observation.species_guess || 'Unknown Species'}
-                  </h3>
-                </CardHeader>
-
-                <CardContent className="space-y-3">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <User className="w-4 h-4" />
-                    <span>{observation.user?.login || 'Anonymous'}</span>
-                  </div>
-
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Calendar className="w-4 h-4" />
-                    <span>{formatDate(observation.observed_on_string)}</span>
-                  </div>
-
-                  {observation.place_guess && (
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <MapPin className="w-4 h-4" />
-                      <span className="line-clamp-1">{observation.place_guess}</span>
+              <Link to={observation.uri || '#'} key={observation.id} target="_blank" rel="noopener noreferrer">
+                <Card
+                  key={observation.id}
+                  className="gradient-card shadow-card hover:shadow-hover transition-all duration-300 overflow-hidden"
+                >
+                  {getPhotoUrl(observation.photos) && (
+                    <div className="aspect-square overflow-hidden">
+                      <img
+                        src={getPhotoUrl(observation.photos)!}
+                        alt={observation.species_guess || 'Unknown species'}
+                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).style.display = 'none';
+                        }}
+                      />
                     </div>
                   )}
 
-                  <Badge variant="secondary" className="w-fit">
-                    ID #{observation.id}
-                  </Badge>
-                </CardContent>
-              </Card>
+                  <CardHeader className="pb-3">
+                    <h3 className="font-semibold text-foreground line-clamp-2">
+                      {observation.species_guess || 'Unknown Species'}
+                    </h3>
+                  </CardHeader>
+
+                  <CardContent className="space-y-3">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <User className="w-4 h-4" />
+                      <span>{observation.user?.login || 'Anonymous'}</span>
+                    </div>
+
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Calendar className="w-4 h-4" />
+                      <span>{formatDate(observation.observed_on_string)}</span>
+                    </div>
+
+                    {observation.place_guess && (
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <MapPin className="w-4 h-4" />
+                        <span className="line-clamp-1">{observation.place_guess}</span>
+                      </div>
+                    )}
+
+                    <Badge variant="secondary" className="w-fit">
+                      ID #{observation.id}
+                    </Badge>
+                  </CardContent>
+                </Card>
+              </Link>
             ))}
           </div>
         )}
