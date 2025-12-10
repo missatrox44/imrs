@@ -27,9 +27,8 @@ const Observations = () => {
   useEffect(() => {
     const fetchObservations = async () => {
       try {
-        // Using a general location for demo since we don't have actual IMRS place_id
         const response = await fetch(
-          'https://api.inaturalist.org/v1/observations?place_id=931&per_page=20&order=desc&order_by=observed_on'
+          'https://api.inaturalist.org/v1/observations?place_id=225419&per_page=50&order=desc&order_by=observed_on'
         );
         const data = await response.json();
         setObservations(data.results || []);
@@ -81,7 +80,7 @@ const Observations = () => {
           <div>
             <h1 className="text-3xl font-bold text-foreground mb-2">Recent Observations</h1>
             <p className="text-muted-foreground">
-              Biodiversity observations from Hudspeth County
+              Biodiversity observations from Indio Mountains Research Station
             </p>
           </div>
 
