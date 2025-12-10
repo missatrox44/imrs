@@ -19,11 +19,11 @@ By making the handbook’s species records digital, organized, searchable, and f
 - Routing: TanStack Router
 - Data Fetching/Caching: TanStack Query
 - Language/Build: TypeScript + Vite
-- Styling: Tailwind & TBD
+- Styling: Tailwind & ShadCN
 
 
 *Data Sources*
-- iNaturalist API - observation data for IMRS vicinity
+- [iNaturalist API](https://www.inaturalist.org/pages/api+reference) - observation data for IMRS vicinity
 - IMRS Handbook - authoritative species list, normalized into SQL tables
 
 *Backend/Database*
@@ -126,6 +126,35 @@ export const POST = async () => {
   // Fetch data from SQLite
   const result = await client.execute("CREATE TABLE todos (description);");
 };
+```
+
+
+## iNaturalist Resources
+- [IMRS Location](https://www.inaturalist.org/places/indio-mountains-research-station)
+- [Developer Docs](https://www.inaturalist.org/pages/developers)
+- [API Reference](https://www.inaturalist.org/pages/api+reference)
+- [iNaturalist API](https://api.inaturalist.org/v1/docs/)
+
+### Rate Limits
+We throttle API usage to a max of 100 requests per minute, though we ask that you try to keep it to 60 requests per minute or lower. If we notice usage that has serious impact on our performance we may institute blocks without notification. The API is intended to support application development, not data scraping. If you want data, see the datasets below.
+
+### iNaturalist API Authentication (NOT USED IN THIS REPO)
+🗒️ *THE FOLLOWING IS JUST PERSONAL NOTES*
+Authentication is only required when requesting [private data](https://www.inaturalist.org/pages/api+recommended+practices). 
+
+Get JWT Token from:
+`https://www.inaturalist.org/users/api_token`
+
+```javascript
+//send JWT in the Authorization header
+const response = await fetch(
+  'https://api.inaturalist.org/v1/observations?per_page=50',
+  {
+    headers: {
+      Authorization: `Bearer ${jwtToken}`,
+    },
+  }
+);
 ```
 
 
