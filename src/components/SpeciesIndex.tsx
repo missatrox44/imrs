@@ -3,22 +3,11 @@ import { ChevronRight, Search } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import type { Species } from "@/types/species";
+import type { Category } from "@/types/category";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
-
-export type Category =
-  | "mammals"
-  | "birds"
-  | "reptiles"
-  | "amphibians"
-  | "plants"
-  | "fungi"
-  | "arthropods"
-  | "worms"
-  | "all";
-
 
 const ALL_CATEGORIES: Array<Category> = [
   "mammals",
