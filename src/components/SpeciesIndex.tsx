@@ -8,6 +8,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Input } from '@/components/ui/input'
+import { Loader } from "@/components/Loader";
 
 const ALL_CATEGORIES: Array<Category> = [
   'mammals',
@@ -19,6 +20,7 @@ const ALL_CATEGORIES: Array<Category> = [
   'arthropods',
   'worms',
 ]
+// TODO: add filter for different tags of common name stuff?
 
 const TABS: Array<Category> = ['all', ...ALL_CATEGORIES]
 
@@ -48,9 +50,7 @@ const SpeciesIndex = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <p className="text-muted-foreground">Loading species index...</p>
-      </div>
+    <Loader dataTitle="species catalog" />
     )
   }
 
@@ -122,7 +122,7 @@ const SpeciesIndex = () => {
                         to="/species/$speciesId"
                         params={{ speciesId: String(item.id) }}
                       >
-                        {/* <Card className="gradient-card shadow-card hover:shadow-hover transition-all duration-300 cursor-pointer">
+                        <Card className="gradient-card shadow-card hover:shadow-hover transition-all duration-300 cursor-pointer">
                           <CardContent className="p-6">
                             <div className="flex items-center justify-between">
                               <div className="flex-1">
@@ -145,8 +145,8 @@ const SpeciesIndex = () => {
                               <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors ml-4" />
                             </div>
                           </CardContent>
-                        </Card> */}
-                        <Card className="gradient-card shadow-card hover:shadow-hover transition-all duration-300 cursor-pointer">
+                        </Card>
+                        {/* <Card className="gradient-card shadow-card hover:shadow-hover transition-all duration-300 cursor-pointer">
                           <CardContent className="p-6">
                             <div className="flex items-center justify-between">
                               <div className="flex-1">
@@ -192,7 +192,7 @@ const SpeciesIndex = () => {
                               <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors ml-4" />
                             </div>
                           </CardContent>
-                        </Card>
+                        </Card> */}
                       </Link>
                     ))}
                   </div>

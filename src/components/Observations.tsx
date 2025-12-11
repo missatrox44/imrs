@@ -1,4 +1,4 @@
-import { useState } from "react";
+// import { useState } from "react";
 import { Calendar, MapPin, User, } from "lucide-react";
 import { Link } from '@tanstack/react-router';
 import { useQuery } from "@tanstack/react-query";
@@ -9,8 +9,9 @@ import { Badge } from "@/components/ui/badge";
 import { Loader } from "@/components/Loader";
 
 
+// TODO: add filter for different tags of common name stuff?
 const Observations = () => {
-  const [filter, setFilter] = useState("all");
+  // const [filter, setFilter] = useState("all");
 
   const { data = { results: [] }, isLoading } = useQuery({
   queryKey: ["observationData"],
