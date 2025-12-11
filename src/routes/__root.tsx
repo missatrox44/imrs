@@ -1,6 +1,8 @@
 import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
-// import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-// import { TanstackDevtools } from '@tanstack/react-devtools'
+import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
+import { TanstackDevtools } from '@tanstack/react-devtools'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { Analytics } from '@vercel/analytics/react';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -54,6 +56,8 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           <Header />
           {children}
           <Footer />
+              <TanStackRouterDevtools position="bottom-right" />
+        <ReactQueryDevtools buttonPosition="bottom-left"/>
           {/* <TanstackDevtools
           config={{
             position: 'bottom-left',
@@ -64,7 +68,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
               render: <TanStackRouterDevtoolsPanel />,
             },
           ]}
-        /> */}
+        />  */}
           <Scripts />
           <Analytics />
         </body>

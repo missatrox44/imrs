@@ -5,7 +5,7 @@ let _db: Database.Database | null = null
 
 export function getDb() {
   if (!_db) {
-    const dbPath = path.join(process.cwd(), 'dev.db')
+    const dbPath = path.join(process.cwd(), 'imrs-species.db')
     console.log("Using SQLite DB:", dbPath);
 
     _db = new Database(dbPath)

@@ -31,8 +31,9 @@ const SpeciesIndex = () => {
   const { data: species = [], isLoading } = useQuery({
     queryKey: ['speciesData'],
     queryFn: async () => {
-      // const res = await fetch('/api/species');
+      // const res = await fetch('/api/species')
       const res = await fetch('/data/species.json')
+      console.log("Species data:", res)
       if (!res.ok) throw new Error('Failed to fetch species')
       return res.json()
     },
@@ -50,7 +51,7 @@ const SpeciesIndex = () => {
 
   if (isLoading) {
     return (
-    <Loader dataTitle="species catalog" />
+      <Loader dataTitle="species catalog" />
     )
   }
 
@@ -77,16 +78,20 @@ const SpeciesIndex = () => {
           value={activeTab}
           onValueChange={(v) => setActiveTab(v as Category)}
         >
-          <TabsList className="flex flex-wrap gap-2">
-            {TABS.map((cat) => (
-              <TabsTrigger key={cat} value={cat}>
-                {cat === 'all'
-                  ? `View All (${getCategoryCount(cat)})`
-                  : `${cat[0].toUpperCase() + cat.slice(1)} (${getCategoryCount(cat)})`}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-
+          <div className="overflow-x-auto">
+            <TabsList className="flex  w-max space-x-2" >
+              {TABS.map((cat) => (
+                <TabsTrigger key={cat} value={cat}>
+                  {cat === 'all'
+                    ? `View All (${getCategoryCount(cat)})`
+                    : `${cat[0].toUpperCase() + cat.slice(1)} (${getCategoryCount(cat)})`}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </div>
+          <p className="mt-2 text-right text-xs text-muted-foreground animate-pulse lg:hidden">
+            Scroll right to see more →
+          </p>
           <div className="mt-6 mb-4 text-sm text-muted-foreground">
             {activeTab === 'all' ? (
               <>Showing {filtered.length} species</>
