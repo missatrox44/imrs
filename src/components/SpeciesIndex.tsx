@@ -89,6 +89,9 @@ const SpeciesIndex = () => {
               ))}
             </TabsList>
           </div>
+          <p className="mt-2 text-right text-xs text-muted-foreground animate-pulse lg:hidden">
+            Scroll right to see more →
+          </p>
           <div className="mt-6 mb-4 text-sm text-muted-foreground">
             {activeTab === 'all' ? (
               <>Showing {filtered.length} species</>
