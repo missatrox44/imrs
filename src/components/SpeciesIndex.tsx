@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ChevronRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
@@ -6,8 +6,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-
-// Expanded categories
 export type Category =
   | "mammals"
   | "birds"
@@ -16,7 +14,8 @@ export type Category =
   | "plants"
   | "fungi"
   | "arthropods"
-  | "worms";
+  | "worms"
+  | "all";
 
 export interface Species {
   id: number;
@@ -58,54 +57,31 @@ const ALL_CATEGORIES: Array<Category> = [
   "worms",
 ];
 
+const TABS: Array<Category> = ["all", ...ALL_CATEGORIES];
+
 const SpeciesIndex = () => {
-  // const [species, setSpecies] = useState<Array<Species>>([]);
   const [activeTab, setActiveTab] = useState<Category>("mammals");
-  // const [loading, setLoading] = useState(true);
-
-  // useEffect(() => {
-  //   const fetchSpecies = async () => {
-  //     try {
-  //       // Local dev replacement until DB/API is wired
-  //       const response = await fetch("/data/species.json");
-  //       const data = await response.json();
-  //       setSpecies(data);
-  //     } catch (error) {
-  //       console.error("Error fetching species:", error);
-  //       setSpecies([]);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchSpecies();
-  // }, []);
-
-const { data: species = [], isLoading } = useQuery({
-  queryKey: ["species"],
-  queryFn: async () => {
-    const res = await fetch("/data/species.json");
-    if (!res.ok) throw new Error("Failed to fetch species");
-    return res.json();
-  },
-});
 
 
-// const { data: species = [], isLoading } = useQuery<Array<Species>>({
-//   queryKey: ["species"],
-//   queryFn: async () => {
-//     const res = await fetch("/api/species");
-//     if (!res.ok) throw new Error("Failed to fetch species");
-//     return res.json();
-//   },
-// });
+  const { data: species = [], isLoading } = useQuery({
+    queryKey: ["speciesData"],
+    queryFn: async () => {
+      const res = await fetch("/data/species.json");
+      if (!res.ok) throw new Error("Failed to fetch species");
+      return res.json();
+    },
+  });
 
 
+  const filtered =
+    activeTab === "all"
+      ? species
+      : species.filter((s: Species) => s.category === activeTab);
 
-  const filtered = species.filter((s: Species) => s.category === activeTab);
-
-  const getCategoryCount = (category: Category) =>
-    species.filter((s: Species) => s.category === category).length;
+  const getCategoryCount = (category: Category) => {
+    if (category === "all") return species.length;
+    return species.filter((s: Species) => s.category === category).length;
+  };
 
   if (isLoading) {
     return (
@@ -125,63 +101,75 @@ const { data: species = [], isLoading } = useQuery({
 
         <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as Category)}>
           <TabsList className="flex flex-wrap gap-2">
-            {ALL_CATEGORIES.map((cat) => (
+            {TABS.map((cat) => (
               <TabsTrigger key={cat} value={cat}>
-                {cat[0].toUpperCase() + cat.slice(1)} ({getCategoryCount(cat)})
+                {cat === "all"
+                  ? `View All (${getCategoryCount(cat)})`
+                  : `${cat[0].toUpperCase() + cat.slice(1)} (${getCategoryCount(cat)})`}
               </TabsTrigger>
             ))}
           </TabsList>
 
           <div className="mt-6 mb-4 text-sm text-muted-foreground">
-            Showing {filtered.length} {activeTab}
+            {activeTab === "all" ? (
+              <>Showing {filtered.length} species</>
+            ) : (
+              <>Showing {filtered.length} {activeTab}</>
+            )}
           </div>
+          {TABS.map((category) => {
+            const items =
+              category === "all"
+                ? species
+                : species.filter((s: Species) => s.category === category);
 
-          {ALL_CATEGORIES.map((category) => (
-            <TabsContent key={category} value={category}>
-              {filtered.length === 0 ? (
-                <Card>
-                  <CardContent className="text-center py-12">
-                    <p className="text-muted-foreground">
-                      No {category} data available.
-                    </p>
-                  </CardContent>
-                </Card>
-              ) : (
-                <div className="space-y-4">
-                  {filtered.map((item: Species) => (
-                    <Link
-                      key={item.id}
-                      to="/species/$speciesId"
-                      params={{ speciesId: String(item.id) }}
-                    >
-                      <Card className="gradient-card shadow-card hover:shadow-hover transition-all duration-300 cursor-pointer">
-                        <CardContent className="p-6">
-                          <div className="flex items-center justify-between">
-                            <div className="flex-1">
-                              <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-3">
-                                <h3 className="scientific-name text-lg font-medium">
-                                  {item.species}{" "} {item.genus}
-                                </h3>
-                                <span className="font-semibold">{item.species_common_name}</span>
+            return (
+              <TabsContent key={category} value={category}>
+                {items.length === 0 ? (
+                  <Card>
+                    <CardContent className="text-center py-12">
+                      <p className="text-muted-foreground">
+                        {category === "all" ? "No species data available." : `No ${category} data available.`}
+                      </p>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <div className="space-y-4">
+                    {items.map((item: Species) => (
+                      <Link
+                        key={item.id}
+                        to="/species/$speciesId"
+                        params={{ speciesId: String(item.id) }}
+                      >
+                        <Card className="gradient-card shadow-card hover:shadow-hover transition-all duration-300 cursor-pointer">
+                          <CardContent className="p-6">
+                            <div className="flex items-center justify-between">
+                              <div className="flex-1">
+                                <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-3">
+                                  <h3 className="scientific-name text-lg font-medium">
+                                    {item.species}{" "} {item.genus}
+                                  </h3>
+                                  <span className="font-semibold">{item.species_common_name}</span>
+                                </div>
+
+                                <Badge variant="secondary">{item.family}</Badge>
+
+                                <p className="text-muted-foreground text-sm mt-3 line-clamp-2">
+                                  {item.note}
+                                </p>
                               </div>
 
-                              <Badge variant="secondary">{item.family}</Badge>
-
-                              <p className="text-muted-foreground text-sm mt-3 line-clamp-2">
-                                {item.note}
-                              </p>
+                              <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors ml-4" />
                             </div>
-
-                            <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors ml-4" />
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </TabsContent>
-          ))}
+                          </CardContent>
+                        </Card>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </TabsContent>
+            );
+          })}
         </Tabs>
       </div>
     </div>
