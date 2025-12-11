@@ -1,4 +1,3 @@
-// 🌵 DOUBLE CHECK
 import { getTurso } from './turso'
 
 export async function ensureSchema() {

@@ -79,21 +79,29 @@ CREATE TABLE specimens (
 
 `sqlite3 dev.db`
 
-
-1. Query it
-
-`sqlite3 dev.db "SELECT * FROM specimens;"`
-
-
-
 Then inside the SQLite prompt:
 ```bash
 .mode csv
 .headers on
 .import specimens.csv specimens
 ```
+
+
+
+4.check that i worked
+
+
+5. push to Turso
+https://turso.tech/blog/migrating-and-importing-sqlite-to-turso-just-got-easier#using-the-turso-cli
+
+
+
+
 Check that it worked
 
+1. Query it
+
+`sqlite3 dev.db "SELECT * FROM specimens;"`
 
 
 ```bash
