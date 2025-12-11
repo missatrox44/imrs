@@ -1,51 +1,47 @@
 // import { useState } from "react";
-import { Calendar, MapPin, User, } from "lucide-react";
-import { Link } from '@tanstack/react-router';
-import { useQuery } from "@tanstack/react-query";
-import type { Observation } from "@/types/observation";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Calendar, MapPin, User } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
+import { useQuery } from '@tanstack/react-query'
+import type { Observation } from '@/types/observation'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
 // import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { Loader } from "@/components/Loader";
-
+import { Badge } from '@/components/ui/badge'
+import { Loader } from '@/components/Loader'
 
 // TODO: add filter for different tags of common name stuff?
 const Observations = () => {
   // const [filter, setFilter] = useState("all");
 
   const { data = { results: [] }, isLoading } = useQuery({
-  queryKey: ["observationData"],
-  queryFn: async () => {
-    const res = await fetch(
-      "https://api.inaturalist.org/v1/observations?place_id=225419&per_page=50&order=desc&order_by=observed_on"
-    );
-    if (!res.ok) throw new Error("Failed to fetch observations");
-    return res.json();
-  },
-});
+    queryKey: ['observationData'],
+    queryFn: async () => {
+      const res = await fetch(
+        'https://api.inaturalist.org/v1/observations?place_id=225419&per_page=50&order=desc&order_by=observed_on',
+      )
+      if (!res.ok) throw new Error('Failed to fetch observations')
+      return res.json()
+    },
+  })
 
-
-// const observations: Array<Observation> = data?.results ?? [];
-const observations = data.results;
+  // const observations: Array<Observation> = data?.results ?? [];
+  const observations = data.results
 
   const formatDate = (dateString?: string) => {
-    if (!dateString) return 'Unknown date';
+    if (!dateString) return 'Unknown date'
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
-      day: 'numeric'
-    });
-  };
+      day: 'numeric',
+    })
+  }
 
   const getPhotoUrl = (photos?: Array<{ url: string }>) => {
-    if (!photos || photos.length === 0) return null;
-    return photos[0].url.replace('square', 'medium');
-  };
+    if (!photos || photos.length === 0) return null
+    return photos[0].url.replace('square', 'medium')
+  }
 
   if (isLoading) {
-    return (
-    <Loader dataTitle="observations" />
-    );
+    return <Loader dataTitle="observations" />
   }
 
   return (
@@ -53,7 +49,9 @@ const observations = data.results;
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-foreground mb-2">Recent Observations</h1>
+            <h1 className="text-3xl font-bold text-foreground mb-2">
+              Recent Observations
+            </h1>
             <p className="text-muted-foreground">
               Biodiversity observations from Indio Mountains Research Station
             </p>
@@ -83,10 +81,15 @@ const observations = data.results;
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {observations.map((observation: Observation) => (
-              <Link to={observation.uri || '#'} key={observation.id} target="_blank" rel="noopener noreferrer">
+              <Link
+                to={observation.uri || '#'}
+                key={observation.id}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <Card
                   key={observation.id}
-                  className="gradient-card shadow-card hover:shadow-hover transition-all duration-300 overflow-hidden"
+                  className="h-full flex flex-col gradient-card shadow-card hover:shadow-hover transition-all duration-300 overflow-hidden"
                 >
                   {getPhotoUrl(observation.photos) && (
                     <div className="aspect-square overflow-hidden">
@@ -95,19 +98,29 @@ const observations = data.results;
                         alt={observation.species_guess || 'Unknown species'}
                         className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                         onError={(e) => {
-                          (e.target as HTMLImageElement).style.display = 'none';
+                          ;(e.target as HTMLImageElement).style.display = 'none'
                         }}
                       />
                     </div>
                   )}
 
-                  <CardHeader className="pb-3">
+                  <CardHeader className="pb-3 space-y-1">
+                    {/* Common Name */}
                     <h3 className="font-semibold text-foreground line-clamp-2">
-                      {observation.species_guess || 'Unknown Species'}
+                      {observation.species_guess ||
+                        observation.taxon?.preferred_common_name ||
+                        'Unknown Species'}
                     </h3>
+
+                    {/* Scientific Name */}
+                    {observation.taxon?.name && (
+                      <p className="italic text-sm text-muted-foreground line-clamp-1">
+                        {observation.taxon.name}
+                      </p>
+                    )}
                   </CardHeader>
 
-                  <CardContent className="space-y-3">
+                  <CardContent className="space-y-3 mt-auto">
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <User className="w-4 h-4" />
                       <span>{observation.user?.login || 'Anonymous'}</span>
@@ -121,7 +134,9 @@ const observations = data.results;
                     {observation.place_guess && (
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         <MapPin className="w-4 h-4" />
-                        <span className="line-clamp-1">{observation.place_guess}</span>
+                        <span className="line-clamp-1">
+                          {observation.place_guess}
+                        </span>
                       </div>
                     )}
 
@@ -136,7 +151,7 @@ const observations = data.results;
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Observations;
+export default Observations

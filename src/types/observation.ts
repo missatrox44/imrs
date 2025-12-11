@@ -10,4 +10,8 @@ export interface Observation {
   }>;
   place_guess?: string;
   uri?: string;
+  taxon?: {
+    name?: string;
+    preferred_common_name?: string;
+  }
 }
