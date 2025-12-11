@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Calendar, MapPin, User, } from "lucide-react";
 import { Link } from '@tanstack/react-router';
+import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 // import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
@@ -20,29 +21,22 @@ interface Observation {
 }
 
 const Observations = () => {
-  const [observations, setObservations] = useState<Array<Observation>>([]);
-  const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
 
-  useEffect(() => {
-    const fetchObservations = async () => {
-      try {
-        const response = await fetch(
-          'https://api.inaturalist.org/v1/observations?place_id=225419&per_page=50&order=desc&order_by=observed_on'
-        );
-        const data = await response.json();
-        setObservations(data.results || []);
-        // console.log('data', data.results);
-      } catch (error) {
-        console.error('Error fetching observations:', error);
-        setObservations([]);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const { data = { results: [] }, isLoading } = useQuery({
+  queryKey: ["observationData"],
+  queryFn: async () => {
+    const res = await fetch(
+      "https://api.inaturalist.org/v1/observations?place_id=225419&per_page=50&order=desc&order_by=observed_on"
+    );
+    if (!res.ok) throw new Error("Failed to fetch observations");
+    return res.json();
+  },
+});
 
-    fetchObservations();
-  }, []);
+
+// const observations: Array<Observation> = data?.results ?? [];
+const observations = data.results;
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return 'Unknown date';
@@ -58,7 +52,7 @@ const Observations = () => {
     return photos[0].url.replace('square', 'medium');
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-background">
         <div className="container mx-auto px-4 py-8">
@@ -107,7 +101,7 @@ const Observations = () => {
           </Card>
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {observations.map((observation) => (
+            {observations.map((observation: Observation) => (
               <Link to={observation.uri || '#'} key={observation.id} target="_blank" rel="noopener noreferrer">
                 <Card
                   key={observation.id}

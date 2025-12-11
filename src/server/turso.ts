@@ -1,4 +1,3 @@
-// 🌵 DOUBLE CHECK
 // If you deploy on Node runtime, use '@libsql/client'.
 // If you deploy to edge/runtime that lacks Node APIs, use '@libsql/client/web'.
 import { createClient } from '@libsql/client'

@@ -66,7 +66,7 @@ const SpeciesIndex = () => {
   const { data: species = [], isLoading } = useQuery({
     queryKey: ["speciesData"],
     queryFn: async () => {
-      const res = await fetch("/data/species.json");
+      const res = await fetch("libsql://imrs-species-vercel-icfg-hl0kv2s95spa1ahb7kgdtop6.aws-us-east-1.turso.io");
       if (!res.ok) throw new Error("Failed to fetch species");
       return res.json();
     },
