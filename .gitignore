@@ -12,4 +12,6 @@ count.txt
 todos.json
 specimens.csv
 .env.development.local
-
+imrs-species.db
+imrs-species.db-shm
+imrs-species.db-wal

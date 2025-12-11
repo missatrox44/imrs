@@ -27,7 +27,8 @@ By making the handbook’s species records digital, organized, searchable, and f
 - IMRS Handbook - authoritative species list, normalized into SQL tables
 
 *Backend/Database*
-- SQLite3
+- [SQLite3](https://formulae.brew.sh/formula/sqlite)
+- [Turso](https://turso.tech/)
 
 ### Install SQLite3 (Mac)
 Check if SQLite3 is installed first:
@@ -38,7 +39,7 @@ If you see a version number, you're good! If not enter:
 1. Create database and table:
 
 ```bash 
-sqlite3 dev.db "
+sqlite3 imrs-species.db "
 CREATE TABLE specimens (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   category TEXT,
@@ -71,13 +72,14 @@ CREATE TABLE specimens (
 ```
 
 2. Verify table exists
-`sqlite3 dev.db ".schema specimens"`
+  
+`sqlite3 imrs-species.db ".schema specimens"`
 
 
-3. 📊 **Import CSV**
-- go to terminal at root of project and enter:
+3. **Import CSV**
+go to terminal at root of project and enter:
 
-`sqlite3 dev.db`
+`sqlite3 imrs-species.db`
 
 Then inside the SQLite prompt:
 ```bash
@@ -86,33 +88,74 @@ Then inside the SQLite prompt:
 .import specimens.csv specimens
 ```
 
+4.check that it worked
+
+`sqlite3 imrs-species.db "SELECT * FROM specimens;"`
+
+## [Preparing Your SQLite Database](https://turso.tech/blog/migrating-and-importing-sqlite-to-turso-just-got-easier#preparing-your-sqlite-database)
+Before importing your SQLite database to Turso Cloud, your database should be using WAL (Write-Ahead Logging) mode:
+
+Open your SQLite database using the SQLite command-line tool:
+
+`sqlite3 path/to/your/database.db`
+
+Set WAL to journal mode:
+
+`PRAGMA journal_mode=WAL;`
+
+Checkpoint and truncate the WAL file:
+
+`PRAGMA wal_checkpoint(TRUNCATE);`
+
+Verify the journal mode is set to WAL:
+
+`PRAGMA journal_mode;`
+
+Exit the SQLite shell:
+
+`.exit`
 
 
-4.check that i worked
+### Turso CLI Thangs
+- Login
+
+If using Turso account managed by Vercel, login with the following
+
+`turso auth login --headless`
 
 
-5. push to Turso
-https://turso.tech/blog/migrating-and-importing-sqlite-to-turso-just-got-easier#using-the-turso-cli
+- Then run command:
+   
+`turso config set token "YOUR_TOKEN_HERE"`
+
+- Confirm logged in (personal default)
+
+`turso auth whoami`
+
+- Switch to vercel org
+   
+`turso org list`
+
+`turso org switch [vercel-team-name]`
+
+   Verify switch:
+
+`turso org list`
+
+
+
+## [Push to Turso](https://turso.tech/blog/migrating-and-importing-sqlite-to-turso-just-got-easier#using-the-turso-cli)
+
+`turso db import ~/path/to/my-database.db`
 
 
 
 
-Check that it worked
-
-1. Query it
-
-`sqlite3 dev.db "SELECT * FROM specimens;"`
 
 
-```bash
-SELECT COUNT(*) FROM specimens;
 
-```
 
-Check how many rows exist:
-`sqlite3 dev.db "SELECT COUNT(*) FROM specimens;"`
-
-## Turso
+## Turso Notes
 ```javascript
 //node.js
 import { createClient } from "@libsql/client";
