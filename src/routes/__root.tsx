@@ -1,8 +1,9 @@
 import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { TanstackDevtools } from '@tanstack/react-devtools'
+// import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
+// import { TanstackDevtools } from '@tanstack/react-devtools'
 import { Analytics } from '@vercel/analytics/react';
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import appCss from '../styles.css?url'
 import Header from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
@@ -19,7 +20,7 @@ export const Route = createRootRoute({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'IMRS Biodiversity',
+        title: 'IMRS Biodiversity Explorer',
       },
     ],
     links: [
@@ -40,17 +41,20 @@ export const Route = createRootRoute({
   shellComponent: RootDocument,
 })
 
+const queryClient = new QueryClient();
+
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        <Header />
-        {children}
-        <Footer />
-        <TanstackDevtools
+    <QueryClientProvider client={queryClient}>
+      <html lang="en">
+        <head>
+          <HeadContent />
+        </head>
+        <body>
+          <Header />
+          {children}
+          <Footer />
+          {/* <TanstackDevtools
           config={{
             position: 'bottom-left',
           }}
@@ -60,10 +64,11 @@ function RootDocument({ children }: { children: React.ReactNode }) {
               render: <TanStackRouterDevtoolsPanel />,
             },
           ]}
-        />
-        <Scripts />
-        <Analytics />
-      </body>
-    </html>
+        /> */}
+          <Scripts />
+          <Analytics />
+        </body>
+      </html>
+    </QueryClientProvider>
   )
 }

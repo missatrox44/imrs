@@ -19,15 +19,163 @@ By making the handbook’s species records digital, organized, searchable, and f
 - Routing: TanStack Router
 - Data Fetching/Caching: TanStack Query
 - Language/Build: TypeScript + Vite
-- Styling: Tailwind & TBD
+- Styling: Tailwind & ShadCN
 
 
 *Data Sources*
-- iNaturalist API - observation data for IMRS vicinity
+- [iNaturalist API](https://www.inaturalist.org/pages/api+reference) - observation data for IMRS vicinity
 - IMRS Handbook - authoritative species list, normalized into SQL tables
 
 *Backend/Database*
-- Relational SQL (Postgres-compatible) for the digitized handbook data and any curated fields (e.g., local notes, synonyms, substrates, collectors, taxa metadata).
+- SQLite3
+
+### Install SQLite3 (Mac)
+Check if SQLite3 is installed first:
+`sqlite3 --version`
+If you see a version number, you're good! If not enter:
+`brew install sqlite3`
+
+1. Create database and table:
+
+```bash 
+sqlite3 dev.db "
+CREATE TABLE specimens (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  category TEXT,
+  kingdom TEXT,
+  phylum TEXT,
+  phylum_common_name TEXT,
+  sub_phylum TEXT,
+  sub_phylum_common_name TEXT,
+  class_name TEXT,
+  class_common_name TEXT,
+  sub_class TEXT,
+  sub_class_common_name TEXT,
+  order_name TEXT,
+  order_common_name TEXT,
+  sub_order TEXT,
+  sub_order_common_name TEXT,
+  family TEXT,
+  family_common_name TEXT,
+  sub_family TEXT,
+  sub_family_common_name TEXT,
+  genus TEXT,
+  species TEXT,
+  authorship TEXT,
+  collectors_field_numbers TEXT,
+  note TEXT,
+  species_common_name TEXT,
+  records TEXT
+);
+"
+```
+
+2. Verify table exists
+`sqlite3 dev.db ".schema specimens"`
+
+
+3. 📊 **Import CSV**
+- go to terminal at root of project and enter:
+
+`sqlite3 dev.db`
+
+Then inside the SQLite prompt:
+```bash
+.mode csv
+.headers on
+.import specimens.csv specimens
+```
+
+
+
+4.check that i worked
+
+
+5. push to Turso
+https://turso.tech/blog/migrating-and-importing-sqlite-to-turso-just-got-easier#using-the-turso-cli
+
+
+
+
+Check that it worked
+
+1. Query it
+
+`sqlite3 dev.db "SELECT * FROM specimens;"`
+
+
+```bash
+SELECT COUNT(*) FROM specimens;
+
+```
+
+Check how many rows exist:
+`sqlite3 dev.db "SELECT COUNT(*) FROM specimens;"`
+
+## Turso
+```javascript
+//node.js
+import { createClient } from "@libsql/client";
+
+const client = createClient({
+  url: process.env.TURSO_DATABASE_URL,
+  authToken: process.env.TURSO_AUTH_TOKEN,
+});
+
+
+//edge ?
+import { createClient } from "@libsql/client/web";
+
+const client = createClient({
+  url: process.env.TURSO_DATABASE_URL,
+  authToken: process.env.TURSO_AUTH_TOKEN,
+});
+```
+
+```javascript
+//next example
+import { createClient } from '@libsql/client';
+import { NextResponse } from 'next/server';
+
+const client = createClient({
+  url: process.env.TURSO_DATABASE_URL,
+  authToken: process.env.TURSO_AUTH_TOKEN
+});
+
+export const POST = async () => {
+  // Fetch data from SQLite
+  const result = await client.execute("CREATE TABLE todos (description);");
+};
+```
+
+
+## iNaturalist Resources
+- [IMRS Location](https://www.inaturalist.org/places/indio-mountains-research-station)
+- [Developer Docs](https://www.inaturalist.org/pages/developers)
+- [API Reference](https://www.inaturalist.org/pages/api+reference)
+- [iNaturalist API](https://api.inaturalist.org/v1/docs/)
+
+### Rate Limits
+We throttle API usage to a max of 100 requests per minute, though we ask that you try to keep it to 60 requests per minute or lower. If we notice usage that has serious impact on our performance we may institute blocks without notification. The API is intended to support application development, not data scraping. If you want data, see the datasets below.
+
+### iNaturalist API Authentication (NOT USED IN THIS REPO)
+🗒️ *THE FOLLOWING IS JUST PERSONAL NOTES*
+Authentication is only required when requesting [private data](https://www.inaturalist.org/pages/api+recommended+practices). 
+
+Get JWT Token from:
+`https://www.inaturalist.org/users/api_token`
+
+```javascript
+//send JWT in the Authorization header
+const response = await fetch(
+  'https://api.inaturalist.org/v1/observations?per_page=50',
+  {
+    headers: {
+      Authorization: `Bearer ${jwtToken}`,
+    },
+  }
+);
+```
 
 
 ## TanStack Start Stuffs:

@@ -1,156 +1,144 @@
-import { useEffect, useMemo, useState } from "react";
-import { ChevronRight, Search } from "lucide-react";
-import { Link } from "@tanstack/react-router";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger, } from "@/components/ui/tabs";
+import { useState } from 'react'
+import { ChevronRight, Search } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
+import { useQuery } from '@tanstack/react-query'
+import type { Species } from '@/types/species'
+import type { Category } from '@/types/category'
+import { Card, CardContent } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Input } from '@/components/ui/input'
+import { Loader } from "@/components/Loader";
 
-interface Species {
-  id: number;
-  scientific_name: string;
-  common_name: string;
-  family: string;
-  notes: string;
-  category: 'plants' | 'reptiles' | 'mammals' | 'birds';
-}
+const ALL_CATEGORIES: Array<Category> = [
+  'mammals',
+  'birds',
+  'reptiles',
+  'amphibians',
+  'plants',
+  'fungi',
+  'arthropods',
+  'worms',
+]
+// TODO: add filter for different tags of common name stuff?
+
+const TABS: Array<Category> = ['all', ...ALL_CATEGORIES]
 
 const SpeciesIndex = () => {
-  const [species, setSpecies] = useState<Array<Species>>([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [activeTab, setActiveTab] = useState<'plants' | 'reptiles' | 'mammals' | 'birds'>('plants');
-  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<Category>('all')
+  const [searchTerm, setSearchTerm] = useState('')
 
-  useEffect(() => {
-    const fetchSpecies = async () => {
-      try {
-        const response = await fetch('/data/species.json');
-        const data = await response.json();
-        setSpecies(data);
-      } catch (error) {
-        console.error('Error fetching species data:', error);
-        setSpecies([]);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const { data: species = [], isLoading } = useQuery({
+    queryKey: ['speciesData'],
+    queryFn: async () => {
+      // const res = await fetch('/api/species');
+      const res = await fetch('/data/species.json')
+      if (!res.ok) throw new Error('Failed to fetch species')
+      return res.json()
+    },
+  })
 
-    fetchSpecies();
-  }, []);
+  const filtered =
+    activeTab === 'all'
+      ? species
+      : species.filter((s: Species) => s.category === activeTab)
 
-  const filteredSpecies = useMemo(() => {
-    const searchLower = searchTerm.toLowerCase();
+  const getCategoryCount = (category: Category) => {
+    if (category === 'all') return species.length
+    return species.filter((s: Species) => s.category === category).length
+  }
 
-    // If there's a search term, search across all species
-    if (searchTerm) {
-      return species.filter(
-        (s) =>
-          s.scientific_name.toLowerCase().includes(searchLower) ||
-          s.common_name.toLowerCase().includes(searchLower) ||
-          s.family.toLowerCase().includes(searchLower) ||
-          s.notes.toLowerCase().includes(searchLower)
-      );
-    }
-
-    // Otherwise, filter by active tab category
-    return species.filter((s) => s.category === activeTab);
-  }, [species, searchTerm, activeTab]);
-
-  const getCategoryCount = (category: 'plants' | 'reptiles' | 'mammals' | 'birds') => {
-    return species.filter((s) => s.category === category).length;
-  };
-
-  if (loading) {
+  if (isLoading) {
     return (
-      <div className="min-h-screen bg-background">
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex items-center justify-center h-64">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-              <p className="text-muted-foreground">Loading species index...</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    <Loader dataTitle="species catalog" />
+    )
   }
 
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-4">Species Index</h1>
-          <p className="text-muted-foreground mb-6">
-            Comprehensive database of species documented at the Indio Mountains Research Station
-          </p>
+        <h1 className="text-3xl font-bold mb-4">Species Index</h1>
+        <p className="text-muted-foreground mb-6">
+          Comprehensive database of species documented at IMRS.
+        </p>
 
-          <div className="relative max-w-md mb-6">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-            <Input
-              type="text"
-              placeholder="Search across all species..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
-            />
+        <div className="relative max-w-md mb-6">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+          <Input
+            type="text"
+            placeholder="Search across all species..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10"
+          />
+        </div>
+
+        <Tabs
+          value={activeTab}
+          onValueChange={(v) => setActiveTab(v as Category)}
+        >
+          <TabsList className="flex flex-wrap gap-2">
+            {TABS.map((cat) => (
+              <TabsTrigger key={cat} value={cat}>
+                {cat === 'all'
+                  ? `View All (${getCategoryCount(cat)})`
+                  : `${cat[0].toUpperCase() + cat.slice(1)} (${getCategoryCount(cat)})`}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+
+          <div className="mt-6 mb-4 text-sm text-muted-foreground">
+            {activeTab === 'all' ? (
+              <>Showing {filtered.length} species</>
+            ) : (
+              <>
+                Showing {filtered.length} {activeTab}
+              </>
+            )}
           </div>
+          {TABS.map((category) => {
+            const items =
+              category === 'all'
+                ? species
+                : species.filter((s: Species) => s.category === category)
 
-          <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as typeof activeTab)}>
-            <TabsList className="w-full sm:w-auto">
-              <TabsTrigger value="plants">Plants ({getCategoryCount('plants')})</TabsTrigger>
-              <TabsTrigger value="reptiles">Reptiles ({getCategoryCount('reptiles')})</TabsTrigger>
-              <TabsTrigger value="mammals">Mammals ({getCategoryCount('mammals')})</TabsTrigger>
-              <TabsTrigger value="birds">Birds ({getCategoryCount('birds')})</TabsTrigger>
-            </TabsList>
-
-            <div className="mt-6 mb-4 text-sm text-muted-foreground">
-              {searchTerm
-                ? `Showing ${filteredSpecies.length} matching results (from ${species.length} total)`
-                : `Showing ${filteredSpecies.length} ${activeTab}`
-              }
-            </div>
-
-            {['plants', 'reptiles', 'mammals', 'birds'].map((category) => (
+            return (
               <TabsContent key={category} value={category}>
-                {filteredSpecies.length === 0 ? (
+                {items.length === 0 ? (
                   <Card>
                     <CardContent className="text-center py-12">
                       <p className="text-muted-foreground">
-                        {searchTerm
-                          ? `No species found matching "${searchTerm}"`
-                          : `No ${category} data available.`
-                        }
+                        {category === 'all'
+                          ? 'No species data available.'
+                          : `No ${category} data available.`}
                       </p>
                     </CardContent>
                   </Card>
                 ) : (
                   <div className="space-y-4">
-                    {filteredSpecies.map((speciesItem) => (
+                    {items.map((item: Species) => (
                       <Link
-                        key={speciesItem.id}
+                        key={item.id}
                         to="/species/$speciesId"
-                        params={{ speciesId: String(speciesItem.id) }}>
-                        <Card className="gradient-card shadow-card hover:shadow-hover transition-all duration-300 group cursor-pointer">
+                        params={{ speciesId: String(item.id) }}
+                      >
+                        <Card className="gradient-card shadow-card hover:shadow-hover transition-all duration-300 cursor-pointer">
                           <CardContent className="p-6">
                             <div className="flex items-center justify-between">
                               <div className="flex-1">
                                 <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-3">
                                   <h3 className="scientific-name text-lg font-medium">
-                                    {speciesItem.scientific_name}
+                                    {item.genus}{" "}{item.species}
                                   </h3>
-                                  <span className="text-foreground font-semibold">
-                                    {speciesItem.common_name}
+                                  <span className="font-semibold">
+                                    {item.species_common_name}
                                   </span>
                                 </div>
 
-                                <div className="flex flex-wrap items-center gap-3 mb-3">
-                                  <Badge variant="secondary">
-                                    {speciesItem.family}
-                                  </Badge>
-                                </div>
+                                <Badge variant="secondary">{item.family}</Badge>
 
-                                <p className="text-muted-foreground text-sm line-clamp-2">
-                                  {speciesItem.notes}
+                                <p className="text-muted-foreground text-sm mt-3 line-clamp-2">
+                                  {item.note}
                                 </p>
                               </div>
 
@@ -158,17 +146,64 @@ const SpeciesIndex = () => {
                             </div>
                           </CardContent>
                         </Card>
+                        {/* <Card className="gradient-card shadow-card hover:shadow-hover transition-all duration-300 cursor-pointer">
+                          <CardContent className="p-6">
+                            <div className="flex items-center justify-between">
+                              <div className="flex-1">
+                                <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-3">
+                                  <h3 className="scientific-name text-lg font-medium">
+                                    {item.genus} {item.species}
+                                  </h3>
+                                  {item.species_common_name && (
+                                      <span className="font-semibold">
+                                    {item.species_common_name}
+                                  </span>
+                                  )}
+                                </div>
+                                <div className="flex flex-wrap gap-2 mb-3">
+                                  {[
+                                    item.phylum_common_name,
+                                    item.sub_phylum_common_name,
+                                    item.class_common_name,
+                                    item.sub_class_common_name,
+                                    item.order_common_name,
+                                    item.sub_order_common_name,
+                                    item.family_common_name,
+                                    item.sub_family_common_name
+                                  ]
+                                    .filter(Boolean)
+                                    .map((name, idx) => (
+                                      <Badge key={idx} variant="secondary" className="text-xs px-2 py-0.5">
+                                        {name}
+                                      </Badge>
+                                    ))}
+                                </div>
+                                {item.family && (
+                                  <Badge variant="secondary" className="text-xs px-2 py-0.5">
+                                    {item.family}
+                                  </Badge>
+                                )}
+                                {item.note && (
+                                  <p className="text-muted-foreground text-sm mt-3 line-clamp-2">
+                                    {item.note}
+                                  </p>
+                                )}
+                              </div>
+                              <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors ml-4" />
+                            </div>
+                          </CardContent>
+                        </Card> */}
                       </Link>
                     ))}
                   </div>
                 )}
               </TabsContent>
-            ))}
-          </Tabs>
-        </div>
+            )
+          })}
+        </Tabs>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SpeciesIndex;
+export default SpeciesIndex
