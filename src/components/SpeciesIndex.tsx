@@ -78,16 +78,17 @@ const SpeciesIndex = () => {
           value={activeTab}
           onValueChange={(v) => setActiveTab(v as Category)}
         >
-          <TabsList className="flex flex-wrap gap-2">
-            {TABS.map((cat) => (
-              <TabsTrigger key={cat} value={cat}>
-                {cat === 'all'
-                  ? `View All (${getCategoryCount(cat)})`
-                  : `${cat[0].toUpperCase() + cat.slice(1)} (${getCategoryCount(cat)})`}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-
+          <div className="overflow-x-auto">
+            <TabsList className="flex  w-max space-x-2" >
+              {TABS.map((cat) => (
+                <TabsTrigger key={cat} value={cat}>
+                  {cat === 'all'
+                    ? `View All (${getCategoryCount(cat)})`
+                    : `${cat[0].toUpperCase() + cat.slice(1)} (${getCategoryCount(cat)})`}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </div>
           <div className="mt-6 mb-4 text-sm text-muted-foreground">
             {activeTab === 'all' ? (
               <>Showing {filtered.length} species</>
