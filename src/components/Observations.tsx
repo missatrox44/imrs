@@ -2,23 +2,11 @@ import { useState } from "react";
 import { Calendar, MapPin, User, } from "lucide-react";
 import { Link } from '@tanstack/react-router';
 import { useQuery } from "@tanstack/react-query";
+import type { Observation } from "@/types/observation";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 // import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 
-interface Observation {
-  id: number;
-  species_guess?: string;
-  user?: {
-    login: string;
-  };
-  observed_on_string?: string;
-  photos?: Array<{
-    url: string;
-  }>;
-  place_guess?: string;
-  uri?: string;
-}
 
 const Observations = () => {
   const [filter, setFilter] = useState("all");

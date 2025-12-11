@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Search } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import type { Species } from "@/types/species";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
 
 export type Category =
   | "mammals"
@@ -17,34 +19,6 @@ export type Category =
   | "worms"
   | "all";
 
-export interface Species {
-  id: number;
-  category?: string;
-  kingdom?: string;
-  phylum?: string;
-  phylum_common_name?: string;
-  sub_phylum?: string;
-  sub_phylum_common_name?: string;
-  class_name?: string;
-  class_common_name?: string;
-  sub_class?: string;
-  sub_class_common_name?: string;
-  order_name?: string;
-  order_common_name?: string;
-  sub_order?: string;
-  sub_order_common_name?: string;
-  family?: string;
-  family_common_name?: string;
-  sub_family?: string;
-  sub_family_common_name?: string;
-  genus?: string;
-  species?: string;
-  authorship?: string;
-  collectors_field_numbers?: string;
-  note?: string;
-  species_common_name?: string;
-  records?: string;
-}
 
 const ALL_CATEGORIES: Array<Category> = [
   "mammals",
@@ -61,13 +35,15 @@ const TABS: Array<Category> = ["all", ...ALL_CATEGORIES];
 
 const SpeciesIndex = () => {
   const [activeTab, setActiveTab] = useState<Category>("mammals");
+    const [searchTerm, setSearchTerm] = useState("");
 
 
   const { data: species = [], isLoading } = useQuery({
     queryKey: ["speciesData"],
     queryFn: async () => {
-      const res = await fetch("libsql://imrs-species-vercel-icfg-hl0kv2s95spa1ahb7kgdtop6.aws-us-east-1.turso.io");
-      if (!res.ok) throw new Error("Failed to fetch species");
+      // const res = await fetch('/api/species');
+            const res = await fetch('/data/species.json');
+      if (!res.ok) throw new Error('Failed to fetch species');
       return res.json();
     },
   });
@@ -98,6 +74,18 @@ const SpeciesIndex = () => {
         <p className="text-muted-foreground mb-6">
           Comprehensive database of species documented at IMRS.
         </p>
+
+
+          <div className="relative max-w-md mb-6">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+            <Input
+              type="text"
+              placeholder="Search across all species..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10"
+            />
+          </div>
 
         <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as Category)}>
           <TabsList className="flex flex-wrap gap-2">

@@ -1,38 +1,11 @@
-// src/routes/species.$speciesId.tsx
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { useMemo } from 'react'
 import { ArrowLeft, Calendar, MapPin, User } from 'lucide-react'
+import type { Species } from '@/types/species'
+import type { Observation } from '@/types/observation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-
-type Species = {
-  id: number
-  scientific_name?: string
-  common_name?: string
-  family?: string
-  kingdom?: string
-  phylum?: string
-  sub_phylum?: string
-  class?: string
-  order?: string
-  genus?: string
-  species?: string
-  authorship?: string
-  collectors_field_numbers?: string
-  records?: string
-  note?: string
-  notes?: string
-}
-
-interface Observation {
-  id: number
-  species_guess?: string
-  user?: { login: string }
-  observed_on_string?: string
-  photos?: Array<{ url: string }>
-  place_guess?: string
-}
 
 export const Route = createFileRoute('/species/$speciesId')({
   // Fetch the species + recent observations for this ID
@@ -41,22 +14,25 @@ export const Route = createFileRoute('/species/$speciesId')({
     const res = await fetch('/data/species.json')
     const all: Array<Species> = await res.json()
 
-    const species =
-      all.find((s) => String(s.id) === String(speciesId)) ?? null
+    const species = all.find((s) => String(s.id) === String(speciesId)) ?? null
 
     let observations: Array<Observation> = []
     if (species) {
       try {
-        if (species.scientific_name) {
+        // Build a scientific name from genus + species
+        const scientificName = [species.genus, species.species]
+          .filter(Boolean)
+          .join(' ')
+
+        if (scientificName.length > 0) {
           const obsRes = await fetch(
             `https://api.inaturalist.org/v1/observations?taxon_name=${encodeURIComponent(
-              species.scientific_name,
+              scientificName,
             )}&per_page=6`,
           )
+
           const obsJson = await obsRes.json()
           observations = obsJson.results ?? []
-        } else {
-          observations = []
         }
       } catch {
         observations = []
@@ -72,11 +48,21 @@ export const Route = createFileRoute('/species/$speciesId')({
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-            <p className="text-muted-foreground">Loading species details...</p>
+            <p className="text-muted-foreground">Loading details...</p>
           </div>
         </div>
       </div>
     </div>
+    // <div className="min-h-screen bg-background">
+    //   <div className="container mx-auto px-4 py-8">
+    //     <div className="flex items-center justify-center h-64">
+    //       <div className="text-center">
+    //         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+    //         <p className="text-muted-foreground">Loading species details...</p>
+    //       </div>
+    //     </div>
+    //   </div>
+    // </div>
   ),
 
   component: SpeciesDetailPage,
@@ -91,10 +77,10 @@ export function SpeciesDetailPage() {
   const formatDate = (dateString?: string) =>
     dateString
       ? new Date(dateString).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-      })
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+        })
       : 'Unknown date'
 
   const obsCount = useMemo(() => observations.length, [observations])
@@ -121,9 +107,6 @@ export function SpeciesDetailPage() {
     )
   }
 
-  // const notes = species.note ?? '';
-  // const records = species.records ?? '';
-
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
@@ -143,7 +126,9 @@ export function SpeciesDetailPage() {
                 <div className="space-y-2">
                   {/* Scientific name + authorship */}
                   <h1 className="scientific-name text-2xl font-medium flex flex-wrap items-baseline gap-2">
-                    <span>{species.genus} {species.species}</span>
+                    <span>
+                      {species.genus} {species.species}
+                    </span>
                     {species.authorship && (
                       <span className="text-lg not-italic text-muted-foreground">
                         {species.authorship}
@@ -152,9 +137,9 @@ export function SpeciesDetailPage() {
                   </h1>
 
                   {/* Common name */}
-                  {species.common_name && (
+                  {species.species_common_name && (
                     <h2 className="text-3xl font-bold text-foreground">
-                      {species.common_name}
+                      {species.species_common_name}
                     </h2>
                   )}
 
@@ -183,7 +168,9 @@ export function SpeciesDetailPage() {
                 {/* Notes */}
                 {species.note && (
                   <section>
-                    <h3 className="font-semibold text-foreground mb-2">Notes</h3>
+                    <h3 className="font-semibold text-foreground mb-2">
+                      Notes
+                    </h3>
                     <p className="text-muted-foreground leading-relaxed">
                       {species.note}
                     </p>
@@ -193,7 +180,9 @@ export function SpeciesDetailPage() {
                 {/* Records */}
                 {species.records && (
                   <section>
-                    <h3 className="font-semibold text-foreground mb-2">Records</h3>
+                    <h3 className="font-semibold text-foreground mb-2">
+                      Records
+                    </h3>
                     <p className="text-muted-foreground leading-relaxed">
                       {species.records}
                     </p>
@@ -211,7 +200,8 @@ export function SpeciesDetailPage() {
                 {obsCount === 0 ? (
                   <div className="text-center py-8">
                     <p className="text-muted-foreground">
-                      No iNaturalist observations recorded for this species at IMRS yet.
+                      No iNaturalist observations recorded for this species at
+                      IMRS yet.
                     </p>
                   </div>
                 ) : (
@@ -223,13 +213,12 @@ export function SpeciesDetailPage() {
                             <div className="aspect-square overflow-hidden rounded-lg mb-3">
                               <img
                                 src={getPhotoUrl(observation.photos)!}
-                                alt={
-                                  observation.species_guess || 'Observation'
-                                }
+                                alt={observation.species_guess || 'Observation'}
                                 className="w-full h-full object-cover"
                                 onError={(e) => {
-                                  (e.target as HTMLImageElement).style.display =
-                                    'none'
+                                  ;(
+                                    e.target as HTMLImageElement
+                                  ).style.display = 'none'
                                 }}
                               />
                             </div>
@@ -276,22 +265,41 @@ export function SpeciesDetailPage() {
                 {[
                   ['Kingdom', species.kingdom],
                   ['Phylum', species.phylum],
+                  ['Phylum (Common Name)', species.phylum_common_name],
+
                   ['Subphylum', species.sub_phylum],
-                  ['Class', species.class],
-                  ['Order', species.order],
+                  ['Subphylum (Common Name)', species.sub_phylum_common_name],
+
+                  ['Class', species.class_name],
+                  ['Class (Common Name)', species.class_common_name],
+
+                  ['Subclass', species.sub_class],
+                  ['Subclass (Common Name)', species.sub_class_common_name],
+
+                  ['Order', species.order_name],
+                  ['Order (Common Name)', species.order_common_name],
+
+                  ['Suborder', species.sub_order],
+                  ['Suborder (Common Name)', species.sub_order_common_name],
+
                   ['Family', species.family],
+                  ['Family (Common Name)', species.family_common_name],
+
+                  ['Subfamily', species.sub_family],
+                  ['Subfamily (Common Name)', species.sub_family_common_name],
+
                   ['Genus', species.genus],
                   ['Species', species.species],
-                ].map(([label, value]) =>
-                  value ? (
+                ]
+                  .filter(([_, value]) => value) // Only show rows with values
+                  .map(([label, value]) => (
                     <div key={label as string}>
                       <div className="text-sm text-muted-foreground">
                         {label}
                       </div>
                       <div className="font-medium">{value}</div>
                     </div>
-                  ) : null
-                )}
+                  ))}
               </CardContent>
             </Card>
 
