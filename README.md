@@ -37,37 +37,42 @@ If you see a version number, you're good! If not enter:
 
 1. Create database and table:
 
-`sqlite3 dev.db`
-
 ```bash 
-Create table
-CREATE TABLE specimen (
+sqlite3 dev.db "
+CREATE TABLE specimens (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   category TEXT,
   kingdom TEXT,
   phylum TEXT,
+  phylum_common_name TEXT,
   sub_phylum TEXT,
+  sub_phylum_common_name TEXT,
   class_name TEXT,
+  class_common_name TEXT,
+  sub_class TEXT,
+  sub_class_common_name TEXT,
   order_name TEXT,
+  order_common_name TEXT,
+  sub_order TEXT,
+  sub_order_common_name TEXT,
   family TEXT,
+  family_common_name TEXT,
+  sub_family TEXT,
+  sub_family_common_name TEXT,
   genus TEXT,
   species TEXT,
   authorship TEXT,
   collectors_field_numbers TEXT,
   note TEXT,
-  common_name TEXT,
+  species_common_name TEXT,
   records TEXT
 );
-.quit
+"
 ```
 
-1. Insert a test row
+2. Verify table exists
+`sqlite3 dev.db ".schema specimens"`
 
-`sqlite3 dev.db "INSERT INTO specimen (category, kingdom, genus, species) VALUES ('Lichens', 'Fungi', 'Acarospora', 'fuscata');"`
-
-2. Query it
-
-`sqlite3 dev.db "SELECT * FROM specimen;"`
 
 3. 📊 **Import CSV**
 - go to terminal at root of project and enter:
@@ -75,22 +80,29 @@ CREATE TABLE specimen (
 `sqlite3 dev.db`
 
 
+1. Query it
+
+`sqlite3 dev.db "SELECT * FROM specimens;"`
+
+
+
 Then inside the SQLite prompt:
 ```bash
 .mode csv
-.separator ,
 .headers on
-.import specimens.csv specimen
+.import specimens.csv specimens
 ```
 Check that it worked
 
+
+
 ```bash
-SELECT COUNT(*) FROM specimen;
-SELECT genus, species, common_name FROM specimen LIMIT 10;
+SELECT COUNT(*) FROM specimens;
+
 ```
 
 Check how many rows exist:
-`sqlite3 dev.db "SELECT COUNT(*) FROM specimen;"`
+`sqlite3 dev.db "SELECT COUNT(*) FROM specimens;"`
 
 ## Turso
 ```javascript

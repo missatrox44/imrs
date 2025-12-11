@@ -1,6 +1,6 @@
 import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { TanstackDevtools } from '@tanstack/react-devtools'
+// import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
+// import { TanstackDevtools } from '@tanstack/react-devtools'
 import { Analytics } from '@vercel/analytics/react';
 
 import appCss from '../styles.css?url'
@@ -50,7 +50,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <Header />
         {children}
         <Footer />
-        <TanstackDevtools
+        {/* <TanstackDevtools
           config={{
             position: 'bottom-left',
           }}
@@ -60,7 +60,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
               render: <TanStackRouterDevtoolsPanel />,
             },
           ]}
-        />
+        /> */}
         <Scripts />
         <Analytics />
       </body>

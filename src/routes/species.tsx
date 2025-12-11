@@ -45,13 +45,11 @@ function normalizeCategory(x: string | null): Category {
 }
 
 export const Route = createFileRoute('/species')({
-  validateSearch: (s) => {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    const q = (s.q as string) ?? ''
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    const category = (s.category as Category) ?? 'plants'
-    return { q, category }
-  },
+validateSearch: (s): { q: string; category: Category } => {
+  const q = typeof s.q === 'string' ? s.q : ''
+  const category = typeof s.category === 'string' ? (s.category as Category) : 'plants'
+  return { q, category }
+},
 
   // SERVER: fetch from Turso in the loader
   loader: async ({ search }) => {
@@ -69,7 +67,7 @@ export const Route = createFileRoute('/species')({
               common_name,
               note AS notes,
               TRIM(COALESCE(genus,'') || ' ' || COALESCE(species,'')) AS scientific_name
-            FROM specimen
+            FROM specimens
             WHERE
               LOWER(TRIM(COALESCE(genus,'') || ' ' || COALESCE(species,''))) LIKE ?
               OR LOWER(COALESCE(common_name,'')) LIKE ?
@@ -88,7 +86,7 @@ export const Route = createFileRoute('/species')({
               common_name,
               note AS notes,
               TRIM(COALESCE(genus,'') || ' ' || COALESCE(species,'')) AS scientific_name
-            FROM specimen
+            FROM specimens
             WHERE LOWER(COALESCE(category,'')) LIKE ?
             ORDER BY scientific_name
           `,
