@@ -1,39 +1,30 @@
-// import { getDb } from "@/server/db";
-// import { getTurso } from "@/server/turso";
+// import { createClient } from '@libsql/client'
 
-// function rowsToObjects(columns: Array<any> | undefined, rows: Array<any>) {
-//   const colNames = (columns || []).map((c: any) => (typeof c === "string" ? c : c.name));
-//   return rows.map((r: Array<any>) =>
-//     Object.fromEntries(colNames.map((n: string, i: number) => [n, r[i]]))
-//   );
-// }
+// const turso = createClient({
+//   url: process.env.TURSO_DATABASE_URL!,
+//   authToken: process.env.TURSO_AUTH_TOKEN!,
+// })
 
 // export const GET = async () => {
-//   // If TURSO_DATABASE_URL is configured, query Turso (libsql client).
-//   if (process.env.TURSO_DATABASE_URL) {
-//     const db = getTurso();
-//     const result = await db.execute({ sql: `SELECT * FROM specimens` });
-//     // `result` shape: { columns, rows }
-//     const items = rowsToObjects(result.columns, result.rows);
-//     return Response.json(items);
+//   try {
+//     const result = await turso.execute('SELECT * FROM specimens')
+
+//     return new Response(JSON.stringify(result.rows), {
+//       headers: { 'Content-Type': 'application/json' },
+//     })
+//   } catch (err) {
+//     console.error('TURSO ERROR:', err)
+
+//     return new Response(JSON.stringify({ error: 'Failed to fetch Turso data' }), {
+//       status: 500,
+//       headers: { 'Content-Type': 'application/json' },
+//     })
 //   }
+// }
 
-//   // Fallback to local sqlite file (development)
-//   const db = getDb();
-//   const rows = db.prepare(`SELECT * FROM specimens`).all();
-//   return Response.json(rows);
-// };
 
-import { getDb } from "@/server/db";
-
-export const GET = () => {
-  const db = getDb();
-
-  try {
-    const rows = db.prepare("SELECT * FROM specimens").all();
-    return Response.json(rows);
-  } catch (err) {
-    console.error("DB ERROR:", err);
-    return new Response("Database error", { status: 500 });
-  }
-};
+export const GET = async () => {
+  return new Response(JSON.stringify({ test: true }), {
+    headers: { "Content-Type": "application/json" },
+  })
+}

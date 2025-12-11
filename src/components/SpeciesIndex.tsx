@@ -31,8 +31,9 @@ const SpeciesIndex = () => {
   const { data: species = [], isLoading } = useQuery({
     queryKey: ['speciesData'],
     queryFn: async () => {
-      // const res = await fetch('/api/species');
-      const res = await fetch('/data/species.json')
+      const res = await fetch('/api/species')
+      // const res = await fetch('/data/species.json')
+      console.log("Species data:", res)
       if (!res.ok) throw new Error('Failed to fetch species')
       return res.json()
     },
@@ -50,7 +51,7 @@ const SpeciesIndex = () => {
 
   if (isLoading) {
     return (
-    <Loader dataTitle="species catalog" />
+      <Loader dataTitle="species catalog" />
     )
   }
 
