@@ -1,4 +1,3 @@
-// 🗒️ BOILERPLATE
 import {
   ErrorComponent,
   Link,
@@ -18,36 +17,92 @@ export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
   console.error(error)
 
   return (
-    <div className="min-w-0 flex-1 p-4 flex flex-col items-center justify-center gap-6">
-      <ErrorComponent error={error} />
-      <div className="flex gap-2 items-center flex-wrap">
-        <button
-          onClick={() => {
-            router.invalidate()
-          }}
-          className={`px-2 py-1 bg-gray-600 dark:bg-gray-700 rounded-sm text-white uppercase font-extrabold`}
-        >
-          Try Again
-        </button>
-        {isRoot ? (
-          <Link
-            to="/"
-            className={`px-2 py-1 bg-gray-600 dark:bg-gray-700 rounded-sm text-white uppercase font-extrabold`}
+    <div
+      className="
+        w-full min-h-[80vh]
+        flex items-center justify-center
+        px-4
+      "
+    >
+      <div
+        className="
+          max-w-2xl w-full
+          bg-card text-card-foreground
+          border border-border
+          p-10
+          shadow-card
+          space-y-6
+        "
+      >
+        <h1 className="text-2xl font-semibold tracking-tight">
+          An Error Occurred
+        </h1>
+
+        <div className="text-muted-foreground leading-relaxed">
+          <ErrorComponent error={error} />
+        </div>
+
+        <div className="flex gap-4 items-center flex-wrap pt-4">
+          {/* Try Again */}
+          <button
+            onClick={() => router.invalidate()}
+            className="
+              inline-flex items-center gap-2
+              px-4 py-2
+              bg-primary text-primary-foreground
+              border border-border
+              font-medium tracking-wide
+              shadow-card
+              transition-colors
+              hover:bg-primary-hover
+              cursor-pointer
+            "
           >
-            Home
-          </Link>
-        ) : (
-          <Link
-            to="/"
-            className={`px-2 py-1 bg-gray-600 dark:bg-gray-700 rounded-sm text-white uppercase font-extrabold`}
-            onClick={(e) => {
-              e.preventDefault()
-              window.history.back()
-            }}
-          >
-            Go Back
-          </Link>
-        )}
+            Try Again
+          </button>
+
+          {/* Conditional Links */}
+          {isRoot ? (
+            <Link
+              to="/"
+              className="
+                inline-flex items-center gap-2
+                px-4 py-2
+                bg-secondary text-secondary-foreground
+                border border-border
+                font-medium tracking-wide
+                shadow-card
+                transition-colors
+                hover:bg-accent
+
+              "
+            >
+              Home
+            </Link>
+          ) : (
+            <Link
+              to="/"
+              className="
+                inline-flex items-center gap-2
+                px-4 py-2
+                bg-secondary text-secondary-foreground
+                border border-border
+                font-medium tracking-wide
+                shadow-card
+                transition-colors
+                hover:bg-accent
+                cursor-pointer
+
+              "
+              onClick={(e) => {
+                e.preventDefault()
+                window.history.back()
+              }}
+            >
+              Go Back
+            </Link>
+          )}
+        </div>
       </div>
     </div>
   )
