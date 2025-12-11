@@ -6,6 +6,7 @@ import type { Observation } from "@/types/observation";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 // import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { Loader } from "@/components/Loader";
 
 
 const Observations = () => {
@@ -42,16 +43,7 @@ const observations = data.results;
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background">
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex items-center justify-center h-64">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-              <p className="text-muted-foreground">Loading observations...</p>
-            </div>
-          </div>
-        </div>
-      </div>
+    <Loader dataTitle="observations" />
     );
   }
 
