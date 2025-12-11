@@ -53,16 +53,6 @@ export const Route = createFileRoute('/species/$speciesId')({
         </div>
       </div>
     </div>
-    // <div className="min-h-screen bg-background">
-    //   <div className="container mx-auto px-4 py-8">
-    //     <div className="flex items-center justify-center h-64">
-    //       <div className="text-center">
-    //         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-    //         <p className="text-muted-foreground">Loading species details...</p>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
   ),
 
   component: SpeciesDetailPage,
@@ -120,11 +110,107 @@ export function SpeciesDetailPage() {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Main column */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Species Information */}
-            <Card className="gradient-card shadow-card">
+      <Card className="gradient-card shadow-card">
+  <CardHeader>
+    <div className="space-y-2">
+      {/* Scientific Name + Authorship */}
+      <h1 className="scientific-name text-2xl font-medium flex flex-wrap items-baseline gap-2">
+        <span>{species.genus} {species.species}</span>
+        {species.authorship && (
+          <span className="text-lg not-italic text-muted-foreground">
+            {species.authorship}
+          </span>
+        )}
+      </h1>
+
+      {/* Species Common Name */}
+      {species.species_common_name && (
+        <h2 className="text-3xl font-bold text-foreground">
+          {species.species_common_name}
+        </h2>
+      )}
+
+      {/* Family badge */}
+      {species.family && (
+        <Badge variant="secondary" className="w-fit">
+          {species.family}
+        </Badge>
+      )}
+    </div>
+  </CardHeader>
+
+  <CardContent className="space-y-6">
+
+    {/* 🌿 Taxonomic Common Names */}
+    {[
+      ['Phylum', species.phylum_common_name],
+      ['Subphylum', species.sub_phylum_common_name],
+      ['Class', species.class_common_name],
+      ['Subclass', species.sub_class_common_name],
+      ['Order', species.order_common_name],
+      ['Suborder', species.sub_order_common_name],
+      ['Family', species.family_common_name],
+      ['Subfamily', species.sub_family_common_name]
+    ]
+      .filter(([, v]) => v)
+      .length > 0 && (
+        <section>
+          <h3 className="font-semibold text-foreground mb-2">Common Taxonomic Names</h3>
+          <div className="space-y-2">
+            {[
+              ['Phylum', species.phylum_common_name],
+              ['Subphylum', species.sub_phylum_common_name],
+              ['Class', species.class_common_name],
+              ['Subclass', species.sub_class_common_name],
+              ['Order', species.order_common_name],
+              ['Suborder', species.sub_order_common_name],
+              ['Family', species.family_common_name],
+              ['Subfamily', species.sub_family_common_name]
+            ]
+              .filter(([_, value]) => value)
+              .map(([label, value]) => (
+                <p key={label} className="text-muted-foreground">
+                  <span className="font-medium">{label}:</span> {value}
+                </p>
+              ))}
+          </div>
+        </section>
+      )
+    }
+
+    {/* 🌱 Collector’s Field Numbers */}
+    {species.collectors_field_numbers && (
+      <section>
+        <h3 className="font-semibold text-foreground mb-1">Collector’s Field #</h3>
+        <p className="text-muted-foreground leading-relaxed">
+          {species.collectors_field_numbers}
+        </p>
+      </section>
+    )}
+
+    {/* 📝 Notes */}
+    {species.note && (
+      <section>
+        <h3 className="font-semibold text-foreground mb-2">Notes</h3>
+        <p className="text-muted-foreground leading-relaxed">{species.note}</p>
+      </section>
+    )}
+
+    {/* 📚 Records */}
+    {species.records && (
+      <section>
+        <h3 className="font-semibold text-foreground mb-2">Records</h3>
+        <p className="text-muted-foreground leading-relaxed">{species.records}</p>
+      </section>
+    )}
+
+  </CardContent>
+</Card>
+
+            {/* <Card className="gradient-card shadow-card">
               <CardHeader>
                 <div className="space-y-2">
-                  {/* Scientific name + authorship */}
+      
                   <h1 className="scientific-name text-2xl font-medium flex flex-wrap items-baseline gap-2">
                     <span>
                       {species.genus} {species.species}
@@ -136,14 +222,14 @@ export function SpeciesDetailPage() {
                     )}
                   </h1>
 
-                  {/* Common name */}
+        
                   {species.species_common_name && (
                     <h2 className="text-3xl font-bold text-foreground">
                       {species.species_common_name}
                     </h2>
                   )}
 
-                  {/* Family badge */}
+         
                   {species.family && (
                     <Badge variant="secondary" className="w-fit">
                       {species.family}
@@ -153,7 +239,7 @@ export function SpeciesDetailPage() {
               </CardHeader>
 
               <CardContent className="space-y-6">
-                {/* Collector's Field Number */}
+       
                 {species.collectors_field_numbers && (
                   <section>
                     <h3 className="font-semibold text-foreground mb-1">
@@ -165,7 +251,7 @@ export function SpeciesDetailPage() {
                   </section>
                 )}
 
-                {/* Notes */}
+      
                 {species.note && (
                   <section>
                     <h3 className="font-semibold text-foreground mb-2">
@@ -177,7 +263,7 @@ export function SpeciesDetailPage() {
                   </section>
                 )}
 
-                {/* Records */}
+           
                 {species.records && (
                   <section>
                     <h3 className="font-semibold text-foreground mb-2">
@@ -189,7 +275,7 @@ export function SpeciesDetailPage() {
                   </section>
                 )}
               </CardContent>
-            </Card>
+            </Card> */}
 
             {/* Recent Observations */}
             <Card className="gradient-card shadow-card">
@@ -210,7 +296,7 @@ export function SpeciesDetailPage() {
                       <Card key={observation.id} className="border">
                         <CardContent className="p-4">
                           {getPhotoUrl(observation.photos) && (
-                            <div className="aspect-square overflow-hidden rounded-lg mb-3">
+                            <div className="aspect-square overflow-hidden mb-3">
                               <img
                                 src={getPhotoUrl(observation.photos)!}
                                 alt={observation.species_guess || 'Observation'}
@@ -265,29 +351,13 @@ export function SpeciesDetailPage() {
                 {[
                   ['Kingdom', species.kingdom],
                   ['Phylum', species.phylum],
-                  ['Phylum (Common Name)', species.phylum_common_name],
-
                   ['Subphylum', species.sub_phylum],
-                  ['Subphylum (Common Name)', species.sub_phylum_common_name],
-
                   ['Class', species.class_name],
-                  ['Class (Common Name)', species.class_common_name],
-
                   ['Subclass', species.sub_class],
-                  ['Subclass (Common Name)', species.sub_class_common_name],
-
                   ['Order', species.order_name],
-                  ['Order (Common Name)', species.order_common_name],
-
                   ['Suborder', species.sub_order],
-                  ['Suborder (Common Name)', species.sub_order_common_name],
-
                   ['Family', species.family],
-                  ['Family (Common Name)', species.family_common_name],
-
                   ['Subfamily', species.sub_family],
-                  ['Subfamily (Common Name)', species.sub_family_common_name],
-
                   ['Genus', species.genus],
                   ['Species', species.species],
                 ]
