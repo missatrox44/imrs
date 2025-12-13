@@ -7,7 +7,7 @@ import { rowToSpecies } from '@/server/speciesMapper'
 
 export const ServerRoute = createServerFileRoute('/api/species').methods({
   GET: async () => {
-    // 1️⃣ try turso first
+    // try turso first
     try {
       const client = getTurso()
       const result = await client.execute('SELECT * FROM specimens')
@@ -20,7 +20,7 @@ export const ServerRoute = createServerFileRoute('/api/species').methods({
       console.warn('[API/species] Turso failed, falling back to local SQLite', tursoError)
     }
 
-    // Fallback to local SQLite
+    // fallback to local SQLite
     try {
       const db = getDb()
       const specimens = db
