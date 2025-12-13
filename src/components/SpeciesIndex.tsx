@@ -36,6 +36,7 @@ const SpeciesIndex = () => {
       if (!res.ok) throw new Error('Failed to fetch species')
       return res.json()
     },
+      // staleTime: 0,  
   })
 
   const filtered =
