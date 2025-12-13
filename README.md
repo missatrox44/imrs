@@ -161,8 +161,8 @@ If using Turso account managed by Vercel, login with the following
 import { createClient } from "@libsql/client";
 
 const client = createClient({
-  url: process.env.imrs_TURSO_DATABASE_URL,
-  authToken: process.env.imrs_TURSO_AUTH_TOKEN,
+  url: process.env.TURSO_DATABASE_URL,
+  authToken: process.env.TURSO_AUTH_TOKEN,
 });
 
 
@@ -170,8 +170,8 @@ const client = createClient({
 import { createClient } from "@libsql/client/web";
 
 const client = createClient({
-  url: process.env.imrs_TURSO_DATABASE_URL,
-  authToken: process.env.imrs_TURSO_AUTH_TOKEN,
+  url: process.env.TURSO_DATABASE_URL,
+  authToken: process.env.TURSO_AUTH_TOKEN,
 });
 ```
 
@@ -181,8 +181,8 @@ import { createClient } from '@libsql/client';
 import { NextResponse } from 'next/server';
 
 const client = createClient({
-  url: process.env.imrs_TURSO_DATABASE_URL,
-  authToken: process.env.imrs_TURSO_AUTH_TOKEN
+  url: process.env.TURSO_DATABASE_URL,
+  authToken: process.env.TURSO_AUTH_TOKEN
 });
 
 export const POST = async () => {
