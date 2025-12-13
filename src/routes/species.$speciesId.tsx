@@ -9,7 +9,7 @@ export const Route = createFileRoute('/species/$speciesId')({
   // Fetch the species + recent observations for this ID
   loader: async ({ params }) => {
     const { speciesId } = params
-    const res = await fetch('/data/species.json')
+    const res = await fetch('/api/species')
     const all: Array<Species> = await res.json()
 
     const species = all.find((s) => String(s.id) === String(speciesId)) ?? null
