@@ -8,11 +8,16 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createServerRootRoute } from '@tanstack/react-start/server'
+
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ObservationsRouteImport } from './routes/observations'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SpeciesIndexRouteImport } from './routes/species.index'
 import { Route as SpeciesSpeciesIdRouteImport } from './routes/species.$speciesId'
+import { ServerRoute as ApiSpeciesServerRouteImport } from './routes/api/species'
+
+const rootServerRouteImport = createServerRootRoute()
 
 const ObservationsRoute = ObservationsRouteImport.update({
   id: '/observations',
@@ -33,6 +38,11 @@ const SpeciesSpeciesIdRoute = SpeciesSpeciesIdRouteImport.update({
   id: '/species/$speciesId',
   path: '/species/$speciesId',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSpeciesServerRoute = ApiSpeciesServerRouteImport.update({
+  id: '/api/species',
+  path: '/api/species',
+  getParentRoute: () => rootServerRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -68,6 +78,27 @@ export interface RootRouteChildren {
   SpeciesSpeciesIdRoute: typeof SpeciesSpeciesIdRoute
   SpeciesIndexRoute: typeof SpeciesIndexRoute
 }
+export interface FileServerRoutesByFullPath {
+  '/api/species': typeof ApiSpeciesServerRoute
+}
+export interface FileServerRoutesByTo {
+  '/api/species': typeof ApiSpeciesServerRoute
+}
+export interface FileServerRoutesById {
+  __root__: typeof rootServerRouteImport
+  '/api/species': typeof ApiSpeciesServerRoute
+}
+export interface FileServerRouteTypes {
+  fileServerRoutesByFullPath: FileServerRoutesByFullPath
+  fullPaths: '/api/species'
+  fileServerRoutesByTo: FileServerRoutesByTo
+  to: '/api/species'
+  id: '__root__' | '/api/species'
+  fileServerRoutesById: FileServerRoutesById
+}
+export interface RootServerRouteChildren {
+  ApiSpeciesServerRoute: typeof ApiSpeciesServerRoute
+}
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
@@ -101,6 +132,17 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+declare module '@tanstack/react-start/server' {
+  interface ServerFileRoutesByPath {
+    '/api/species': {
+      id: '/api/species'
+      path: '/api/species'
+      fullPath: '/api/species'
+      preLoaderRoute: typeof ApiSpeciesServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
+  }
+}
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -111,3 +153,9 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+const rootServerRouteChildren: RootServerRouteChildren = {
+  ApiSpeciesServerRoute: ApiSpeciesServerRoute,
+}
+export const serverRouteTree = rootServerRouteImport
+  ._addFileChildren(rootServerRouteChildren)
+  ._addFileTypes<FileServerRouteTypes>()

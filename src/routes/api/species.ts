@@ -23,8 +23,21 @@
 // }
 
 
-export const GET = async () => {
-  return new Response(JSON.stringify({ test: true }), {
-    headers: { "Content-Type": "application/json" },
+// export const GET = async () => {
+//   return new Response(JSON.stringify({ test: true }), {
+//     headers: { "Content-Type": "application/json" },
+//   })
+// }
+
+
+
+import { createServerFileRoute } from '@tanstack/react-start/server'
+
+export const ServerRoute = createServerFileRoute('/api/species')
+  .methods({
+    GET: async () => {
+      return new Response(JSON.stringify({ test: true }), {
+        headers: { 'Content-Type': 'application/json' },
+      })
+    },
   })
-}
