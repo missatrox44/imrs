@@ -2,10 +2,18 @@ import { Link } from '@tanstack/react-router'
 import { useMemo } from 'react'
 import { ArrowLeft, Calendar, MapPin, User } from 'lucide-react'
 import type { Observation } from '@/types/observation'
+import type { Species } from '@/types/species'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Route } from '@/routes/species.$speciesId'
+
+interface TaxonomyRow {
+  rank: string;
+  scientificName: string;
+  commonName: string | null;
+  level: number;
+}
 
 export function SpeciesDetails() {
   const { species, observations } = Route.useLoaderData()
@@ -16,13 +24,54 @@ export function SpeciesDetails() {
   const formatDate = (dateString?: string) =>
     dateString
       ? new Date(dateString).toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-        })
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      })
       : 'Unknown date'
 
   const obsCount = useMemo(() => observations.length, [observations])
+
+  // eslint-disable-next-line no-shadow
+  const buildTaxonomyHierarchy = (species: Species): Array<TaxonomyRow> => {
+    const rows: Array<TaxonomyRow> = [];
+
+    if (species.kingdom) {
+      rows.push({ rank: "Kingdom", scientificName: species.kingdom, commonName: null, level: 0 });
+    }
+    if (species.phylum) {
+      rows.push({ rank: "Phylum", scientificName: species.phylum, commonName: species.phylum_common_name ?? null, level: 1 });
+    }
+    if (species.sub_phylum) {
+      rows.push({ rank: "Subphylum", scientificName: species.sub_phylum, commonName: species.sub_phylum_common_name ?? null, level: 2 });
+    }
+    if (species.class_name) {
+      rows.push({ rank: "Class", scientificName: species.class_name, commonName: species.class_common_name ?? null, level: 2 });
+    }
+    if (species.sub_class) {
+      rows.push({ rank: "Subclass", scientificName: species.sub_class, commonName: species.sub_class_common_name ?? null, level: 3 });
+    }
+    if (species.order_name) {
+      rows.push({ rank: "Order", scientificName: species.order_name, commonName: species.order_common_name ?? null, level: 3 });
+    }
+    if (species.sub_order) {
+      rows.push({ rank: "Suborder", scientificName: species.sub_order, commonName: species.sub_order_common_name ?? null, level: 4 });
+    }
+    if (species.family) {
+      rows.push({ rank: "Family", scientificName: species.family, commonName: species.family_common_name ?? null, level: 4 });
+    }
+    if (species.sub_family) {
+      rows.push({ rank: "Subfamily", scientificName: species.sub_family, commonName: species.sub_family_common_name ?? null, level: 5 });
+    }
+    if (species.genus) {
+      rows.push({ rank: "Genus", scientificName: species.genus, commonName: null, level: 5 });
+    }
+    if (species.species) {
+      rows.push({ rank: "Species", scientificName: `${species.genus} ${species.species}`, commonName: species.species_common_name ?? null, level: 6 });
+    }
+
+    return rows;
+  };
 
   if (!species) {
     return (
@@ -46,6 +95,9 @@ export function SpeciesDetails() {
     )
   }
 
+  const scientificName = `${species.genus} ${species.species}`;
+  const taxonomyRows = buildTaxonomyHierarchy(species);
+
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
@@ -59,167 +111,55 @@ export function SpeciesDetails() {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Main column */}
           <div className="lg:col-span-2 space-y-6">
-            {/* <Card className="gradient-card shadow-card">
-              <CardHeader>
-                <div className="space-y-2">
-                  <h1 className="scientific-name text-2xl font-medium flex flex-wrap items-baseline gap-2">
-                    <span>
-                      {species.genus} {species.species}
-                    </span>
-                    {species.authorship && (
-                      <span className="text-lg not-italic text-muted-foreground">
-                        {species.authorship}
-                      </span>
-                    )}
-                  </h1>
 
-                  {species.species_common_name && (
-                    <h2 className="text-3xl font-bold text-foreground">
-                      {species.species_common_name}
-                    </h2>
-                  )}
-
-                  {species.family && (
-                    <Badge variant="secondary" className="w-fit">
-                      {species.family}
-                    </Badge>
-                  )}
-                </div>
-              </CardHeader>
-
-              <CardContent className="space-y-6">
-                {[
-                  ['Phylum', species.phylum_common_name],
-                  ['Subphylum', species.sub_phylum_common_name],
-                  ['Class', species.class_common_name],
-                  ['Subclass', species.sub_class_common_name],
-                  ['Order', species.order_common_name],
-                  ['Suborder', species.sub_order_common_name],
-                  ['Family', species.family_common_name],
-                  ['Subfamily', species.sub_family_common_name],
-                ].filter(([, v]) => v).length > 0 && (
-                  <section>
-                    <h3 className="font-semibold text-foreground mb-2">
-                      Common Taxonomic Names
-                    </h3>
-                    <div className="space-y-2">
-                      {[
-                        ['Phylum', species.phylum_common_name],
-                        ['Subphylum', species.sub_phylum_common_name],
-                        ['Class', species.class_common_name],
-                        ['Subclass', species.sub_class_common_name],
-                        ['Order', species.order_common_name],
-                        ['Suborder', species.sub_order_common_name],
-                        ['Family', species.family_common_name],
-                        ['Subfamily', species.sub_family_common_name],
-                      ]
-                        .filter(([_, value]) => value)
-                        .map(([label, value]) => (
-                          <p key={label} className="text-muted-foreground">
-                            <span className="font-medium">{label}:</span>{' '}
-                            {value}
-                          </p>
-                        ))}
-                    </div>
-                  </section>
-                )}
-
-                {species.collectors_field_numbers && (
-                  <section>
-                    <h3 className="font-semibold text-foreground mb-1">
-                      Collector’s Field #
-                    </h3>
-                    <p className="text-muted-foreground leading-relaxed">
-                      {species.collectors_field_numbers}
-                    </p>
-                  </section>
-                )}
-
-                {species.note && (
-                  <section>
-                    <h3 className="font-semibold text-foreground mb-2">
-                      Notes
-                    </h3>
-                    <p className="text-muted-foreground leading-relaxed">
-                      {species.note}
-                    </p>
-                  </section>
-                )}
-
-                {species.records && (
-                  <section>
-                    <h3 className="font-semibold text-foreground mb-2">
-                      Records
-                    </h3>
-                    <p className="text-muted-foreground leading-relaxed">
-                      {species.records}
-                    </p>
-                  </section>
-                )}
-              </CardContent>
-            </Card> */}
 
             <Card className="gradient-card shadow-card">
               <CardHeader>
                 <div className="space-y-2">
-                  <h1 className="scientific-name text-2xl font-medium flex flex-wrap items-baseline gap-2">
-                    <span>
-                      {species.genus} {species.species}
-                    </span>
-                    {species.authorship && (
-                      <span className="text-lg not-italic text-muted-foreground">
-                        {species.authorship}
-                      </span>
-                    )}
+                  <Badge variant="outline" className="w-fit capitalize">{species.category}</Badge>
+                  <h1 className="scientific-name text-2xl font-medium">
+                    {scientificName}
                   </h1>
-
-                  {species.species_common_name && (
-                    <h2 className="text-3xl font-bold text-foreground">
-                      {species.species_common_name}
-                    </h2>
-                  )}
-
-                  {species.family && (
-                    <Badge variant="secondary" className="w-fit">
-                      {species.family}
-                    </Badge>
+                  <h2 className="text-3xl font-bold text-foreground">
+                    {species.species_common_name}
+                  </h2>
+                  {species.authorship && (
+                    <p className="text-sm text-muted-foreground">
+                      Authorship: {species.authorship}
+                    </p>
                   )}
                 </div>
               </CardHeader>
-
-              <CardContent className="space-y-6">
-                {species.collectors_field_numbers && (
-                  <section>
-                    <h3 className="font-semibold text-foreground mb-1">
-                      Collector’s Field #
-                    </h3>
-                    <p className="text-muted-foreground leading-relaxed">
-                      {species.collectors_field_numbers}
-                    </p>
-                  </section>
-                )}
-
-                {species.note && (
-                  <section>
-                    <h3 className="font-semibold text-foreground mb-2">
-                      Notes
-                    </h3>
+              <CardContent>
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="font-semibold text-foreground mb-2">Description & Notes</h3>
                     <p className="text-muted-foreground leading-relaxed">
                       {species.note}
                     </p>
-                  </section>
-                )}
+                  </div>
 
-                {species.records && (
-                  <section>
-                    <h3 className="font-semibold text-foreground mb-2">
-                      Records
-                    </h3>
-                    <p className="text-muted-foreground leading-relaxed">
-                      {species.records}
-                    </p>
-                  </section>
-                )}
+                  {/* Collection Info */}
+                  {(species.collectors_field_numbers || species.records) && (
+                    <div className="pt-4 border-t border-border">
+                      <h3 className="font-semibold text-foreground mb-3">Collection Information</h3>
+                      <div className="grid sm:grid-cols-2 gap-3">
+                        {species.collectors_field_numbers && (
+                          <div className="bg-muted/50 rounded-md p-3">
+                            <div className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Field Number</div>
+                            <div className="font-mono text-sm">{species.collectors_field_numbers}</div>
+                          </div>
+                        )}
+                        {species.records && (
+                          <div className="bg-muted/50 rounded-md p-3">
+                            <div className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Records</div>
+                            <div className="font-mono text-sm">{species.records}</div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </CardContent>
             </Card>
 
@@ -259,7 +199,7 @@ export function SpeciesDetails() {
                                     }
                                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                                     onError={(e) => {
-                                      ;(
+                                      ; (
                                         e.target as HTMLImageElement
                                       ).style.display = 'none'
                                     }}
