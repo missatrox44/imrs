@@ -3,6 +3,13 @@ import { useMemo } from 'react'
 import { ArrowLeft, Calendar, ChevronRight, MapPin, User } from 'lucide-react'
 import type { Observation } from '@/types/observation'
 import type { Species } from '@/types/species'
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -24,10 +31,10 @@ export function SpeciesDetails() {
   const formatDate = (dateString?: string) =>
     dateString
       ? new Date(dateString).toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-        })
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      })
       : 'Unknown date'
 
   const obsCount = useMemo(() => observations.length, [observations])
@@ -245,66 +252,87 @@ export function SpeciesDetails() {
                     </p>
                   </div>
                 ) : (
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    {observations
-                      .slice(0, 4)
-                      .map((observation: Observation) => (
-                        <Link
-                          key={observation.id}
-                          to={observation.uri || '#'}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <Card className="border hover:shadow-lg transition-shadow cursor-pointer overflow-hidden">
-                            <CardContent className="p-4">
-                              {getPhotoUrl(observation.photos) && (
-                                <div className="aspect-square overflow-hidden rounded-md mb-3">
-                                  <img
-                                    src={getPhotoUrl(observation.photos)!}
-                                    alt={
-                                      observation.species_guess || 'Observation'
-                                    }
-                                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                                    onError={(e) => {
-                                      ;(
-                                        e.target as HTMLImageElement
-                                      ).style.display = 'none'
-                                    }}
-                                  />
-                                </div>
-                              )}
+                  <div className="w-full relative px-8">
+                    <Carousel
+                      opts={{
+                        align: 'start',
+                        loop: true,
+                      }}
+                      className="w-full"
+                    >
+                      <CarouselContent className="-ml-4">
+                        {observations
+                          .slice(0, 6)
+                          .map((observation: Observation) => (
+                            <CarouselItem
+                              key={observation.id}
+                              className="pl-4 basis-full md:basis-1/2"
+                            >
+                              <Link
+                                to={observation.uri || '#'}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="block h-full"
+                              >
+                                <Card className="border hover:shadow-lg transition-shadow cursor-pointer overflow-hidden h-full">
+                                  <CardContent className="p-4 flex flex-col h-full">
+                                    {getPhotoUrl(observation.photos) && (
+                                      <div className="aspect-square overflow-hidden mb-3 shrink-0">
+                                        <img
+                                          src={getPhotoUrl(observation.photos)!}
+                                          alt={
+                                            observation.species_guess ||
+                                            'Observation'
+                                          }
+                                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                                          onError={(e) => {
+                                            ; (
+                                              e.target as HTMLImageElement
+                                            ).style.display = 'none'
+                                          }}
+                                        />
+                                      </div>
+                                    )}
 
-                              <div className="space-y-2">
-                                {/* User */}
-                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                  <User className="w-3 h-3" />
-                                  <span>
-                                    {observation.user?.login || 'Anonymous'}
-                                  </span>
-                                </div>
+                                    <div className="space-y-2 grow">
+                                      {/* User */}
+                                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                        <User className="w-3 h-3 shrink-0" />
+                                        <span className="truncate">
+                                          {observation.user?.login ||
+                                            'Anonymous'}
+                                        </span>
+                                      </div>
 
-                                {/* Date */}
-                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                  <Calendar className="w-3 h-3" />
-                                  <span>
-                                    {formatDate(observation.observed_on_string)}
-                                  </span>
-                                </div>
+                                      {/* Date */}
+                                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                        <Calendar className="w-3 h-3 shrink-0" />
+                                        <span>
+                                          {formatDate(
+                                            observation.observed_on_string,
+                                          )}
+                                        </span>
+                                      </div>
 
-                                {/* Location */}
-                                {observation.place_guess && (
-                                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                    <MapPin className="w-3 h-3" />
-                                    <span className="line-clamp-1">
-                                      {observation.place_guess}
-                                    </span>
-                                  </div>
-                                )}
-                              </div>
-                            </CardContent>
-                          </Card>
-                        </Link>
-                      ))}
+                                      {/* Location */}
+                                      {observation.place_guess && (
+                                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                          <MapPin className="w-3 h-3 shrink-0" />
+                                          <span className="line-clamp-1">
+                                            {observation.place_guess}
+                                          </span>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </CardContent>
+                                </Card>
+                              </Link>
+                            </CarouselItem>
+                          ))}
+                      </CarouselContent>
+                      <CarouselPrevious className="-left-4 lg:-left-8" />
+                      <CarouselNext className="-right-4 lg:-right-8" />
+                    </Carousel>
                   </div>
                 )}
               </CardContent>
