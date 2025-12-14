@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { useMemo } from 'react'
-import { ArrowLeft, Calendar, MapPin, User } from 'lucide-react'
+import { ArrowLeft, Calendar, ChevronRight, MapPin, User } from 'lucide-react'
 import type { Observation } from '@/types/observation'
 import type { Species } from '@/types/species'
 import { Button } from '@/components/ui/button'
@@ -9,10 +9,10 @@ import { Badge } from '@/components/ui/badge'
 import { Route } from '@/routes/species.$speciesId'
 
 interface TaxonomyRow {
-  rank: string;
-  scientificName: string;
-  commonName: string | null;
-  level: number;
+  rank: string
+  scientificName: string
+  commonName: string | null
+  level: number
 }
 
 export function SpeciesDetails() {
@@ -24,54 +24,109 @@ export function SpeciesDetails() {
   const formatDate = (dateString?: string) =>
     dateString
       ? new Date(dateString).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-      })
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+        })
       : 'Unknown date'
 
   const obsCount = useMemo(() => observations.length, [observations])
 
   // eslint-disable-next-line no-shadow
   const buildTaxonomyHierarchy = (species: Species): Array<TaxonomyRow> => {
-    const rows: Array<TaxonomyRow> = [];
+    const rows: Array<TaxonomyRow> = []
 
     if (species.kingdom) {
-      rows.push({ rank: "Kingdom", scientificName: species.kingdom, commonName: null, level: 0 });
+      rows.push({
+        rank: 'Kingdom',
+        scientificName: species.kingdom,
+        commonName: null,
+        level: 0,
+      })
     }
     if (species.phylum) {
-      rows.push({ rank: "Phylum", scientificName: species.phylum, commonName: species.phylum_common_name ?? null, level: 1 });
+      rows.push({
+        rank: 'Phylum',
+        scientificName: species.phylum,
+        commonName: species.phylum_common_name ?? null,
+        level: 1,
+      })
     }
     if (species.sub_phylum) {
-      rows.push({ rank: "Subphylum", scientificName: species.sub_phylum, commonName: species.sub_phylum_common_name ?? null, level: 2 });
+      rows.push({
+        rank: 'Subphylum',
+        scientificName: species.sub_phylum,
+        commonName: species.sub_phylum_common_name ?? null,
+        level: 2,
+      })
     }
     if (species.class_name) {
-      rows.push({ rank: "Class", scientificName: species.class_name, commonName: species.class_common_name ?? null, level: 2 });
+      rows.push({
+        rank: 'Class',
+        scientificName: species.class_name,
+        commonName: species.class_common_name ?? null,
+        level: 2,
+      })
     }
     if (species.sub_class) {
-      rows.push({ rank: "Subclass", scientificName: species.sub_class, commonName: species.sub_class_common_name ?? null, level: 3 });
+      rows.push({
+        rank: 'Subclass',
+        scientificName: species.sub_class,
+        commonName: species.sub_class_common_name ?? null,
+        level: 3,
+      })
     }
     if (species.order_name) {
-      rows.push({ rank: "Order", scientificName: species.order_name, commonName: species.order_common_name ?? null, level: 3 });
+      rows.push({
+        rank: 'Order',
+        scientificName: species.order_name,
+        commonName: species.order_common_name ?? null,
+        level: 3,
+      })
     }
     if (species.sub_order) {
-      rows.push({ rank: "Suborder", scientificName: species.sub_order, commonName: species.sub_order_common_name ?? null, level: 4 });
+      rows.push({
+        rank: 'Suborder',
+        scientificName: species.sub_order,
+        commonName: species.sub_order_common_name ?? null,
+        level: 4,
+      })
     }
     if (species.family) {
-      rows.push({ rank: "Family", scientificName: species.family, commonName: species.family_common_name ?? null, level: 4 });
+      rows.push({
+        rank: 'Family',
+        scientificName: species.family,
+        commonName: species.family_common_name ?? null,
+        level: 4,
+      })
     }
     if (species.sub_family) {
-      rows.push({ rank: "Subfamily", scientificName: species.sub_family, commonName: species.sub_family_common_name ?? null, level: 5 });
+      rows.push({
+        rank: 'Subfamily',
+        scientificName: species.sub_family,
+        commonName: species.sub_family_common_name ?? null,
+        level: 5,
+      })
     }
     if (species.genus) {
-      rows.push({ rank: "Genus", scientificName: species.genus, commonName: null, level: 5 });
+      rows.push({
+        rank: 'Genus',
+        scientificName: species.genus,
+        commonName: null,
+        level: 5,
+      })
     }
     if (species.species) {
-      rows.push({ rank: "Species", scientificName: `${species.genus} ${species.species}`, commonName: species.species_common_name ?? null, level: 6 });
+      rows.push({
+        rank: 'Species',
+        scientificName: species.species,
+        commonName: null,
+        level: 6,
+      })
     }
 
-    return rows;
-  };
+    return rows
+  }
 
   if (!species) {
     return (
@@ -95,8 +150,8 @@ export function SpeciesDetails() {
     )
   }
 
-  const scientificName = `${species.genus} ${species.species}`;
-  const taxonomyRows = buildTaxonomyHierarchy(species);
+  const scientificName = `${species.genus} ${species.species}`
+  const taxonomyRows = buildTaxonomyHierarchy(species)
 
   return (
     <div className="min-h-screen bg-background">
@@ -111,12 +166,12 @@ export function SpeciesDetails() {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Main column */}
           <div className="lg:col-span-2 space-y-6">
-
-
             <Card className="gradient-card shadow-card">
               <CardHeader>
                 <div className="space-y-2">
-                  <Badge variant="outline" className="w-fit capitalize">{species.category}</Badge>
+                  <Badge variant="outline" className="w-fit capitalize">
+                    {species.category}
+                  </Badge>
                   <h1 className="scientific-name text-2xl font-medium">
                     {scientificName}
                   </h1>
@@ -133,7 +188,9 @@ export function SpeciesDetails() {
               <CardContent>
                 <div className="space-y-4">
                   <div>
-                    <h3 className="font-semibold text-foreground mb-2">Description & Notes</h3>
+                    <h3 className="font-semibold text-foreground mb-2">
+                      Description & Notes
+                    </h3>
                     <p className="text-muted-foreground leading-relaxed">
                       {species.note}
                     </p>
@@ -142,18 +199,28 @@ export function SpeciesDetails() {
                   {/* Collection Info */}
                   {(species.collectors_field_numbers || species.records) && (
                     <div className="pt-4 border-t border-border">
-                      <h3 className="font-semibold text-foreground mb-3">Collection Information</h3>
+                      <h3 className="font-semibold text-foreground mb-3">
+                        Collection Information
+                      </h3>
                       <div className="grid sm:grid-cols-2 gap-3">
                         {species.collectors_field_numbers && (
                           <div className="bg-muted/50 rounded-md p-3">
-                            <div className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Field Number</div>
-                            <div className="font-mono text-sm">{species.collectors_field_numbers}</div>
+                            <div className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
+                              Field Number
+                            </div>
+                            <div className="font-mono text-sm">
+                              {species.collectors_field_numbers}
+                            </div>
                           </div>
                         )}
                         {species.records && (
                           <div className="bg-muted/50 rounded-md p-3">
-                            <div className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Records</div>
-                            <div className="font-mono text-sm">{species.records}</div>
+                            <div className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
+                              Records
+                            </div>
+                            <div className="font-mono text-sm">
+                              {species.records}
+                            </div>
                           </div>
                         )}
                       </div>
@@ -199,7 +266,7 @@ export function SpeciesDetails() {
                                     }
                                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                                     onError={(e) => {
-                                      ; (
+                                      ;(
                                         e.target as HTMLImageElement
                                       ).style.display = 'none'
                                     }}
@@ -248,6 +315,45 @@ export function SpeciesDetails() {
           <div className="space-y-6">
             <Card className="gradient-card shadow-card">
               <CardHeader>
+                <CardTitle>Taxonomic Classification</CardTitle>
+              </CardHeader>
+              <CardContent className="p-0">
+                <div className="divide-y divide-border">
+                  {taxonomyRows.map((row, index) => (
+                    <div
+                      key={row.rank}
+                      className="px-4 py-3 hover:bg-muted/30 transition-colors"
+                      style={{ paddingLeft: `${1 + row.level * 0.5}rem` }}
+                    >
+                      <div className="flex items-start gap-2">
+                        <ChevronRight className="w-3 h-3 mt-1.5 text-muted-foreground/50 shrink-0" />
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="text-xs text-muted-foreground uppercase tracking-wide">
+                              {row.rank}
+                            </span>
+                          </div>
+                          <div className="flex items-baseline gap-2 flex-wrap">
+                            <span
+                              className={`font-medium ${row.rank === 'Species' || row.rank === 'Genus' ? 'scientific-name' : ''}`}
+                            >
+                              {row.scientificName}
+                            </span>
+                            {row.commonName && (
+                              <span className="text-sm text-muted-foreground">
+                                ({row.commonName})
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+            {/* <Card className="gradient-card shadow-card">
+              <CardHeader>
                 <CardTitle>Taxonomy</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -274,7 +380,7 @@ export function SpeciesDetails() {
                     </div>
                   ))}
               </CardContent>
-            </Card>
+            </Card> */}
 
             {/* Extra Details */}
             {/* <Card className="gradient-card shadow-card">
