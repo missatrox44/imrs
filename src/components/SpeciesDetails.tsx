@@ -330,8 +330,8 @@ export function SpeciesDetails() {
                             </CarouselItem>
                           ))}
                       </CarouselContent>
-                      <CarouselPrevious className="-left-4 lg:-left-8" />
-                      <CarouselNext className="-right-4 lg:-right-8" />
+                      <CarouselPrevious className="w-10 h-10" />
+                      <CarouselNext className="w-10 h-10" />
                     </Carousel>
                   </div>
                 )}
