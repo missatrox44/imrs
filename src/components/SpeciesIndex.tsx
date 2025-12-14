@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Input } from '@/components/ui/input'
 import { Loader } from "@/components/Loader";
-import { AdvancedSearch } from '@/components/AdvancedSearch';
+// import { AdvancedSearch } from '@/components/AdvancedSearch';
 
 const ALL_CATEGORIES: Array<Category> = [
   'mammals',
@@ -86,7 +86,7 @@ const SpeciesIndex = () => {
           Comprehensive database of species documented at IMRS.
         </p>
 
-        <div className="relative max-w-md mb-6">
+        <div className="relative mb-6">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
           <Input
             type="text"
@@ -111,10 +111,10 @@ const SpeciesIndex = () => {
                 </TabsTrigger>
               ))}
             </TabsList>
-          <p className="mt-2 text-right text-xs text-muted-foreground animate-pulse lg:hidden">
+          </div>
+          <p className="mt-2 mr-2 text-right text-xs text-muted-foreground animate-pulse lg:hidden">
             Scroll right to see more →
           </p>
-          </div>
 
           {/* <AdvancedSearch /> */}
 
@@ -211,11 +211,11 @@ const SpeciesIndex = () => {
                                       {item.family_common_name ?? item.family}
                                     </Badge>
                                   )}
-                                  {item.family && (
+                                  {/* {item.family && (
                                     <Badge variant="outline" className="text-xs">
                                       Family: {item.family}
                                     </Badge>
-                                  )}
+                                  )} */}
                                 </div>
 
                                 {/* Notes */}
