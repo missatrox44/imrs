@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { useMemo } from 'react'
-import { ArrowLeft, Calendar, ChevronRight, MapPin, User } from 'lucide-react'
+import { ArrowLeft, Calendar, ChevronRight, MapPin, User, ImageOff } from 'lucide-react'
 import type { Observation } from '@/types/observation'
 import type { Species } from '@/types/species'
 import {
@@ -238,7 +238,7 @@ export function SpeciesDetails() {
             </Card>
 
             {/* Recent Observations */}
-            <Card className="gradient-card shadow-card">
+            {/* <Card className="gradient-card shadow-card">
               <CardHeader>
                 <CardTitle>Recent Observations</CardTitle>
               </CardHeader>
@@ -295,7 +295,7 @@ export function SpeciesDetails() {
                                     )}
 
                                     <div className="space-y-2 grow">
-                                      {/* User */}
+                                  
                                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
                                         <User className="w-3 h-3 shrink-0" />
                                         <span className="truncate">
@@ -304,7 +304,7 @@ export function SpeciesDetails() {
                                         </span>
                                       </div>
 
-                                      {/* Date */}
+                                    
                                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
                                         <Calendar className="w-3 h-3 shrink-0" />
                                         <span>
@@ -314,7 +314,6 @@ export function SpeciesDetails() {
                                         </span>
                                       </div>
 
-                                      {/* Location */}
                                       {observation.place_guess && (
                                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                                           <MapPin className="w-3 h-3 shrink-0" />
@@ -333,6 +332,91 @@ export function SpeciesDetails() {
                       <CarouselPrevious className="w-10 h-10" />
                       <CarouselNext className="w-10 h-10" />
                     </Carousel>
+                  </div>
+                )}
+              </CardContent>
+            </Card> */}
+             <Card className="gradient-card shadow-card">
+              <CardHeader>
+                <CardTitle>Recent Observations</CardTitle>
+              </CardHeader>
+
+              <CardContent>
+                {obsCount === 0 ? (
+                  <div className="text-center py-8">
+                    <p className="text-muted-foreground">
+                      No iNaturalist observations recorded for this species at
+                      IMRS yet.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    {observations
+                      .slice(0, 4)
+                      .map((observation: Observation) => (
+                        <Link
+                          key={observation.id}
+                          to={observation.uri || '#'}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Card className="border hover:shadow-lg transition-shadow cursor-pointer overflow-hidden">
+                            <CardContent className="p-4">
+                              {(() => {
+                                const photoUrl = getPhotoUrl(observation.photos)
+                                return photoUrl ? (
+                                  <div className="aspect-square overflow-hidden rounded-md mb-3">
+                                    <img
+                                      src={photoUrl}
+                                      alt={
+                                        observation.species_guess || 'Observation'
+                                      }
+                                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                                      onError={(e) => {
+                                        ;(
+                                          e.target as HTMLImageElement
+                                        ).style.display = 'none'
+                                      }}
+                                    />
+                                  </div>
+                                ) : (
+                                  <div className="aspect-square flex items-center justify-center rounded-md mb-3 bg-muted/10 text-muted-foreground">
+                                    <ImageOff className="w-6 h-6" />
+                                  </div>
+                                )
+                              })()}
+
+                              <div className="space-y-2">
+                                {/* User */}
+                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                  <User className="w-3 h-3" />
+                                  <span>
+                                    {observation.user?.login || 'Anonymous'}
+                                  </span>
+                                </div>
+
+                                {/* Date */}
+                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                  <Calendar className="w-3 h-3" />
+                                  <span>
+                                    {formatDate(observation.observed_on_string)}
+                                  </span>
+                                </div>
+
+                                {/* Location */}
+                                {observation.place_guess && (
+                                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                    <MapPin className="w-3 h-3" />
+                                    <span className="line-clamp-1">
+                                      {observation.place_guess}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                            </CardContent>
+                          </Card>
+                        </Link>
+                      ))}
                   </div>
                 )}
               </CardContent>
