@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ChevronRight, Search } from 'lucide-react'
+import { Bird, Bug, ChevronRight, Flower2, ImageOff, Leaf, Rabbit, Search, Shell, Turtle } from "lucide-react";
 import { Link } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import type { Species } from '@/types/species'
@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Input } from '@/components/ui/input'
 import { Loader } from "@/components/Loader";
+// import { AdvancedSearch } from '@/components/AdvancedSearch';
 
 const ALL_CATEGORIES: Array<Category> = [
   'mammals',
@@ -20,9 +21,31 @@ const ALL_CATEGORIES: Array<Category> = [
   'arthropods',
   'worms',
 ]
-// TODO: add filter for different tags of common name stuff?
-
 const TABS: Array<Category> = ['all', ...ALL_CATEGORIES]
+
+const getCategoryIcon = (category: string) => {
+  switch (category) {
+    case 'plants':
+      return <Leaf className="w-4 h-4" />;
+    case 'birds':
+      return <Bird className="w-4 h-4" />;
+    case 'mammals':
+      return <Rabbit className="w-4 h-4" />;
+    case 'reptiles':
+      return <Turtle className="w-4 h-4" />;
+    case 'amphibians':
+      return <Shell className="w-4 h-4" />;
+    case 'arthropods':
+      return <Bug className="w-4 h-4" />;
+    case 'fungi':
+      return <Flower2 className="w-4 h-4" />;
+    case 'worms':
+      return <Shell className="w-4 h-4" />;
+    default:
+      return null;
+  }
+};
+
 
 const SpeciesIndex = () => {
   const [activeTab, setActiveTab] = useState<Category>('all')
@@ -36,7 +59,7 @@ const SpeciesIndex = () => {
       if (!res.ok) throw new Error('Failed to fetch species')
       return res.json()
     },
-      // staleTime: 0,  
+    // staleTime: 0,  
   })
 
   const filtered =
@@ -63,7 +86,7 @@ const SpeciesIndex = () => {
           Comprehensive database of species documented at IMRS.
         </p>
 
-        <div className="relative max-w-md mb-6">
+        <div className="relative mb-6">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
           <Input
             type="text"
@@ -89,9 +112,12 @@ const SpeciesIndex = () => {
               ))}
             </TabsList>
           </div>
-          <p className="mt-2 text-right text-xs text-muted-foreground animate-pulse lg:hidden">
+          <p className="mt-2 mr-2 text-right text-xs text-muted-foreground animate-pulse lg:hidden">
             Scroll right to see more →
           </p>
+
+          {/* <AdvancedSearch /> */}
+
           <div className="mt-6 mb-4 text-sm text-muted-foreground">
             {activeTab === 'all' ? (
               <>Showing {filtered.length} species</>
@@ -127,77 +153,83 @@ const SpeciesIndex = () => {
                         to="/species/$speciesId"
                         params={{ speciesId: String(item.id) }}
                       >
-                        <Card className="gradient-card shadow-card hover:shadow-hover transition-all duration-300 cursor-pointer">
-                          <CardContent className="p-6">
-                            <div className="flex items-center justify-between">
-                              <div className="flex-1">
-                                <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-3">
-                                  <h3 className="scientific-name text-lg font-medium">
-                                    {item.genus}{" "}{item.species}
-                                  </h3>
-                                  <span className="font-semibold">
-                                    {item.species_common_name}
-                                  </span>
+                        <Card className="gradient-card shadow-card hover:shadow-hover transition-all duration-300 group cursor-pointer">
+                          <CardContent className="p-4 sm:p-6">
+                            <div className="flex items-start gap-4">
+
+
+                              <div className="flex-1 min-w-0">
+                                {/* Scientific + Common Name */}
+                                <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-2">
+                                  <div className="flex items-center gap-2">
+                                    {item.category && (
+                                      <span className="text-muted-foreground">
+                                        {getCategoryIcon(item.category)}
+                                      </span>
+                                    )}
+                                    <h3 className="scientific-name text-lg font-medium truncate">
+                                      {item.genus} {item.species}
+                                    </h3>
+                                  </div>
+
+                                  {item.species_common_name && (
+                                    <span className="text-foreground font-semibold truncate">
+                                      {item.species_common_name}
+                                    </span>
+                                  )}
                                 </div>
 
-                                <Badge variant="secondary">{item.family}</Badge>
-
-                                <p className="text-muted-foreground text-sm mt-3 line-clamp-2">
-                                  {item.note}
+                                {/* Taxonomic Path */}
+                                <p className="text-xs text-muted-foreground font-mono mb-2 truncate">
+                                  {item.phylum} › {item.class_name} › {item.order_name} › {item.family}
                                 </p>
+
+                                {/* Phylum & Class */}
+                                {/* <div className="flex flex-wrap items-center gap-2 mb-2">
+                                  {item.phylum && (
+                                    <Badge
+                                      variant="outline"
+                                      className="text-xs font-normal opacity-70 border-dashed"
+                                    >
+                                      {item.phylum}
+                                    </Badge>
+                                  )}
+                                  {item.class_name && (
+                                    <Badge
+                                      variant="outline"
+                                      className="text-xs font-normal opacity-70 border-dashed"
+                                    >
+                                      {item.class_name}
+                                    </Badge>
+                                  )}
+                                </div> */}
+
+                                {/* Order & Family */}
+                                <div className="flex flex-wrap items-center gap-2 mb-2">
+                                  {(item.family_common_name || item.family) && (
+                                    <Badge variant="secondary" className="text-xs">
+                                      {item.family_common_name ?? item.family}
+                                    </Badge>
+                                  )}
+                                  {/* {item.family && (
+                                    <Badge variant="outline" className="text-xs">
+                                      Family: {item.family}
+                                    </Badge>
+                                  )} */}
+                                </div>
+
+                                {/* Notes */}
+                                {/* {item.note && (
+                                  <p className="text-muted-foreground text-sm line-clamp-2">
+                                    {item.note}
+                                  </p>
+                                )} */}
                               </div>
 
-                              <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors ml-4" />
+                              <ChevronRight className="shrink-0 w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors self-center" />
                             </div>
                           </CardContent>
                         </Card>
-                        {/* <Card className="gradient-card shadow-card hover:shadow-hover transition-all duration-300 cursor-pointer">
-                          <CardContent className="p-6">
-                            <div className="flex items-center justify-between">
-                              <div className="flex-1">
-                                <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-3">
-                                  <h3 className="scientific-name text-lg font-medium">
-                                    {item.genus} {item.species}
-                                  </h3>
-                                  {item.species_common_name && (
-                                      <span className="font-semibold">
-                                    {item.species_common_name}
-                                  </span>
-                                  )}
-                                </div>
-                                <div className="flex flex-wrap gap-2 mb-3">
-                                  {[
-                                    item.phylum_common_name,
-                                    item.sub_phylum_common_name,
-                                    item.class_common_name,
-                                    item.sub_class_common_name,
-                                    item.order_common_name,
-                                    item.sub_order_common_name,
-                                    item.family_common_name,
-                                    item.sub_family_common_name
-                                  ]
-                                    .filter(Boolean)
-                                    .map((name, idx) => (
-                                      <Badge key={idx} variant="secondary" className="text-xs px-2 py-0.5">
-                                        {name}
-                                      </Badge>
-                                    ))}
-                                </div>
-                                {item.family && (
-                                  <Badge variant="secondary" className="text-xs px-2 py-0.5">
-                                    {item.family}
-                                  </Badge>
-                                )}
-                                {item.note && (
-                                  <p className="text-muted-foreground text-sm mt-3 line-clamp-2">
-                                    {item.note}
-                                  </p>
-                                )}
-                              </div>
-                              <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors ml-4" />
-                            </div>
-                          </CardContent>
-                        </Card> */}
                       </Link>
                     ))}
                   </div>
