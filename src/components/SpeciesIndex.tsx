@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ArrowUpDown, Bird, Bug, ChevronRight, Filter, Flower2, ImageOff, Leaf, Rabbit, RotateCcw, Search, Shell, SlidersHorizontal, Turtle } from "lucide-react";
+import { Bird, Bug, ChevronRight, Flower2, ImageOff, Leaf, Rabbit, Search, Shell, Turtle } from "lucide-react";
 import { Link } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import type { Species } from '@/types/species'
@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Input } from '@/components/ui/input'
 import { Loader } from "@/components/Loader";
+import { AdvancedSearch } from '@/components/AdvancedSearch';
 
 const ALL_CATEGORIES: Array<Category> = [
   'mammals',
@@ -45,7 +46,6 @@ const getCategoryIcon = (category: string) => {
   }
 };
 
-// TODO: add filter for different tags of common name stuff?
 
 const SpeciesIndex = () => {
   const [activeTab, setActiveTab] = useState<Category>('all')
@@ -111,10 +111,13 @@ const SpeciesIndex = () => {
                 </TabsTrigger>
               ))}
             </TabsList>
-          </div>
           <p className="mt-2 text-right text-xs text-muted-foreground animate-pulse lg:hidden">
             Scroll right to see more →
           </p>
+          </div>
+
+          {/* <AdvancedSearch /> */}
+
           <div className="mt-6 mb-4 text-sm text-muted-foreground">
             {activeTab === 'all' ? (
               <>Showing {filtered.length} species</>
@@ -208,11 +211,11 @@ const SpeciesIndex = () => {
                                       {item.family_common_name ?? item.family}
                                     </Badge>
                                   )}
-                                  {/* {item.family && (
+                                  {item.family && (
                                     <Badge variant="outline" className="text-xs">
                                       Family: {item.family}
                                     </Badge>
-                                  )} */}
+                                  )}
                                 </div>
 
                                 {/* Notes */}
