@@ -1,19 +1,22 @@
 import { Link } from '@tanstack/react-router'
 import { useMemo } from 'react'
-import { ArrowLeft, Calendar, ChevronRight, MapPin, User, ImageOff } from 'lucide-react'
+import {
+  ArrowLeft,
+  Calendar,
+  ChevronRight,
+  ImageOff,
+  MapPin,
+  User,
+} from 'lucide-react'
 import type { Observation } from '@/types/observation'
 import type { Species } from '@/types/species'
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@/components/ui/carousel'
+
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Route } from '@/routes/species.$speciesId'
+import { formatDate } from '@/lib/formatDate'
+import { getPhotoUrl } from '@/lib/getPhotoUrl'
 
 interface TaxonomyRow {
   rank: string
@@ -24,18 +27,6 @@ interface TaxonomyRow {
 
 export function SpeciesDetails() {
   const { species, observations } = Route.useLoaderData()
-
-  const getPhotoUrl = (photos?: Array<{ url: string }>) =>
-    photos?.[0]?.url ? photos[0].url.replace('square', 'small') : null
-
-  const formatDate = (dateString?: string) =>
-    dateString
-      ? new Date(dateString).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-      })
-      : 'Unknown date'
 
   const obsCount = useMemo(() => observations.length, [observations])
 
@@ -238,105 +229,8 @@ export function SpeciesDetails() {
             </Card>
 
             {/* Recent Observations */}
-            {/* <Card className="gradient-card shadow-card">
-              <CardHeader>
-                <CardTitle>Recent Observations</CardTitle>
-              </CardHeader>
 
-              <CardContent>
-                {obsCount === 0 ? (
-                  <div className="text-center py-8">
-                    <p className="text-muted-foreground">
-                      No iNaturalist observations recorded for this species at
-                      IMRS yet.
-                    </p>
-                  </div>
-                ) : (
-                  <div className="w-full relative px-8">
-                    <Carousel
-                      opts={{
-                        align: 'start',
-                        loop: true,
-                      }}
-                      className="w-full"
-                    >
-                      <CarouselContent className="-ml-4">
-                        {observations
-                          .slice(0, 6)
-                          .map((observation: Observation) => (
-                            <CarouselItem
-                              key={observation.id}
-                              className="pl-4 basis-full md:basis-1/2"
-                            >
-                              <Link
-                                to={observation.uri || '#'}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="block h-full"
-                              >
-                                <Card className="border hover:shadow-lg transition-shadow cursor-pointer overflow-hidden h-full">
-                                  <CardContent className="p-4 flex flex-col h-full">
-                                    {getPhotoUrl(observation.photos) && (
-                                      <div className="aspect-square overflow-hidden mb-3 shrink-0">
-                                        <img
-                                          src={getPhotoUrl(observation.photos)!}
-                                          alt={
-                                            observation.species_guess ||
-                                            'Observation'
-                                          }
-                                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                                          onError={(e) => {
-                                            ; (
-                                              e.target as HTMLImageElement
-                                            ).style.display = 'none'
-                                          }}
-                                        />
-                                      </div>
-                                    )}
-
-                                    <div className="space-y-2 grow">
-                                  
-                                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                        <User className="w-3 h-3 shrink-0" />
-                                        <span className="truncate">
-                                          {observation.user?.login ||
-                                            'Anonymous'}
-                                        </span>
-                                      </div>
-
-                                    
-                                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                        <Calendar className="w-3 h-3 shrink-0" />
-                                        <span>
-                                          {formatDate(
-                                            observation.observed_on_string,
-                                          )}
-                                        </span>
-                                      </div>
-
-                                      {observation.place_guess && (
-                                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                          <MapPin className="w-3 h-3 shrink-0" />
-                                          <span className="line-clamp-1">
-                                            {observation.place_guess}
-                                          </span>
-                                        </div>
-                                      )}
-                                    </div>
-                                  </CardContent>
-                                </Card>
-                              </Link>
-                            </CarouselItem>
-                          ))}
-                      </CarouselContent>
-                      <CarouselPrevious className="w-10 h-10" />
-                      <CarouselNext className="w-10 h-10" />
-                    </Carousel>
-                  </div>
-                )}
-              </CardContent>
-            </Card> */}
-             <Card className="gradient-card shadow-card">
+            <Card className="gradient-card shadow-card">
               <CardHeader>
                 <CardTitle>Recent Observations</CardTitle>
               </CardHeader>
@@ -369,7 +263,8 @@ export function SpeciesDetails() {
                                     <img
                                       src={photoUrl}
                                       alt={
-                                        observation.species_guess || 'Observation'
+                                        observation.species_guess ||
+                                        'Observation'
                                       }
                                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                                       onError={(e) => {
@@ -464,36 +359,6 @@ export function SpeciesDetails() {
                 </div>
               </CardContent>
             </Card>
-            {/* <Card className="gradient-card shadow-card">
-              <CardHeader>
-                <CardTitle>Taxonomy</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {[
-                  ['Kingdom', species.kingdom],
-                  ['Phylum', species.phylum],
-                  ['Subphylum', species.sub_phylum],
-                  ['Class', species.class_name],
-                  ['Subclass', species.sub_class],
-                  ['Order', species.order_name],
-                  ['Suborder', species.sub_order],
-                  ['Family', species.family],
-                  ['Subfamily', species.sub_family],
-                  ['Genus', species.genus],
-                  ['Species', species.species],
-                ]
-                  .filter(([_, value]) => value) // Only show rows with values
-                  .map(([label, value]) => (
-                    <div key={label as string}>
-                      <div className="text-sm text-muted-foreground">
-                        {label}
-                      </div>
-                      <div className="font-medium">{value}</div>
-                    </div>
-                  ))}
-              </CardContent>
-            </Card> */}
-
             {/* Extra Details */}
             {/* <Card className="gradient-card shadow-card">
               <CardHeader>
