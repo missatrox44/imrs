@@ -1,8 +1,10 @@
 export interface GazetteerEntry {
-  id: string;              // slug/id for the location
-  name: string;            // place name (e.g., "Echo Spring")
-  description: string;     // short paragraph describing the feature
-  latitude: number;        // decimal degrees
-  longitude: number;       // decimal degrees
-  elevationMeters: number; // elevation in meters
+  id: string
+  name: string
+  description: string
+  latitude: number | null
+  longitude: number | null
+  elevationMeters: number | null
+  alternateNames?: Array<string>
+  references?: Array<string>
 }

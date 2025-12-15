@@ -42,7 +42,7 @@ const Gazetteer = () => {
             <h1 className="text-4xl font-bold text-foreground mb-2">
               IMRS Gazetteer
             </h1>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground md:text-balance">
               A comprehensive list of notable locations and features within the Indio Mountains Research Station
             </p>
           </div>
@@ -52,7 +52,7 @@ const Gazetteer = () => {
               placeholder="Search locations (e.g., Echo, Tank, Canyon)..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="max-w-md"
+              className="md:max-w-md"
             />
           </div>
 
@@ -62,29 +62,54 @@ const Gazetteer = () => {
                 <Card key={entry.id} className="hover:shadow-md transition-shadow">
                   <CardHeader>
                     <CardTitle className="text-xl">{entry.name}</CardTitle>
+                    {entry.alternateNames?.length ? (
+                      <p className="text-sm text-muted-foreground italic">
+                        aka {entry.alternateNames.join(", ")}
+                      </p>
+                    ) : null}
                   </CardHeader>
                   <CardContent>
-                    <div className={entriesWithImages.includes(entry.id) ? "flex flex-col md:flex-row gap-4" : ""}>
+                    <div
+                      className={
+                        entriesWithImages.includes(entry.id)
+                          ? "flex flex-col md:flex-row gap-4"
+                          : ""
+                      }
+                    >
                       <div className="flex-1 space-y-3">
-                        <p className="text-muted-foreground">{entry.description}</p>
-                        <div className="flex flex-wrap gap-3 text-sm">
-                          <Badge variant="secondary" className="flex items-center gap-1">
-                            <MapPin className="w-3 h-3" />
-                            {formatCoordinates(entry.latitude, entry.longitude)}
-                          </Badge>
-                          <Badge variant="secondary" className="flex items-center gap-1">
-                            <Mountain className="w-3 h-3" />
-                            {formatElevation(entry.elevationMeters)}
-                          </Badge>
+                        <p className="text-muted-foreground">
+                          {entry.description}
+                        </p>
+
+                        <div className="flex flex-wrap gap-2 text-sm">
+                          {entry.latitude !== null && entry.longitude !== null && (
+                            <Badge variant="secondary" className="flex items-center gap-1">
+                              <MapPin className="w-3 h-3" />
+                              {formatCoordinates(entry.latitude, entry.longitude)}
+                            </Badge>
+                          )}
+
+                          {entry.elevationMeters !== null && (
+                            <Badge variant="secondary" className="flex items-center gap-1">
+                              <Mountain className="w-3 h-3" />
+                              {formatElevation(entry.elevationMeters)}
+                            </Badge>
+                          )}
                         </div>
                       </div>
+
                       {entriesWithImages.includes(entry.id) && (
-                        <div className="flex-shrink-0 w-full md:w-auto">
+                        <div className="shrink-0">
                           <img
                             src={getImageUrl(entry.id)}
                             alt={entry.name}
-                            className="w-full md:w-[300px] h-[200px] object-cover rounded-md cursor-pointer hover:opacity-90 transition-opacity"
-                            onClick={() => setSelectedImage({ url: getImageUrl(entry.id), name: entry.name })}
+                            className="w-full md:w-75 h-50 object-cover rounded-md cursor-pointer hover:opacity-90 transition-opacity"
+                            onClick={() =>
+                              setSelectedImage({
+                                url: getImageUrl(entry.id),
+                                name: entry.name,
+                              })
+                            }
                           />
                         </div>
                       )}
