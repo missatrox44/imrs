@@ -22,7 +22,7 @@ export const Home = () => {
 
         {/* Action Cards */}
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          <Card className="gradient-card shadow-card hover:shadow-hover transition-all duration-300 group">
+          <Card className="gradient-card shadow-md hover:shadow-2xl transition-shadow duration-300 group">
             <CardContent className="p-8 text-center">
               <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
                 <Eye className="w-8 h-8 text-primary-foreground" />
@@ -39,7 +39,7 @@ export const Home = () => {
             </CardContent>
           </Card>
 
-          <Card className="gradient-card shadow-card hover:shadow-hover transition-all duration-300 group">
+          <Card className="gradient-card shadow-md hover:shadow-2xl transition-shadow duration-300 group">
             <CardContent className="p-8 text-center">
               <div className="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
                 <BookOpen className="w-8 h-8 text-accent-foreground" />
