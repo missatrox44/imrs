@@ -1,6 +1,6 @@
 import { BookOpen, Eye } from "lucide-react";
 import { Link } from '@tanstack/react-router'
-import { STATS } from '@/lib/constants';
+import { StatsCounter } from "./StatsCounter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -58,21 +58,7 @@ export const Home = () => {
         </div>
 
         {/* Stats Section */}
-        <div className="mt-20 text-center">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {STATS.map((stat) => (
-              <div key={stat.label} className="text-center">
-                <div className="text-3xl font-bold text-primary mb-2">
-                  {stat.value}
-                </div>
-                <div className="text-sm text-muted-foreground">
-                  {stat.label}
-                </div>
-              </div>
-            ))}
-          </div>
-
-        </div>
+        <StatsCounter />
       </main>
     </div>
   );
