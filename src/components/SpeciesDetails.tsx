@@ -202,7 +202,7 @@ export function SpeciesDetails() {
                       </h3>
                       <div className="grid sm:grid-cols-2 gap-3">
                         {species.collectors_field_numbers && (
-                          <div className="bg-muted/50 rounded-md p-3">
+                          <div className="bg-muted/50 p-3">
                             <div className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
                               Field Number
                             </div>
@@ -212,7 +212,7 @@ export function SpeciesDetails() {
                           </div>
                         )}
                         {species.records && (
-                          <div className="bg-muted/50 rounded-md p-3">
+                          <div className="bg-muted/50 p-3">
                             <div className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
                               Records
                             </div>
@@ -259,7 +259,7 @@ export function SpeciesDetails() {
                               {(() => {
                                 const photoUrl = getPhotoUrl(observation.photos)
                                 return photoUrl ? (
-                                  <div className="aspect-square overflow-hidden rounded-md mb-3">
+                                  <div className="aspect-square overflow-hidden mb-3">
                                     <img
                                       src={photoUrl}
                                       alt={
@@ -275,7 +275,7 @@ export function SpeciesDetails() {
                                     />
                                   </div>
                                 ) : (
-                                  <div className="aspect-square flex items-center justify-center rounded-md mb-3 bg-muted/10 text-muted-foreground">
+                                  <div className="aspect-square flex items-center justify-center mb-3 bg-muted/10 text-muted-foreground">
                                     <ImageOff className="w-6 h-6" />
                                   </div>
                                 )

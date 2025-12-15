@@ -1,5 +1,6 @@
 import { BookOpen, Eye } from "lucide-react";
 import { Link } from '@tanstack/react-router'
+import { StatsCounter } from "./StatsCounter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -13,16 +14,15 @@ export const Home = () => {
             IMRS Biodiversity
             <span className="gradient-hero bg-clip-text text-foreground"> Explorer</span>
           </h1>
-          <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-            Explore the biodiversity of the Indio Mountains Research Station (IMRS). 
-            Discover species, view recent observations, and contribute to our understanding 
-            of this unique desert ecosystem.
+          <p className="text-xl text-muted-foreground mb-8 leading-relaxed text-balance">
+            Explore the biodiversity of the Indio Mountains Research Station (IMRS).
+            Discover species and view recent observations from this unique desert ecosystem.
           </p>
         </div>
 
         {/* Action Cards */}
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          <Card className="gradient-card shadow-card hover:shadow-hover transition-all duration-300 group">
+          <Card className="gradient-card shadow-md hover:shadow-xl transition-shadow duration-300 group">
             <CardContent className="p-8 text-center">
               <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
                 <Eye className="w-8 h-8 text-primary-foreground" />
@@ -39,7 +39,7 @@ export const Home = () => {
             </CardContent>
           </Card>
 
-          <Card className="gradient-card shadow-card hover:shadow-hover transition-all duration-300 group">
+          <Card className="gradient-card shadow-md hover:shadow-xl transition-shadow duration-300 group">
             <CardContent className="p-8 text-center">
               <div className="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
                 <BookOpen className="w-8 h-8 text-accent-foreground" />
@@ -58,26 +58,7 @@ export const Home = () => {
         </div>
 
         {/* Stats Section */}
-        <div className="mt-20 text-center">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-2xl mx-auto">
-            <div>
-              <div className="text-3xl font-bold text-primary mb-2">150+</div>
-              <div className="text-sm text-muted-foreground">Species Documented</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-primary mb-2">1,200+</div>
-              <div className="text-sm text-muted-foreground">Observations</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-primary mb-2">25</div>
-              <div className="text-sm text-muted-foreground">Research Projects</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-primary mb-2">5,000</div>
-              <div className="text-sm text-muted-foreground">Acres Protected</div>
-            </div>
-          </div>
-        </div>
+        <StatsCounter />
       </main>
     </div>
   );

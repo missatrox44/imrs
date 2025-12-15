@@ -12,6 +12,7 @@ import { createServerRootRoute } from '@tanstack/react-start/server'
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ObservationsRouteImport } from './routes/observations'
+import { Route as GazetteerRouteImport } from './routes/gazetteer'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SpeciesIndexRouteImport } from './routes/species.index'
 import { Route as SpeciesSpeciesIdRouteImport } from './routes/species.$speciesId'
@@ -22,6 +23,11 @@ const rootServerRouteImport = createServerRootRoute()
 const ObservationsRoute = ObservationsRouteImport.update({
   id: '/observations',
   path: '/observations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GazetteerRoute = GazetteerRouteImport.update({
+  id: '/gazetteer',
+  path: '/gazetteer',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -47,12 +53,14 @@ const ApiSpeciesServerRoute = ApiSpeciesServerRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/gazetteer': typeof GazetteerRoute
   '/observations': typeof ObservationsRoute
   '/species/$speciesId': typeof SpeciesSpeciesIdRoute
   '/species': typeof SpeciesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/gazetteer': typeof GazetteerRoute
   '/observations': typeof ObservationsRoute
   '/species/$speciesId': typeof SpeciesSpeciesIdRoute
   '/species': typeof SpeciesIndexRoute
@@ -60,20 +68,33 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/gazetteer': typeof GazetteerRoute
   '/observations': typeof ObservationsRoute
   '/species/$speciesId': typeof SpeciesSpeciesIdRoute
   '/species/': typeof SpeciesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/observations' | '/species/$speciesId' | '/species'
+  fullPaths:
+    | '/'
+    | '/gazetteer'
+    | '/observations'
+    | '/species/$speciesId'
+    | '/species'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/observations' | '/species/$speciesId' | '/species'
-  id: '__root__' | '/' | '/observations' | '/species/$speciesId' | '/species/'
+  to: '/' | '/gazetteer' | '/observations' | '/species/$speciesId' | '/species'
+  id:
+    | '__root__'
+    | '/'
+    | '/gazetteer'
+    | '/observations'
+    | '/species/$speciesId'
+    | '/species/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  GazetteerRoute: typeof GazetteerRoute
   ObservationsRoute: typeof ObservationsRoute
   SpeciesSpeciesIdRoute: typeof SpeciesSpeciesIdRoute
   SpeciesIndexRoute: typeof SpeciesIndexRoute
@@ -107,6 +128,13 @@ declare module '@tanstack/react-router' {
       path: '/observations'
       fullPath: '/observations'
       preLoaderRoute: typeof ObservationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gazetteer': {
+      id: '/gazetteer'
+      path: '/gazetteer'
+      fullPath: '/gazetteer'
+      preLoaderRoute: typeof GazetteerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -146,6 +174,7 @@ declare module '@tanstack/react-start/server' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  GazetteerRoute: GazetteerRoute,
   ObservationsRoute: ObservationsRoute,
   SpeciesSpeciesIdRoute: SpeciesSpeciesIdRoute,
   SpeciesIndexRoute: SpeciesIndexRoute,

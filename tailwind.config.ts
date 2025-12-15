@@ -17,10 +17,10 @@ export default {
       mono: ["Courier Prime", "IBM Plex Mono", "monospace"],
       sans: ["Courier Prime", "IBM Plex Mono", "monospace"],
     },
-    borderRadius: {
-      lg: "var(--radius)",
-      md: "calc(var(--radius) - 2px)",
-      sm: "calc(var(--radius) - 4px)",
-    },
+    // borderRadius: {
+    //   lg: "var(--radius)",
+    //   md: "calc(var(--radius) - 2px)",
+    //   sm: "calc(var(--radius) - 4px)",
+    // },
   },
 } satisfies Config;
