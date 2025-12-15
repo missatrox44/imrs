@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { motion, useInView, useSpring, useTransform } from 'framer-motion'
-import { STATS } from '@/lib/constants'
+import { STATS } from '@/data/constants'
 
 const AnimatedCounter = ({
   value,
