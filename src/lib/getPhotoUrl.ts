@@ -4,5 +4,5 @@ export function getPhotoUrl(photos?: Array<{ url: string }>): string | null {
   const url = photos[0]?.url
   if (!url) return null
 
-  return url.replace('square', 'small')
+  return url.replace('square', 'medium')
 }

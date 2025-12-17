@@ -7,6 +7,8 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 // import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from '@/components/ui/badge'
 import { Loader } from '@/components/Loader'
+import { formatDate } from '@/lib/formatDate'
+import { getPhotoUrl } from '@/lib/getPhotoUrl'
 
 // TODO: add filter for different tags of common name stuff?
 const Observations = () => {
@@ -26,19 +28,6 @@ const Observations = () => {
   // const observations: Array<Observation> = data?.results ?? [];
   const observations = data.results
 
-  const formatDate = (dateString?: string) => {
-    if (!dateString) return 'Unknown date'
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    })
-  }
-
-  const getPhotoUrl = (photos?: Array<{ url: string }>) => {
-    if (!photos || photos.length === 0) return null
-    return photos[0].url.replace('square', 'medium')
-  }
 
   if (isLoading) {
     return <Loader dataTitle="observations" />
