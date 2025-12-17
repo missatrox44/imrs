@@ -1,15 +1,27 @@
 import { useState } from 'react'
-import { Bird, Bug, ChevronRight, Flower2, ImageOff, Leaf, Rabbit, Search, Shell, Turtle } from "lucide-react";
+import {
+  Bird,
+  Bug,
+  ChevronRight,
+  Flower2,
+  ImageOff,
+  Leaf,
+  Rabbit,
+  Search,
+  Shell,
+  Turtle,
+} from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import type { Species } from '@/types/species'
 import type { Category } from '@/types/category'
+import type { TaxonomicFilters } from '@/components/AdvancedSearch'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Input } from '@/components/ui/input'
-import { Loader } from "@/components/Loader";
-// import { AdvancedSearch } from '@/components/AdvancedSearch';
+import { Loader } from '@/components/Loader'
+import { AdvancedSearch } from '@/components/AdvancedSearch'
 
 const ALL_CATEGORIES: Array<Category> = [
   'mammals',
@@ -26,41 +38,89 @@ const TABS: Array<Category> = ['all', ...ALL_CATEGORIES]
 const getCategoryIcon = (category: string) => {
   switch (category) {
     case 'plants':
-      return <Leaf className="w-4 h-4" />;
+      return <Leaf className="w-4 h-4" />
     case 'birds':
-      return <Bird className="w-4 h-4" />;
+      return <Bird className="w-4 h-4" />
     case 'mammals':
-      return <Rabbit className="w-4 h-4" />;
+      return <Rabbit className="w-4 h-4" />
     case 'reptiles':
-      return <Turtle className="w-4 h-4" />;
+      return <Turtle className="w-4 h-4" />
     case 'amphibians':
-      return <Shell className="w-4 h-4" />;
+      return <Shell className="w-4 h-4" />
     case 'arthropods':
-      return <Bug className="w-4 h-4" />;
+      return <Bug className="w-4 h-4" />
     case 'fungi':
-      return <Flower2 className="w-4 h-4" />;
+      return <Flower2 className="w-4 h-4" />
     case 'worms':
-      return <Shell className="w-4 h-4" />;
+      return <Shell className="w-4 h-4" />
     default:
-      return null;
+      return null
   }
-};
-
+}
 
 const SpeciesIndex = () => {
   const [activeTab, setActiveTab] = useState<Category>('all')
   const [searchTerm, setSearchTerm] = useState('')
 
+  const initialFilters: TaxonomicFilters = {
+    kingdom: '',
+    phylum: '',
+    class: '',
+    order: '',
+    family: '',
+    genus: '',
+    sortOrder: 'asc',
+  }
+
+  const [filters, setFilters] = useState<TaxonomicFilters>(initialFilters)
+
+  // Fetch species data with filters
   const { data: species = [], isLoading } = useQuery({
-    queryKey: ['speciesData'],
+    queryKey: ['speciesData', filters],
     queryFn: async () => {
-      const res = await fetch('/api/species')
-      console.log("Species data:", res)
+      const params = new URLSearchParams()
+
+      // Only add non-empty filters
+      if (filters.kingdom) params.append('kingdom', filters.kingdom)
+      if (filters.phylum) params.append('phylum', filters.phylum)
+      if (filters.class) params.append('class', filters.class)
+      if (filters.order) params.append('order', filters.order)
+      if (filters.family) params.append('family', filters.family)
+      if (filters.genus) params.append('genus', filters.genus)
+      params.append('sortOrder', filters.sortOrder)
+
+      const res = await fetch(`/api/species?${params.toString()}`)
       if (!res.ok) throw new Error('Failed to fetch species')
       return res.json()
     },
-    // staleTime: 0,  
   })
+
+  // Handler for individual filter changes
+  const handleFilterChange = (
+    filterName: keyof TaxonomicFilters,
+    value: string,
+  ) => {
+    setFilters((prev) => ({
+      ...prev,
+      [filterName]: value,
+    }))
+  }
+
+  // Reset all filters
+  const handleReset = () => {
+    setFilters(initialFilters)
+  }
+
+  // const { data: species = [], isLoading } = useQuery({
+  //   queryKey: ['speciesData'],
+  //   queryFn: async () => {
+  //     const res = await fetch('/api/species')
+  //     console.log("Species data:", res)
+  //     if (!res.ok) throw new Error('Failed to fetch species')
+  //     return res.json()
+  //   },
+  //   // staleTime: 0,
+  // })
 
   const filtered =
     activeTab === 'all'
@@ -73,9 +133,7 @@ const SpeciesIndex = () => {
   }
 
   if (isLoading) {
-    return (
-      <Loader dataTitle="species catalog" />
-    )
+    return <Loader dataTitle="species catalog" />
   }
 
   return (
@@ -102,7 +160,7 @@ const SpeciesIndex = () => {
           onValueChange={(v) => setActiveTab(v as Category)}
         >
           <div className="overflow-x-auto">
-            <TabsList className="flex  w-max space-x-2" >
+            <TabsList className="flex  w-max space-x-2">
               {TABS.map((cat) => (
                 <TabsTrigger key={cat} value={cat}>
                   {cat === 'all'
@@ -116,7 +174,11 @@ const SpeciesIndex = () => {
             Scroll right to see more →
           </p>
 
-          {/* <AdvancedSearch /> */}
+          <AdvancedSearch
+            filters={filters}
+            onFilterChange={handleFilterChange}
+            onReset={handleReset}
+          />
 
           <div className="mt-6 mb-4 text-sm text-muted-foreground">
             {activeTab === 'all' ? (
@@ -156,8 +218,6 @@ const SpeciesIndex = () => {
                         <Card className="gradient-card shadow-card hover:shadow-hover transition-all duration-300 group cursor-pointer">
                           <CardContent className="p-4 sm:p-6">
                             <div className="flex items-start gap-4">
-
-
                               <div className="flex-1 min-w-0">
                                 {/* Scientific + Common Name */}
                                 <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-2">
@@ -181,7 +241,8 @@ const SpeciesIndex = () => {
 
                                 {/* Taxonomic Path */}
                                 <p className="text-xs text-muted-foreground font-mono mb-2 truncate">
-                                  {item.phylum} › {item.class_name} › {item.order_name} › {item.family}
+                                  {item.phylum} › {item.class_name} ›{' '}
+                                  {item.order_name} › {item.family}
                                 </p>
 
                                 {/* Phylum & Class */}
@@ -207,7 +268,10 @@ const SpeciesIndex = () => {
                                 {/* Order & Family */}
                                 <div className="flex flex-wrap items-center gap-2 mb-2">
                                   {(item.family_common_name || item.family) && (
-                                    <Badge variant="secondary" className="text-xs">
+                                    <Badge
+                                      variant="secondary"
+                                      className="text-xs"
+                                    >
                                       {item.family_common_name ?? item.family}
                                     </Badge>
                                   )}

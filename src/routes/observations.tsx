@@ -11,3 +11,4 @@ function RouteComponent() {
       <Observations />
     </>)
 }
+// TODO MOVE OBSERVATIONS QUERY TO HERE

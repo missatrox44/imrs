@@ -9,8 +9,39 @@ import {
 } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 
-export function AdvancedSearch() {
-  const [sortBy, setSortBy] = useState<'order' | 'family'>('order')
+// Define the filter state type
+export interface TaxonomicFilters {
+  kingdom: string
+  phylum: string
+  class: string
+  order: string
+  family: string
+  genus: string
+  sortOrder: 'asc' | 'desc'
+}
+
+// Props interface
+interface AdvancedSearchProps {
+  filters: TaxonomicFilters
+  onFilterChange: (filterName: keyof TaxonomicFilters, value: string) => void
+  onReset: () => void
+  // Optional: pass in available options if you want dynamic filtering
+  availableOptions?: {
+    kingdoms?: Array<string>
+    phylums?: Array<string>
+    classes?: Array<string>
+    orders?: Array<string>
+    families?: Array<string>
+    genuses?: Array<string>
+  }
+}
+
+export function AdvancedSearch({
+  filters,
+  onFilterChange,
+  onReset,
+  availableOptions
+}: AdvancedSearchProps) {
   return (
     <>
       <div className="bg-card border border-border p-4 mb-6">
@@ -27,14 +58,20 @@ export function AdvancedSearch() {
             <label className="text-xs text-muted-foreground font-medium flex items-center gap-1">
               <Filter className="w-3 h-3" /> Kingdom
             </label>
-            <Select>
+            <Select
+              value={filters.kingdom || 'all'}
+              onValueChange={(value) => onFilterChange('kingdom', value === 'all' ? '' : value)}
+            >
               <SelectTrigger className="h-8 text-xs">
                 <SelectValue placeholder="All" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Kingdoms</SelectItem>
-                <SelectItem value="animalia">Animalia</SelectItem>
-                <SelectItem value="plantae">Plantae</SelectItem>
+                {availableOptions?.kingdoms?.map(kingdom => (
+                  <SelectItem key={kingdom} value={kingdom}>
+                    {kingdom.charAt(0).toUpperCase() + kingdom.slice(1)}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -44,34 +81,44 @@ export function AdvancedSearch() {
             <label className="text-xs text-muted-foreground font-medium flex items-center gap-1">
               <Filter className="w-3 h-3" /> Phylum
             </label>
-            <Select>
+            <Select
+              value={filters.phylum || 'all'}
+              onValueChange={(value) => onFilterChange('phylum', value === 'all' ? '' : value)}
+            >
               <SelectTrigger className="h-8 text-xs">
                 <SelectValue placeholder="All" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Phyla</SelectItem>
-                <SelectItem value="chordata">Chordata</SelectItem>
-                <SelectItem value="tracheophyta">Tracheophyta</SelectItem>
-                <SelectItem value="arthropoda">Arthropoda</SelectItem>
+                {availableOptions?.phylums?.map(phylum => (
+                  <SelectItem key={phylum} value={phylum}>
+                    {phylum.charAt(0).toUpperCase() + phylum.slice(1)}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
 
           {/* Class Filter */}
+          {/* Class Filter */}
           <div className="space-y-1">
             <label className="text-xs text-muted-foreground font-medium flex items-center gap-1">
               <Filter className="w-3 h-3" /> Class
             </label>
-            <Select>
+            <Select
+              value={filters.class || 'all'}
+              onValueChange={(value) => onFilterChange('class', value === 'all' ? '' : value)}
+            >
               <SelectTrigger className="h-8 text-xs">
                 <SelectValue placeholder="All" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Classes</SelectItem>
-                <SelectItem value="mammalia">Mammalia</SelectItem>
-                <SelectItem value="reptilia">Reptilia</SelectItem>
-                <SelectItem value="aves">Aves</SelectItem>
-                <SelectItem value="magnoliopsida">Magnoliopsida</SelectItem>
+                {availableOptions?.classes?.map(cls => (
+                  <SelectItem key={cls} value={cls}>
+                    {cls.charAt(0).toUpperCase() + cls.slice(1)}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -81,16 +128,20 @@ export function AdvancedSearch() {
             <label className="text-xs text-muted-foreground font-medium flex items-center gap-1">
               <Filter className="w-3 h-3" /> Order
             </label>
-            <Select>
+            <Select
+              value={filters.order || 'all'}
+              onValueChange={(value) => onFilterChange('order', value === 'all' ? '' : value)}
+            >
               <SelectTrigger className="h-8 text-xs">
                 <SelectValue placeholder="All" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Orders</SelectItem>
-                <SelectItem value="squamata">Squamata</SelectItem>
-                <SelectItem value="rodentia">Rodentia</SelectItem>
-                <SelectItem value="carnivora">Carnivora</SelectItem>
-                <SelectItem value="passeriformes">Passeriformes</SelectItem>
+                {availableOptions?.orders?.map(order => (
+                  <SelectItem key={order} value={order}>
+                    {order.charAt(0).toUpperCase() + order.slice(1)}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -100,16 +151,20 @@ export function AdvancedSearch() {
             <label className="text-xs text-muted-foreground font-medium flex items-center gap-1">
               <Filter className="w-3 h-3" /> Family
             </label>
-            <Select>
+            <Select
+              value={filters.family || 'all'}
+              onValueChange={(value) => onFilterChange('family', value === 'all' ? '' : value)}
+            >
               <SelectTrigger className="h-8 text-xs">
                 <SelectValue placeholder="All" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Families</SelectItem>
-                <SelectItem value="colubridae">Colubridae</SelectItem>
-                <SelectItem value="viperidae">Viperidae</SelectItem>
-                <SelectItem value="cricetidae">Cricetidae</SelectItem>
-                <SelectItem value="fabaceae">Fabaceae</SelectItem>
+                {availableOptions?.families?.map(family => (
+                  <SelectItem key={family} value={family}>
+                    {family.charAt(0).toUpperCase() + family.slice(1)}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -119,21 +174,26 @@ export function AdvancedSearch() {
             <label className="text-xs text-muted-foreground font-medium flex items-center gap-1">
               <Filter className="w-3 h-3" /> Genus
             </label>
-            <Select>
+            <Select
+              value={filters.genus || 'all'}
+              onValueChange={(value) => onFilterChange('genus', value === 'all' ? '' : value)}
+            >
               <SelectTrigger className="h-8 text-xs">
                 <SelectValue placeholder="All" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Genera</SelectItem>
-                <SelectItem value="crotalus">Crotalus</SelectItem>
-                <SelectItem value="peromyscus">Peromyscus</SelectItem>
-                <SelectItem value="quercus">Quercus</SelectItem>
+                {availableOptions?.genuses?.map(genus => (
+                  <SelectItem key={genus} value={genus}>
+                    {genus.charAt(0).toUpperCase() + genus.slice(1)}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
 
           {/* Species Filter */}
-          <div className="space-y-1">
+          {/* <div className="space-y-1">
             <label className="text-xs text-muted-foreground font-medium flex items-center gap-1">
               <Filter className="w-3 h-3" /> Species
             </label>
@@ -146,7 +206,7 @@ export function AdvancedSearch() {
                 <SelectItem value="specific">Specific epithet...</SelectItem>
               </SelectContent>
             </Select>
-          </div>
+          </div> */}
         </div>
 
         {/* Sort Options Row */}
@@ -158,20 +218,11 @@ export function AdvancedSearch() {
             </span>
           </div>
 
-          {/* <Select
-            value={sortBy}
-            onValueChange={(value) => setSortBy(value as typeof sortBy)}
-          >
-            <SelectTrigger className="h-8 w-[140px] text-xs">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="order">Order</SelectItem>
-              <SelectItem value="family">Family</SelectItem>
-            </SelectContent>
-          </Select> */}
 
-          <Select>
+          <Select
+            value={filters.sortOrder}
+            onValueChange={(value: 'asc' | 'desc') => onFilterChange('sortOrder', value)}
+          >
             <SelectTrigger className="h-8 w-[120px] text-xs">
               <SelectValue placeholder="Direction" />
             </SelectTrigger>
@@ -181,24 +232,11 @@ export function AdvancedSearch() {
             </SelectContent>
           </Select>
 
-          {/* <Select>
-            <SelectTrigger className="h-8 w-[140px] text-xs">
-              <SelectValue placeholder="Group by" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="none">No Grouping</SelectItem>
-              <SelectItem value="kingdom">Kingdom</SelectItem>
-              <SelectItem value="phylum">Phylum</SelectItem>
-              <SelectItem value="class">Class</SelectItem>
-              <SelectItem value="order">Order</SelectItem>
-              <SelectItem value="family">Family</SelectItem>
-            </SelectContent>
-          </Select> */}
-
           <Button
             variant="ghost"
             size="sm"
             className="h-8 text-xs text-muted-foreground hover:text-foreground"
+            onClick={onReset}
           >
             <RotateCcw className="w-3 h-3 mr-1" />
             Reset Filters

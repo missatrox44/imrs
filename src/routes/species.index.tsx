@@ -5,3 +5,4 @@ export const Route = createFileRoute('/species/')({
   component: SpeciesIndex,
 })
 
+// TODO MOVE SPECIES QUERY TO HERE

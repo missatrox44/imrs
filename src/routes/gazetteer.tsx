@@ -11,3 +11,5 @@ function RouteComponent() {
       <Gazetteer />
     </>)
 }
+
+// TODO MOVE GAZETTEER QUERY TO HERE
