@@ -1,36 +1,21 @@
 // import { useState } from "react";
 import { Calendar, MapPin, User } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
-import { useQuery } from '@tanstack/react-query'
 import type { Observation } from '@/types/observation'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 // import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from '@/components/ui/badge'
-import { Loader } from '@/components/Loader'
 import { formatDate } from '@/lib/formatDate'
 import { getPhotoUrl } from '@/lib/getPhotoUrl'
+import EmptyState from '@/components/EmptyState'
 
-// TODO: add filter for different tags of common name stuff?
-const Observations = () => {
-  // const [filter, setFilter] = useState("all");
+interface ObservationsProps {
+  observations: Array<Observation>
+}
 
-  const { data = { results: [] }, isLoading } = useQuery({
-    queryKey: ['observationData'],
-    queryFn: async () => {
-      const res = await fetch(
-        'https://api.inaturalist.org/v1/observations?place_id=225419&per_page=50&order=desc&order_by=observed_on',
-      )
-      if (!res.ok) throw new Error('Failed to fetch observations')
-      return res.json()
-    },
-  })
-
-  // const observations: Array<Observation> = data?.results ?? [];
-  const observations = data.results
-
-
-  if (isLoading) {
-    return <Loader dataTitle="observations" />
+const Observations = ({ observations }: ObservationsProps) => {
+  if (!observations.length) {
+    return <EmptyState />
   }
 
   return (
