@@ -1,4 +1,5 @@
 // TODO: Refactor for repsonviness and add to species detail page
+// ? This is component is meant to be added to Species Detail Page in future
 import { Link } from '@tanstack/react-router'
 import {
   Calendar,

@@ -5,6 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { GAZETTEER_ENTRIES } from "@/data/gazetteer";
+import { formatCoordinates } from "@/lib/formatCoordinates";
+import { formatElevation } from "@/lib/formatElevation";
 
 const Gazetteer = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -18,13 +20,6 @@ const Gazetteer = () => {
       .sort((a, b) => a.name.localeCompare(b.name));
   }, [searchTerm]);
 
-  const formatElevation = (meters: number) => {
-    return `${meters.toLocaleString()} m`;
-  };
-
-  const formatCoordinates = (lat: number, lon: number) => {
-    return `${lat.toFixed(5)}°N, ${Math.abs(lon).toFixed(5)}°W`;
-  };
 
   // Entries with images
   const entriesWithImages = ["echo-spring", "red-tank", "echo-peak"];
@@ -55,7 +50,7 @@ const Gazetteer = () => {
               className="md:max-w-md"
             />
           </div>
-
+<h1>{filteredAndSortedEntries.length}</h1>
           <div className="space-y-4">
             {filteredAndSortedEntries.length > 0 ? (
               filteredAndSortedEntries.map((entry) => (
