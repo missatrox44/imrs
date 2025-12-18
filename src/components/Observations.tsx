@@ -8,12 +8,14 @@ import type { Observation } from '@/types/observation'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 // import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from '@/components/ui/badge'
-import { Loader } from '@/components/Loader'
+// import { Loader } from '@/components/Loader'
 import EmptyState from '@/components/EmptyState'
 import { formatDate } from '@/lib/formatDate'
 import { getPhotoUrl } from '@/lib/getPhotoUrl'
+import { ObservationCardSkeleton } from '@/components/ObservationCardSkeleton'
 
 const PER_PAGE = 50
+const SKELETON_COUNT = 12
 
 interface ObservationsPage {
   page: number
@@ -183,16 +185,21 @@ const Observations = ({ initialPage }: ObservationsProps) => {
               </Card>
             </Link>
           ))}
+
+          {isFetchingNextPage &&
+            Array.from({ length: SKELETON_COUNT }).map((_, i) => (
+              <ObservationCardSkeleton key={`skeleton-${i}`} />
+            ))}
         </div>
 
         {/* infinite scroll sentinel */}
         <div ref={ref} className="h-12" />
 
-        {isFetchingNextPage && (
+        {/* {isFetchingNextPage && (
           <div className="mt-8">
             <Loader dataTitle="more observations" />
           </div>
-        )}
+        )} */}
       </div>
     </div>
   )
