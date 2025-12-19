@@ -27,3 +27,16 @@ export const iNaturalistUrl  = new URL('https://api.inaturalist.org/v1/observati
 export const PLACE_ID = '225419'
 export const ORDER = 'desc'
 export const ORDER_BY = 'observed_on' 
+
+
+// FUTURE for filtering observations
+export const TAXON_GROUPS = [
+  { value: '', label: 'All' },
+  { value: 'Mammalia', label: 'Mammals' },
+  { value: 'Aves', label: 'Birds' },
+  { value: 'Reptilia', label: 'Reptiles' },
+  { value: 'Amphibia', label: 'Amphibians' },
+  { value: 'Insecta', label: 'Insects' },
+  { value: 'Plantae', label: 'Plants' },
+  { value: 'Fungi', label: 'Fungi' }
+]
