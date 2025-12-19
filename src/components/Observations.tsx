@@ -13,9 +13,8 @@ import EmptyState from '@/components/EmptyState'
 import { formatDate } from '@/lib/formatDate'
 import { getPhotoUrl } from '@/lib/getPhotoUrl'
 import { ObservationCardSkeleton } from '@/components/ObservationCardSkeleton'
+import { ORDER, ORDER_BY, PER_PAGE, PLACE_ID, SKELETON_COUNT, iNaturalistUrl } from '@/data/constants'
 
-const PER_PAGE = 50
-const SKELETON_COUNT = 12
 
 interface ObservationsPage {
   page: number
@@ -39,16 +38,16 @@ const Observations = ({ initialPage }: ObservationsProps) => {
       initialPageParam: 1,
 
       queryFn: async ({ pageParam }) => {
-        const url = new URL('https://api.inaturalist.org/v1/observations')
-        url.search = new URLSearchParams({
-          place_id: '225419',
-          order: 'desc',
-          order_by: 'observed_on',
+
+        iNaturalistUrl.search = new URLSearchParams({
+          place_id: PLACE_ID,
+          order: ORDER,
+          order_by: ORDER_BY,
           per_page: String(PER_PAGE),
           page: String(pageParam),
         }).toString()
 
-        const res = await fetch(url)
+        const res = await fetch(iNaturalistUrl)
 
         if (!res.ok) {
           throw new Error('Failed to fetch more observations')
@@ -138,7 +137,7 @@ const Observations = ({ initialPage }: ObservationsProps) => {
                       alt={observation.species_guess || 'Unknown species'}
                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                       onError={(e) => {
-                        ;(e.target as HTMLImageElement).style.display = 'none'
+                        ; (e.target as HTMLImageElement).style.display = 'none'
                       }}
                     />
                   </div>

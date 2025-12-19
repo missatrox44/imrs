@@ -1,23 +1,22 @@
 import { createFileRoute } from '@tanstack/react-router'
 import Observations from '@/components/Observations'
 import { Loader } from '@/components/Loader'
+import { ORDER, ORDER_BY, PER_PAGE, PLACE_ID, iNaturalistUrl } from '@/data/constants'
 
-const PER_PAGE = 50
 
 export const Route = createFileRoute('/observations')({
   ssr: 'data-only',
 
   loader: async () => {
-    const url = new URL('https://api.inaturalist.org/v1/observations')
-    url.search = new URLSearchParams({
-      place_id: '225419',
-      order: 'desc',
-      order_by: 'observed_on',
+    iNaturalistUrl.search = new URLSearchParams({
+      place_id: PLACE_ID,
+      order: ORDER,
+      order_by: ORDER_BY,
       per_page: String(PER_PAGE),
       page: '1',
     }).toString()
 
-    const res = await fetch(url)
+    const res = await fetch(iNaturalistUrl)
     if (!res.ok) {
       throw new Error('Failed to fetch initial observations')
     }

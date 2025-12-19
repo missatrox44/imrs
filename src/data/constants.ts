@@ -20,3 +20,10 @@ export const STATS = [
     suffix: '',
   },
 ]
+
+export const PER_PAGE = 50
+export const SKELETON_COUNT = 8
+export const iNaturalistUrl  = new URL('https://api.inaturalist.org/v1/observations')
+export const PLACE_ID = '225419'
+export const ORDER = 'desc'
+export const ORDER_BY = 'observed_on' 
