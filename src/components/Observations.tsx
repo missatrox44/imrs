@@ -13,7 +13,7 @@ import EmptyState from '@/components/EmptyState'
 import { formatDate } from '@/lib/formatDate'
 import { getPhotoUrl } from '@/lib/getPhotoUrl'
 import { ObservationCardSkeleton } from '@/components/ObservationCardSkeleton'
-import { ORDER, ORDER_BY, PER_PAGE, PLACE_ID, SKELETON_COUNT, iNaturalistUrl } from '@/data/constants'
+import { GC_TIME, ORDER, ORDER_BY, PER_PAGE, PLACE_ID, SKELETON_COUNT, STALE_TIME, iNaturalistUrl } from '@/data/constants'
 
 
 interface ObservationsPage {
@@ -77,8 +77,8 @@ const Observations = ({ initialPage }: ObservationsProps) => {
       },
 
       // monthly updates → long cache
-      staleTime: 1000 * 60 * 60 * 24 * 30, // 30 days
-      gcTime: 1000 * 60 * 60 * 24 * 60, // 60 days
+      staleTime: STALE_TIME,
+      gcTime: GC_TIME
     })
 
   // flatten pages

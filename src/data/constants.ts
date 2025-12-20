@@ -27,6 +27,8 @@ export const iNaturalistUrl  = new URL('https://api.inaturalist.org/v1/observati
 export const PLACE_ID = '225419'
 export const ORDER = 'desc'
 export const ORDER_BY = 'observed_on' 
+export const STALE_TIME = 1000 * 60 * 60 * 24 * 30 // 30 days
+export const GC_TIME = 1000 * 60 * 60 * 24 * 60 // 60 days
 
 
 // FUTURE for filtering observations
