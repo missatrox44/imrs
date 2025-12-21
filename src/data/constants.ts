@@ -1,3 +1,5 @@
+import type { Category } from '@/types/category'
+
 export const STATS = [
   {
     value: 40000,
@@ -41,4 +43,15 @@ export const TAXON_GROUPS = [
   { value: 'Insecta', label: 'Insects' },
   { value: 'Plantae', label: 'Plants' },
   { value: 'Fungi', label: 'Fungi' }
+]
+
+export const ALL_CATEGORIES: Array<Category> = [
+  'mammals',
+  'birds',
+  'reptiles',
+  'amphibians',
+  'plants',
+  'fungi',
+  'arthropods',
+  'worms',
 ]

@@ -1,8 +1,5 @@
 import { useState } from 'react'
-import { Bird, Bug, Cat, ChevronRight, ImageOff, LayoutGrid, Leaf, Search, Table as TableIcon, Turtle } from "lucide-react";
-import { GiSuperMushroom } from "react-icons/gi";
-import { LiaFrogSolid } from "react-icons/lia";
-import { LuWorm } from "react-icons/lu";
+import { ChevronRight, ImageOff, LayoutGrid, Search, Table as TableIcon } from "lucide-react";
 import { Link } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import type { Species } from '@/types/species'
@@ -13,42 +10,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Input } from '@/components/ui/input'
 import { Loader } from "@/components/Loader";
 // import { AdvancedSearch } from '@/components/AdvancedSearch';
+import { getCategoryIcon } from '@/lib/getCategoryIcon';
+import { ALL_CATEGORIES } from '@/data/constants';
 
-const ALL_CATEGORIES: Array<Category> = [
-  'mammals',
-  'birds',
-  'reptiles',
-  'amphibians',
-  'plants',
-  'fungi',
-  'arthropods',
-  'worms',
-]
+
 const TABS: Array<Category> = ['all', ...ALL_CATEGORIES]
-
-const getCategoryIcon = (category: string) => {
-  switch (category) {
-    case 'plants':
-      return <Leaf className="w-4 h-4" />;
-    case 'birds':
-      return <Bird className="w-4 h-4" />;
-    case 'mammals':
-      return <Cat className="w-4 h-4" />;
-    case 'reptiles':
-      return <Turtle className="w-4 h-4" />;
-    case 'amphibians':
-      return <LiaFrogSolid className="w-4 h-4" />;
-    case 'arthropods':
-      return <Bug className="w-4 h-4" />;
-    case 'fungi':
-      return <GiSuperMushroom className="w-4 h-4" />;
-    case 'worms':
-      return <LuWorm className="w-4 h-4" />;
-    default:
-      return null;
-  }
-};
-
 
 const SpeciesIndex = () => {
   const [activeTab, setActiveTab] = useState<Category>('all')
