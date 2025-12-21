@@ -1,5 +1,8 @@
 import { useState } from 'react'
-import { Bird, Bug, ChevronRight, Flower2, ImageOff, LayoutGrid, Leaf, Rabbit, Search, Shell, Table as TableIcon, Turtle } from "lucide-react";
+import { Bird, Bug, Cat, ChevronRight, ImageOff, LayoutGrid, Leaf, Search, Table as TableIcon, Turtle } from "lucide-react";
+import { GiSuperMushroom } from "react-icons/gi";
+import { LiaFrogSolid } from "react-icons/lia";
+import { LuWorm } from "react-icons/lu";
 import { Link } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import type { Species } from '@/types/species'
@@ -30,17 +33,17 @@ const getCategoryIcon = (category: string) => {
     case 'birds':
       return <Bird className="w-4 h-4" />;
     case 'mammals':
-      return <Rabbit className="w-4 h-4" />;
+      return <Cat className="w-4 h-4" />;
     case 'reptiles':
       return <Turtle className="w-4 h-4" />;
     case 'amphibians':
-      return <Shell className="w-4 h-4" />;
+      return <LiaFrogSolid className="w-4 h-4" />;
     case 'arthropods':
       return <Bug className="w-4 h-4" />;
     case 'fungi':
-      return <Flower2 className="w-4 h-4" />;
+      return <GiSuperMushroom className="w-4 h-4" />;
     case 'worms':
-      return <Shell className="w-4 h-4" />;
+      return <LuWorm className="w-4 h-4" />;
     default:
       return null;
   }
