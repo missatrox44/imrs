@@ -36,10 +36,10 @@ export const GazetteerRolodex = () => {
   };
 
   return (
-    <div className="text-center mt-20">
+    <div className="text-center mt-20 container mx-auto">
       <h2 className="text-3xl font-bold text-foreground mb-4">Explore Locations</h2>
-      <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
-        Discover the diverse locations within the Indio Mountains Research Station
+      <p className="text-muted-foreground mb-8 max-w-2xl mx-auto text-balance">
+        Discover the diverse locations on Indio Mountains Research Station
       </p>
 
       {/* Rolodex Card Stack */}

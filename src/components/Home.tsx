@@ -4,11 +4,12 @@ import { StatsCounter } from "./StatsCounter";
 import { GazetteerRolodex } from "./GazetteerRolodex";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { ImageCarousel } from "@/components/ImageCarousel";
 
 export const Home = () => {
   return (
     <div className="min-h-screen bg-background">
-      <main className="container mx-auto px-4 py-12">
+      <main className="mx-auto px-4 py-12">
         {/* Hero Section */}
         <div className="text-center max-w-4xl mx-auto mb-16">
           <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
@@ -60,6 +61,7 @@ export const Home = () => {
 
         {/* Stats Section */}
         <StatsCounter />
+        <ImageCarousel />
         <GazetteerRolodex />
       </main>
     </div>

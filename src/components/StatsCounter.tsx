@@ -46,7 +46,7 @@ export const StatsCounter = () => {
     </div> */}
 
       <motion.div
-        className="mt-20 text-center"
+        className="mt-20 text-center container mx-auto"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
