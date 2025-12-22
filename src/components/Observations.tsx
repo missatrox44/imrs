@@ -13,9 +13,8 @@ import EmptyState from '@/components/EmptyState'
 import { formatDate } from '@/lib/formatDate'
 import { getPhotoUrl } from '@/lib/getPhotoUrl'
 import { ObservationCardSkeleton } from '@/components/ObservationCardSkeleton'
+import { GC_TIME, ORDER, ORDER_BY, PER_PAGE, PLACE_ID, SKELETON_COUNT, STALE_TIME, iNaturalistUrl } from '@/data/constants'
 
-const PER_PAGE = 50
-const SKELETON_COUNT = 12
 
 interface ObservationsPage {
   page: number
@@ -39,16 +38,16 @@ const Observations = ({ initialPage }: ObservationsProps) => {
       initialPageParam: 1,
 
       queryFn: async ({ pageParam }) => {
-        const url = new URL('https://api.inaturalist.org/v1/observations')
-        url.search = new URLSearchParams({
-          place_id: '225419',
-          order: 'desc',
-          order_by: 'observed_on',
+
+        iNaturalistUrl.search = new URLSearchParams({
+          place_id: PLACE_ID,
+          order: ORDER,
+          order_by: ORDER_BY,
           per_page: String(PER_PAGE),
           page: String(pageParam),
         }).toString()
 
-        const res = await fetch(url)
+        const res = await fetch(iNaturalistUrl)
 
         if (!res.ok) {
           throw new Error('Failed to fetch more observations')
@@ -78,8 +77,8 @@ const Observations = ({ initialPage }: ObservationsProps) => {
       },
 
       // monthly updates → long cache
-      staleTime: 1000 * 60 * 60 * 24 * 30, // 30 days
-      gcTime: 1000 * 60 * 60 * 24 * 60, // 60 days
+      staleTime: STALE_TIME,
+      gcTime: GC_TIME
     })
 
   // flatten pages
@@ -98,15 +97,15 @@ const Observations = ({ initialPage }: ObservationsProps) => {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
+      <main className="container mx-auto px-4 py-8">
+        <section className="mb-8">
           <h1 className="text-3xl font-bold text-foreground mb-2">
             Recent Observations
           </h1>
           <p className="text-muted-foreground">
             Biodiversity observations from Indio Mountains Research Station
           </p>
-        </div>
+        </section>
 
         {/* <Select value={filter} onValueChange={setFilter}>
             <SelectTrigger className="w-48">
@@ -122,7 +121,7 @@ const Observations = ({ initialPage }: ObservationsProps) => {
             </SelectContent>
           </Select> */}
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <section className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {observations.map((observation) => (
             <Link
               key={observation.id}
@@ -138,7 +137,7 @@ const Observations = ({ initialPage }: ObservationsProps) => {
                       alt={observation.species_guess || 'Unknown species'}
                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                       onError={(e) => {
-                        ;(e.target as HTMLImageElement).style.display = 'none'
+                        ; (e.target as HTMLImageElement).style.display = 'none'
                       }}
                     />
                   </div>
@@ -190,7 +189,7 @@ const Observations = ({ initialPage }: ObservationsProps) => {
             Array.from({ length: SKELETON_COUNT }).map((_, i) => (
               <ObservationCardSkeleton key={`skeleton-${i}`} />
             ))}
-        </div>
+        </section>
 
         {/* infinite scroll sentinel */}
         <div ref={ref} className="h-12" />
@@ -200,7 +199,7 @@ const Observations = ({ initialPage }: ObservationsProps) => {
             <Loader dataTitle="more observations" />
           </div>
         )} */}
-      </div>
+      </main>
     </div>
   )
 }

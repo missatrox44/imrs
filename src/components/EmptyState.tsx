@@ -4,7 +4,7 @@ import { Card, CardContent } from '@/components/ui/card'
 
 const EmptyState = () => {
   return (
-    <div className="min-h-[60vh] flex items-center justify-center px-4">
+    <section className="min-h-[60vh] flex items-center justify-center px-4">
       <Card className="max-w-md w-full text-center">
         <CardContent className="py-12 space-y-4">
           <div className="flex justify-center">
@@ -21,7 +21,7 @@ const EmptyState = () => {
           </p>
         </CardContent>
       </Card>
-    </div>
+    </section>
   )
 }
 

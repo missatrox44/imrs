@@ -3,14 +3,14 @@ import { ArrowLeft, Home } from 'lucide-react'
 
 export function NotFound({ children }: { children?: any }) {
   return (
-    <div
+    <main
       className="
         w-full min-h-[80vh]
         flex items-center justify-center
         px-4
       "
     >
-      <div
+      <section
         className="
           max-w-2xl w-full
           bg-card text-card-foreground
@@ -70,7 +70,7 @@ export function NotFound({ children }: { children?: any }) {
             Return Home
           </Link>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
   )
 }

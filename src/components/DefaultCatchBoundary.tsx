@@ -17,7 +17,7 @@ export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
   console.error(error)
 
   return (
-    <div
+    <main
       className="
         w-full min-h-[80vh]
         flex items-center justify-center
@@ -104,6 +104,6 @@ export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
           )}
         </div>
       </div>
-    </div>
+    </main>
   )
 }
