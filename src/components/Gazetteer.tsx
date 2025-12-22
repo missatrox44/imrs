@@ -43,7 +43,7 @@ const Gazetteer = () => {
               IMRS Gazetteer
             </h1>
             <p className="text-muted-foreground md:text-balance">
-              A comprehensive list of notable locations and features within the
+              A comprehensive list of notable locations and features on
               Indio Mountains Research Station
             </p>
           </div>
