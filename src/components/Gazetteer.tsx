@@ -1,33 +1,38 @@
-import { useMemo, useState } from "react";
-import { MapPin, Mountain } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { GAZETTEER_ENTRIES } from "@/data/gazetteer";
-import { formatCoordinates } from "@/lib/formatCoordinates";
-import { formatElevation } from "@/lib/formatElevation";
+import { useMemo, useState } from 'react'
+import { MapPin, Mountain } from 'lucide-react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import { GAZETTEER_ENTRIES } from '@/data/gazetteer'
+import { formatCoordinates } from '@/lib/formatCoordinates'
+import { formatElevation } from '@/lib/formatElevation'
+import { SearchInput } from '@/components/SearchInput'
 
 const Gazetteer = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedImage, setSelectedImage] = useState<{ url: string; name: string } | null>(null);
+  const [searchTerm, setSearchTerm] = useState('')
+  const [selectedImage, setSelectedImage] = useState<{
+    url: string
+    name: string
+  } | null>(null)
 
   const filteredAndSortedEntries = useMemo(() => {
-    return GAZETTEER_ENTRIES
-      .filter((entry) =>
-        entry.name.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-      .sort((a, b) => a.name.localeCompare(b.name));
-  }, [searchTerm]);
-
+    return GAZETTEER_ENTRIES.filter((entry) =>
+      entry.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    ).sort((a, b) => a.name.localeCompare(b.name))
+  }, [searchTerm])
 
   // Entries with images
-  const entriesWithImages = ["echo-spring", "red-tank", "echo-peak"];
+  const entriesWithImages = ['echo-spring', 'red-tank', 'echo-peak']
 
   const getImageUrl = (id: string) => {
-    const seed = id.split('-').join('');
-    return `https://picsum.photos/seed/${seed}/300/200`;
-  };
+    const seed = id.split('-').join('')
+    return `https://picsum.photos/seed/${seed}/300/200`
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -38,28 +43,30 @@ const Gazetteer = () => {
               IMRS Gazetteer
             </h1>
             <p className="text-muted-foreground md:text-balance">
-              A comprehensive list of notable locations and features within the Indio Mountains Research Station
+              A comprehensive list of notable locations and features within the
+              Indio Mountains Research Station
             </p>
           </div>
           <div className="mb-6">
-            <Input
-              type="text"
-              placeholder="Search locations (e.g., Echo, Tank, Canyon)..."
+            <SearchInput
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="md:max-w-md"
+              onChange={setSearchTerm}
+              placeholder="Search locations"
             />
           </div>
-<h1>{filteredAndSortedEntries.length}</h1>
+          <h1>{filteredAndSortedEntries.length}</h1>
           <div className="space-y-4">
             {filteredAndSortedEntries.length > 0 ? (
               filteredAndSortedEntries.map((entry) => (
-                <Card key={entry.id} className="hover:shadow-md transition-shadow">
+                <Card
+                  key={entry.id}
+                  className="hover:shadow-md transition-shadow"
+                >
                   <CardHeader>
                     <CardTitle className="text-xl">{entry.name}</CardTitle>
                     {entry.alternateNames?.length ? (
                       <p className="text-sm text-muted-foreground italic">
-                        aka {entry.alternateNames.join(", ")}
+                        aka {entry.alternateNames.join(', ')}
                       </p>
                     ) : null}
                   </CardHeader>
@@ -67,8 +74,8 @@ const Gazetteer = () => {
                     <div
                       className={
                         entriesWithImages.includes(entry.id)
-                          ? "flex flex-col md:flex-row gap-4"
-                          : ""
+                          ? 'flex flex-col md:flex-row gap-4'
+                          : ''
                       }
                     >
                       <div className="flex-1 space-y-3">
@@ -77,15 +84,24 @@ const Gazetteer = () => {
                         </p>
 
                         <div className="flex flex-wrap gap-2 text-sm">
-                          {entry.latitude !== null && entry.longitude !== null && (
-                            <Badge variant="secondary" className="flex items-center gap-1">
+                          {entry.latitude && entry.longitude && (
+                            <Badge
+                              variant="secondary"
+                              className="flex items-center gap-1"
+                            >
                               <MapPin className="w-3 h-3" />
-                              {formatCoordinates(entry.latitude, entry.longitude)}
+                              {formatCoordinates(
+                                entry.latitude,
+                                entry.longitude,
+                              )}
                             </Badge>
                           )}
 
-                          {entry.elevationMeters !== null && (
-                            <Badge variant="secondary" className="flex items-center gap-1">
+                          {entry.elevationMeters && (
+                            <Badge
+                              variant="secondary"
+                              className="flex items-center gap-1"
+                            >
                               <Mountain className="w-3 h-3" />
                               {formatElevation(entry.elevationMeters)}
                             </Badge>
@@ -125,13 +141,17 @@ const Gazetteer = () => {
 
           {filteredAndSortedEntries.length > 0 && (
             <div className="mt-6 text-center text-sm text-muted-foreground">
-              Showing {filteredAndSortedEntries.length} of {GAZETTEER_ENTRIES.length} locations
+              Showing {filteredAndSortedEntries.length} of{' '}
+              {GAZETTEER_ENTRIES.length} locations
             </div>
           )}
         </div>
       </main>
 
-      <Dialog open={!!selectedImage} onOpenChange={() => setSelectedImage(null)}>
+      <Dialog
+        open={!!selectedImage}
+        onOpenChange={() => setSelectedImage(null)}
+      >
         <DialogContent className="max-w-4xl">
           <DialogHeader>
             <DialogTitle>{selectedImage?.name}</DialogTitle>
@@ -146,7 +166,7 @@ const Gazetteer = () => {
         </DialogContent>
       </Dialog>
     </div>
-  );
-};
+  )
+}
 
-export default Gazetteer;
+export default Gazetteer

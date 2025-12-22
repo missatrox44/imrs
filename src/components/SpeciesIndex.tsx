@@ -3,7 +3,6 @@ import {
   ChevronRight,
   ImageOff,
   LayoutGrid,
-  Search,
   Table as TableIcon,
 } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
@@ -13,11 +12,11 @@ import type { Category } from '@/types/category'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Input } from '@/components/ui/input'
 import { Loader } from '@/components/Loader'
 // import { AdvancedSearch } from '@/components/AdvancedSearch';
 import { getCategoryIcon } from '@/lib/getCategoryIcon'
 import { ALL_CATEGORIES } from '@/data/constants'
+import { SearchInput } from '@/components/SearchInput'
 
 const TABS: Array<Category> = ['all', ...ALL_CATEGORIES]
 
@@ -83,22 +82,20 @@ const SpeciesIndex = () => {
           <div className="flex items-center gap-2 bg-muted/50 p-1 border">
             <button
               onClick={() => setView('grid')}
-              className={`p-2 transition-all ${
-                view === 'grid'
+              className={`p-2 transition-all ${view === 'grid'
                   ? 'bg-background shadow-sm text-foreground'
                   : 'text-muted-foreground hover:text-foreground'
-              }`}
+                }`}
               title="Grid View"
             >
               <LayoutGrid className="w-4 h-4" />
             </button>
             <button
               onClick={() => setView('table')}
-              className={`p-2 transition-all ${
-                view === 'table'
+              className={`p-2 transition-all ${view === 'table'
                   ? 'bg-background shadow-sm text-foreground'
                   : 'text-muted-foreground hover:text-foreground'
-              }`}
+                }`}
               title="Table View"
             >
               <TableIcon className="w-4 h-4" />
@@ -107,13 +104,10 @@ const SpeciesIndex = () => {
         </div>
 
         <div className="relative mb-6">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-          <Input
-            type="text"
-            placeholder="Search across all species..."
+          <SearchInput
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
+            onChange={setSearchTerm}
+            placeholder="Search species index"
           />
         </div>
 
