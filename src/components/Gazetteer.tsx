@@ -98,7 +98,7 @@ const Gazetteer = () => {
                           <img
                             src={getImageUrl(entry.id)}
                             alt={entry.name}
-                            className="w-full md:w-75 h-50 object-cover rounded-md cursor-pointer hover:opacity-90 transition-opacity"
+                            className="w-full md:w-75 h-50 object-cover cursor-pointer hover:opacity-90 transition-opacity"
                             onClick={() =>
                               setSelectedImage({
                                 url: getImageUrl(entry.id),
@@ -140,7 +140,7 @@ const Gazetteer = () => {
             <img
               src={selectedImage?.url}
               alt={selectedImage?.name}
-              className="w-full h-auto rounded-md"
+              className="w-full h-auto"
             />
           </div>
         </DialogContent>
