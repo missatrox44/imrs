@@ -1,19 +1,8 @@
 import { motion } from 'framer-motion'
 import { Card, CardContent } from '@/components/ui/card'
+import { CAROUSEL_IMAGES } from '@/data/constants'
 
 export const ImageCarousel = () => {
-  const autoScrollImages = [
-    { src: 'https://picsum.photos/seed/auto1/600/400', alt: 'Desert flora' },
-    { src: 'https://picsum.photos/seed/auto2/600/400', alt: 'Rocky outcrops' },
-    { src: 'https://picsum.photos/seed/auto3/600/400', alt: 'Sunset vista' },
-    { src: 'https://picsum.photos/seed/auto4/600/400', alt: 'Wildlife tracks' },
-    {
-      src: 'https://picsum.photos/seed/auto5/600/400',
-      alt: 'Research equipment',
-    },
-    { src: 'https://picsum.photos/seed/auto6/600/400', alt: 'Canyon view' },
-    { src: 'https://picsum.photos/seed/auto7/600/400', alt: 'Desert bloom' },
-  ]
 
   return (
     <motion.section
@@ -32,7 +21,7 @@ export const ImageCarousel = () => {
     >
       <div className="relative overflow-hidden">
         <div className="flex gap-4 animate-scroll">
-          {[...autoScrollImages, ...autoScrollImages].map((image, index) => (
+          {[...CAROUSEL_IMAGES, ...CAROUSEL_IMAGES].map((image, index) => (
             <div key={index} className="shrink-0 w-48 md:w-56">
               <Card className="border-0 overflow-hidden">
                 <CardContent className="p-0">
