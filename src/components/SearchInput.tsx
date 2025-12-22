@@ -15,7 +15,7 @@ export const SearchInput = ({
   className = "",
 }: SearchInputProps) => {
   return (
-    <div className={`relative ${className}`}>
+    <section className={`relative ${className}`}>
       <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
       <Input
         type="text"
@@ -24,6 +24,6 @@ export const SearchInput = ({
         placeholder={placeholder}
         className="pl-10"
       />
-    </div>
+    </section>
   );
 };

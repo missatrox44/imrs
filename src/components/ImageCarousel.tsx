@@ -33,7 +33,7 @@ export const ImageCarousel = () => {
       viewport={{ once: true }}
       transition={{ duration: 0.6 }}
     >
-      <div className="overflow-hidden">
+      <section className="overflow-hidden">
         <motion.div
           className="flex gap-4 w-max"
           animate={{ x: ['0%', '-50%'] }}
@@ -74,7 +74,7 @@ export const ImageCarousel = () => {
             </div>
           ))}
         </motion.div>
-      </div>
+      </section>
     </motion.section>
   )
 }

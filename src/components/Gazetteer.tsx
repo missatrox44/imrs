@@ -35,8 +35,8 @@ const Gazetteer = () => {
   // }
 
   return (
-    <div className="min-h-screen bg-background">
-      <main className="container mx-auto px-4 py-8">
+    <main className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">
             <h1 className="text-4xl font-bold text-foreground mb-2">
@@ -55,7 +55,7 @@ const Gazetteer = () => {
             />
           </div>
           {/* <h1>{filteredAndSortedEntries.length}</h1> */}
-          <div className="space-y-4">
+          <section className="space-y-4">
             {filteredAndSortedEntries.length > 0 ? (
               filteredAndSortedEntries.map((entry) => (
                 <Card
@@ -138,7 +138,7 @@ const Gazetteer = () => {
                 </CardContent>
               </Card>
             )}
-          </div>
+          </section>
 
           {filteredAndSortedEntries.length > 0 && (
             <div className="mt-6 text-center text-sm text-muted-foreground">
@@ -147,7 +147,7 @@ const Gazetteer = () => {
             </div>
           )}
         </div>
-      </main>
+      </div>
 
       {/* <Dialog
         open={!!selectedImage}
@@ -166,7 +166,7 @@ const Gazetteer = () => {
           </div>
         </DialogContent>
       </Dialog> */}
-    </div>
+    </main>
   )
 }
 

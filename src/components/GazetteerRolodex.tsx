@@ -36,7 +36,7 @@ export const GazetteerRolodex = () => {
   };
 
   return (
-    <div className="text-center mt-20 container mx-auto">
+    <section className="text-center mt-20 container mx-auto">
       <h2 className="text-3xl font-bold text-foreground mb-4">Explore Locations</h2>
       <p className="text-muted-foreground mb-8 max-w-2xl mx-auto text-balance">
         Discover the diverse locations on Indio Mountains Research Station
@@ -181,6 +181,6 @@ export const GazetteerRolodex = () => {
           </Link>
         </Button>
       </div>
-    </div>
+    </section>
   );
 };

@@ -45,7 +45,7 @@ export const StatsCounter = () => {
       </div>
     </div> */}
 
-      <motion.div
+      <motion.section
         className="mt-20 text-center container mx-auto"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -63,7 +63,7 @@ export const StatsCounter = () => {
             </div>
           ))}
         </div>
-      </motion.div>
+      </motion.section>
     </>
   )
 }

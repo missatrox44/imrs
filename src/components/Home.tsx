@@ -11,7 +11,7 @@ export const Home = () => {
     <div className="min-h-screen bg-background">
       <main className="mx-auto px-4 py-12">
         {/* Hero Section */}
-        <div className="text-center max-w-4xl mx-auto mb-16">
+        <section className="text-center max-w-4xl mx-auto mb-16">
           <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
             IMRS Biodiversity
             <span className="gradient-hero bg-clip-text text-foreground"> Explorer</span>
@@ -20,10 +20,10 @@ export const Home = () => {
             Explore the biodiversity of the Indio Mountains Research Station (IMRS).
             Discover species and view recent observations from this unique desert ecosystem.
           </p>
-        </div>
+        </section>
 
         {/* Action Cards */}
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <section className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           <Card className="gradient-card shadow-md hover:shadow-xl transition-shadow duration-300 group">
             <CardContent className="p-8 text-center">
               <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
@@ -57,7 +57,7 @@ export const Home = () => {
               </Button>
             </CardContent>
           </Card>
-        </div>
+        </section>
 
         {/* Stats Section */}
         <StatsCounter />
