@@ -2,12 +2,12 @@ import { useMemo, useState } from 'react'
 import { MapPin, Mountain } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog'
+// import {
+//   Dialog,
+//   DialogContent,
+//   DialogHeader,
+//   DialogTitle,
+// } from '@/components/ui/dialog'
 import { GAZETTEER_ENTRIES } from '@/data/gazetteer'
 import { formatCoordinates } from '@/lib/formatCoordinates'
 import { formatElevation } from '@/lib/formatElevation'
@@ -15,10 +15,10 @@ import { SearchInput } from '@/components/SearchInput'
 
 const Gazetteer = () => {
   const [searchTerm, setSearchTerm] = useState('')
-  const [selectedImage, setSelectedImage] = useState<{
-    url: string
-    name: string
-  } | null>(null)
+  // const [selectedImage, setSelectedImage] = useState<{
+  //   url: string
+  //   name: string
+  // } | null>(null)
 
   const filteredAndSortedEntries = useMemo(() => {
     return GAZETTEER_ENTRIES.filter((entry) =>
@@ -27,12 +27,12 @@ const Gazetteer = () => {
   }, [searchTerm])
 
   // Entries with images
-  const entriesWithImages = ['echo-spring', 'red-tank', 'echo-peak']
+  // const entriesWithImages = ['echo-spring', 'red-tank', 'echo-peak']
 
-  const getImageUrl = (id: string) => {
-    const seed = id.split('-').join('')
-    return `https://picsum.photos/seed/${seed}/300/200`
-  }
+  // const getImageUrl = (id: string) => {
+  //   const seed = id.split('-').join('')
+  //   return `https://picsum.photos/seed/${seed}/300/200`
+  // }
 
   return (
     <div className="min-h-screen bg-background">
@@ -54,7 +54,7 @@ const Gazetteer = () => {
               placeholder="Search locations"
             />
           </div>
-          <h1>{filteredAndSortedEntries.length}</h1>
+          {/* <h1>{filteredAndSortedEntries.length}</h1> */}
           <div className="space-y-4">
             {filteredAndSortedEntries.length > 0 ? (
               filteredAndSortedEntries.map((entry) => (
@@ -71,13 +71,14 @@ const Gazetteer = () => {
                     ) : null}
                   </CardHeader>
                   <CardContent>
-                    <div
+                    {/* <div
                       className={
                         entriesWithImages.includes(entry.id)
                           ? 'flex flex-col md:flex-row gap-4'
                           : ''
                       }
-                    >
+                    > */}
+                     <div>
                       <div className="flex-1 space-y-3">
                         <p className="text-muted-foreground">
                           {entry.description}
@@ -108,7 +109,7 @@ const Gazetteer = () => {
                           )}
                         </div>
                       </div>
-
+{/* 
                       {entriesWithImages.includes(entry.id) && (
                         <div className="shrink-0">
                           <img
@@ -123,7 +124,7 @@ const Gazetteer = () => {
                             }
                           />
                         </div>
-                      )}
+                      )} */}
                     </div>
                   </CardContent>
                 </Card>
@@ -148,7 +149,7 @@ const Gazetteer = () => {
         </div>
       </main>
 
-      <Dialog
+      {/* <Dialog
         open={!!selectedImage}
         onOpenChange={() => setSelectedImage(null)}
       >
@@ -164,7 +165,7 @@ const Gazetteer = () => {
             />
           </div>
         </DialogContent>
-      </Dialog>
+      </Dialog> */}
     </div>
   )
 }
