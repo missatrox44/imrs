@@ -198,7 +198,7 @@ code {
   }
 }
 
-@keyframes scroll {
+/* @keyframes scroll {
   0% {
     transform: translateX(0);
   }
@@ -213,4 +213,4 @@ code {
 
 .animate-scroll:hover {
   animation-play-state: paused;
-}
+} */
