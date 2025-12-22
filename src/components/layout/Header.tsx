@@ -23,7 +23,7 @@ export default function Header() {
     { to: '/', label: 'Home' },
     { to: '/observations', label: 'Observations' },
     { to: '/species', label: 'Species Index' },
-    { to: '/gazetteer', label: 'Gazetteer' },
+    // { to: '/gazetteer', label: 'Gazetteer' },
   ]
 
   return (
