@@ -76,16 +76,15 @@ CREATE TABLE specimens (
 `sqlite3 imrs-species.db ".schema specimens"`
 
 
-3. **Import CSV**
+3. **Import TSV**
 go to terminal at root of project and enter:
 
 `sqlite3 imrs-species.db`
 
 Then inside the SQLite prompt:
 ```bash
-.mode csv
-.headers on
-.import specimens.csv specimens
+.mode tabs
+.import specimens.tsv specimens
 ```
 
 4.check that it worked
