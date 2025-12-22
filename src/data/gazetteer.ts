@@ -278,7 +278,7 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     longitude: null,
     elevationMeters: null,
   },
-    {
+  {
     id: "flat-top-mountain",
     name: "Flat Top Mountain",
     description:
@@ -435,7 +435,7 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     longitude: -105.00833,
     elevationMeters: 1415.2,
   },
-    {
+  {
     id: "oak-wash",
     name: "Oak Wash",
     description:
@@ -785,5 +785,56 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     latitude: null,
     longitude: null,
     elevationMeters: null,
+  },
+];
+
+
+export const GAZETTEER_ROLODEX: Array<GazetteerEntry> = [
+  {
+    id: "bailey-evans-peak",
+    name: "Bailey Evans Peak",
+    description:
+      "Highest mountain peak east-northeast of Indio Ranch House. Also known as Mount Everest.",
+    latitude: 30.781661,
+    longitude: -105.004167,
+    elevationMeters: 1461.6,
+    alternateNames: ["Mount Everest"],
+  },
+  {
+    id: "mesquite-tank",
+    name: "Mesquite Tank",
+    description:
+      "Tank near Bailey Evens Arroyo west-southwest of IMRS HQ.",
+    latitude: 30.76153,
+    longitude: -105.031,
+    elevationMeters: 1167,
+  },
+  {
+    id: "red-tank",
+    name: "Red Tank",
+    description:
+      "Large seasonally dry impoundment along River Road west of Eagle Canyon; contains pit-fall trap array.",
+    latitude: 30.73067,
+    longitude: -104.988,
+    elevationMeters: 1195.6,
+  },
+  {
+    id: "flat-top-mountain",
+    name: "Flat Top Mountain",
+    description:
+      "Mesa and ridge system north-northeast of Red Tank; highest elevation occurs at the southern end of the mountain.",
+    latitude: 30.74805,
+    longitude: -104.997,
+    elevationMeters: 1359,
+  },
+  {
+    id: "corral-tank",
+    name: "Corral Tank",
+    description:
+      "Northernmost seasonal impoundment near Double Tank Corral; often holds water early or late in the year.",
+    latitude: 30.78729,
+    longitude: -104.986,
+    elevationMeters: 1339,
+    alternateNames: ["Road Tank"],
   },
 ];
