@@ -6,9 +6,9 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     name: "Access Road",
     description:
       "Alternate name for IMRS Access Road; see Main Road.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
     alternateNames: ["IMRS Access Road", "Main Road"],
   },
   {
@@ -25,18 +25,18 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     name: "Bailey Evens Arroyo",
     description:
       "Arroyo leaving Bailey Evens Canyon and draining to the Rio Grande.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
   },
   {
     id: "bailey-evens-canyon",
     name: "Bailey Evens Canyon",
     description:
       "Canyon and arroyo north of dormitory and bathroom building at IMRS HQ; drains to the Rio Grande near The Box.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
   },
   {
     id: "bailey-evans-peak",
@@ -62,9 +62,9 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     name: "Bramlett Ranch",
     description:
       "Principal land holdings surrounding the southwest, west, and northwest boundaries of IMRS.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
   },
   {
     id: "campo-bonito",
@@ -89,9 +89,9 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     name: "Clay Bluffs Draw",
     description:
       "Large arroyo system east of River Road with high vertical banks draining into Green River.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
   },
   {
     id: "corral-tank",
@@ -108,8 +108,8 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     name: "Cottonwood Canyon Tank",
     description:
       "Cattle tank near the northwest corner of the IMRS boundary.",
-    latitude: null,
-    longitude: null,
+    
+    
     elevationMeters: 1287.1,
   },
   {
@@ -117,18 +117,18 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     name: "Cougar Cave",
     description:
       "Cave located in an arroyo crossing the road to Echo Spring north of IMRS HQ.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
   },
   {
     id: "double-tank",
     name: "Double Tank",
     description:
       "Collective name referring to Pirtle Tank and Road Tank.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
     alternateNames: ["Pirtle Tank", "Road Tank"],
   },
   {
@@ -145,9 +145,9 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     name: "Eagle Canyon",
     description:
       "Rugged canyon system east of IMRS draining southward to the Rio Grande; contains Palmas Well and The Narrows.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
     alternateNames: ["Snake Canyon"],
   },
   {
@@ -155,9 +155,9 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     name: "Eagle Canyon Road",
     description:
       "Bulldozed gravel road running over Eagle Pass through upper Eagle Canyon to River Road; currently impassable.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
   },
   {
     id: "eagle-pass",
@@ -191,27 +191,27 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     name: "East Well Arroyo",
     description:
       "East-draining arroyo immediately north of East Well that washes out East Well Road.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
   },
   {
     id: "east-well-road",
     name: "East Well Road",
     description:
       "Primitive road extending south from Main Road past Grassy Tank and Lost Well to East Well.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
   },
   {
     id: "echo-canyon",
     name: "Echo Canyon",
     description:
       "Southwest-draining canyon along Main Road on east slope of the Indio Mountains below Indio Pass.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
   },
   {
     id: "echo-canyon-overlook",
@@ -227,9 +227,9 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     name: "Echo Canyon Tank",
     description:
       "Tank on jeep road to Echo Spring below Echo Canyon Overlook.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
   },
   {
     id: "echo-canyon-twin-tanks",
@@ -246,9 +246,9 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     name: "Echo Creek Canyon",
     description:
       "Major arroyo draining southwest to the Rio Grande; contains Echo Spring.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
     alternateNames: ["Echo Creek", "Echo Spring Canyon"],
   },
   {
@@ -274,11 +274,11 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     name: "Echo Ridge",
     description:
       "Ridgeline extending east-southeast and west-northwest from Echo Peak.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
   },
-  {
+    {
     id: "flat-top-mountain",
     name: "Flat Top Mountain",
     description:
@@ -287,14 +287,15 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     longitude: -104.997,
     elevationMeters: 1359,
   },
+  
   {
     id: "glenn-creek",
     name: "Glenn Creek",
     description:
       "Alternate name listed on some maps for Green River; Green River is the preferred usage.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
     alternateNames: ["Green River"],
   },
   {
@@ -311,9 +312,9 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     name: "Green River",
     description:
       "Large normally dry wash forming the eastern boundary of the Indio Mountains. Preferred name over Glenn Creek.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
     alternateNames: ["Glenn Creek"],
   },
   {
@@ -321,9 +322,9 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     name: "Green River Road",
     description:
       "Gravel road forming the main eastern access to IMRS, following the Green River through Wolf Creek Ranch toward The Box.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
   },
   {
     id: "grassy-tank",
@@ -348,36 +349,36 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     name: "Indio Fault",
     description:
       "Northwest–southeast trending fault dividing the Indio Mountains into higher eastern and lower western blocks.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
   },
   {
     id: "indio-mountains",
     name: "Indio Mountains",
     description:
       "Southern spur of the Eagle Mountains in Hudspeth County, Texas, bounded by Oxford Canyon, the Rio Grande, Red Light Draw, and Green River.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
   },
   {
     id: "indio-pass",
     name: "Indio Pass",
     description:
       "Mountain pass over the Indio Mountains traversed by Main Road; summit lies just east of Echo Canyon Overlook.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
   },
   {
     id: "imrs",
     name: "IMRS",
     description:
       "Abbreviation for UTEP’s Indio Mountains Research Station.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
     alternateNames: ["Indio Mountains Research Station"],
   },
   {
@@ -387,7 +388,7 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
       "Area north of Double Tank Corral along the road to Echo Spring.",
     latitude: 30.79537,
     longitude: -104.994,
-    elevationMeters: null,
+    
   },
   {
     id: "lonely-tank",
@@ -403,18 +404,18 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     name: "Lost Tank",
     description:
       "Abandoned tank and adobe retaining wall along East Well Road south of its junction with Main Road.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
   },
   {
     id: "main-road",
     name: "Main Road",
     description:
       "Primary gravel road running from Green River Road through East Gate, Echo Canyon, IMRS HQ, and north toward Oxford Canyon.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
     alternateNames: ["IMRS Access Road", "Access Road"],
   },
   {
@@ -435,23 +436,23 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     longitude: -105.00833,
     elevationMeters: 1415.2,
   },
-  {
+    {
     id: "oak-wash",
     name: "Oak Wash",
     description:
       "Wash located on Main Road approximately 0.40 km west of Double Tank Corral.",
     latitude: 30.78511,
     longitude: -104.98961,
-    elevationMeters: null,
+    
   },
   {
     id: "north-gate",
     name: "North Gate",
     description:
       "Gate across Main Road north of Woodpecker Well, separating IMRS from Bramlett Ranch.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
   },
   {
     id: "oak-arroyo",
@@ -467,9 +468,9 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     name: "O’Connor Ranch",
     description:
       "Former Lado Ranch holdings along the southeastern and southern boundary of IMRS; access is gated.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
     alternateNames: ["Lado Ranch", "Ballinamona II"],
   },
   {
@@ -477,9 +478,9 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     name: "Oxford Canyon",
     description:
       "Draw at the north end of the Indio Mountains separating them from the Eagle Mountains.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
   },
   {
     id: "oxford-spring",
@@ -488,7 +489,7 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
       "Permanent spring in Oxford Canyon north of Woodpecker Well, just outside IMRS property.",
     latitude: 30.84023,
     longitude: -105.041,
-    elevationMeters: null,
+    
   },
   {
     id: "painted-cliffs",
@@ -497,7 +498,7 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
       "Eroded ash formation on a north-facing arroyo slope south-southwest of the junction of Green River and Main Roads.",
     latitude: 30.78056,
     longitude: -104.94583,
-    elevationMeters: null,
+    
   },
   {
     id: "palmas-well",
@@ -532,9 +533,9 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     name: "Prospect Pits Arroyo",
     description:
       "Large arroyo draining Echo Canyon and Ranch House Draw near the Y on Main Road.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
   },
   {
     id: "prospect-pits",
@@ -559,18 +560,18 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     name: "Purple Sage Mine Road",
     description:
       "Gravel road extending south-southwest from Main Road to Carpenter and Purple Sage Mines.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
   },
   {
     id: "ranch-house-draw",
     name: "Ranch House Draw",
     description:
       "Depression running alongside Main Road leading to IMRS HQ from the Y junction with River Road.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
   },
   {
     id: "rattlesnake-tank",
@@ -587,9 +588,9 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     name: "Redetzke’s Knob",
     description:
       "South-facing ridge at the summit of Flat Top Mountain.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
   },
   {
     id: "red-mountain",
@@ -614,18 +615,18 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     name: "River Road",
     description:
       "Gravel road running north from the Green River near The Box through South Gate and Campo Bonito to Main Road.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
   },
   {
     id: "scotts-crossing",
     name: "Scott’s Crossing",
     description:
       "Crossing where Green River Road intersects the Southern Pacific Railroad tracks south-southeast of Van Horn.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
   },
   {
     id: "south-gate",
@@ -651,9 +652,9 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     name: "Snake Canyon",
     description:
       "Former name for Eagle Canyon.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
     alternateNames: ["Eagle Canyon"],
   },
   {
@@ -708,18 +709,18 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     name: "Tres Amigos",
     description:
       "Group of three hills at the west entrance to Oxford Canyon on Bramlett Ranch.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
   },
   {
     id: "twin-tanks",
     name: "Twin Tanks",
     description:
       "Collective term referring to Echo Canyon Twin Tanks and The Narrows Twin Tanks.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
     alternateNames: ["Echo Canyon Twin Tanks", "The Narrows Twin Tanks"],
   },
   {
@@ -736,9 +737,9 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     name: "Willoughby Creek",
     description:
       "Dry arroyo north-northwest of Echo Ridge draining into the Green River.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
   },
   {
     id: "woodpecker-well",
@@ -754,9 +755,9 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     name: "Wolf Creek Ranch",
     description:
       "Ranch holdings north and northeast of IMRS providing primary access to IMRS via Green River Road.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
   },
   {
     id: "wrong-red-tank",
@@ -782,15 +783,15 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     name: "Yucca Ridge",
     description:
       "Ridge running northwest to southeast between Oxford Canyon and Echo Creek Canyon, south of Echo Ridge.",
-    latitude: null,
-    longitude: null,
-    elevationMeters: null,
+    
+    
+    
   },
 ];
 
 
 export const GAZETTEER_ROLODEX: Array<GazetteerEntry> = [
-  {
+    {
     id: "bailey-evans-peak",
     name: "Bailey Evans Peak",
     description:
@@ -809,7 +810,7 @@ export const GAZETTEER_ROLODEX: Array<GazetteerEntry> = [
     longitude: -105.031,
     elevationMeters: 1167,
   },
-  {
+    {
     id: "red-tank",
     name: "Red Tank",
     description:
@@ -818,16 +819,16 @@ export const GAZETTEER_ROLODEX: Array<GazetteerEntry> = [
     longitude: -104.988,
     elevationMeters: 1195.6,
   },
-  {
-    id: "flat-top-mountain",
-    name: "Flat Top Mountain",
+    {
+    id: "mesquite-tank",
+    name: "Mesquite Tank",
     description:
-      "Mesa and ridge system north-northeast of Red Tank; highest elevation occurs at the southern end of the mountain.",
-    latitude: 30.74805,
-    longitude: -104.997,
-    elevationMeters: 1359,
+      "Tank near Bailey Evens Arroyo west-southwest of IMRS HQ.",
+    latitude: 30.76153,
+    longitude: -105.031,
+    elevationMeters: 1167,
   },
-  {
+    {
     id: "corral-tank",
     name: "Corral Tank",
     description:

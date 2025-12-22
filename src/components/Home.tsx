@@ -1,6 +1,7 @@
 import { BookOpen, Eye } from "lucide-react";
 import { Link } from '@tanstack/react-router'
 import { StatsCounter } from "./StatsCounter";
+import { GazetteerRolodex } from "./GazetteerRolodex";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -59,6 +60,7 @@ export const Home = () => {
 
         {/* Stats Section */}
         <StatsCounter />
+        <GazetteerRolodex />
       </main>
     </div>
   );

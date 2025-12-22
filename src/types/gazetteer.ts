@@ -2,9 +2,9 @@ export interface GazetteerEntry {
   id: string
   name: string
   description: string
-  latitude: number | null
-  longitude: number | null
-  elevationMeters: number | null
+  latitude?: number
+  longitude?: number
+  elevationMeters?: number
   alternateNames?: Array<string>
   references?: Array<string>
 }
