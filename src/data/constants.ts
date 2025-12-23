@@ -7,7 +7,7 @@ export const STATS = [
     suffix: '+',
   },
   {
-    value: 3000,
+    value: 1200,
     label: 'Species Documented',
     suffix: '+',
   },
@@ -50,10 +50,11 @@ export const ALL_CATEGORIES: Array<Category> = [
   'birds',
   'reptiles',
   'amphibians',
+  'fish',
   'plants',
   'fungi',
   'arthropods',
-  'worms',
+  'inverts',
 ]
 
 export const CAROUSEL_IMAGES = [

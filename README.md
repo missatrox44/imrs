@@ -41,7 +41,7 @@ If you see a version number, you're good! If not enter:
 ```bash 
 sqlite3 imrs-species.db "
 CREATE TABLE specimens (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  id INTEGER PRIMARY NOT NULL,
   category TEXT,
   kingdom TEXT,
   phylum TEXT,
@@ -84,12 +84,13 @@ go to terminal at root of project and enter:
 Then inside the SQLite prompt:
 ```bash
 .mode tabs
+.headers on
 .import specimens.tsv specimens
 ```
 
 4.check that it worked
 
-`sqlite3 imrs-species.db "SELECT * FROM specimens;"`
+`sqlite3 imrs-species.db ;"`
 
 ## [Preparing Your SQLite Database](https://turso.tech/blog/migrating-and-importing-sqlite-to-turso-just-got-easier#preparing-your-sqlite-database)
 Before importing your SQLite database to Turso Cloud, your database should be using WAL (Write-Ahead Logging) mode:
