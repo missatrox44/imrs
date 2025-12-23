@@ -29,7 +29,7 @@ const SpeciesIndex = () => {
     queryKey: ['speciesData'],
     queryFn: async () => {
       const res = await fetch('/api/species')
-      console.log('Species data:', res)
+      // console.log('Species data:', res)
       if (!res.ok) throw new Error('Failed to fetch species')
       return res.json()
     },
@@ -75,7 +75,7 @@ const SpeciesIndex = () => {
           <div>
             <h1 className="text-3xl font-bold mb-2">Species Index</h1>
             <p className="text-muted-foreground">
-              Comprehensive database of species documented at IMRS.
+              Comprehensive database of species documented on IMRS.
             </p>
           </div>
 

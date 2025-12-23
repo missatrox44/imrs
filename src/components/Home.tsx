@@ -17,7 +17,7 @@ export const Home = () => {
             <span className="gradient-hero bg-clip-text text-foreground"> Explorer</span>
           </h1>
           <p className="text-xl text-muted-foreground mb-8 leading-relaxed text-balance">
-            Explore the biodiversity of the Indio Mountains Research Station (IMRS).
+            Explore the biodiversity of Indio Mountains Research Station (IMRS).
             Discover species and view recent observations from this unique desert ecosystem.
           </p>
         </section>
@@ -33,7 +33,7 @@ export const Home = () => {
                 Recent Observations
               </h2>
               <p className="text-muted-foreground mb-6">
-                Browse the latest wildlife and plant observations from researchers and visitors at IMRS.
+                Browse the latest wildlife and plant observations from researchers and visitors on IMRS.
               </p>
               <Button asChild size="lg" className="w-full">
                 <Link to="/observations">View Observations</Link>
@@ -50,7 +50,7 @@ export const Home = () => {
                 Species Index
               </h2>
               <p className="text-muted-foreground mb-6">
-                Explore our comprehensive database of documented species found within the research station.
+                Explore our comprehensive database of documented species found within the research station property.
               </p>
               <Button asChild variant="secondary" size="lg" className="w-full">
                 <Link to="/species">Browse Species</Link>
