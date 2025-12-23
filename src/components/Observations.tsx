@@ -103,7 +103,10 @@ const Observations = ({ initialPage }: ObservationsProps) => {
             Recent Observations
           </h1>
           <p className="text-muted-foreground">
-            Biodiversity observations from Indio Mountains Research Station
+            Biodiversity observations on Indio Mountains Research Station from iNaturalist.
+          </p>
+          <p className="text-muted-foreground font-bold">
+            Click any observation card to view full observation details.
           </p>
         </section>
 

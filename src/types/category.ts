@@ -3,8 +3,9 @@ export type Category =
   | "birds"
   | "reptiles"
   | "amphibians"
+  | "fish"
   | "plants"
   | "fungi"
   | "arthropods"
-  | "worms"
+  | "inverts"
   | "all";

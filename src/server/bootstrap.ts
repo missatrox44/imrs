@@ -2,9 +2,9 @@ import { getTurso } from './turso'
 
 export async function ensureSchema() {
   const db = getTurso()
-  await db.execute(`
+  await db.execute(` 
     CREATE TABLE IF NOT EXISTS specimens (
-      id INTEGER PRIMARY KEY,
+      id INTEGER PRIMARY KEY NOT NULL,
       category TEXT,
       kingdom TEXT,
       phylum TEXT,

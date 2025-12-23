@@ -29,7 +29,7 @@ export function ObservationCarousel({observations, obsCount}: {observations: Arr
         {obsCount === 0 ? (
           <div className="text-center py-8">
             <p className="text-muted-foreground">
-              No iNaturalist observations recorded for this species at IMRS yet.
+              No iNaturalist observations recorded for this species on IMRS yet.
             </p>
           </div>
         ) : (
