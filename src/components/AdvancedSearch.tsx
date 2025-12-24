@@ -1,5 +1,4 @@
 import { ArrowUpDown, Filter, RotateCcw, SlidersHorizontal } from 'lucide-react'
-
 import {
   Select,
   SelectContent,
@@ -11,8 +10,9 @@ import { Button } from '@/components/ui/button'
 import { getCategoryIcon } from '@/lib/getCategoryIcon'
 
 export function AdvancedSearch() {
+
   return (
-    <div className="bg-card border border-border rounded-lg p-4 mb-6">
+    <div className="bg-card border border-border p-4 mb-6">
       {/* Header */}
       <div className="flex items-center gap-2 mb-3">
         <SlidersHorizontal className="w-4 h-4 text-muted-foreground" />
@@ -56,7 +56,7 @@ export function AdvancedSearch() {
               className="h-7 text-xs capitalize gap-1"
             >
               {getCategoryIcon(category)}
-              {category} (12)
+              {category} {category.length}
             </Button>
           ))}
         </div>
@@ -119,7 +119,7 @@ export function AdvancedSearch() {
         </Select> */}
 
         <Select>
-          <SelectTrigger className="h-8 w-[120px] text-xs">
+          <SelectTrigger className="h-8 w-30 text-xs">
             <SelectValue placeholder="Direction" />
           </SelectTrigger>
           <SelectContent>
