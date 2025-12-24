@@ -19,7 +19,7 @@ export const getCategoryIcon = (category: string) => {
       return <Bug className="w-4 h-4" />;
     case 'fungi':
       return <GiSuperMushroom className="w-4 h-4" />;
-    case 'worms':
+    case 'inverts':
       return <LuWorm className="w-4 h-4" />;
     default:
       return null;

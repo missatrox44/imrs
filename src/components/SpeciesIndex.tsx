@@ -13,7 +13,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Loader } from '@/components/Loader'
-// import { AdvancedSearch } from '@/components/AdvancedSearch';
+import { AdvancedSearch } from '@/components/AdvancedSearch';
 import { getCategoryIcon } from '@/lib/getCategoryIcon'
 import { ALL_CATEGORIES } from '@/data/constants'
 import { SearchInput } from '@/components/SearchInput'
@@ -130,7 +130,7 @@ const SpeciesIndex = () => {
             </p>
           </div>
 
-          {/* <AdvancedSearch /> */}
+          <AdvancedSearch />
 
           <div className="mb-4 text-sm text-muted-foreground">
             Showing {filtered.length}{' '}
