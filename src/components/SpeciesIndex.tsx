@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   LayoutGrid,
   Table as TableIcon,
 } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
+import { useMediaQuery } from '@uidotdev/usehooks'
 import { SpeciesGridView } from './SpeciesGridView'
 import type { Species } from '@/types/species'
 import type { Category } from '@/types/category'
@@ -22,6 +23,7 @@ const SpeciesIndex = () => {
   const [activeTab, setActiveTab] = useState<Category>('all')
   const [searchTerm, setSearchTerm] = useState('')
   const [view, setView] = useState<'grid' | 'table'>('grid')
+  const isMobile = useMediaQuery('(max-width: 767px)')
 
   const { data: species = [], isLoading } = useQuery({
     queryKey: ['speciesData'],
@@ -66,6 +68,12 @@ const SpeciesIndex = () => {
     return <Loader dataTitle="species catalog" />
   }
 
+  useEffect(() => {
+    if (isMobile && view !== 'grid') {
+      setView('grid')
+    }
+  }, [isMobile, view])
+
   return (
     <main className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
@@ -77,7 +85,7 @@ const SpeciesIndex = () => {
             </p>
           </div>
 
-          <div className="flex items-center gap-2 bg-muted/50 p-1 border">
+          <div className="hidden md:flex items-center gap-2 bg-muted/50 p-1 border">
             <button
               onClick={() => setView('grid')}
               className={`p-2 transition-all ${view === 'grid'
