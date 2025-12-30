@@ -68,6 +68,7 @@ export const ImageCarousel = () => {
                     src={image.src}
                     alt={image.alt}
                     className="w-full h-40 md:h-48 object-cover"
+                    loading='lazy'
                   />
                 </CardContent>
               </Card>

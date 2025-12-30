@@ -33,14 +33,14 @@ export default function Header() {
           <div className="flex items-center justify-between h-16">
             {/* LOGO + TITLE */}
             <Link to="/" className="flex items-center space-x-2">
-              <img src="/utep.webp" alt="IMRS Logo" className="w-8 h-8" />
+              <img src="/toad.png" alt="IMRS Logo" className="h-8 md:h-10" />
               <span className="font-semibold text-foreground text-sm md:text-lg">
                 IMRS Biodiversity Explorer
               </span>
             </Link>
 
             {/* DESKTOP NAV */}
-            <div className="hidden md:flex items-center space-x-2">
+            <div className="hidden lg:flex items-center space-x-2">
               {navItems.map((item) => {
                 const isActive =
                   pathname === item.to ||
@@ -61,7 +61,7 @@ export default function Header() {
 
             {/* MOBILE DRAWER */}
             <Drawer open={open} onOpenChange={setOpen}>
-              <DrawerTrigger asChild className="md:hidden">
+              <DrawerTrigger asChild className="lg:hidden">
                 <button
                   className="
                     p-2 text-foreground 
