@@ -42,9 +42,21 @@ export const SpeciesGridView = ({ items }: { items: Array<Species> }) => {
                       </div>
 
                       {/* Taxonomic Path */}
-                      <p className="text-xs text-muted-foreground font-mono mb-2 truncate">
+                      {/* <p className="text-xs text-muted-foreground font-mono mb-2 truncate">
                         {item.phylum} › {item.class_name} › {item.order_name} ›{' '}
                         {item.family}
+                      </p> */}
+                      {/* build breadcrumb as array, filter out missing values then join */}
+                      <p className="text-xs text-muted-foreground font-mono mb-2 truncate">
+                        {[
+                          item.phylum,
+                          item.class_name,
+                          item.order_name,
+                          item.family,
+                        ]
+                          .map((crumb) => crumb?.trim())
+                          .filter(Boolean)
+                          .join(' › ')}
                       </p>
 
                       {/* <div className="flex flex-wrap items-center gap-2 mb-2">
@@ -70,7 +82,7 @@ export const SpeciesGridView = ({ items }: { items: Array<Species> }) => {
                       {(item.family_common_name || item.family) && (
                         <div className="flex flex-wrap items-center gap-2">
                           <Badge variant="secondary" className="text-xs">
-                            {item.family_common_name ?? item.family}
+                            {item.family_common_name || item.family}
                           </Badge>
                         </div>
                       )}
