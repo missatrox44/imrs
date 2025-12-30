@@ -128,7 +128,7 @@ const SpeciesIndex = () => {
             </p>
           </div>
 
-          <AdvancedSearch />
+          {/* <AdvancedSearch /> */}
 
           <div className="mb-4 text-sm text-muted-foreground">
             Showing {filtered.length}{' '}

@@ -68,7 +68,7 @@ const DrawerContent = React.forwardRef<
     >
       <div className="flex items-center justify-between px-6 py-4 border-b border-border">
         <div className="flex items-center space-x-2">
-          <img src="/utep.webp" alt="IMRS Logo" className="w-8 h-8" />
+          <img src="/toad.png" alt="IMRS Logo" className="h-8" />
           <span className="font-semibold text-foreground text-sm md:text-lg">
             IMRS Biodiversity Explorer
           </span>
