@@ -63,16 +63,15 @@ const SpeciesIndex = () => {
   const getCategoryCount = (category: Category) => {
     return getFilteredItems(category).length
   }
-
-  if (isLoading) {
-    return <Loader dataTitle="species catalog" />
-  }
-
   useEffect(() => {
     if (isMobile && view !== 'grid') {
       setView('grid')
     }
   }, [isMobile, view])
+  
+  if (isLoading) {
+    return <Loader dataTitle="species catalog" />
+  }
 
   return (
     <main className="min-h-screen bg-background">
