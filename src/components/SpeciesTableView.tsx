@@ -20,11 +20,17 @@ export const SpeciesTableView = ({ items }: { items: Array<Species> }) => {
                 <th className="h-12 px-4 align-middle font-medium text-muted-foreground">
                   Common Name
                 </th>
-                <th className="h-12 px-4 align-middle font-medium text-muted-foreground hidden md:table-cell">
-                  Family
+                <th className="h-12 px-4 align-middle font-medium text-muted-foreground">
+                  Phylum
+                </th>
+                <th className="h-12 px-4 align-middle font-medium text-muted-foreground">
+                  Class
                 </th>
                 <th className="h-12 px-4 align-middle font-medium text-muted-foreground hidden lg:table-cell">
                   Order
+                </th>
+                <th className="h-12 px-4 align-middle font-medium text-muted-foreground hidden md:table-cell">
+                  Family
                 </th>
                 <th className="h-12 px-4 align-middle font-medium text-muted-foreground w-12.5"></th>
               </tr>
@@ -52,16 +58,22 @@ export const SpeciesTableView = ({ items }: { items: Array<Species> }) => {
                   <td className="p-4 align-middle">
                     {item.species_common_name || '-'}
                   </td>
-                  <td className="p-4 align-middle hidden md:table-cell">
-                    {item.family}
-                    {item.family_common_name && (
-                      <span className="text-muted-foreground ml-1">
-                        ({item.family_common_name})
-                      </span>
-                    )}
+                  <td className="p-4 align-middle">
+                    {item.phylum || '-'}
+                  </td>
+                  <td className="p-4 align-middle">
+                    {item.class_name || '-'}
                   </td>
                   <td className="p-4 align-middle hidden lg:table-cell">
                     {item.order_name}
+                  </td>
+                  <td className="p-4 align-middle hidden md:table-cell">
+                    {item.family}
+                    {/* {item.family_common_name && (
+                      <span className="text-muted-foreground ml-1">
+                        ({item.family_common_name})
+                      </span>
+                    )} */}
                   </td>
                   <td className="p-4 align-middle">
                     <Link
