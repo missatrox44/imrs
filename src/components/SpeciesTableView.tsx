@@ -39,7 +39,7 @@ export const SpeciesTableView = ({ items }: { items: Array<Species> }) => {
               {items.map((item: Species) => (
                 <tr
                   key={item.id}
-                  className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted group"
+                  className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted group cursor-pointer relative"
                 >
                   <td className="p-4 align-middle">
                     {item.category && getCategoryIcon(item.category)}
@@ -48,9 +48,9 @@ export const SpeciesTableView = ({ items }: { items: Array<Species> }) => {
                     <Link
                       to="/species/$speciesId"
                       params={{ speciesId: String(item.id) }}
-                      className="hover:underline flex items-center gap-2"
+                      className="before:absolute before:inset-0 before:z-10"
                     >
-                      <span className="scientific-name">
+                      <span className="scientific-name relative z-20 group-hover:underline">
                         {item.genus} {item.species}
                       </span>
                     </Link>
@@ -69,19 +69,9 @@ export const SpeciesTableView = ({ items }: { items: Array<Species> }) => {
                   </td>
                   <td className="p-4 align-middle hidden md:table-cell">
                     {item.family}
-                    {/* {item.family_common_name && (
-                      <span className="text-muted-foreground ml-1">
-                        ({item.family_common_name})
-                      </span>
-                    )} */}
                   </td>
                   <td className="p-4 align-middle">
-                    <Link
-                      to="/species/$speciesId"
-                      params={{ speciesId: String(item.id) }}
-                    >
-                      <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary" />
-                    </Link>
+                    <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary relative z-20" />
                   </td>
                 </tr>
               ))}
