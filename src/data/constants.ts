@@ -72,3 +72,10 @@ export const CAROUSEL_IMAGES = [
   { src: 'imgs/carousel_12.webp', alt: 'IMRS landscape photograph 12' },
   { src: 'imgs/carousel_13.webp', alt: 'IMRS landscape photograph 13' },
 ];
+
+export const navItems = [
+  { to: '/', label: 'Home' },
+  { to: '/observations', label: 'Observations' },
+  { to: '/species', label: 'Species Index' },
+  { to: '/gazetteer', label: 'Gazetteer' },
+]

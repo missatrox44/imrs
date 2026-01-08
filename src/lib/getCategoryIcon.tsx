@@ -1,4 +1,4 @@
-import { Bird, Bug, Cat, Leaf, Turtle, Fish } from "lucide-react";
+import { Bird, Bug, Cat, Fish, Leaf, Turtle } from "lucide-react";
 import { GiSuperMushroom } from "react-icons/gi";
 import { LiaFrogSolid } from "react-icons/lia";
 import { LuWorm } from "react-icons/lu";
