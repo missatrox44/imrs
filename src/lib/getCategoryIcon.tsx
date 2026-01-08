@@ -1,4 +1,4 @@
-import { Bird, Bug, Cat, Leaf, Turtle } from "lucide-react";
+import { Bird, Bug, Cat, Leaf, Turtle, Fish } from "lucide-react";
 import { GiSuperMushroom } from "react-icons/gi";
 import { LiaFrogSolid } from "react-icons/lia";
 import { LuWorm } from "react-icons/lu";
@@ -20,7 +20,9 @@ export const getCategoryIcon = (category: string) => {
     case 'fungi':
       return <GiSuperMushroom className="w-4 h-4" />;
     case 'inverts':
-      return <LuWorm className="w-4 h-4" />;
+      return <LuWorm className="w-4 h-4" />
+    case 'fish':
+      return <Fish className="w-4 h-4" />
     default:
       return null;
   }
