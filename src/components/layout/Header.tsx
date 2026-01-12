@@ -14,17 +14,11 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer'
+import { navItems } from '@/data/constants'
 
 export default function Header() {
   const pathname = useRouterState({ select: (s) => s.location.pathname })
   const [open, setOpen] = useState(false)
-
-  const navItems = [
-    { to: '/', label: 'Home' },
-    { to: '/observations', label: 'Observations' },
-    { to: '/species', label: 'Species Index' },
-    { to: '/gazetteer', label: 'Gazetteer' },
-  ]
 
   return (
     <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
