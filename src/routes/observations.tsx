@@ -31,7 +31,22 @@ export const Route = createFileRoute('/observations')({
       results: data.results,
     }
   },
-
+  head: () => ({
+    title: 'Recent Observations | IMRS',
+    scripts: [
+      {
+        type: 'application/ld+json',
+        children: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'CollectionPage',
+          name: 'Recent Biodiversity Observations',
+          description:
+            'Recent flora and fauna observations recorded at Indio Mountains Research Station via iNaturalist.',
+        }),
+      },
+    ],
+  }),
+  
   pendingComponent: () => <Loader dataTitle="observations" />,
   component: RouteComponent,
 })
