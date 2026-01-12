@@ -5,6 +5,7 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 import { useInView } from 'react-intersection-observer'
 
 import type { Observation } from '@/types/observation'
+import type { TaxonGroup } from '@/types/taxon';
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from '@/components/ui/badge'
@@ -14,6 +15,7 @@ import { formatDate } from '@/lib/formatDate'
 import { getPhotoUrl } from '@/lib/getPhotoUrl'
 import { ObservationCardSkeleton } from '@/components/ObservationCardSkeleton'
 import { GC_TIME, ORDER, ORDER_BY, PER_PAGE, PLACE_ID, SKELETON_COUNT, STALE_TIME, iNaturalistUrl } from '@/data/constants'
+import { GROUP_TO_TAXON_ID } from '@/types/taxon'
 
 
 interface ObservationsPage {
@@ -25,28 +27,6 @@ interface ObservationsPage {
 interface ObservationsProps {
   initialPage: ObservationsPage
 }
-
-type TaxonGroup =
-  | 'all'
-  | 'mammals'
-  | 'birds'
-  | 'reptiles'
-  | 'amphibians'
-  | 'plants'
-  | 'insects'
-  | 'invertebrates'
-
-const GROUP_TO_TAXON_ID: Partial<Record<TaxonGroup, number>> = {
-  mammals: 40151,      // Mammalia
-  birds: 3,            // Aves
-  reptiles: 26036,     // Reptilia
-  amphibians: 20978,   // Amphibia
-  plants: 47126,       // Plantae
-  insects: 47158,      // Insecta
-  invertebrates: 47120, // Invertebrata
-}
-
-
 
 
 const Observations = ({ initialPage }: ObservationsProps) => {
@@ -145,40 +125,44 @@ const Observations = ({ initialPage }: ObservationsProps) => {
             Recent Observations
           </h1>
           <p className="text-muted-foreground">
-            Biodiversity observations on Indio Mountains Research Station from iNaturalist.
+            Biodiversity observations on Indio Mountains Research Station from <a rel="noreferrer noopener" target="_blank" href="https://www.inaturalist.org/" >iNaturalist</a>.
           </p>
           <p className="text-muted-foreground font-bold">
             Click any observation card to view full observation details.
           </p>
+
+          <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            {selectedGroup !== 'all' ? (
+              <span className="text-sm text-muted-foreground">
+                Showing {filteredObservations.length} of {observations.length} observations
+              </span>
+            ) : (
+              <span />
+            )}
+
+            <Select
+              value={selectedGroup}
+              onValueChange={(value) => setSelectedGroup(value as TaxonGroup)}
+            >
+              <SelectTrigger className="w-48">
+                <SelectValue placeholder="Filter by group" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Groups</SelectItem>
+                <SelectItem value="plants">Plants</SelectItem>
+                {/* <SelectItem value="fungi">Fungi</SelectItem> */}
+                <SelectItem value="mammals">Mammals</SelectItem>
+                <SelectItem value="birds">Birds</SelectItem>
+                <SelectItem value="reptiles">Reptiles</SelectItem>
+                <SelectItem value="amphibians">Amphibians</SelectItem>
+                {/* <SelectItem value="fish">Fish</SelectItem> */}
+                <SelectItem value="insects">Insects</SelectItem>
+                <SelectItem value="arachnid">Arachnids</SelectItem>
+                {/* <SelectItem value="invertebrates">Other Invertebrates</SelectItem> */}
+              </SelectContent>
+            </Select>
+          </div>
         </section>
-
-        <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          {selectedGroup !== 'all' ? (
-            <span className="text-sm text-muted-foreground">
-              Showing {filteredObservations.length} of {observations.length} observations
-            </span>
-          ) : (
-            <span /> 
-          )}
-
-          <Select
-            value={selectedGroup}
-            onValueChange={(value) => setSelectedGroup(value as TaxonGroup)}
-          >
-            <SelectTrigger className="w-48">
-              <SelectValue placeholder="Filter by group" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Groups</SelectItem>
-              <SelectItem value="plants">Plants</SelectItem>
-              <SelectItem value="birds">Birds</SelectItem>
-              <SelectItem value="reptiles">Reptiles</SelectItem>
-              <SelectItem value="insects">Insects</SelectItem>
-              <SelectItem value="mammals">Mammals</SelectItem>
-              <SelectItem value="invertebrates">Invertebrates</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
         <section className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredObservations.map((observation) => (
             <Link
