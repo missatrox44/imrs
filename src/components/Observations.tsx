@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Calendar, MapPin, User } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { useInfiniteQuery } from '@tanstack/react-query'
@@ -6,7 +6,7 @@ import { useInView } from 'react-intersection-observer'
 
 import type { Observation } from '@/types/observation'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
-// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from '@/components/ui/badge'
 // import { Loader } from '@/components/Loader'
 import EmptyState from '@/components/EmptyState'
@@ -26,7 +26,31 @@ interface ObservationsProps {
   initialPage: ObservationsPage
 }
 
+type TaxonGroup =
+  | 'all'
+  | 'mammals'
+  | 'birds'
+  | 'reptiles'
+  | 'amphibians'
+  | 'plants'
+  | 'insects'
+  | 'invertebrates'
+
+const GROUP_TO_TAXON_ID: Partial<Record<TaxonGroup, number>> = {
+  mammals: 40151,      // Mammalia
+  birds: 3,            // Aves
+  reptiles: 26036,     // Reptilia
+  amphibians: 20978,   // Amphibia
+  plants: 47126,       // Plantae
+  insects: 47158,      // Insecta
+  invertebrates: 47120, // Invertebrata
+}
+
+
+
+
 const Observations = ({ initialPage }: ObservationsProps) => {
+  const [selectedGroup, setSelectedGroup] = useState<TaxonGroup>('all')
   const { ref, inView } = useInView({
     rootMargin: '200px',
   })
@@ -91,9 +115,27 @@ const Observations = ({ initialPage }: ObservationsProps) => {
     }
   }, [inView, hasNextPage, isFetching, fetchNextPage])
 
+
+  const filteredObservations = useMemo(() => {
+    if (selectedGroup === 'all') return observations
+
+    const targetTaxonId = GROUP_TO_TAXON_ID[selectedGroup]
+    if (!targetTaxonId) return observations
+
+    return observations.filter(obs => {
+      // Check if observation's taxon hierarchy includes the target group
+      const taxonIds = obs.taxon?.ancestor_ids || []
+      return taxonIds.includes(targetTaxonId)
+    })
+  }, [observations, selectedGroup])
+
+
+
   if (!observations.length) {
     return <EmptyState />
   }
+
+
 
   return (
     <div className="min-h-screen bg-background">
@@ -110,7 +152,19 @@ const Observations = ({ initialPage }: ObservationsProps) => {
           </p>
         </section>
 
-        {/* <Select value={filter} onValueChange={setFilter}>
+        <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          {selectedGroup !== 'all' ? (
+            <span className="text-sm text-muted-foreground">
+              Showing {filteredObservations.length} of {observations.length} observations
+            </span>
+          ) : (
+            <span /> 
+          )}
+
+          <Select
+            value={selectedGroup}
+            onValueChange={(value) => setSelectedGroup(value as TaxonGroup)}
+          >
             <SelectTrigger className="w-48">
               <SelectValue placeholder="Filter by group" />
             </SelectTrigger>
@@ -121,11 +175,12 @@ const Observations = ({ initialPage }: ObservationsProps) => {
               <SelectItem value="reptiles">Reptiles</SelectItem>
               <SelectItem value="insects">Insects</SelectItem>
               <SelectItem value="mammals">Mammals</SelectItem>
+              <SelectItem value="invertebrates">Invertebrates</SelectItem>
             </SelectContent>
-          </Select> */}
-
+          </Select>
+        </div>
         <section className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {observations.map((observation) => (
+          {filteredObservations.map((observation) => (
             <Link
               key={observation.id}
               to={observation.uri || '#'}

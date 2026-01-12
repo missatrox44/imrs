@@ -22,7 +22,7 @@ export const Route = createFileRoute('/observations')({
     }
 
     const data = await res.json()
-    //     console.log('[iNat observation example]', data.results[0])
+        // console.log('[iNat observation example]', data.results[0])
 
     return {
       page: 1,
