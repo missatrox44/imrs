@@ -8,9 +8,9 @@ export const Footer = () => {
   return (
     <footer className="border-t border-border bg-card/50 backdrop-blur-sm">
       <div className="container mx-auto px-4 py-6 text-sm text-muted-foreground space-y-1">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
           {/* Logo & About */}
-          <div className="md:col-span-1">
+          <div className="md:col-span-4">
             <Link to="/" className="flex items-center space-x-2 mb-2">
               <img src="/toad.png" alt="IMRS Logo" className="h-8 md:h-10" />
               <span className="font-semibold text-foreground text-sm md:text-lg">
@@ -24,7 +24,7 @@ export const Footer = () => {
           </div>
 
           {/* Quick Links */}
-          <div>
+          <div className="md:col-span-3 md:col-start-6">
             <h3 className="font-semibold text-foreground mb-3">Quick Links</h3>
             <ul className="space-y-2 text-sm">
               {navItems.map((item) => (
@@ -41,7 +41,7 @@ export const Footer = () => {
           </div>
 
           {/* External Resources */}
-          <div>
+          <div className="md:col-span-3">
             <h3 className="font-semibold text-foreground mb-3">
               External Resources
             </h3>
@@ -59,11 +59,9 @@ export const Footer = () => {
                 </li>
               ))}
             </ul>
-          </div>
-
-          {/* Support */}
-          <div>
-            <h3 className="font-semibold text-foreground mb-3">Support</h3>
+            <h3 className="font-semibold text-foreground mt-8 md:mt-3 mb-3">
+              Support
+            </h3>
             <ul className="space-y-2 text-sm">
               <li>
                 <a
