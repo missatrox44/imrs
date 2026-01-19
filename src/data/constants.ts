@@ -79,3 +79,12 @@ export const navItems = [
   { to: '/species', label: 'Species Index' },
   { to: '/gazetteer', label: 'Gazetteer' },
 ]
+
+export const externalLinks = [
+  { to: 'https://www.utep.edu/science/indio/', label: 'IMRS' },
+  { to: 'https://www.inaturalist.org/', label: 'iNaturalist' },
+]
+
+export const otherLinks = [
+  { to: 'https://github.com/missatrox44/imrs/issues', label: 'Report an issue' }
+]
