@@ -20,6 +20,7 @@ const Gazetteer = () => {
   //   name: string
   // } | null>(null)
 
+  // useMemo is overkill for now but will be useful when adding modal with images later
   const filteredAndSortedEntries = useMemo(() => {
     return GAZETTEER_ENTRIES.filter((entry) =>
       entry.name.toLowerCase().includes(searchTerm.toLowerCase()),
@@ -43,8 +44,8 @@ const Gazetteer = () => {
               IMRS Gazetteer
             </h1>
             <p className="text-muted-foreground md:text-balance">
-              A comprehensive list of notable locations and features on
-              Indio Mountains Research Station
+              A comprehensive list of notable locations and features on Indio
+              Mountains Research Station
             </p>
           </div>
           <div className="mb-6">
@@ -78,7 +79,7 @@ const Gazetteer = () => {
                           : ''
                       }
                     > */}
-                     <div>
+                    <div>
                       <div className="flex-1 space-y-3">
                         <p className="text-muted-foreground">
                           {entry.description}
@@ -109,7 +110,7 @@ const Gazetteer = () => {
                           )}
                         </div>
                       </div>
-{/* 
+                      {/* 
                       {entriesWithImages.includes(entry.id) && (
                         <div className="shrink-0">
                           <img

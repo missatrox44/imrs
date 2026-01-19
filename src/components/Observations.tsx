@@ -1,12 +1,13 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Calendar, MapPin, User } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useInView } from 'react-intersection-observer'
 
 import type { Observation } from '@/types/observation'
+import type { TaxonGroup } from '@/types/taxon';
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
-// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from '@/components/ui/badge'
 // import { Loader } from '@/components/Loader'
 import EmptyState from '@/components/EmptyState'
@@ -14,6 +15,7 @@ import { formatDate } from '@/lib/formatDate'
 import { getPhotoUrl } from '@/lib/getPhotoUrl'
 import { ObservationCardSkeleton } from '@/components/ObservationCardSkeleton'
 import { GC_TIME, ORDER, ORDER_BY, PER_PAGE, PLACE_ID, SKELETON_COUNT, STALE_TIME, iNaturalistUrl } from '@/data/constants'
+import { GROUP_TO_TAXON_ID } from '@/types/taxon'
 
 
 interface ObservationsPage {
@@ -26,7 +28,9 @@ interface ObservationsProps {
   initialPage: ObservationsPage
 }
 
+
 const Observations = ({ initialPage }: ObservationsProps) => {
+  const [selectedGroup, setSelectedGroup] = useState<TaxonGroup>('all')
   const { ref, inView } = useInView({
     rootMargin: '200px',
   })
@@ -91,9 +95,27 @@ const Observations = ({ initialPage }: ObservationsProps) => {
     }
   }, [inView, hasNextPage, isFetching, fetchNextPage])
 
+
+  const filteredObservations = useMemo(() => {
+    if (selectedGroup === 'all') return observations
+
+    const targetTaxonId = GROUP_TO_TAXON_ID[selectedGroup]
+    if (!targetTaxonId) return observations
+
+    return observations.filter(obs => {
+      // Check if observation's taxon hierarchy includes the target group
+      const taxonIds = obs.taxon?.ancestor_ids || []
+      return taxonIds.includes(targetTaxonId)
+    })
+  }, [observations, selectedGroup])
+
+
+
   if (!observations.length) {
     return <EmptyState />
   }
+
+
 
   return (
     <div className="min-h-screen bg-background">
@@ -103,29 +125,46 @@ const Observations = ({ initialPage }: ObservationsProps) => {
             Recent Observations
           </h1>
           <p className="text-muted-foreground">
-            Biodiversity observations on Indio Mountains Research Station from iNaturalist.
+            Biodiversity observations on Indio Mountains Research Station from <a rel="noreferrer noopener" target="_blank" href="https://www.inaturalist.org/" >iNaturalist</a>.
           </p>
           <p className="text-muted-foreground font-bold">
             Click any observation card to view full observation details.
           </p>
+
+          <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            {selectedGroup !== 'all' ? (
+              <span className="text-sm text-muted-foreground">
+                Showing {filteredObservations.length} of {observations.length} observations
+              </span>
+            ) : (
+              <span />
+            )}
+
+            <Select
+              value={selectedGroup}
+              onValueChange={(value) => setSelectedGroup(value as TaxonGroup)}
+            >
+              <SelectTrigger className="w-48">
+                <SelectValue placeholder="Filter by group" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Groups</SelectItem>
+                <SelectItem value="plants">Plants</SelectItem>
+                {/* <SelectItem value="fungi">Fungi</SelectItem> */}
+                <SelectItem value="mammals">Mammals</SelectItem>
+                <SelectItem value="birds">Birds</SelectItem>
+                <SelectItem value="reptiles">Reptiles</SelectItem>
+                <SelectItem value="amphibians">Amphibians</SelectItem>
+                {/* <SelectItem value="fish">Fish</SelectItem> */}
+                <SelectItem value="insects">Insects</SelectItem>
+                <SelectItem value="arachnid">Arachnids</SelectItem>
+                {/* <SelectItem value="invertebrates">Other Invertebrates</SelectItem> */}
+              </SelectContent>
+            </Select>
+          </div>
         </section>
-
-        {/* <Select value={filter} onValueChange={setFilter}>
-            <SelectTrigger className="w-48">
-              <SelectValue placeholder="Filter by group" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Groups</SelectItem>
-              <SelectItem value="plants">Plants</SelectItem>
-              <SelectItem value="birds">Birds</SelectItem>
-              <SelectItem value="reptiles">Reptiles</SelectItem>
-              <SelectItem value="insects">Insects</SelectItem>
-              <SelectItem value="mammals">Mammals</SelectItem>
-            </SelectContent>
-          </Select> */}
-
         <section className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {observations.map((observation) => (
+          {filteredObservations.map((observation) => (
             <Link
               key={observation.id}
               to={observation.uri || '#'}

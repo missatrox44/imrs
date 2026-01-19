@@ -40,6 +40,39 @@ export const Route = createFileRoute('/species/$speciesId')({
     return { species, observations }
   },
 
+
+  head: ({ loaderData }) => {
+      if (!loaderData || !loaderData.species) {
+    return {}
+  }
+    const { species } = loaderData
+
+    const scientificName = [species.genus, species.species]
+      .filter(Boolean)
+      .join(' ')
+
+    return {
+      title: `${scientificName} | IMRS`,
+      scripts: [
+        {
+          type: 'application/ld+json',
+          children: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Taxon',
+            name: scientificName,
+            alternateName: species.species_common_name || undefined,
+            taxonRank: 'Species',
+            isPartOf: {
+              '@type': 'Dataset',
+              name: 'IMRS Biodiversity Records',
+            },
+          }),
+        },
+      ],
+    }
+  },
+
+
   pendingComponent: () => <Loader dataTitle="species details" />,
 
   component: SpeciesDetails,
