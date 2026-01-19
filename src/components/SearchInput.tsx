@@ -20,7 +20,7 @@ export const SearchInput = ({
       <Input
         type="text"
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => onChange(e.target.value.slice(0, 100))}
         placeholder={placeholder}
         className="pl-10"
       />
