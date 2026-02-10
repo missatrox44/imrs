@@ -22,6 +22,8 @@ interface AdvancedSearchProps {
   taxonomicFilters: TaxonomicFilters
   onTaxonomicFilterChange: (filters: TaxonomicFilters) => void
   onResetFilters: () => void
+  sortDirection: 'asc' | 'desc'
+  onSortChange: (direction: 'asc' | 'desc') => void
 }
 
 function getUniqueValues(items: Array<Species>, key: keyof Species): Array<string> {
@@ -43,6 +45,8 @@ export function AdvancedSearch({
   taxonomicFilters,
   onTaxonomicFilterChange,
   onResetFilters,
+  sortDirection,
+  onSortChange,
 }: AdvancedSearchProps) {
 
   // Compute cascading options for each taxonomic rank
@@ -153,7 +157,7 @@ export function AdvancedSearch({
                   <SelectValue placeholder="All" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All {label}s</SelectItem>
+                  <SelectItem value="all">All {label.endsWith('y') ? `${label.slice(0, -1)}ies` : `${label}s`}</SelectItem>
                   {options.map((item) => (
                     <SelectItem key={item} value={item}>
                       {item}
@@ -171,13 +175,16 @@ export function AdvancedSearch({
         <div className="flex items-center gap-2">
           <ArrowUpDown className="w-4 h-4 text-muted-foreground" />
           <span className="text-xs text-muted-foreground font-medium">
-            Sort by:
+            Sort species by:
           </span>
         </div>
 
-        <Select>
+        <Select
+          value={sortDirection}
+          onValueChange={(val) => onSortChange(val as 'asc' | 'desc')}
+        >
           <SelectTrigger className="h-8 w-30 text-xs">
-            <SelectValue placeholder="Direction" />
+            <SelectValue />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="asc">A → Z</SelectItem>

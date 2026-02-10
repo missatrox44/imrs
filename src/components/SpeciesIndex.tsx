@@ -40,6 +40,7 @@ const SpeciesIndex = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [view, setView] = useState<'grid' | 'table'>('grid')
   const [taxonomicFilters, setTaxonomicFilters] = useState<TaxonomicFilters>(EMPTY_TAXONOMIC_FILTERS)
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
   const isMobile = useMediaQuery('(max-width: 767px)')
 
   const setCategory = (cat: Category) => {
@@ -58,6 +59,7 @@ const SpeciesIndex = () => {
   const handleResetFilters = useCallback(() => {
     setCategory('all')
     setTaxonomicFilters(EMPTY_TAXONOMIC_FILTERS)
+    setSortDirection('asc')
   }, [])
 
   // Filter based on search term and taxonomic filters
@@ -98,6 +100,13 @@ const SpeciesIndex = () => {
   }
 
   const filtered = getFilteredItems(category)
+
+  const sorted = filtered.slice().sort((a, b) => {
+    const genusA = (a.genus ?? '').toLowerCase()
+    const genusB = (b.genus ?? '').toLowerCase()
+    const cmp = genusA.localeCompare(genusB) || (a.species ?? '').toLowerCase().localeCompare((b.species ?? '').toLowerCase())
+    return sortDirection === 'asc' ? cmp : -cmp
+  })
 
   const getCategoryCount = (cat: Category) => {
     return getFilteredItems(cat).length
@@ -164,14 +173,16 @@ const SpeciesIndex = () => {
           taxonomicFilters={taxonomicFilters}
           onTaxonomicFilterChange={setTaxonomicFilters}
           onResetFilters={handleResetFilters}
+          sortDirection={sortDirection}
+          onSortChange={setSortDirection}
         />
 
         <div className="mb-4 text-sm text-muted-foreground">
-          Showing {filtered.length}{' '}
+          Showing {sorted.length}{' '}
           {category === 'all' ? 'species' : category}
         </div>
 
-        {filtered.length === 0 ? (
+        {sorted.length === 0 ? (
           <Card>
             <CardContent className="text-center py-12">
               <p className="text-muted-foreground">
@@ -184,9 +195,9 @@ const SpeciesIndex = () => {
             </CardContent>
           </Card>
         ) : view === 'grid' ? (
-          <SpeciesGridView items={filtered} />
+          <SpeciesGridView items={sorted} />
         ) : (
-          <SpeciesTableView items={filtered} />
+          <SpeciesTableView items={sorted} />
         )}
       </div>
     </main>
