@@ -3,6 +3,7 @@ import { ArrowUpDown, Filter, RotateCcw, SlidersHorizontal } from 'lucide-react'
 import type { Category } from '@/types/category'
 import type { Species } from '@/types/species'
 import type { TaxonomicFilters } from '@/components/SpeciesIndex'
+import { ALL_CATEGORIES, TAXONOMIC_RANKS } from '@/data/constants'
 import {
   Select,
   SelectContent,
@@ -12,16 +13,6 @@ import {
 } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 import { getCategoryIcon } from '@/lib/getCategoryIcon'
-import { ALL_CATEGORIES } from '@/data/constants'
-
-const TAXONOMIC_RANKS = [
-  { key: 'kingdom' as const, label: 'Kingdom' },
-  { key: 'phylum' as const, label: 'Phylum' },
-  { key: 'class_name' as const, label: 'Class' },
-  { key: 'order_name' as const, label: 'Order' },
-  { key: 'family' as const, label: 'Family' },
-  { key: 'genus' as const, label: 'Genus' },
-]
 
 interface AdvancedSearchProps {
   activeCategory: Category
