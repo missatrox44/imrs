@@ -157,7 +157,7 @@ export function AdvancedSearch({
                   <SelectValue placeholder="All" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All {label.endsWith('y') ? `${label.slice(0, -1)}ies` : `${label}s`}</SelectItem>
+                  <SelectItem value="all">All {label.endsWith('y') ? `${label.slice(0, -1)}ies` : label.endsWith('s') ? `${label}es` : `${label}s`}</SelectItem>
                   {options.map((item) => (
                     <SelectItem key={item} value={item}>
                       {item}
