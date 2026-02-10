@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { MapPin, Mountain } from 'lucide-react'
+import type { ComponentType } from 'react'
+import type { GazetteerMapProps } from '@/components/GazetteerMap'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { GAZETTEER_ENTRIES } from '@/data/gazetteer'
@@ -7,8 +9,6 @@ import { formatCoordinates } from '@/lib/formatCoordinates'
 import { formatElevation } from '@/lib/formatElevation'
 import { SearchInput } from '@/components/SearchInput'
 import { cn } from '@/lib/utils'
-import type { ComponentType } from 'react'
-import type { GazetteerMapProps } from '@/components/GazetteerMap'
 
 const Gazetteer = () => {
   const [searchTerm, setSearchTerm] = useState('')
