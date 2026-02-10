@@ -1,5 +1,8 @@
+import { useMemo } from 'react'
 import { ArrowUpDown, Filter, RotateCcw, SlidersHorizontal } from 'lucide-react'
 import type { Category } from '@/types/category'
+import type { Species } from '@/types/species'
+import type { TaxonomicFilters } from '@/components/SpeciesIndex'
 import {
   Select,
   SelectContent,
@@ -11,13 +14,86 @@ import { Button } from '@/components/ui/button'
 import { getCategoryIcon } from '@/lib/getCategoryIcon'
 import { ALL_CATEGORIES } from '@/data/constants'
 
+const TAXONOMIC_RANKS = [
+  { key: 'kingdom' as const, label: 'Kingdom' },
+  { key: 'phylum' as const, label: 'Phylum' },
+  { key: 'class_name' as const, label: 'Class' },
+  { key: 'order_name' as const, label: 'Order' },
+  { key: 'family' as const, label: 'Family' },
+  { key: 'genus' as const, label: 'Genus' },
+]
+
 interface AdvancedSearchProps {
   activeCategory: Category
   onCategoryChange: (category: Category) => void
   getCategoryCount: (category: Category) => number
+  species: Array<Species>
+  taxonomicFilters: TaxonomicFilters
+  onTaxonomicFilterChange: (filters: TaxonomicFilters) => void
+  onResetFilters: () => void
 }
 
-export function AdvancedSearch({ activeCategory, onCategoryChange, getCategoryCount }: AdvancedSearchProps) {
+function getUniqueValues(items: Array<Species>, key: keyof Species): Array<string> {
+  const values = new Set<string>()
+  for (const item of items) {
+    const val = item[key]
+    if (val && typeof val === 'string' && val.trim()) {
+      values.add(val.trim())
+    }
+  }
+  return Array.from(values).sort((a, b) => a.localeCompare(b))
+}
+
+export function AdvancedSearch({
+  activeCategory,
+  onCategoryChange,
+  getCategoryCount,
+  species,
+  taxonomicFilters,
+  onTaxonomicFilterChange,
+  onResetFilters,
+}: AdvancedSearchProps) {
+
+  // Compute cascading options for each taxonomic rank
+  const taxonomicOptions = useMemo(() => {
+    // Start with species filtered by category
+    const baseItems = activeCategory === 'all'
+      ? species
+      : species.filter((s) => s.category === activeCategory)
+
+    const options: Record<string, Array<string>> = {}
+
+    for (let i = 0; i < TAXONOMIC_RANKS.length; i++) {
+      const rank = TAXONOMIC_RANKS[i]
+      // Filter by all higher-rank selections
+      let filtered = baseItems
+      for (let j = 0; j < i; j++) {
+        const higherRank = TAXONOMIC_RANKS[j]
+        const selectedValue = taxonomicFilters[higherRank.key]
+        if (selectedValue) {
+          filtered = filtered.filter(
+            (s) => s[higherRank.key as keyof Species]?.toString().toLowerCase() === selectedValue.toLowerCase(),
+          )
+        }
+      }
+      options[rank.key] = getUniqueValues(filtered, rank.key as keyof Species)
+    }
+
+    return options
+  }, [species, activeCategory, taxonomicFilters])
+
+  const handleFilterChange = (rankKey: keyof TaxonomicFilters, value: string | null) => {
+    const newFilters = { ...taxonomicFilters }
+    newFilters[rankKey] = value
+
+    // Clear all lower-rank selections
+    const rankIndex = TAXONOMIC_RANKS.findIndex((r) => r.key === rankKey)
+    for (let i = rankIndex + 1; i < TAXONOMIC_RANKS.length; i++) {
+      newFilters[TAXONOMIC_RANKS[i].key] = null
+    }
+
+    onTaxonomicFilterChange(newFilters)
+  }
 
   return (
     <div className="bg-card border border-border p-4 mb-6">
@@ -66,35 +142,37 @@ export function AdvancedSearch({ activeCategory, onCategoryChange, getCategoryCo
       </label>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3">
-        {[
-          { label: 'Kingdom', items: ['Animalia', 'Plantae'] },
-          { label: 'Phylum', items: ['Chordata', 'Arthropoda'] },
-          { label: 'Class', items: ['Mammalia', 'Aves'] },
-          { label: 'Order', items: ['Squamata', 'Carnivora'] },
-          { label: 'Family', items: ['Colubridae', 'Fabaceae'] },
-          { label: 'Genus', items: ['Crotalus', 'Quercus'] },
-          // { label: 'Species', items: ['Specific epithet…'] },
-        ].map(({ label, items }) => (
-          <div key={label} className="space-y-1">
-            <label className="text-xs text-muted-foreground font-medium flex items-center gap-1">
-              <Filter className="w-3 h-3" /> {label}
-            </label>
+        {TAXONOMIC_RANKS.map(({ key, label }) => {
+          const options = taxonomicOptions[key]
+          const selectedValue = taxonomicFilters[key]
 
-            <Select>
-              <SelectTrigger className="h-8 text-xs">
-                <SelectValue placeholder="All" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All {label}s</SelectItem>
-                {items.map((item) => (
-                  <SelectItem key={item} value={item.toLowerCase()}>
-                    {item}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        ))}
+          return (
+            <div key={key} className="space-y-1">
+              <label className="text-xs text-muted-foreground font-medium flex items-center gap-1">
+                <Filter className="w-3 h-3" /> {label}
+              </label>
+
+              <Select
+                value={selectedValue ?? 'all'}
+                onValueChange={(val) =>
+                  handleFilterChange(key, val === 'all' ? null : val)
+                }
+              >
+                <SelectTrigger className="h-8 text-xs">
+                  <SelectValue placeholder="All" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All {label}s</SelectItem>
+                  {options.map((item) => (
+                    <SelectItem key={item} value={item}>
+                      {item}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )
+        })}
       </div>
 
       {/* Sort Options */}
@@ -119,7 +197,7 @@ export function AdvancedSearch({ activeCategory, onCategoryChange, getCategoryCo
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => onCategoryChange('all')}
+          onClick={onResetFilters}
           className="h-8 text-xs text-muted-foreground hover:text-foreground"
         >
           <RotateCcw className="w-3 h-3 mr-1" />

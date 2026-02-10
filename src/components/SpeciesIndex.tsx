@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import {
   LayoutGrid,
   Table as TableIcon,
@@ -16,11 +16,30 @@ import { AdvancedSearch } from '@/components/AdvancedSearch'
 import { SearchInput } from '@/components/SearchInput'
 import { Route } from '@/routes/species.index'
 
+export type TaxonomicFilters = {
+  kingdom: string | null
+  phylum: string | null
+  class_name: string | null
+  order_name: string | null
+  family: string | null
+  genus: string | null
+}
+
+const EMPTY_TAXONOMIC_FILTERS: TaxonomicFilters = {
+  kingdom: null,
+  phylum: null,
+  class_name: null,
+  order_name: null,
+  family: null,
+  genus: null,
+}
+
 const SpeciesIndex = () => {
   const { category } = Route.useSearch()
   const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState('')
   const [view, setView] = useState<'grid' | 'table'>('grid')
+  const [taxonomicFilters, setTaxonomicFilters] = useState<TaxonomicFilters>(EMPTY_TAXONOMIC_FILTERS)
   const isMobile = useMediaQuery('(max-width: 767px)')
 
   const setCategory = (cat: Category) => {
@@ -36,18 +55,38 @@ const SpeciesIndex = () => {
     },
   })
 
-  // Filter based on search term as well
+  const handleResetFilters = useCallback(() => {
+    setCategory('all')
+    setTaxonomicFilters(EMPTY_TAXONOMIC_FILTERS)
+  }, [])
+
+  // Filter based on search term and taxonomic filters
   const filterSpecies = (items: Array<Species>) => {
-    if (!searchTerm) return items
-    const lowerTerm = searchTerm.toLowerCase()
-    return items.filter(
-      (s) =>
-        (s.genus && s.genus.toLowerCase().includes(lowerTerm)) ||
-        (s.species && s.species.toLowerCase().includes(lowerTerm)) ||
-        (s.species_common_name &&
-          s.species_common_name.toLowerCase().includes(lowerTerm)) ||
-        (s.family && s.family.toLowerCase().includes(lowerTerm)),
-    )
+    let result = items
+
+    // Apply taxonomic filters
+    for (const [key, value] of Object.entries(taxonomicFilters)) {
+      if (value) {
+        result = result.filter(
+          (s) => s[key as keyof Species]?.toString().toLowerCase() === value.toLowerCase(),
+        )
+      }
+    }
+
+    // Apply search term
+    if (searchTerm) {
+      const lowerTerm = searchTerm.toLowerCase()
+      result = result.filter(
+        (s) =>
+          (s.genus && s.genus.toLowerCase().includes(lowerTerm)) ||
+          (s.species && s.species.toLowerCase().includes(lowerTerm)) ||
+          (s.species_common_name &&
+            s.species_common_name.toLowerCase().includes(lowerTerm)) ||
+          (s.family && s.family.toLowerCase().includes(lowerTerm)),
+      )
+    }
+
+    return result
   }
 
   const getFilteredItems = (cat: Category) => {
@@ -121,6 +160,10 @@ const SpeciesIndex = () => {
           activeCategory={category}
           onCategoryChange={setCategory}
           getCategoryCount={getCategoryCount}
+          species={species}
+          taxonomicFilters={taxonomicFilters}
+          onTaxonomicFilterChange={setTaxonomicFilters}
+          onResetFilters={handleResetFilters}
         />
 
         <div className="mb-4 text-sm text-muted-foreground">
