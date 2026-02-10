@@ -53,7 +53,7 @@ export const Home = () => {
                 Explore our comprehensive database of documented species found within the research station property.
               </p>
               <Button asChild variant="secondary" size="lg" className="w-full">
-                <Link to="/species">Browse Species</Link>
+                <Link to="/species" search={{ category: 'all' }}>Browse Species</Link>
               </Button>
             </CardContent>
           </Card>
