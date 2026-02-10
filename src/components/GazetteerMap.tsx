@@ -1,9 +1,17 @@
 import { useEffect } from 'react'
-import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
+import {
+  GeoJSON,
+  MapContainer,
+  Marker,
+  Popup,
+  TileLayer,
+  useMap,
+} from 'react-leaflet'
 import L from 'leaflet'
 import type { GazetteerEntry } from '@/types/gazetteer'
 import { formatCoordinates } from '@/lib/formatCoordinates'
 import { formatElevation } from '@/lib/formatElevation'
+import boundaryData from '@/data/imrs-boundary.geojson'
 
 const defaultIcon = L.divIcon({
   className: '',
@@ -83,6 +91,16 @@ export function GazetteerMap({
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      <GeoJSON
+        data={boundaryData}
+        style={{
+          color: 'hsl(25, 20%, 15%)',
+          weight: 2,
+          opacity: 0.6,
+          fillColor: 'hsl(35, 50%, 65%)',
+          fillOpacity: 0.08,
+        }}
       />
       <FlyToSelected entries={entries} selectedId={selectedId} />
       {entriesWithCoords.map((entry) => (
