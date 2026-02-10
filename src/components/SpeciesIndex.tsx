@@ -5,35 +5,35 @@ import {
 } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 import { useMediaQuery } from '@uidotdev/usehooks'
+import { useNavigate } from '@tanstack/react-router'
 import { SpeciesGridView } from './SpeciesGridView'
 import type { Species } from '@/types/species'
 import type { Category } from '@/types/category'
 import { SpeciesTableView } from '@/components/SpeciesTableView'
 import { Card, CardContent } from '@/components/ui/card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Loader } from '@/components/Loader'
-// import { AdvancedSearch } from '@/components/AdvancedSearch';
-import { ALL_CATEGORIES } from '@/data/constants'
+import { AdvancedSearch } from '@/components/AdvancedSearch'
 import { SearchInput } from '@/components/SearchInput'
-
-
-const TABS: Array<Category> = ['all', ...ALL_CATEGORIES]
+import { Route } from '@/routes/species.index'
 
 const SpeciesIndex = () => {
-  const [activeTab, setActiveTab] = useState<Category>('all')
+  const { category } = Route.useSearch()
+  const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState('')
   const [view, setView] = useState<'grid' | 'table'>('grid')
   const isMobile = useMediaQuery('(max-width: 767px)')
+
+  const setCategory = (cat: Category) => {
+    navigate({ to: '/species', search: { category: cat } })
+  }
 
   const { data: species = [], isLoading } = useQuery({
     queryKey: ['speciesData'],
     queryFn: async () => {
       const res = await fetch('/api/species')
-      // console.log('Species data:', res)
       if (!res.ok) throw new Error('Failed to fetch species')
       return res.json()
     },
-    // staleTime: 0,
   })
 
   // Filter based on search term as well
@@ -50,25 +50,26 @@ const SpeciesIndex = () => {
     )
   }
 
-  const getFilteredItems = (category: Category) => {
+  const getFilteredItems = (cat: Category) => {
     const items =
-      category === 'all'
+      cat === 'all'
         ? species
-        : species.filter((s: Species) => s.category === category)
+        : species.filter((s: Species) => s.category === cat)
     return filterSpecies(items)
   }
 
-  const filtered = getFilteredItems(activeTab)
+  const filtered = getFilteredItems(category)
 
-  const getCategoryCount = (category: Category) => {
-    return getFilteredItems(category).length
+  const getCategoryCount = (cat: Category) => {
+    return getFilteredItems(cat).length
   }
+
   useEffect(() => {
     if (isMobile && view !== 'grid') {
       setView('grid')
     }
   }, [isMobile, view])
-  
+
   if (isLoading) {
     return <Loader dataTitle="species catalog" />
   }
@@ -116,60 +117,34 @@ const SpeciesIndex = () => {
           />
         </div>
 
-        <Tabs
-          value={activeTab}
-          onValueChange={(v) => setActiveTab(v as Category)}
-        >
-          <div className="overflow-x-auto mb-6">
-            <TabsList className="flex w-max space-x-2">
-              {TABS.map((cat) => (
-                <TabsTrigger key={cat} value={cat}>
-                  {cat === 'all'
-                    ? `View All (${getCategoryCount(cat)})`
-                    : `${cat[0].toUpperCase() + cat.slice(1)} (${getCategoryCount(cat)})`}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-            <p className="mt-2 text-xs text-muted-foreground animate-pulse lg:hidden">
-              Scroll right to see more →
-            </p>
-          </div>
+        <AdvancedSearch
+          activeCategory={category}
+          onCategoryChange={setCategory}
+          getCategoryCount={getCategoryCount}
+        />
 
-          {/* <AdvancedSearch /> */}
+        <div className="mb-4 text-sm text-muted-foreground">
+          Showing {filtered.length}{' '}
+          {category === 'all' ? 'species' : category}
+        </div>
 
-          <div className="mb-4 text-sm text-muted-foreground">
-            Showing {filtered.length}{' '}
-            {activeTab === 'all' ? 'species' : activeTab}
-          </div>
-
-          {TABS.map((category) => {
-            const items = getFilteredItems(category)
-
-            return (
-              <TabsContent key={category} value={category}>
-                {items.length === 0 ? (
-                  <Card>
-                    <CardContent className="text-center py-12">
-                      <p className="text-muted-foreground">
-                        {searchTerm
-                          ? `No results found for "${searchTerm}" in ${category}.`
-                          : category === 'all'
-                            ? 'No species data available.'
-                            : `No ${category} data available.`}
-                      </p>
-                    </CardContent>
-                  </Card>
-                ) : view === 'grid' ? (
-
-                  <SpeciesGridView items={items} />
-
-                ) : (
-                  <SpeciesTableView items={items} />
-                )}
-              </TabsContent>
-            )
-          })}
-        </Tabs>
+        {filtered.length === 0 ? (
+          <Card>
+            <CardContent className="text-center py-12">
+              <p className="text-muted-foreground">
+                {searchTerm
+                  ? `No results found for "${searchTerm}" in ${category}.`
+                  : category === 'all'
+                    ? 'No species data available.'
+                    : `No ${category} data available.`}
+              </p>
+            </CardContent>
+          </Card>
+        ) : view === 'grid' ? (
+          <SpeciesGridView items={filtered} />
+        ) : (
+          <SpeciesTableView items={filtered} />
+        )}
       </div>
     </main>
   )

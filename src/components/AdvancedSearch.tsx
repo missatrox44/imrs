@@ -1,4 +1,5 @@
 import { ArrowUpDown, Filter, RotateCcw, SlidersHorizontal } from 'lucide-react'
+import type { Category } from '@/types/category'
 import {
   Select,
   SelectContent,
@@ -8,8 +9,15 @@ import {
 } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 import { getCategoryIcon } from '@/lib/getCategoryIcon'
+import { ALL_CATEGORIES } from '@/data/constants'
 
-export function AdvancedSearch() {
+interface AdvancedSearchProps {
+  activeCategory: Category
+  onCategoryChange: (category: Category) => void
+  getCategoryCount: (category: Category) => number
+}
+
+export function AdvancedSearch({ activeCategory, onCategoryChange, getCategoryCount }: AdvancedSearchProps) {
 
   return (
     <div className="bg-card border border-border p-4 mb-6">
@@ -17,7 +25,7 @@ export function AdvancedSearch() {
       <div className="flex items-center gap-2 mb-3">
         <SlidersHorizontal className="w-4 h-4 text-muted-foreground" />
         <span className="text-sm font-medium text-foreground">
-          Advanced Filters & Sorting
+          Filters & Sorting
         </span>
       </div>
 
@@ -29,34 +37,24 @@ export function AdvancedSearch() {
 
         <div className="flex flex-wrap gap-2">
           <Button
-            variant="default"
+            variant={activeCategory === 'all' ? 'default' : 'outline'}
             size="sm"
-            onClick={() => {}}
+            onClick={() => onCategoryChange('all')}
             className="h-7 text-xs capitalize"
           >
-            All Species
+            All Species ({getCategoryCount('all')})
           </Button>
 
-          {[
-            'mammals',
-            'reptiles',
-            'amphibians',
-            'fish',
-            'birds',
-            'plants',
-            'fungi',
-            'arthropods',
-            'inverts',
-          ].map((category) => (
+          {ALL_CATEGORIES.map((category) => (
             <Button
               key={category}
-              variant="outline"
+              variant={activeCategory === category ? 'default' : 'outline'}
               size="sm"
-              onClick={() => {}}
+              onClick={() => onCategoryChange(category)}
               className="h-7 text-xs capitalize gap-1"
             >
               {getCategoryIcon(category)}
-              {category} {category.length}
+              {category} ({getCategoryCount(category)})
             </Button>
           ))}
         </div>
@@ -108,16 +106,6 @@ export function AdvancedSearch() {
           </span>
         </div>
 
-        {/* <Select>
-          <SelectTrigger className="h-8 w-[140px] text-xs">
-            <SelectValue placeholder="Order" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="order">Order</SelectItem>
-            <SelectItem value="family">Family</SelectItem>
-          </SelectContent>
-        </Select> */}
-
         <Select>
           <SelectTrigger className="h-8 w-30 text-xs">
             <SelectValue placeholder="Direction" />
@@ -128,24 +116,10 @@ export function AdvancedSearch() {
           </SelectContent>
         </Select>
 
-        {/* <Select>
-          <SelectTrigger className="h-8 w-[140px] text-xs">
-            <SelectValue placeholder="Group by" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="none">No Grouping</SelectItem>
-            <SelectItem value="kingdom">Kingdom</SelectItem>
-            <SelectItem value="phylum">Phylum</SelectItem>
-            <SelectItem value="class">Class</SelectItem>
-            <SelectItem value="order">Order</SelectItem>
-            <SelectItem value="family">Family</SelectItem>
-          </SelectContent>
-        </Select> */}
-
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => {}}
+          onClick={() => onCategoryChange('all')}
           className="h-8 text-xs text-muted-foreground hover:text-foreground"
         >
           <RotateCcw className="w-3 h-3 mr-1" />
