@@ -13,9 +13,9 @@ export const SpeciesGridView = ({ items }: { items: Array<Species> }) => {
             key={item.id}
             to="/species/$speciesId"
             params={{ speciesId: String(item.id) }}
-            className="h-full"
+            className="h-full block group"
           >
-            <Card className="gradient-card shadow-card hover:shadow-hover transition-all duration-300 group cursor-pointer h-full">
+            <Card className="gradient-card shadow-card hover:shadow-hover transition-all duration-300 cursor-pointer h-full hover:bg-muted/50">
               <CardContent className="p-4 sm:p-6 h-full">
                 <div className="flex flex-col h-full justify-between">
                   {/* Top content */}
@@ -25,11 +25,11 @@ export const SpeciesGridView = ({ items }: { items: Array<Species> }) => {
                       <div className="flex flex-col gap-1 mb-2">
                         <div className="flex items-center gap-2">
                           {item.category && (
-                            <span className="text-muted-foreground">
+                            <span className="text-muted-foreground group-hover:text-primary transition-colors">
                               {getCategoryIcon(item.category)}
                             </span>
                           )}
-                          <h3 className="scientific-name text-lg font-medium truncate">
+                          <h3 className="scientific-name text-lg font-medium truncate group-hover:underline">
                             {item.genus} {item.species}
                           </h3>
                         </div>
