@@ -1,74 +1,127 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import {
   LayoutGrid,
   Table as TableIcon,
 } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 import { useMediaQuery } from '@uidotdev/usehooks'
+import { useNavigate } from '@tanstack/react-router'
 import { SpeciesGridView } from './SpeciesGridView'
 import type { Species } from '@/types/species'
 import type { Category } from '@/types/category'
 import { SpeciesTableView } from '@/components/SpeciesTableView'
 import { Card, CardContent } from '@/components/ui/card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Loader } from '@/components/Loader'
-// import { AdvancedSearch } from '@/components/AdvancedSearch';
-import { ALL_CATEGORIES } from '@/data/constants'
+import { AdvancedSearch } from '@/components/AdvancedSearch'
 import { SearchInput } from '@/components/SearchInput'
+import { Route } from '@/routes/species.index'
 
+export type TaxonomicFilters = {
+  kingdom: string | null
+  phylum: string | null
+  class_name: string | null
+  order_name: string | null
+  family: string | null
+  genus: string | null
+}
 
-const TABS: Array<Category> = ['all', ...ALL_CATEGORIES]
+const EMPTY_TAXONOMIC_FILTERS: TaxonomicFilters = {
+  kingdom: null,
+  phylum: null,
+  class_name: null,
+  order_name: null,
+  family: null,
+  genus: null,
+}
 
 const SpeciesIndex = () => {
-  const [activeTab, setActiveTab] = useState<Category>('all')
+  const { category } = Route.useSearch()
+  const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState('')
   const [view, setView] = useState<'grid' | 'table'>('grid')
+  const [taxonomicFilters, setTaxonomicFilters] = useState<TaxonomicFilters>(EMPTY_TAXONOMIC_FILTERS)
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
   const isMobile = useMediaQuery('(max-width: 767px)')
+
+  const setCategory = (cat: Category) => {
+    navigate({ to: '/species', search: { category: cat } })
+  }
 
   const { data: species = [], isLoading } = useQuery({
     queryKey: ['speciesData'],
     queryFn: async () => {
       const res = await fetch('/api/species')
-      // console.log('Species data:', res)
       if (!res.ok) throw new Error('Failed to fetch species')
       return res.json()
     },
-    // staleTime: 0,
   })
 
-  // Filter based on search term as well
+  const handleResetFilters = useCallback(() => {
+    setCategory('all')
+    setTaxonomicFilters(EMPTY_TAXONOMIC_FILTERS)
+    setSortDirection('asc')
+  }, [])
+
+  // Filter based on search term and taxonomic filters
   const filterSpecies = (items: Array<Species>) => {
-    if (!searchTerm) return items
-    const lowerTerm = searchTerm.toLowerCase()
-    return items.filter(
-      (s) =>
-        (s.genus && s.genus.toLowerCase().includes(lowerTerm)) ||
-        (s.species && s.species.toLowerCase().includes(lowerTerm)) ||
-        (s.species_common_name &&
-          s.species_common_name.toLowerCase().includes(lowerTerm)) ||
-        (s.family && s.family.toLowerCase().includes(lowerTerm)),
-    )
+    let result = items
+
+    // Apply taxonomic filters
+    for (const [key, value] of Object.entries(taxonomicFilters)) {
+      if (value) {
+        result = result.filter(
+          (s) => s[key as keyof Species]?.toString().toLowerCase() === value.toLowerCase(),
+        )
+      }
+    }
+
+    // Apply search term
+    if (searchTerm) {
+      const lowerTerm = searchTerm.toLowerCase()
+      result = result.filter(
+        (s) =>
+          (s.genus && s.genus.toLowerCase().includes(lowerTerm)) ||
+          (s.species && s.species.toLowerCase().includes(lowerTerm)) ||
+          (s.species_common_name &&
+            s.species_common_name.toLowerCase().includes(lowerTerm)) ||
+          (s.family && s.family.toLowerCase().includes(lowerTerm)),
+      )
+    }
+
+    return result
   }
 
-  const getFilteredItems = (category: Category) => {
+  const getFilteredItems = (cat: Category) => {
     const items =
-      category === 'all'
+      cat === 'all'
         ? species
-        : species.filter((s: Species) => s.category === category)
+        : species.filter((s: Species) => s.category === cat)
     return filterSpecies(items)
   }
 
-  const filtered = getFilteredItems(activeTab)
+  const filtered = getFilteredItems(category)
 
-  const getCategoryCount = (category: Category) => {
-    return getFilteredItems(category).length
+  const sorted = filtered.slice().sort((a, b) => {
+    const aEmpty = !a.genus && !a.species
+    const bEmpty = !b.genus && !b.species
+    if (aEmpty !== bEmpty) return aEmpty ? 1 : -1
+
+    const genusA = (a.genus ?? '').toLowerCase()
+    const genusB = (b.genus ?? '').toLowerCase()
+    const cmp = genusA.localeCompare(genusB) || (a.species ?? '').toLowerCase().localeCompare((b.species ?? '').toLowerCase())
+    return sortDirection === 'asc' ? cmp : -cmp
+  })
+
+  const getCategoryCount = (cat: Category) => {
+    return getFilteredItems(cat).length
   }
+
   useEffect(() => {
     if (isMobile && view !== 'grid') {
       setView('grid')
     }
   }, [isMobile, view])
-  
+
   if (isLoading) {
     return <Loader dataTitle="species catalog" />
   }
@@ -116,60 +169,40 @@ const SpeciesIndex = () => {
           />
         </div>
 
-        <Tabs
-          value={activeTab}
-          onValueChange={(v) => setActiveTab(v as Category)}
-        >
-          <div className="overflow-x-auto mb-6">
-            <TabsList className="flex w-max space-x-2">
-              {TABS.map((cat) => (
-                <TabsTrigger key={cat} value={cat}>
-                  {cat === 'all'
-                    ? `View All (${getCategoryCount(cat)})`
-                    : `${cat[0].toUpperCase() + cat.slice(1)} (${getCategoryCount(cat)})`}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-            <p className="mt-2 text-xs text-muted-foreground animate-pulse lg:hidden">
-              Scroll right to see more →
-            </p>
-          </div>
+        <AdvancedSearch
+          activeCategory={category}
+          onCategoryChange={setCategory}
+          getCategoryCount={getCategoryCount}
+          species={species}
+          taxonomicFilters={taxonomicFilters}
+          onTaxonomicFilterChange={setTaxonomicFilters}
+          onResetFilters={handleResetFilters}
+          sortDirection={sortDirection}
+          onSortChange={setSortDirection}
+        />
 
-          {/* <AdvancedSearch /> */}
+        <div className="mb-4 text-sm text-muted-foreground">
+          Showing {sorted.length}{' '}
+          {category === 'all' ? 'species' : category}
+        </div>
 
-          <div className="mb-4 text-sm text-muted-foreground">
-            Showing {filtered.length}{' '}
-            {activeTab === 'all' ? 'species' : activeTab}
-          </div>
-
-          {TABS.map((category) => {
-            const items = getFilteredItems(category)
-
-            return (
-              <TabsContent key={category} value={category}>
-                {items.length === 0 ? (
-                  <Card>
-                    <CardContent className="text-center py-12">
-                      <p className="text-muted-foreground">
-                        {searchTerm
-                          ? `No results found for "${searchTerm}" in ${category}.`
-                          : category === 'all'
-                            ? 'No species data available.'
-                            : `No ${category} data available.`}
-                      </p>
-                    </CardContent>
-                  </Card>
-                ) : view === 'grid' ? (
-
-                  <SpeciesGridView items={items} />
-
-                ) : (
-                  <SpeciesTableView items={items} />
-                )}
-              </TabsContent>
-            )
-          })}
-        </Tabs>
+        {sorted.length === 0 ? (
+          <Card>
+            <CardContent className="text-center py-12">
+              <p className="text-muted-foreground">
+                {searchTerm
+                  ? `No results found for "${searchTerm}" in ${category}.`
+                  : category === 'all'
+                    ? 'No species data available.'
+                    : `No ${category} data available.`}
+              </p>
+            </CardContent>
+          </Card>
+        ) : view === 'grid' ? (
+          <SpeciesGridView items={sorted} />
+        ) : (
+          <SpeciesTableView items={sorted} />
+        )}
       </div>
     </main>
   )

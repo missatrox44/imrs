@@ -17,6 +17,7 @@ import { Badge } from '@/components/ui/badge'
 import { Route } from '@/routes/species.$speciesId'
 import { formatDate } from '@/lib/formatDate'
 import { getPhotoUrl } from '@/lib/getPhotoUrl'
+import { ALL_CATEGORIES } from '@/data/constants'
 
 interface TaxonomyRow {
   rank: string
@@ -139,7 +140,7 @@ export function SpeciesDetails() {
                 The requested species could not be found in our database.
               </p>
               <Button asChild>
-                <Link to="/species">Back to Species Index</Link>
+                <Link to="/species" search={{ category: 'all' }}>Back to Species Index</Link>
               </Button>
             </CardContent>
           </Card>
@@ -155,7 +156,7 @@ export function SpeciesDetails() {
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         <Button variant="ghost" asChild className="mb-6">
-          <Link to="/species">
+          <Link to="/species" search={{ category: 'all' }}>
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Species Index
           </Link>

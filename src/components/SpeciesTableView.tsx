@@ -51,7 +51,7 @@ export const SpeciesTableView = ({ items }: { items: Array<Species> }) => {
                       className="before:absolute before:inset-0 before:z-10"
                     >
                       <span className="scientific-name relative z-20 group-hover:underline">
-                        {item.genus} {item.species}
+                        {item.genus ? `${item.genus} ${item.species}` : '-'}
                       </span>
                     </Link>
                   </td>
@@ -65,10 +65,10 @@ export const SpeciesTableView = ({ items }: { items: Array<Species> }) => {
                     {item.class_name || '-'}
                   </td>
                   <td className="p-4 align-middle hidden lg:table-cell">
-                    {item.order_name}
+                    {item.order_name || '-'}
                   </td>
                   <td className="p-4 align-middle hidden md:table-cell">
-                    {item.family}
+                    {item.family || '-'}
                   </td>
                   <td className="p-4 align-middle">
                     <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary relative z-20" />

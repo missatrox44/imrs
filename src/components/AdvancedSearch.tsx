@@ -1,4 +1,9 @@
+import { useMemo } from 'react'
 import { ArrowUpDown, Filter, RotateCcw, SlidersHorizontal } from 'lucide-react'
+import type { Category } from '@/types/category'
+import type { Species } from '@/types/species'
+import type { TaxonomicFilters } from '@/components/SpeciesIndex'
+import { ALL_CATEGORIES, TAXONOMIC_RANKS } from '@/data/constants'
 import {
   Select,
   SelectContent,
@@ -9,7 +14,81 @@ import {
 import { Button } from '@/components/ui/button'
 import { getCategoryIcon } from '@/lib/getCategoryIcon'
 
-export function AdvancedSearch() {
+interface AdvancedSearchProps {
+  activeCategory: Category
+  onCategoryChange: (category: Category) => void
+  getCategoryCount: (category: Category) => number
+  species: Array<Species>
+  taxonomicFilters: TaxonomicFilters
+  onTaxonomicFilterChange: (filters: TaxonomicFilters) => void
+  onResetFilters: () => void
+  sortDirection: 'asc' | 'desc'
+  onSortChange: (direction: 'asc' | 'desc') => void
+}
+
+function getUniqueValues(items: Array<Species>, key: keyof Species): Array<string> {
+  const values = new Set<string>()
+  for (const item of items) {
+    const val = item[key]
+    if (val && typeof val === 'string' && val.trim()) {
+      values.add(val.trim())
+    }
+  }
+  return Array.from(values).sort((a, b) => a.localeCompare(b))
+}
+
+export function AdvancedSearch({
+  activeCategory,
+  onCategoryChange,
+  getCategoryCount,
+  species,
+  taxonomicFilters,
+  onTaxonomicFilterChange,
+  onResetFilters,
+  sortDirection,
+  onSortChange,
+}: AdvancedSearchProps) {
+
+  // Compute cascading options for each taxonomic rank
+  const taxonomicOptions = useMemo(() => {
+    // Start with species filtered by category
+    const baseItems = activeCategory === 'all'
+      ? species
+      : species.filter((s) => s.category === activeCategory)
+
+    const options: Record<string, Array<string>> = {}
+
+    for (let i = 0; i < TAXONOMIC_RANKS.length; i++) {
+      const rank = TAXONOMIC_RANKS[i]
+      // Filter by all higher-rank selections
+      let filtered = baseItems
+      for (let j = 0; j < i; j++) {
+        const higherRank = TAXONOMIC_RANKS[j]
+        const selectedValue = taxonomicFilters[higherRank.key]
+        if (selectedValue) {
+          filtered = filtered.filter(
+            (s) => s[higherRank.key as keyof Species]?.toString().toLowerCase() === selectedValue.toLowerCase(),
+          )
+        }
+      }
+      options[rank.key] = getUniqueValues(filtered, rank.key as keyof Species)
+    }
+
+    return options
+  }, [species, activeCategory, taxonomicFilters])
+
+  const handleFilterChange = (rankKey: keyof TaxonomicFilters, value: string | null) => {
+    const newFilters = { ...taxonomicFilters }
+    newFilters[rankKey] = value
+
+    // Clear all lower-rank selections
+    const rankIndex = TAXONOMIC_RANKS.findIndex((r) => r.key === rankKey)
+    for (let i = rankIndex + 1; i < TAXONOMIC_RANKS.length; i++) {
+      newFilters[TAXONOMIC_RANKS[i].key] = null
+    }
+
+    onTaxonomicFilterChange(newFilters)
+  }
 
   return (
     <div className="bg-card border border-border p-4 mb-6">
@@ -17,7 +96,7 @@ export function AdvancedSearch() {
       <div className="flex items-center gap-2 mb-3">
         <SlidersHorizontal className="w-4 h-4 text-muted-foreground" />
         <span className="text-sm font-medium text-foreground">
-          Advanced Filters & Sorting
+          Filters & Sorting
         </span>
       </div>
 
@@ -29,34 +108,24 @@ export function AdvancedSearch() {
 
         <div className="flex flex-wrap gap-2">
           <Button
-            variant="default"
+            variant={activeCategory === 'all' ? 'default' : 'outline'}
             size="sm"
-            onClick={() => {}}
+            onClick={() => onCategoryChange('all')}
             className="h-7 text-xs capitalize"
           >
-            All Species
+            All Species ({getCategoryCount('all')})
           </Button>
 
-          {[
-            'mammals',
-            'reptiles',
-            'amphibians',
-            'fish',
-            'birds',
-            'plants',
-            'fungi',
-            'arthropods',
-            'inverts',
-          ].map((category) => (
+          {ALL_CATEGORIES.map((category) => (
             <Button
               key={category}
-              variant="outline"
+              variant={activeCategory === category ? 'default' : 'outline'}
               size="sm"
-              onClick={() => {}}
+              onClick={() => onCategoryChange(category)}
               className="h-7 text-xs capitalize gap-1"
             >
               {getCategoryIcon(category)}
-              {category} {category.length}
+              {category} ({getCategoryCount(category)})
             </Button>
           ))}
         </div>
@@ -68,35 +137,37 @@ export function AdvancedSearch() {
       </label>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3">
-        {[
-          { label: 'Kingdom', items: ['Animalia', 'Plantae'] },
-          { label: 'Phylum', items: ['Chordata', 'Arthropoda'] },
-          { label: 'Class', items: ['Mammalia', 'Aves'] },
-          { label: 'Order', items: ['Squamata', 'Carnivora'] },
-          { label: 'Family', items: ['Colubridae', 'Fabaceae'] },
-          { label: 'Genus', items: ['Crotalus', 'Quercus'] },
-          // { label: 'Species', items: ['Specific epithet…'] },
-        ].map(({ label, items }) => (
-          <div key={label} className="space-y-1">
-            <label className="text-xs text-muted-foreground font-medium flex items-center gap-1">
-              <Filter className="w-3 h-3" /> {label}
-            </label>
+        {TAXONOMIC_RANKS.map(({ key, label }) => {
+          const options = taxonomicOptions[key]
+          const selectedValue = taxonomicFilters[key]
 
-            <Select>
-              <SelectTrigger className="h-8 text-xs">
-                <SelectValue placeholder="All" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All {label}s</SelectItem>
-                {items.map((item) => (
-                  <SelectItem key={item} value={item.toLowerCase()}>
-                    {item}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        ))}
+          return (
+            <div key={key} className="space-y-1">
+              <label className="text-xs text-muted-foreground font-medium flex items-center gap-1">
+                <Filter className="w-3 h-3" /> {label}
+              </label>
+
+              <Select
+                value={selectedValue ?? 'all'}
+                onValueChange={(val) =>
+                  handleFilterChange(key, val === 'all' ? null : val)
+                }
+              >
+                <SelectTrigger className="h-8 text-xs">
+                  <SelectValue placeholder="All" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All {label.endsWith('y') ? `${label.slice(0, -1)}ies` : `${label}s`}</SelectItem>
+                  {options.map((item) => (
+                    <SelectItem key={item} value={item}>
+                      {item}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )
+        })}
       </div>
 
       {/* Sort Options */}
@@ -104,23 +175,16 @@ export function AdvancedSearch() {
         <div className="flex items-center gap-2">
           <ArrowUpDown className="w-4 h-4 text-muted-foreground" />
           <span className="text-xs text-muted-foreground font-medium">
-            Sort by:
+            Sort species by:
           </span>
         </div>
 
-        {/* <Select>
-          <SelectTrigger className="h-8 w-[140px] text-xs">
-            <SelectValue placeholder="Order" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="order">Order</SelectItem>
-            <SelectItem value="family">Family</SelectItem>
-          </SelectContent>
-        </Select> */}
-
-        <Select>
+        <Select
+          value={sortDirection}
+          onValueChange={(val) => onSortChange(val as 'asc' | 'desc')}
+        >
           <SelectTrigger className="h-8 w-30 text-xs">
-            <SelectValue placeholder="Direction" />
+            <SelectValue />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="asc">A → Z</SelectItem>
@@ -128,24 +192,10 @@ export function AdvancedSearch() {
           </SelectContent>
         </Select>
 
-        {/* <Select>
-          <SelectTrigger className="h-8 w-[140px] text-xs">
-            <SelectValue placeholder="Group by" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="none">No Grouping</SelectItem>
-            <SelectItem value="kingdom">Kingdom</SelectItem>
-            <SelectItem value="phylum">Phylum</SelectItem>
-            <SelectItem value="class">Class</SelectItem>
-            <SelectItem value="order">Order</SelectItem>
-            <SelectItem value="family">Family</SelectItem>
-          </SelectContent>
-        </Select> */}
-
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => {}}
+          onClick={onResetFilters}
           className="h-8 text-xs text-muted-foreground hover:text-foreground"
         >
           <RotateCcw className="w-3 h-3 mr-1" />

@@ -1,12 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
 import SpeciesIndex from '@/components/SpeciesIndex'
+import type { Category } from '@/types/category'
 
 export const Route = createFileRoute('/species/')({
-  //   loader: async () => {
-  //   const res = await fetch('/api/species');
-  //   if (!res.ok) throw new Error('Failed to fetch species');
-  //   return res.json();
-  // },
+  validateSearch: (search: Record<string, unknown>): { category: Category } => ({
+    category: (search.category as Category) || 'all',
+  }),
   component: SpeciesIndex,
   head: () => ({
     title: 'Species Index | IMRS',

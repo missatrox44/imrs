@@ -33,17 +33,14 @@ export const STALE_TIME = 1000 * 60 * 60 * 24 * 30 // 30 days
 export const GC_TIME = 1000 * 60 * 60 * 24 * 60 // 60 days
 
 
-// FUTURE for filtering observations
-// export const TAXON_GROUPS = [
-//   { value: '', label: 'All' },
-//   { value: 'Mammalia', label: 'Mammals' },
-//   { value: 'Aves', label: 'Birds' },
-//   { value: 'Reptilia', label: 'Reptiles' },
-//   { value: 'Amphibia', label: 'Amphibians' },
-//   { value: 'Insecta', label: 'Insects' },
-//   { value: 'Plantae', label: 'Plants' },
-//   { value: 'Fungi', label: 'Fungi' }
-// ]
+export const TAXONOMIC_RANKS = [
+  { key: 'kingdom' as const, label: 'Kingdom' },
+  { key: 'phylum' as const, label: 'Phylum' },
+  { key: 'class_name' as const, label: 'Class' },
+  { key: 'order_name' as const, label: 'Order' },
+  { key: 'family' as const, label: 'Family' },
+  { key: 'genus' as const, label: 'Genus' },
+]
 
 export const ALL_CATEGORIES: Array<Category> = [
   'mammals',
