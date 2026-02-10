@@ -102,6 +102,10 @@ const SpeciesIndex = () => {
   const filtered = getFilteredItems(category)
 
   const sorted = filtered.slice().sort((a, b) => {
+    const aEmpty = !a.genus && !a.species
+    const bEmpty = !b.genus && !b.species
+    if (aEmpty !== bEmpty) return aEmpty ? 1 : -1
+
     const genusA = (a.genus ?? '').toLowerCase()
     const genusB = (b.genus ?? '').toLowerCase()
     const cmp = genusA.localeCompare(genusB) || (a.species ?? '').toLowerCase().localeCompare((b.species ?? '').toLowerCase())
