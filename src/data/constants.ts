@@ -34,16 +34,16 @@ export const GC_TIME = 1000 * 60 * 60 * 24 * 60 // 60 days
 
 
 // FUTURE for filtering observations
-export const TAXON_GROUPS = [
-  { value: '', label: 'All' },
-  { value: 'Mammalia', label: 'Mammals' },
-  { value: 'Aves', label: 'Birds' },
-  { value: 'Reptilia', label: 'Reptiles' },
-  { value: 'Amphibia', label: 'Amphibians' },
-  { value: 'Insecta', label: 'Insects' },
-  { value: 'Plantae', label: 'Plants' },
-  { value: 'Fungi', label: 'Fungi' }
-]
+// export const TAXON_GROUPS = [
+//   { value: '', label: 'All' },
+//   { value: 'Mammalia', label: 'Mammals' },
+//   { value: 'Aves', label: 'Birds' },
+//   { value: 'Reptilia', label: 'Reptiles' },
+//   { value: 'Amphibia', label: 'Amphibians' },
+//   { value: 'Insecta', label: 'Insects' },
+//   { value: 'Plantae', label: 'Plants' },
+//   { value: 'Fungi', label: 'Fungi' }
+// ]
 
 export const ALL_CATEGORIES: Array<Category> = [
   'mammals',
@@ -85,6 +85,6 @@ export const externalLinks = [
   { to: 'https://www.inaturalist.org/', label: 'iNaturalist' },
 ]
 
-export const otherLinks = [
-  { to: 'https://github.com/missatrox44/imrs/issues', label: 'Report an issue' }
-]
+// export const otherLinks = [
+//   { to: 'https://github.com/missatrox44/imrs/issues', label: 'Report an issue' }
+// ]
