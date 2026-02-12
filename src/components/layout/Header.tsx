@@ -21,7 +21,7 @@ export default function Header() {
   const [open, setOpen] = useState(false)
 
   return (
-    <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+    <header className="border-b border-border bg-card sticky top-0 z-50">
       <nav>
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
