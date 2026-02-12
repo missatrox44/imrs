@@ -131,7 +131,9 @@ const Observations = ({ initialPage }: ObservationsProps) => {
             Click any observation card to view full observation details.
           </p>
 
-          <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        </section>
+
+        <div className="sticky top-16 z-40 bg-background py-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             {selectedGroup !== 'all' ? (
               <span className="text-sm text-muted-foreground">
                 Showing {filteredObservations.length} of {observations.length} observations
@@ -162,7 +164,6 @@ const Observations = ({ initialPage }: ObservationsProps) => {
               </SelectContent>
             </Select>
           </div>
-        </section>
         <section className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredObservations.map((observation) => (
             <Link

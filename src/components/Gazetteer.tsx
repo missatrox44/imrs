@@ -1,172 +1,175 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { MapPin, Mountain } from 'lucide-react'
+import type { ComponentType } from 'react'
+import type { GazetteerMapProps } from '@/components/GazetteerMap'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-// import {
-//   Dialog,
-//   DialogContent,
-//   DialogHeader,
-//   DialogTitle,
-// } from '@/components/ui/dialog'
 import { GAZETTEER_ENTRIES } from '@/data/gazetteer'
 import { formatCoordinates } from '@/lib/formatCoordinates'
 import { formatElevation } from '@/lib/formatElevation'
 import { SearchInput } from '@/components/SearchInput'
+import { cn } from '@/lib/utils'
 
 const Gazetteer = () => {
   const [searchTerm, setSearchTerm] = useState('')
-  // const [selectedImage, setSelectedImage] = useState<{
-  //   url: string
-  //   name: string
-  // } | null>(null)
+  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const cardRefs = useRef<Record<string, HTMLDivElement | null>>({})
+  const [MapComponent, setMapComponent] =
+    useState<ComponentType<GazetteerMapProps> | null>(null)
 
-  // useMemo is overkill for now but will be useful when adding modal with images later
+  // Dynamically import leaflet map only on the client
+  useEffect(() => {
+    import('@/components/GazetteerMap').then((m) => {
+      setMapComponent(() => m.GazetteerMap)
+    })
+  }, [])
+
   const filteredAndSortedEntries = useMemo(() => {
     return GAZETTEER_ENTRIES.filter((entry) =>
       entry.name.toLowerCase().includes(searchTerm.toLowerCase()),
     ).sort((a, b) => a.name.localeCompare(b.name))
   }, [searchTerm])
 
-  // Entries with images
-  // const entriesWithImages = ['echo-spring', 'red-tank', 'echo-peak']
+  // Clear selectedId when it's no longer in filtered results
+  useEffect(() => {
+    if (
+      selectedId &&
+      !filteredAndSortedEntries.some((e) => e.id === selectedId)
+    ) {
+      setSelectedId(null)
+    }
+  }, [filteredAndSortedEntries, selectedId])
 
-  // const getImageUrl = (id: string) => {
-  //   const seed = id.split('-').join('')
-  //   return `https://picsum.photos/seed/${seed}/300/200`
-  // }
+  // Scroll card into view when pin is clicked
+  useEffect(() => {
+    const el = selectedId ? cardRefs.current[selectedId] : null
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    }
+  }, [selectedId])
 
   return (
     <main className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold text-foreground mb-2">
-              IMRS Gazetteer
-            </h1>
-            <p className="text-muted-foreground md:text-balance">
-              A comprehensive list of notable locations and features on Indio
-              Mountains Research Station
-            </p>
-          </div>
-          <div className="mb-6">
-            <SearchInput
-              value={searchTerm}
-              onChange={setSearchTerm}
-              placeholder="Search locations"
-            />
-          </div>
-          {/* <h1>{filteredAndSortedEntries.length}</h1> */}
-          <section className="space-y-4">
-            {filteredAndSortedEntries.length > 0 ? (
-              filteredAndSortedEntries.map((entry) => (
-                <Card
-                  key={entry.id}
-                  className="hover:shadow-md transition-shadow"
-                >
-                  <CardHeader>
-                    <CardTitle className="text-xl">{entry.name}</CardTitle>
-                    {entry.alternateNames?.length ? (
-                      <p className="text-sm text-muted-foreground italic">
-                        aka {entry.alternateNames.join(', ')}
-                      </p>
-                    ) : null}
-                  </CardHeader>
-                  <CardContent>
-                    {/* <div
-                      className={
-                        entriesWithImages.includes(entry.id)
-                          ? 'flex flex-col md:flex-row gap-4'
-                          : ''
-                      }
-                    > */}
-                    <div>
-                      <div className="flex-1 space-y-3">
-                        <p className="text-muted-foreground">
-                          {entry.description}
-                        </p>
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-foreground mb-2">
+            IMRS Gazetteer
+          </h1>
+          <p className="text-muted-foreground md:text-balance">
+            A comprehensive list of notable locations and features on Indio
+            Mountains Research Station
+          </p>
+        </div>
 
-                        <div className="flex flex-wrap gap-2 text-sm">
-                          {entry.latitude && entry.longitude && (
-                            <Badge
-                              variant="secondary"
-                              className="flex items-center gap-1"
-                            >
-                              <MapPin className="w-3 h-3" />
-                              {formatCoordinates(
-                                entry.latitude,
-                                entry.longitude,
+        {/* Desktop: side-by-side | Mobile: stacked */}
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Map panel */}
+          <div className="h-[40vh] lg:h-[calc(80vh-6rem)] lg:w-1/2 xl:w-3/5 lg:sticky lg:top-6 rounded-sm border overflow-hidden">
+            {MapComponent ? (
+              <MapComponent
+                entries={filteredAndSortedEntries}
+                selectedId={selectedId}
+                onPinClick={setSelectedId}
+              />
+            ) : (
+              <div className="h-full w-full flex items-center justify-center bg-muted text-muted-foreground">
+                Loading map…
+              </div>
+            )}
+          </div>
+
+          {/* Cards panel */}
+          <div className="lg:w-1/2 xl:w-2/5 lg:h-[calc(80vh-6rem)] lg:overflow-y-auto">
+            <div className="sticky top-0 z-10 bg-background pb-4">
+              <SearchInput
+                value={searchTerm}
+                onChange={setSearchTerm}
+                placeholder="Search locations"
+              />
+            </div>
+
+            <section className="space-y-4">
+              {filteredAndSortedEntries.length > 0 ? (
+                filteredAndSortedEntries.map((entry) => (
+                  <div
+                    key={entry.id}
+                    ref={(el) => {
+                      cardRefs.current[entry.id] = el
+                    }}
+                  >
+                    <Card
+                      className={cn(
+                        'hover:shadow-md transition-all cursor-pointer',
+                        entry.id === selectedId &&
+                          'ring-4 ring-accent shadow-lg bg-accent/10',
+                      )}
+                      onClick={() => setSelectedId(entry.id)}
+                    >
+                      <CardHeader>
+                        <CardTitle className="text-xl">{entry.name}</CardTitle>
+                        {entry.alternateNames?.length ? (
+                          <p className="text-sm text-muted-foreground italic">
+                            aka {entry.alternateNames.join(', ')}
+                          </p>
+                        ) : null}
+                      </CardHeader>
+                      <CardContent>
+                        <div>
+                          <div className="flex-1 space-y-3">
+                            <p className="text-muted-foreground">
+                              {entry.description}
+                            </p>
+
+                            <div className="flex flex-wrap gap-2 text-sm">
+                              {entry.latitude && entry.longitude && (
+                                <Badge
+                                  variant="secondary"
+                                  className="flex items-center gap-1"
+                                >
+                                  <MapPin className="w-3 h-3" />
+                                  {formatCoordinates(
+                                    entry.latitude,
+                                    entry.longitude,
+                                  )}
+                                </Badge>
                               )}
-                            </Badge>
-                          )}
 
-                          {entry.elevationMeters && (
-                            <Badge
-                              variant="secondary"
-                              className="flex items-center gap-1"
-                            >
-                              <Mountain className="w-3 h-3" />
-                              {formatElevation(entry.elevationMeters)}
-                            </Badge>
-                          )}
+                              {entry.elevationMeters && (
+                                <Badge
+                                  variant="secondary"
+                                  className="flex items-center gap-1"
+                                >
+                                  <Mountain className="w-3 h-3" />
+                                  {formatElevation(entry.elevationMeters)}
+                                </Badge>
+                              )}
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                      {/* 
-                      {entriesWithImages.includes(entry.id) && (
-                        <div className="shrink-0">
-                          <img
-                            src={getImageUrl(entry.id)}
-                            alt={entry.name}
-                            className="w-full md:w-75 h-50 object-cover cursor-pointer hover:opacity-90 transition-opacity"
-                            onClick={() =>
-                              setSelectedImage({
-                                url: getImageUrl(entry.id),
-                                name: entry.name,
-                              })
-                            }
-                          />
-                        </div>
-                      )} */}
-                    </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                ))
+              ) : (
+                <Card>
+                  <CardContent className="py-8 text-center">
+                    <p className="text-muted-foreground">
+                      No locations found matching "{searchTerm}"
+                    </p>
                   </CardContent>
                 </Card>
-              ))
-            ) : (
-              <Card>
-                <CardContent className="py-8 text-center">
-                  <p className="text-muted-foreground">
-                    No locations found matching "{searchTerm}"
-                  </p>
-                </CardContent>
-              </Card>
-            )}
-          </section>
+              )}
+            </section>
 
-          {filteredAndSortedEntries.length > 0 && (
-            <div className="mt-6 text-center text-sm text-muted-foreground">
-              Showing {filteredAndSortedEntries.length} of{' '}
-              {GAZETTEER_ENTRIES.length} locations
-            </div>
-          )}
+            {filteredAndSortedEntries.length > 0 && (
+              <div className="mt-6 text-center text-sm text-muted-foreground">
+                Showing {filteredAndSortedEntries.length} of{' '}
+                {GAZETTEER_ENTRIES.length} locations
+              </div>
+            )}
+          </div>
         </div>
       </div>
-
-      {/* <Dialog
-        open={!!selectedImage}
-        onOpenChange={() => setSelectedImage(null)}
-      >
-        <DialogContent className="max-w-4xl">
-          <DialogHeader>
-            <DialogTitle>{selectedImage?.name}</DialogTitle>
-          </DialogHeader>
-          <div className="w-full">
-            <img
-              src={selectedImage?.url}
-              alt={selectedImage?.name}
-              className="w-full h-auto"
-            />
-          </div>
-        </DialogContent>
-      </Dialog> */}
     </main>
   )
 }

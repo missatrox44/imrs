@@ -6,6 +6,18 @@ import tailwindcss from '@tailwindcss/vite'
 
 const config = defineConfig({
   plugins: [
+    // treat .geojson files as JSON
+    {
+      name: 'geojson',
+      transform(code, id) {
+        if (id.endsWith('.geojson')) {
+          return {
+            code: `export default ${code}`,
+            map: null,
+          }
+        }
+      },
+    },
     // this is the plugin that enables path aliases
     viteTsConfigPaths({
       projects: ['./tsconfig.json'],
