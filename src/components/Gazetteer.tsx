@@ -64,7 +64,7 @@ const Gazetteer = () => {
         {/* Desktop: side-by-side | Mobile: stacked */}
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Map panel */}
-          <div className="h-[40vh] lg:h-[calc(100vh-6rem)] lg:w-1/2 xl:w-3/5 lg:sticky lg:top-6 rounded-sm border overflow-hidden">
+          <div className="h-[40vh] lg:h-[calc(80vh-6rem)] lg:w-1/2 xl:w-3/5 lg:sticky lg:top-6 rounded-sm border overflow-hidden">
             {MapComponent ? (
               <MapComponent
                 entries={filteredAndSortedEntries}
@@ -79,8 +79,8 @@ const Gazetteer = () => {
           </div>
 
           {/* Cards panel */}
-          <div className="lg:w-1/2 xl:w-2/5">
-            <div className="mb-6">
+          <div className="lg:w-1/2 xl:w-2/5 lg:h-[calc(80vh-6rem)] lg:overflow-y-auto">
+            <div className="sticky top-0 z-10 bg-background pb-4">
               <SearchInput
                 value={searchTerm}
                 onChange={setSearchTerm}
