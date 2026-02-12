@@ -101,7 +101,7 @@ const Gazetteer = () => {
                       className={cn(
                         'hover:shadow-md transition-all cursor-pointer',
                         entry.id === selectedId &&
-                          'ring-2 ring-accent shadow-md',
+                          'ring-4 ring-accent shadow-lg bg-accent/10',
                       )}
                       onClick={() => setSelectedId(entry.id)}
                     >
