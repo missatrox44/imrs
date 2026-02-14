@@ -3,7 +3,6 @@ import {
   LayoutGrid,
   Table as TableIcon,
 } from 'lucide-react'
-import { useQuery } from '@tanstack/react-query'
 import { useMediaQuery } from '@uidotdev/usehooks'
 import { useNavigate } from '@tanstack/react-router'
 import { SpeciesGridView } from './SpeciesGridView'
@@ -11,7 +10,6 @@ import type { Species } from '@/types/species'
 import type { Category } from '@/types/category'
 import { SpeciesTableView } from '@/components/SpeciesTableView'
 import { Card, CardContent } from '@/components/ui/card'
-import { Loader } from '@/components/Loader'
 import { AdvancedSearch } from '@/components/AdvancedSearch'
 import { SearchInput } from '@/components/SearchInput'
 import { Route } from '@/routes/species.index'
@@ -47,14 +45,7 @@ const SpeciesIndex = () => {
     navigate({ to: '/species', search: { category: cat } })
   }
 
-  const { data: species = [], isLoading } = useQuery({
-    queryKey: ['speciesData'],
-    queryFn: async () => {
-      const res = await fetch('/api/species')
-      if (!res.ok) throw new Error('Failed to fetch species')
-      return res.json()
-    },
-  })
+  const species: Array<Species> = Route.useLoaderData()
 
   const handleResetFilters = useCallback(() => {
     setCategory('all')
@@ -121,10 +112,6 @@ const SpeciesIndex = () => {
       setView('grid')
     }
   }, [isMobile, view])
-
-  if (isLoading) {
-    return <Loader dataTitle="species catalog" />
-  }
 
   return (
     <main className="min-h-screen bg-background">
