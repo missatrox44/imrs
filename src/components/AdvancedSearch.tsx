@@ -26,12 +26,16 @@ interface AdvancedSearchProps {
   onSortChange: (direction: 'asc' | 'desc') => void
 }
 
+function capitalize(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+}
+
 function getUniqueValues(items: Array<Species>, key: keyof Species): Array<string> {
   const values = new Set<string>()
   for (const item of items) {
     const val = item[key]
     if (val && typeof val === 'string' && val.trim()) {
-      values.add(val.trim())
+      values.add(capitalize(val.trim()))
     }
   }
   return Array.from(values).sort((a, b) => a.localeCompare(b))
