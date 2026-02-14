@@ -1,45 +1,95 @@
 # IMRS Biodiversity Explorer
 
-[Deployed Link (MVP)](https://imrs.vercel.app/)
+[Live Deployment](https://imrs.vercel.app/)
 
-## Purpose
-This web application was created for students, researchers, and visitors interested in exploring the biodiversity of Indio Mountains Research Station (IMRS), managed by The University of Texas at El Paso (UTEP).
+## The Challenge
+For years, the biodiversity records of the **Indio Mountains Research Station (IMRS)**—a 40,000-acre research facility in the Chihuahuan Desert managed by UTEP—were locked away in a static PDF handbook: *[Natural Resources and Physical Environment of Indio Mountains Research Station](https://www.utep.edu/science/indio/_files/docs/imrs%20natural%20resources.pdf)*.
 
-It combines modern observation data from iNaturalist with a digital species catalogue from the official IMRS handbook:
+While authoritative, this format made it difficult for students, researchers, and visitors to quickly identify species, cross-reference data, or access information while in the field.
 
-[NATURAL RESOURCES AND PHYSICAL ENVIRONMENT OF INDIO MOUNTAINS RESEARCH STATION (IMRS), SOUTHEASTERN HUDSPETH COUNTY, TEXAS — A HANDBOOK FOR STUDENTS AND RESEARCHERS.](https://www.utep.edu/science/indio/_files/docs/imrs%20natural%20resources.pdf)
+## The Solution
+The **IMRS Biodiversity Explorer** transforms this static data into a living, interactive digital resource. By normalizing the handbook's data into a structured SQL database and integrating real-time observations from iNaturalist, this application provides a powerful tool for exploring the station's flora and fauna.
 
-By making the handbook’s species records digital, organized, searchable, and filterable, the app becomes a living reference for the Chihuahuan Desert flora and fauna found on IMRS.
+## Key Features
+- **Digital Species Catalog**: A fully searchable and filterable database of all species recorded in the station's history.
+    - **Dual Views**: Switch between a visual Grid View for browsing and a detailed Table View for data analysis.
+    - **Advanced Filtering**: Filter by Taxonomy (Kingdom, Phylum, Class, Order, Family, Genus).
+    - **Smart Search**: Instantly find species by scientific or common names.
+- **Recent Observations**: Real-time integration with the **iNaturalist API** to display the latest confirmed sightings at the station.
+- **Gazetteer**: A reference for key geographical locations within the research station.
 
+## Technology Stack
+**Frontend**
+- **Framework**: [TanStack Start](https://tanstack.com/start) (React)
+- **Routing**: [TanStack Router](https://tanstack.com/router)
+- **Data Fetching**: [TanStack Query](https://tanstack.com/query)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) & [ShadCN UI](https://ui.shadcn.com/)
+- **Maps**: Leaflet / React-Leaflet
 
+**Backend & Data**
+- **Database**: [SQLite3](https://sqlite.org/) (Local) / [Turso](https://turso.tech/) (Production)
+- **ORM/Querying**: Raw SQL & `better-sqlite3` / `@libsql/client`
+- **External API**: iNaturalist
 
-## Tech Stack
-*Frontend*
-- Frameworks: TanStack Start (React)
-- Routing: TanStack Router
-- Data Fetching/Caching: TanStack Query
-- Language/Build: TypeScript + Vite
-- Styling: Tailwind & ShadCN
+## Future Roadmap
+- **Authentication & Admin Dashboard**: Implement secure login for station administrators to manage and update the species index directly (CRUD operations).
+- **Weather Integration**: Visualize historical and real-time climate data from on-site weather stations to correlate biodiversity trends with environmental conditions.
+- **Open Source**: Prepare the codebase for public contribution, assisting other field stations in digitizing their records.
 
+---
 
-*Data Sources*
-- [iNaturalist API](https://www.inaturalist.org/pages/api+reference) - observation data for IMRS vicinity
-- IMRS Handbook - authoritative species list, normalized into SQL tables
+## Getting Started
 
-*Backend/Database*
-- [SQLite3](https://formulae.brew.sh/formula/sqlite)
-- [Turso](https://turso.tech/)
+### Prerequisites
+- Node.js (v18+)
+- npm or pnpm
+- SQLite3 (for local database management)
 
-### Install SQLite3 (Mac)
-Check if SQLite3 is installed first:
-`sqlite3 --version`
-If you see a version number, you're good! If not enter:
-`brew install sqlite3`
+### Installation
 
-1. Create database and table:
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/missatrox44/imrs.git
+   cd imrs
+   ```
 
-```bash 
-sqlite3 imrs-species.db "
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Environment Setup**
+   Create a `.env` file in the root directory:
+   ```bash
+   cp .env.sample .env
+   ```
+   *Note: For local development, you typically only need the `DATABASE_URL` pointing to your local SQLite file (e.g., `file:local.db`).*
+
+4. **Run the development server**
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:3000](http://localhost:3000) to view the app.
+
+---
+
+## Database Setup
+The application uses SQLite. In production, we use Turso.
+
+### 1. Local SQLite Setup (Mac)
+Check if SQLite3 is installed:
+```bash
+sqlite3 --version
+# If not installed:
+brew install sqlite3
+```
+
+**Initialize Database:**
+```bash
+# Create DB and Table
+sqlite3 imrs-species.db
+
+# In SQLite prompt:
 CREATE TABLE specimens (
   id INTEGER PRIMARY NOT NULL,
   category TEXT,
@@ -68,154 +118,38 @@ CREATE TABLE specimens (
   species_common_name TEXT,
   records TEXT
 );
-"
-```
 
-2. Verify table exists
-  
-`sqlite3 imrs-species.db ".schema specimens"`
-
-
-3. **Import TSV**
-go to terminal at root of project and enter:
-
-`sqlite3 imrs-species.db`
-
-Then inside the SQLite prompt:
-```bash
+# Import Data (ensure specimens.tsv is in root)
 .mode tabs
 .headers on
 .import specimens.tsv specimens
+
+# Verify
+SELECT count(*) FROM specimens;
+.exit
 ```
 
-4.check that it worked
+### 2. Migration to Turso (Production)
+[Turso Migration Guide](https://turso.tech/blog/migrating-and-importing-sqlite-to-turso-just-got-easier)
 
-`sqlite3 imrs-species.db ;"`
-
-## [Preparing Your SQLite Database](https://turso.tech/blog/migrating-and-importing-sqlite-to-turso-just-got-easier#preparing-your-sqlite-database)
-Before importing your SQLite database to Turso Cloud, your database should be using WAL (Write-Ahead Logging) mode:
-
-Open your SQLite database using the SQLite command-line tool:
-
-`sqlite3 path/to/your/database.db`
-
-Set WAL to journal mode:
-
-`PRAGMA journal_mode=WAL;`
-
-Checkpoint and truncate the WAL file:
-
-`PRAGMA wal_checkpoint(TRUNCATE);`
-
-Verify the journal mode is set to WAL:
-
-`PRAGMA journal_mode;`
-
-Exit the SQLite shell:
-
-`.exit`
-
-
-### Turso CLI Thangs
-- Login
-
-If using Turso account managed by Vercel, login with the following
-
-`turso auth login --headless`
-
-
-- Then run command:
-   
-`turso config set token "YOUR_TOKEN_HERE"`
-
-- Confirm logged in (personal default)
-
-`turso auth whoami`
-
-- Switch to vercel org
-   
-`turso org list`
-
-`turso org switch [vercel-team-name]`
-
-   Verify switch:
-
-`turso org list`
-
-
-
-## [Push to Turso](https://turso.tech/blog/migrating-and-importing-sqlite-to-turso-just-got-easier#using-the-turso-cli)
-
-`turso db import ~/path/to/my-database.db`
-
-
-
-
-
-
-
-
-## Turso Notes
-```javascript
-//node.js
-import { createClient } from "@libsql/client";
-
-const client = createClient({
-  url: process.env.TURSO_DATABASE_URL,
-  authToken: process.env.TURSO_AUTH_TOKEN,
-});
-
-
-//edge ?
-import { createClient } from "@libsql/client/web";
-
-const client = createClient({
-  url: process.env.TURSO_DATABASE_URL,
-  authToken: process.env.TURSO_AUTH_TOKEN,
-});
+**Prepare Local DB:**
+```bash
+sqlite3 imrs-species.db "PRAGMA journal_mode=WAL;"
+sqlite3 imrs-species.db "PRAGMA wal_checkpoint(TRUNCATE);"
 ```
 
-```javascript
-//next example
-import { createClient } from '@libsql/client';
-import { NextResponse } from 'next/server';
+**Push to Turso:**
+```bash
+# Auth
+turso auth login
+turso config set token "YOUR_TOKEN"
 
-const client = createClient({
-  url: process.env.TURSO_DATABASE_URL,
-  authToken: process.env.TURSO_AUTH_TOKEN
-});
-
-export const POST = async () => {
-  // Fetch data from SQLite
-  const result = await client.execute("CREATE TABLE todos (description);");
-};
+# Import
+turso db import imrs-species.db
 ```
 
+---
 
 ## iNaturalist Resources
-- [IMRS Location](https://www.inaturalist.org/places/indio-mountains-research-station)
-- [Developer Docs](https://www.inaturalist.org/pages/developers)
+- [IMRS Location ID](https://www.inaturalist.org/places/indio-mountains-research-station)
 - [API Reference](https://www.inaturalist.org/pages/api+reference)
-- [iNaturalist API](https://api.inaturalist.org/v1/docs/)
-
-### Rate Limits
-We throttle API usage to a max of 100 requests per minute, though we ask that you try to keep it to 60 requests per minute or lower. If we notice usage that has serious impact on our performance we may institute blocks without notification. The API is intended to support application development, not data scraping. If you want data, see the datasets below.
-
-### iNaturalist API Authentication (NOT USED IN THIS REPO)
-🗒️ *THE FOLLOWING IS JUST PERSONAL NOTES*
-Authentication is only required when requesting [private data](https://www.inaturalist.org/pages/api+recommended+practices). 
-
-Get JWT Token from:
-`https://www.inaturalist.org/users/api_token`
-
-```javascript
-//send JWT in the Authorization header
-const response = await fetch(
-  'https://api.inaturalist.org/v1/observations?per_page=50',
-  {
-    headers: {
-      Authorization: `Bearer ${jwtToken}`,
-    },
-  }
-);
-```
