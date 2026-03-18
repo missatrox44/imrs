@@ -24,39 +24,43 @@ export const Home = () => {
 
         {/* Action Cards */}
         <section className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          <Card className="gradient-card shadow-md hover:shadow-xl transition-shadow duration-300 group">
-            <CardContent className="p-8 text-center">
-              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-                <Eye className="w-8 h-8 text-primary-foreground" />
-              </div>
-              <h2 className="text-2xl font-semibold text-foreground mb-4">
-                Recent Observations
-              </h2>
-              <p className="text-muted-foreground mb-6">
-                Browse the latest wildlife and plant observations from researchers and visitors on IMRS.
-              </p>
-              <Button asChild size="lg" className="w-full">
-                <Link to="/observations">View Observations</Link>
-              </Button>
-            </CardContent>
-          </Card>
+          <Link to="/observations" className="no-underline">
+            <Card className="gradient-card shadow-md hover:shadow-xl transition-shadow duration-300 group cursor-pointer">
+              <CardContent className="p-8 text-center">
+                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <Eye className="w-8 h-8 text-primary-foreground" />
+                </div>
+                <h2 className="text-2xl font-semibold text-foreground mb-4">
+                  Recent Observations
+                </h2>
+                <p className="text-muted-foreground mb-6">
+                  Browse the latest wildlife and plant observations from researchers and visitors on IMRS.
+                </p>
+                <Button size="lg" className="w-full cursor-pointer">
+                  View Observations
+                </Button>
+              </CardContent>
+            </Card>
+          </Link>
 
-          <Card className="gradient-card shadow-md hover:shadow-xl transition-shadow duration-300 group">
-            <CardContent className="p-8 text-center">
-              <div className="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-                <BookOpen className="w-8 h-8 text-accent-foreground" />
-              </div>
-              <h2 className="text-2xl font-semibold text-foreground mb-4">
-                Species Index
-              </h2>
-              <p className="text-muted-foreground mb-6">
-                Explore our comprehensive database of documented species found within the research station property.
-              </p>
-              <Button asChild variant="secondary" size="lg" className="w-full">
-                <Link to="/species" search={{ category: 'all' }}>Browse Species</Link>
-              </Button>
-            </CardContent>
-          </Card>
+          <Link to="/species" search={{ category: 'all' }} className="no-underline">
+            <Card className="gradient-card shadow-md hover:shadow-xl transition-shadow duration-300 group cursor-pointer">
+              <CardContent className="p-8 text-center">
+                <div className="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <BookOpen className="w-8 h-8 text-accent-foreground" />
+                </div>
+                <h2 className="text-2xl font-semibold text-foreground mb-4">
+                  Species Index
+                </h2>
+                <p className="text-muted-foreground mb-6">
+                  Explore our comprehensive database of documented species found within the research station property.
+                </p>
+                <Button variant="secondary" size="lg" className="w-full cursor-pointer">
+                  Browse Species
+                </Button>
+              </CardContent>
+            </Card>
+          </Link>
         </section>
 
         {/* Stats Section */}

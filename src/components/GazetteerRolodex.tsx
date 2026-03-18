@@ -46,9 +46,10 @@ export const GazetteerRolodex = () => {
       <div className="relative flex flex-col items-center">
         {/* Navigation */}
         <div className="flex items-center gap-4 mb-6">
-          <Button 
-            variant="outline" 
-            size="icon" 
+          <Button
+            variant="outline"
+            size="icon"
+            className="cursor-pointer"
             onClick={prevCard}
           >
             <ChevronLeft className="h-4 w-4" />
@@ -56,9 +57,10 @@ export const GazetteerRolodex = () => {
           <span className="text-sm text-muted-foreground min-w-[80px] text-center">
             {activeIndex + 1} of {sortedEntries.length}
           </span>
-          <Button 
-            variant="outline" 
-            size="icon" 
+          <Button
+            variant="outline"
+            size="icon"
+            className="cursor-pointer"
             onClick={nextCard}
           >
             <ChevronRight className="h-4 w-4" />
