@@ -115,7 +115,7 @@ export function AdvancedSearch({
             variant={activeCategory === 'all' ? 'default' : 'outline'}
             size="sm"
             onClick={() => onCategoryChange('all')}
-            className="h-7 text-xs capitalize"
+            className="h-7 text-xs capitalize cursor-pointer"
           >
             All Species ({getCategoryCount('all')})
           </Button>
@@ -126,7 +126,7 @@ export function AdvancedSearch({
               variant={activeCategory === category ? 'default' : 'outline'}
               size="sm"
               onClick={() => onCategoryChange(category)}
-              className="h-7 text-xs capitalize gap-1"
+              className="h-7 text-xs capitalize gap-1 cursor-pointer"
             >
               {getCategoryIcon(category)}
               {category} ({getCategoryCount(category)})
@@ -157,7 +157,7 @@ export function AdvancedSearch({
                   handleFilterChange(key, val === 'all' ? null : val)
                 }
               >
-                <SelectTrigger className="h-8 text-xs">
+                <SelectTrigger className="h-8 text-xs cursor-pointer">
                   <SelectValue placeholder="All" />
                 </SelectTrigger>
                 <SelectContent>
@@ -187,7 +187,7 @@ export function AdvancedSearch({
           value={sortDirection}
           onValueChange={(val) => onSortChange(val as 'asc' | 'desc')}
         >
-          <SelectTrigger className="h-8 w-30 text-xs">
+          <SelectTrigger className="h-8 w-30 text-xs cursor-pointer">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -200,7 +200,7 @@ export function AdvancedSearch({
           variant="ghost"
           size="sm"
           onClick={onResetFilters}
-          className="h-8 text-xs text-muted-foreground hover:text-foreground"
+          className="h-8 text-xs text-muted-foreground hover:text-foreground cursor-pointer"
         >
           <RotateCcw className="w-3 h-3 mr-1" />
           Reset Filters

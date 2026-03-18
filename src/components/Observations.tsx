@@ -146,7 +146,7 @@ const Observations = ({ initialPage }: ObservationsProps) => {
               value={selectedGroup}
               onValueChange={(value) => setSelectedGroup(value as TaxonGroup)}
             >
-              <SelectTrigger className="w-48">
+              <SelectTrigger className="w-48 cursor-pointer">
                 <SelectValue placeholder="Filter by group" />
               </SelectTrigger>
               <SelectContent>
