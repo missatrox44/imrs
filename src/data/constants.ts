@@ -75,6 +75,7 @@ export const navItems = [
   { to: '/observations', label: 'Observations' },
   { to: '/species', label: 'Species Index' },
   { to: '/gazetteer', label: 'Gazetteer' },
+  { to: '/weather', label: 'Weather' },
 ]
 
 export const externalLinks = [
