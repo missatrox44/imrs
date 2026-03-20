@@ -255,6 +255,12 @@ export function SpeciesDetails() {
                           target="_blank"
                           rel="noopener noreferrer"
                         >
+                          <span className="sr-only">
+                            {observation.species_guess ||
+                              observation.taxon?.preferred_common_name ||
+                              'Observation'}{' '}
+                            (opens in new tab)
+                          </span>
                           <Card className="border hover:shadow-lg transition-shadow cursor-pointer overflow-hidden">
                             <CardContent className="p-4">
                               {(() => {
@@ -265,7 +271,9 @@ export function SpeciesDetails() {
                                       src={photoUrl}
                                       alt={
                                         observation.species_guess ||
-                                        'Observation'
+                                        observation.taxon?.preferred_common_name ||
+                                        observation.taxon?.name ||
+                                        `Observation #${observation.id}`
                                       }
                                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                                       onError={(e) => {

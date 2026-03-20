@@ -1,29 +1,38 @@
-import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { useId } from 'react'
+import { Search } from 'lucide-react'
+import { Input } from '@/components/ui/input'
 
 interface SearchInputProps {
-  value: string;
-  onChange: (value: string) => void;
-  placeholder?: string;
-  className?: string;
+  value: string
+  onChange: (value: string) => void
+  placeholder?: string
+  className?: string
 }
 
 export const SearchInput = ({
   value,
   onChange,
-  placeholder = "Search…",
-  className = "",
+  placeholder = 'Search…',
+  className = '',
 }: SearchInputProps) => {
+  const id = useId()
   return (
-    <section className={`relative ${className}`}>
-      <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
+    <div className={`relative ${className}`}>
+      <label htmlFor={id} className="sr-only">
+        {placeholder}
+      </label>
+      <Search
+        className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4"
+        aria-hidden="true"
+      />
       <Input
+        id={id}
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value.slice(0, 100))}
         placeholder={placeholder}
         className="pl-10"
       />
-    </section>
-  );
-};
+    </div>
+  )
+}

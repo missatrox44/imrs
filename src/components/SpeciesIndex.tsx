@@ -124,24 +124,30 @@ const SpeciesIndex = () => {
             </p>
           </div>
 
-          <div className="hidden md:flex items-center gap-2 bg-muted/50 p-1 border">
+          <div
+            className="hidden md:flex items-center gap-2 bg-muted/50 p-1 border"
+            role="group"
+            aria-label="View mode"
+          >
             <button
               onClick={() => setView('grid')}
+              aria-label="Grid view"
+              aria-pressed={view === 'grid'}
               className={`p-2 transition-all ${view === 'grid'
                 ? 'bg-background shadow-sm text-foreground'
                 : 'text-muted-foreground hover:text-foreground'
                 }`}
-              title="Grid View"
             >
               <LayoutGrid className="w-4 h-4" />
             </button>
             <button
               onClick={() => setView('table')}
+              aria-label="Table view"
+              aria-pressed={view === 'table'}
               className={`p-2 transition-all ${view === 'table'
                 ? 'bg-background shadow-sm text-foreground'
                 : 'text-muted-foreground hover:text-foreground'
                 }`}
-              title="Table View"
             >
               <TableIcon className="w-4 h-4" />
             </button>
@@ -168,7 +174,11 @@ const SpeciesIndex = () => {
           onSortChange={setSortDirection}
         />
 
-        <div className="mb-4 text-sm text-muted-foreground">
+        <div
+          className="mb-4 text-sm text-muted-foreground"
+          role="status"
+          aria-live="polite"
+        >
           Showing {sorted.length}{' '}
           {category === 'all' ? 'species' : category}
         </div>

@@ -48,3 +48,20 @@ Prettier enforced: no semicolons, single quotes, trailing commas.
 ## Environment Variables
 
 Copy `.env.sample` to `.env`. For local dev, only `DATABASE_URL` is needed (e.g., `file:local.db`). Production requires `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN`.
+
+## Accessibility
+
+**Target**: WCAG 2.1 AA compliance.
+
+### Key Patterns
+- **Skip navigation**: `<a href="#main-content">` as first child of `<body>` in `__root.tsx`.
+- **Form labeling**: Every `<input>` has a `<label>` (visually hidden via `sr-only` when no visible label). Use `useId()` for unique IDs.
+- **aria-current="page"**: Active nav links declare `aria-current="page"`.
+- **aria-live regions**: Dynamic result counts use `role="status" aria-live="polite"`.
+- **External links**: All `target="_blank"` links include `<span className="sr-only"> (opens in new tab)</span>`.
+- **Semantic tables**: `<th scope="col">`, `<caption>` on all data tables.
+- **Keyboard access**: Interactive elements must be focusable and operable via Enter/Space.
+- **Reduced motion**: Animations use `useReducedMotion()` from framer-motion.
+
+### Lint Rules
+- `eslint-plugin-jsx-a11y` recommended ruleset enforced via ESLint flat config.

@@ -1,21 +1,9 @@
-// import useEffect from 'react'
-import { motion, useAnimation } from 'framer-motion'
+import { motion, useAnimation, useReducedMotion } from 'framer-motion'
 import { Card, CardContent } from '@/components/ui/card'
 import { CAROUSEL_IMAGES } from '@/data/constants'
 
 export const ImageCarousel = () => {
-  //   const controls = useAnimation()
-
-  // useEffect(() => {
-  //   controls.start({
-  //     x: ['0%', '-50%'],
-  //     transition: {
-  //       ease: 'linear',
-  //       duration: 45,
-  //       repeat: Infinity,
-  //     },
-  //   })
-  // }, [])
+  const shouldReduceMotion = useReducedMotion()
 
   return (
     <motion.section
@@ -28,21 +16,25 @@ export const ImageCarousel = () => {
         -mx-[50vw]
         overflow-hidden
       "
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.6 }}
+      transition={{ duration: shouldReduceMotion ? 0 : 0.6 }}
     >
       <section className="overflow-hidden">
         <motion.div
           className="flex gap-4 w-max"
-          animate={{ x: ['0%', '-50%'] }}
-          transition={{
-            ease: 'linear',
-            duration: 90,
-            repeat: Infinity,
-            repeatType: 'loop',
-          }}
+          animate={shouldReduceMotion ? {} : { x: ['0%', '-50%'] }}
+          transition={
+            shouldReduceMotion
+              ? {}
+              : {
+                  ease: 'linear',
+                  duration: 90,
+                  repeat: Infinity,
+                  repeatType: 'loop',
+                }
+          }
           // whileHover={{ animationPlayState: 'paused' }}
         >
           {/* <motion.div
