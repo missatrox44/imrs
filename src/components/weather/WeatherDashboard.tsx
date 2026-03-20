@@ -1,10 +1,17 @@
 import { Route } from '@/routes/weather'
 import WeatherFilterBar from './WeatherFilterBar'
+import WeatherStatCards from './WeatherStatCards'
+import WeatherTimeSeries from './WeatherTimeSeries'
+import { useWeatherSummary, useWeatherDaily } from '@/hooks/useWeatherData'
 import type { WeatherFilters } from '@/types/weather'
 
 export default function WeatherDashboard() {
   const { year, season, variable } = Route.useSearch()
   const filters: WeatherFilters = { year, season, variable }
+
+  const { data: summary, isLoading: summaryLoading } =
+    useWeatherSummary(filters)
+  const { data: daily, isLoading: dailyLoading } = useWeatherDaily(filters)
 
   return (
     <main id="main-content" className="container mx-auto px-4 py-8">
@@ -20,10 +27,17 @@ export default function WeatherDashboard() {
         <WeatherFilterBar />
       </section>
 
-      <p className="text-sm text-muted-foreground">
-        Weather dashboard charts coming soon. Active filters: year={filters.year}
-        , season={filters.season}, variable={filters.variable}
-      </p>
+      <section className="mb-8">
+        <WeatherStatCards summary={summary} isLoading={summaryLoading} />
+      </section>
+
+      <section className="mb-8">
+        <WeatherTimeSeries
+          data={daily}
+          variable={variable}
+          isLoading={dailyLoading}
+        />
+      </section>
     </main>
   )
 }
