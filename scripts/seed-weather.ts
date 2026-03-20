@@ -92,7 +92,7 @@ function insertReadings(db: Database.Database) {
   `)
 
   const insertMany = db.transaction(
-    (rows: (string | number | null)[][]) => {
+    (rows: Array<Array<string | number | null>>) => {
       for (const row of rows) {
         insert.run(...row)
       }
@@ -113,15 +113,15 @@ function insertReadings(db: Database.Database) {
     console.log(`Reading ${fileName}...`)
     const wb = XLSX.readFile(filePath)
     const ws = wb.Sheets[wb.SheetNames[0]]
-    const data = XLSX.utils.sheet_to_json<(string | number | null)[]>(ws, {
+    const data = XLSX.utils.sheet_to_json<Array<string | number | null>>(ws, {
       header: 1,
     })
 
     // Row 0: title, Row 1: headers, Row 2+: data
-    const rows: (string | number | null)[][] = []
+    const rows: Array<Array<string | number | null>> = []
     for (let i = 2; i < data.length; i++) {
       const r = data[i]
-      if (!r || r.length < 2) continue
+      if (r.length < 2) continue
 
       const serialDate = r[1]
       if (typeof serialDate !== 'number') continue

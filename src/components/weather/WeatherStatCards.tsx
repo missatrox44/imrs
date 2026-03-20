@@ -1,10 +1,10 @@
-import { Card, CardContent } from '@/components/ui/card'
-import { Thermometer, CloudRain, Droplets, Wind } from 'lucide-react'
-import { WEATHER_COLORS } from '@/lib/weatherColors'
+import { CloudRain, Droplets, Thermometer, Wind } from 'lucide-react'
 import type { WeatherSummary } from '@/types/weather'
+import { Card, CardContent } from '@/components/ui/card'
+import { WEATHER_COLORS } from '@/lib/weatherColors'
 
 interface SparklineProps {
-  data: number[]
+  data: Array<number>
   color: string
   width?: number
   height?: number
@@ -49,7 +49,7 @@ interface StatCardProps {
   value: string
   unit: string
   icon: React.ReactNode
-  sparkData: number[]
+  sparkData: Array<number>
   color: string
   borderColor: string
 }

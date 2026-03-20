@@ -1,7 +1,7 @@
 import type {
+  MonsoonComparison,
   WeatherDailyRow,
   WeatherHourlyRow,
-  MonsoonComparison,
   WindSpeedBin,
 } from '@/types/weather'
 

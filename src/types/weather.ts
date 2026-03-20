@@ -57,10 +57,10 @@ export interface WeatherSummary {
   avgHumidity: number | null
   avgWindSpeed: number | null
   sparklines: {
-    temp: number[]
-    precip: number[]
-    humidity: number[]
-    wind: number[]
+    temp: Array<number>
+    precip: Array<number>
+    humidity: Array<number>
+    wind: Array<number>
   }
 }
 

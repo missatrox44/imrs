@@ -13,16 +13,16 @@ export const Route = createFileRoute('/weather')({
   ssr: 'data-only',
 
   validateSearch: (search: Record<string, unknown>): WeatherSearch => ({
-    year: (search.year as string) || 'all',
-    season: (search.season as Season) || 'all',
-    variable: (search.variable as WeatherVariable) || 'all',
+    year: (search.year as string | undefined) ?? 'all',
+    season: (search.season as Season | undefined) ?? 'all',
+    variable: (search.variable as WeatherVariable | undefined) ?? 'all',
   }),
 
   loader: async ({ location }) => {
     const params = new URLSearchParams({
       view: 'summary',
-      year: (location.search as WeatherSearch).year || 'all',
-      season: (location.search as WeatherSearch).season || 'all',
+      year: (location.search as WeatherSearch).year,
+      season: (location.search as WeatherSearch).season,
     })
     const res = await fetch(`/api/weather?${params}`)
     if (!res.ok) throw new Error('Failed to fetch weather data')

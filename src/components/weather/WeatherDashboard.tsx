@@ -1,9 +1,9 @@
-import { Route } from '@/routes/weather'
 import WeatherFilterBar from './WeatherFilterBar'
 import WeatherStatCards from './WeatherStatCards'
 import WeatherTimeSeries from './WeatherTimeSeries'
-import { useWeatherSummary, useWeatherDaily } from '@/hooks/useWeatherData'
 import type { WeatherFilters } from '@/types/weather'
+import { Route } from '@/routes/weather'
+import { useWeatherDaily, useWeatherSummary } from '@/hooks/useWeatherData'
 
 export default function WeatherDashboard() {
   const { year, season, variable } = Route.useSearch()

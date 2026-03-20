@@ -2,15 +2,15 @@ import { getSeasonMonthsClause } from '@/lib/weatherUtils'
 
 interface WhereClause {
   sql: string
-  args: (string | number)[]
+  args: Array<string | number>
 }
 
 export function buildWhereClause(
   year: string,
   season: string,
 ): WhereClause {
-  const conditions: string[] = []
-  const args: (string | number)[] = []
+  const conditions: Array<string> = []
+  const args: Array<string | number> = []
 
   if (year !== 'all') {
     const years = year.split(',').map(Number).filter((n) => !Number.isNaN(n))
@@ -118,8 +118,8 @@ export function windDistributionQueryFromReadings(
   year: string,
   season: string,
 ) {
-  const conditions: string[] = ['wind_speed IS NOT NULL']
-  const args: (string | number)[] = []
+  const conditions: Array<string> = ['wind_speed IS NOT NULL']
+  const args: Array<string | number> = []
 
   if (year !== 'all') {
     const years = year.split(',').map(Number).filter((n) => !Number.isNaN(n))

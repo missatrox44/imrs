@@ -1,11 +1,11 @@
-import { useQuery, keepPreviousData } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import type {
-  WeatherFilters,
+  MonsoonComparison,
   WeatherDailyRow,
+  WeatherFilters,
   WeatherHourlyRow,
   WeatherSummary,
   WindSpeedBin,
-  MonsoonComparison,
 } from '@/types/weather'
 
 const WEATHER_STALE_TIME = 1000 * 60 * 60 * 24 * 30 // 30 days
@@ -43,7 +43,7 @@ export function useWeatherSummary(filters: WeatherFilters) {
 export function useWeatherDaily(filters: WeatherFilters) {
   return useQuery({
     queryKey: weatherQueryKey('daily', filters),
-    queryFn: () => fetchWeather<WeatherDailyRow[]>('daily', filters),
+    queryFn: () => fetchWeather<Array<WeatherDailyRow>>('daily', filters),
     staleTime: WEATHER_STALE_TIME,
     gcTime: WEATHER_GC_TIME,
     placeholderData: keepPreviousData,
@@ -53,7 +53,7 @@ export function useWeatherDaily(filters: WeatherFilters) {
 export function useWeatherHourly(filters: WeatherFilters) {
   return useQuery({
     queryKey: weatherQueryKey('hourly', filters),
-    queryFn: () => fetchWeather<WeatherHourlyRow[]>('hourly', filters),
+    queryFn: () => fetchWeather<Array<WeatherHourlyRow>>('hourly', filters),
     staleTime: WEATHER_STALE_TIME,
     gcTime: WEATHER_GC_TIME,
     placeholderData: keepPreviousData,
@@ -64,7 +64,7 @@ export function useWeatherMonsoon() {
   return useQuery({
     queryKey: ['weather', 'monsoon'],
     queryFn: () =>
-      fetchWeather<MonsoonComparison[]>('monsoon', {
+      fetchWeather<Array<MonsoonComparison>>('monsoon', {
         year: 'all',
         season: 'all',
         variable: 'all',
@@ -77,7 +77,7 @@ export function useWeatherMonsoon() {
 export function useWeatherWind(filters: WeatherFilters) {
   return useQuery({
     queryKey: weatherQueryKey('wind', filters),
-    queryFn: () => fetchWeather<WindSpeedBin[]>('wind', filters),
+    queryFn: () => fetchWeather<Array<WindSpeedBin>>('wind', filters),
     staleTime: WEATHER_STALE_TIME,
     gcTime: WEATHER_GC_TIME,
     placeholderData: keepPreviousData,

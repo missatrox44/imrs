@@ -1,13 +1,13 @@
 import { useNavigate } from '@tanstack/react-router'
+import { RotateCcw } from 'lucide-react'
+import type { Season, WeatherVariable } from '@/types/weather'
 import { Route } from '@/routes/weather'
 import { Button } from '@/components/ui/button'
 import { SEASONS } from '@/lib/weatherUtils'
-import type { Season, WeatherVariable } from '@/types/weather'
-import { RotateCcw } from 'lucide-react'
 
 const YEARS = ['all', '2020', '2021', '2022', '2023', '2024'] as const
 
-const VARIABLES: { key: WeatherVariable; label: string }[] = [
+const VARIABLES: Array<{ key: WeatherVariable; label: string }> = [
   { key: 'all', label: 'All' },
   { key: 'temp', label: 'Temperature' },
   { key: 'humidity', label: 'Humidity' },
@@ -17,7 +17,7 @@ const VARIABLES: { key: WeatherVariable; label: string }[] = [
   { key: 'dewpoint', label: 'Dew Point' },
 ]
 
-const SEASON_OPTIONS: { key: Season; label: string }[] = [
+const SEASON_OPTIONS: Array<{ key: Season; label: string }> = [
   { key: 'all', label: 'All Seasons' },
   ...Object.entries(SEASONS).map(([key, val]) => ({
     key: key as Season,

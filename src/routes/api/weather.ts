@@ -1,4 +1,5 @@
 import { createServerFileRoute } from '@tanstack/react-start/server'
+import type { WeatherSummary } from '@/types/weather'
 import { getTurso } from '@/server/turso'
 import { getWeatherDb } from '@/server/db'
 import {
@@ -9,13 +10,12 @@ import {
 } from '@/server/weatherMapper'
 import {
   dailyQuery,
-  summaryQuery,
-  sparklineQuery,
   hourlyQuery,
   monsoonQuery,
+  sparklineQuery,
+  summaryQuery,
   windDistributionQueryFromReadings,
 } from '@/server/weatherQueries'
-import type { WeatherSummary } from '@/types/weather'
 
 const CACHE_HEADERS = {
   'Content-Type': 'application/json',
@@ -23,25 +23,25 @@ const CACHE_HEADERS = {
 }
 
 interface QueryResult {
-  rows: Record<string, unknown>[]
+  rows: Array<Record<string, unknown>>
 }
 
 async function executeQuery(
   sql: string,
-  args: (string | number)[],
+  args: Array<string | number>,
 ): Promise<QueryResult> {
   // Try Turso first
   try {
     const client = getTurso()
     const result = await client.execute({ sql, args })
-    return { rows: result.rows as unknown as Record<string, unknown>[] }
+    return { rows: result.rows as unknown as Array<Record<string, unknown>> }
   } catch (tursoError) {
     console.warn('[API/weather] Turso failed, falling back to local SQLite')
   }
 
   // Fallback to local SQLite
   const db = getWeatherDb()
-  const rows = db.prepare(sql).all(...args) as Record<string, unknown>[]
+  const rows = db.prepare(sql).all(...args) as Array<Record<string, unknown>>
   return { rows }
 }
 
@@ -65,10 +65,10 @@ export const ServerRoute = createServerFileRoute('/api/weather').methods({
           // Downsample sparklines to ~30 points
           const sparkRows = sparkResult.rows
           const step = Math.max(1, Math.floor(sparkRows.length / 30))
-          const temp: number[] = []
-          const precip: number[] = []
-          const humidity: number[] = []
-          const wind: number[] = []
+          const temp: Array<number> = []
+          const precip: Array<number> = []
+          const humidity: Array<number> = []
+          const wind: Array<number> = []
 
           for (let i = 0; i < sparkRows.length; i += step) {
             const r = sparkRows[i]
