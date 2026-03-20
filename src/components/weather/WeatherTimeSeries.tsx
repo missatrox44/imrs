@@ -1,25 +1,25 @@
 import { useMemo } from 'react'
 import {
-  ComposedChart,
   Area,
-  Line,
   Bar,
+  Brush,
+  CartesianGrid,
+  ComposedChart,
+  Legend,
+  Line,
+  ReferenceArea,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  Brush,
-  ReferenceArea,
 } from 'recharts'
+import WeatherChartCard from './WeatherChartCard'
+import type { WeatherDailyRow, WeatherVariable } from '@/types/weather'
 import { WEATHER_COLORS } from '@/lib/weatherColors'
 import { isMonsoonMonth } from '@/lib/weatherUtils'
-import type { WeatherDailyRow, WeatherVariable } from '@/types/weather'
-import WeatherChartCard from './WeatherChartCard'
 
 interface WeatherTimeSeriesProps {
-  data: WeatherDailyRow[] | undefined
+  data: Array<WeatherDailyRow> | undefined
   variable: WeatherVariable
   isLoading: boolean
 }
@@ -77,7 +77,7 @@ export default function WeatherTimeSeries({
   // Find monsoon period ranges for highlighting
   const monsoonRanges = useMemo(() => {
     if (!data) return []
-    const ranges: { start: string; end: string }[] = []
+    const ranges: Array<{ start: string; end: string }> = []
     let currentStart: string | null = null
 
     for (const row of data) {
