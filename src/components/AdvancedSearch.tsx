@@ -1,4 +1,4 @@
-import { useId, useMemo } from 'react'
+import { useMemo } from 'react'
 import { ArrowUpDown, Filter, RotateCcw, SlidersHorizontal } from 'lucide-react'
 import type { Category } from '@/types/category'
 import type { Species } from '@/types/species'

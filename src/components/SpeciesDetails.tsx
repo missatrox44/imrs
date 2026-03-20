@@ -17,7 +17,6 @@ import { Badge } from '@/components/ui/badge'
 import { Route } from '@/routes/species.$speciesId'
 import { formatDate } from '@/lib/formatDate'
 import { getPhotoUrl } from '@/lib/getPhotoUrl'
-import { ALL_CATEGORIES } from '@/data/constants'
 
 interface TaxonomyRow {
   rank: string
@@ -335,7 +334,7 @@ export function SpeciesDetails() {
               </CardHeader>
               <CardContent className="p-0">
                 <div className="divide-y divide-border">
-                  {taxonomyRows.map((row, index) => (
+                  {taxonomyRows.map((row) => (
                     <div
                       key={row.rank}
                       className="px-4 py-3 hover:bg-muted/30 transition-colors"

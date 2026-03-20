@@ -1,4 +1,4 @@
-import { motion, useAnimation, useReducedMotion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import { Card, CardContent } from '@/components/ui/card'
 import { CAROUSEL_IMAGES } from '@/data/constants'
 
