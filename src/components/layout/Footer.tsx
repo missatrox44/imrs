@@ -31,7 +31,7 @@ export const Footer = () => {
                 <li key={item.to}>
                   <Link
                     to={item.to}
-                    className="text-muted-foreground hover:text-primary transition-colors"
+                    className="text-muted-foreground hover:text-primary transition-colors cursor-pointer"
                   >
                     {item.label}
                   </Link>
@@ -52,7 +52,7 @@ export const Footer = () => {
                     href={link.to}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-1"
+                    className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-1 cursor-pointer"
                   >
                     {link.label} <ExternalLink className="w-3 h-3" />
                   </a>
@@ -68,7 +68,7 @@ export const Footer = () => {
                   href="https://github.com/missatrox44/imrs/issues"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-1"
+                  className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-1 cursor-pointer"
                 >
                   <Bug className="w-3 h-3" /> Report an Issue
                 </a>
@@ -84,7 +84,7 @@ export const Footer = () => {
               href="https://github.com/missatrox44/imrs"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-foreground transition-colors inline-flex items-center gap-1"
+              className="hover:text-foreground transition-colors inline-flex items-center gap-1 cursor-pointer"
             >
               GitHub <Github className="w-3 h-3" />
             </a>
@@ -93,7 +93,7 @@ export const Footer = () => {
               href="https://sarabaqla.dev"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-foreground transition-colors inline-flex items-center gap-1"
+              className="hover:text-foreground transition-colors inline-flex items-center gap-1 cursor-pointer"
             >
               sarabaqla.dev
             </a>
