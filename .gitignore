@@ -19,3 +19,5 @@ specimens.csv
 specimens.tsv
 .claude
 /imrs_boundary.kml
+*.sql
+specimens.json
