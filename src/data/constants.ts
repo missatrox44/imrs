@@ -80,7 +80,8 @@ export const navItems = [
 
 export const externalLinks = [
   { to: 'https://www.utep.edu/science/indio/', label: 'IMRS' },
-  { to: 'https://www.inaturalist.org/', label: 'iNaturalist' },
+  // { to: 'https://www.inaturalist.org/', label: 'iNaturalist' },
+  { to: 'https://www.inaturalist.org/places/indio-mountains-research-station', label: 'iNaturalist'}
 ]
 
 // export const otherLinks = [

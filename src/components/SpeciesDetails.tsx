@@ -12,7 +12,7 @@ import type { Observation } from '@/types/observation'
 import type { Species } from '@/types/species'
 
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Route } from '@/routes/species.$speciesId'
 import { formatDate } from '@/lib/formatDate'
@@ -233,6 +233,7 @@ export function SpeciesDetails() {
             <Card className="gradient-card shadow-card">
               <CardHeader>
                 <CardTitle>Recent Observations</CardTitle>
+                <CardDescription>Sourced from iNaturalist, not necessarily observed at IMRS</CardDescription>
               </CardHeader>
 
               <CardContent>
