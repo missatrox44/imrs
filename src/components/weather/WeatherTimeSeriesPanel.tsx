@@ -24,6 +24,7 @@ interface SeriesConfig {
   strokeDasharray?: string
   strokeOpacity?: number
   fillOpacity?: number
+  baseValue?: number | 'dataMin' | 'dataMax'
   fill?: string
   barSize?: number
   legendType?: 'none' | 'line'
@@ -70,11 +71,22 @@ function CustomTooltip({ active, payload, label }: any) {
   return (
     <div className="bg-card border border-border p-3 text-xs shadow-md">
       <p className="font-medium mb-1">{formatTooltipDate(label)}</p>
-      {payload.map((entry: any) => (
-        <p key={entry.dataKey} style={{ color: entry.color }}>
-          {entry.name}: {entry.value != null ? Number(entry.value).toFixed(1) : '—'}
-        </p>
-      ))}
+      {payload.map((entry: any) => {
+        if (Array.isArray(entry.value)) {
+          const [low, high] = entry.value
+          return (
+            <div key={entry.dataKey} style={{ color: entry.color }}>
+              <p>Daily Low (°C)': {low != null ? Number(low).toFixed(1) : '—'}</p>
+              <p>Daily High (°C)': {high != null ? Number(high).toFixed(1) : '—'}</p>
+            </div>
+          )
+        }
+        return (
+          <p key={entry.dataKey} style={{ color: entry.color }}>
+            {entry.name}: {entry.value != null ? Number(entry.value).toFixed(1) : '—'}
+          </p>
+        )
+      })}
     </div>
   )
 }
@@ -106,10 +118,11 @@ export default function WeatherTimeSeriesPanel({
           </span>
         )}
       </div>
+      <div style={{ overflow: 'visible' }} className="[&_svg]:overflow-visible">
       <ResponsiveContainer width="100%" height={height}>
         <ComposedChart
           data={data}
-          margin={{ top: 4, right: hasRightAxis ? 10 : 30, left: 0, bottom: 0 }}
+          margin={{ top: 4, right: 40, left: 10, bottom: showBrush ? 20 : 0 }}
           syncId="weather"
         >
           <CartesianGrid stroke={WEATHER_COLORS.gridLine} strokeDasharray="3 3" />
@@ -144,7 +157,11 @@ export default function WeatherTimeSeriesPanel({
           )}
 
         <Tooltip content={<CustomTooltip />} />
-        <Legend wrapperStyle={{ fontSize: 12 }} iconType="line" />
+        <Legend
+          wrapperStyle={{ fontSize: 12 }}
+          iconType="line"
+          verticalAlign={showBrush ? 'top' : 'bottom'}
+        />
 
         {monsoonRanges.map((range, i) => (
           <ReferenceArea
@@ -172,6 +189,7 @@ export default function WeatherTimeSeriesPanel({
                 strokeWidth={s.strokeWidth ?? 0}
                 fill={s.fill ?? s.color}
                 fillOpacity={s.fillOpacity ?? 0.15}
+                baseValue={s.baseValue}
                 name={s.name}
                 dot={s.dot ?? false}
                 activeDot={s.activeDot ?? false}
@@ -213,7 +231,7 @@ export default function WeatherTimeSeriesPanel({
         {showBrush && (
           <Brush
             dataKey="date"
-            height={30}
+            height={36}
             stroke={WEATHER_COLORS.gridLine}
             tickFormatter={formatDate}
             travellerWidth={8}
@@ -228,6 +246,12 @@ export default function WeatherTimeSeriesPanel({
         )}
       </ComposedChart>
     </ResponsiveContainer>
+    </div>
+    {showBrush && (
+      <p className="text-center text-xs text-muted-foreground mt-1">
+        Drag the handles or slide the bar to zoom all panels
+      </p>
+    )}
     </div>
   )
 }

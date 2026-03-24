@@ -20,8 +20,10 @@ export default function WeatherTimeSeries({
     if (!data) return []
     return data.map((row) => ({
       date: row.date_local,
-      tempMin: row.temp_min,
-      tempMax: row.temp_max,
+      tempRange:
+        row.temp_min != null && row.temp_max != null
+          ? [row.temp_min, row.temp_max]
+          : null,
       tempAvg: row.temp_avg,
       dewpoint: row.dewpt_avg,
       humidity: row.rh_avg,
@@ -86,22 +88,13 @@ export default function WeatherTimeSeries({
           tickInterval={tickInterval}
           series={[
             {
-              dataKey: 'tempMax',
+              dataKey: 'tempRange',
               type: 'area',
-              color: WEATHER_COLORS.tempBand,
-              fill: WEATHER_COLORS.tempBand,
-              fillOpacity: 1,
-              name: 'Temp Max',
-              legendType: 'none',
-            },
-            {
-              dataKey: 'tempMin',
-              type: 'area',
-              color: 'var(--background)',
-              fill: 'var(--background)',
-              fillOpacity: 1,
-              name: 'Temp Min',
-              legendType: 'none',
+              color: WEATHER_COLORS.temp,
+              fill: WEATHER_COLORS.temp,
+              fillOpacity: 0.15,
+              strokeWidth: 0,
+              name: 'Daily Range (°C)',
             },
             {
               dataKey: 'tempAvg',
@@ -174,10 +167,9 @@ export default function WeatherTimeSeries({
             {
               dataKey: 'gustMax',
               type: 'line',
-              color: WEATHER_COLORS.wind,
+              color: WEATHER_COLORS.gust,
               strokeWidth: 1,
               strokeDasharray: '4 2',
-              strokeOpacity: 0.5,
               name: 'Gust Max (km/hr)',
             },
           ]}
@@ -186,7 +178,7 @@ export default function WeatherTimeSeries({
         {/* Panel 4: Pressure (mm Hg) — with x-axis labels and brush */}
         <WeatherTimeSeriesPanel
           data={chartData}
-          height={210}
+          height={230}
           yAxisLabel="mm Hg"
           showXAxis={true}
           showBrush={true}

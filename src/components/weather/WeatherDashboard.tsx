@@ -19,7 +19,7 @@ export default function WeatherDashboard() {
         <h1 className="text-3xl font-bold">Climate &amp; Weather</h1>
         <p className="text-sm text-muted-foreground">
           Hill Station &middot; Indio Mountains Research Station &middot;
-          2020&ndash;2024 &middot; 15-minute intervals
+          2020&ndash;2024 
         </p>
       </div>
 
