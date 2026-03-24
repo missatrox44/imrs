@@ -78,7 +78,7 @@ export default function WeatherTimeSeries({
         {/* Panel 1: Temperature + Dew Point (°C) */}
         <WeatherTimeSeriesPanel
           data={chartData}
-          height={220}
+          height={200}
           yAxisLabel="°C"
           showXAxis={false}
           showBrush={false}
@@ -148,7 +148,7 @@ export default function WeatherTimeSeries({
         {/* Panel 3: Wind Speed + Gust Speed (km/hr) */}
         <WeatherTimeSeriesPanel
           data={chartData}
-          height={180}
+          height={200}
           yAxisLabel="km/hr"
           showXAxis={false}
           showBrush={false}
@@ -178,7 +178,7 @@ export default function WeatherTimeSeries({
         {/* Panel 4: Pressure (mm Hg) — with x-axis labels and brush */}
         <WeatherTimeSeriesPanel
           data={chartData}
-          height={230}
+          height={200}
           yAxisLabel="mm Hg"
           showXAxis={true}
           showBrush={true}
