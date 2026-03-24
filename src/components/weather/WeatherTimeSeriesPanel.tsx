@@ -122,7 +122,7 @@ export default function WeatherTimeSeriesPanel({
       <ResponsiveContainer width="100%" height={height}>
         <ComposedChart
           data={data}
-          margin={{ top: 4, right: 40, left: 10, bottom: showBrush ? 20 : 0 }}
+          margin={{ top: 4, right: 40, left: 10, bottom: 0 }}
           syncId="weather"
         >
           <CartesianGrid stroke={WEATHER_COLORS.gridLine} strokeDasharray="3 3" />
@@ -157,11 +157,13 @@ export default function WeatherTimeSeriesPanel({
           )}
 
         <Tooltip content={<CustomTooltip />} />
-        <Legend
-          wrapperStyle={{ fontSize: 12 }}
-          iconType="line"
-          verticalAlign={showBrush ? 'top' : 'bottom'}
-        />
+        {!showBrush && (
+          <Legend
+            wrapperStyle={{ fontSize: 12 }}
+            iconType="line"
+            verticalAlign="bottom"
+          />
+        )}
 
         {monsoonRanges.map((range, i) => (
           <ReferenceArea
@@ -228,29 +230,56 @@ export default function WeatherTimeSeriesPanel({
           )
         })}
 
-        {showBrush && (
-          <Brush
-            dataKey="date"
-            height={36}
-            stroke={WEATHER_COLORS.gridLine}
-            tickFormatter={formatDate}
-            travellerWidth={8}
-            startIndex={brushIndex?.[0]}
-            endIndex={brushIndex?.[1]}
-            onChange={(range: any) => {
-              if (range?.startIndex != null && range?.endIndex != null) {
-                onBrushChange(range.startIndex, range.endIndex)
-              }
-            }}
-          />
-        )}
       </ComposedChart>
     </ResponsiveContainer>
     </div>
     {showBrush && (
-      <p className="text-center text-xs text-muted-foreground mt-1">
-        Drag the handles or slide the bar to zoom all panels
-      </p>
+      <>
+        <div className="flex justify-center gap-4 py-1" style={{ fontSize: 12 }}>
+          {series.map((s) => (
+            <div key={s.dataKey} className="flex items-center gap-1.5">
+              <svg width="14" height="14">
+                <line
+                  x1="0"
+                  y1="7"
+                  x2="14"
+                  y2="7"
+                  stroke={s.color}
+                  strokeWidth={2}
+                />
+              </svg>
+              <span style={{ color: s.color }}>{s.name}</span>
+            </div>
+          ))}
+        </div>
+        <div style={{ overflow: 'visible' }} className="[&_svg]:overflow-visible">
+          <ResponsiveContainer width="100%" height={56}>
+            <ComposedChart
+              data={data}
+              margin={{ top: 0, right: 40, left: 10, bottom: 0 }}
+              syncId="weather"
+            >
+              <Brush
+                dataKey="date"
+                height={36}
+                stroke={WEATHER_COLORS.gridLine}
+                tickFormatter={formatDate}
+                travellerWidth={8}
+                startIndex={brushIndex?.[0]}
+                endIndex={brushIndex?.[1]}
+                onChange={(range: any) => {
+                  if (range?.startIndex != null && range?.endIndex != null) {
+                    onBrushChange(range.startIndex, range.endIndex)
+                  }
+                }}
+              />
+            </ComposedChart>
+          </ResponsiveContainer>
+        </div>
+        <p className="text-center text-xs text-muted-foreground mt-1">
+          Drag the handles or slide the bar to zoom all panels
+        </p>
+      </>
     )}
     </div>
   )
