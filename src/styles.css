@@ -81,7 +81,7 @@ code {
 
     /* UI colors */
     --muted: 40 25% 88%;
-    --muted-foreground: 25 15% 45%;
+    --muted-foreground: 25 15% 38%;
 
     --card: 42 40% 96%; /* Card stock paper */
     --card-foreground: 25 20% 15%;
@@ -135,7 +135,7 @@ code {
     --secondary-foreground: 42 30% 85%;
 
     --muted: 25 15% 18%;
-    --muted-foreground: 40 20% 55%;
+    --muted-foreground: 40 20% 58%;
 
     --accent: 35 40% 50%;
     --accent-foreground: 42 30% 85%;

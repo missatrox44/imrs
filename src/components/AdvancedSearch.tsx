@@ -106,9 +106,9 @@ export function AdvancedSearch({
 
       {/* Quick Category Filters */}
       <div className="mb-4 pb-4 border-b border-border">
-        <label className="text-xs text-muted-foreground font-medium mb-2 block">
+        <span className="text-xs text-muted-foreground font-medium mb-2 block">
           Quick Category (click to filter)
-        </label>
+        </span>
 
         <div className="flex flex-wrap gap-2">
           <Button
@@ -136,19 +136,23 @@ export function AdvancedSearch({
       </div>
 
       {/* Taxonomic Filters */}
-      <label className="text-xs text-muted-foreground font-medium mb-2 block">
+      <span className="text-xs text-muted-foreground font-medium mb-2 block">
         Taxonomic Filters
-      </label>
+      </span>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3">
         {TAXONOMIC_RANKS.map(({ key, label }) => {
           const options = taxonomicOptions[key]
           const selectedValue = taxonomicFilters[key]
+          const filterId = `filter-${key}`
 
           return (
             <div key={key} className="space-y-1">
-              <label className="text-xs text-muted-foreground font-medium flex items-center gap-1">
-                <Filter className="w-3 h-3" /> {label}
+              <label
+                htmlFor={filterId}
+                className="text-xs text-muted-foreground font-medium flex items-center gap-1"
+              >
+                <Filter className="w-3 h-3" aria-hidden="true" /> {label}
               </label>
 
               <Select
@@ -157,7 +161,10 @@ export function AdvancedSearch({
                   handleFilterChange(key, val === 'all' ? null : val)
                 }
               >
-                <SelectTrigger className="h-8 text-xs cursor-pointer">
+                <SelectTrigger
+                  id={filterId}
+                  className="h-8 text-xs cursor-pointer"
+                >
                   <SelectValue placeholder="All" />
                 </SelectTrigger>
                 <SelectContent>
@@ -187,7 +194,10 @@ export function AdvancedSearch({
           value={sortDirection}
           onValueChange={(val) => onSortChange(val as 'asc' | 'desc')}
         >
-          <SelectTrigger className="h-8 w-30 text-xs cursor-pointer">
+          <SelectTrigger
+            aria-label="Sort direction"
+            className="h-8 w-30 text-xs cursor-pointer"
+          >
             <SelectValue />
           </SelectTrigger>
           <SelectContent>

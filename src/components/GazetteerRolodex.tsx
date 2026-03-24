@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, ChevronLeft, ChevronRight, MapPin, Mountain } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import type { GazetteerEntry } from "@/types/gazetteer";
@@ -17,6 +17,7 @@ export const hasCoordinates = (
 
 export const GazetteerRolodex = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const shouldReduceMotion = useReducedMotion();
 
   const sortedEntries = useMemo(() => {
     return [...GAZETTEER_ROLODEX].sort((a, b) => a.name.localeCompare(b.name));
@@ -51,6 +52,7 @@ export const GazetteerRolodex = () => {
             size="icon"
             className="cursor-pointer"
             onClick={prevCard}
+            aria-label="Previous location"
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
@@ -62,6 +64,7 @@ export const GazetteerRolodex = () => {
             size="icon"
             className="cursor-pointer"
             onClick={nextCard}
+            aria-label="Next location"
           >
             <ChevronRight className="h-4 w-4" />
           </Button>
@@ -97,11 +100,11 @@ export const GazetteerRolodex = () => {
                     rotateX: offset < 0 ? -15 : 15,
                     opacity: 0 
                   }}
-                  transition={{ 
-                    type: "spring", 
-                    stiffness: 300, 
-                    damping: 30 
-                  }}
+                  transition={
+                    shouldReduceMotion
+                      ? { duration: 0 }
+                      : { type: 'spring', stiffness: 300, damping: 30 }
+                  }
                   style={{ 
                     transformStyle: "preserve-3d",
                     pointerEvents: offset === 0 ? "auto" : "none"

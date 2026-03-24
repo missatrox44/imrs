@@ -12,9 +12,12 @@ count.txt
 todos.json
 specimens.csv
 .env.development.local
-imrs-species.db
-imrs-species.db-shm
-imrs-species.db-wal
+*.xlsx
+*.db
+*.db-shm
+*.db-wal
 specimens.tsv
 .claude
 /imrs_boundary.kml
+*.sql
+specimens.json

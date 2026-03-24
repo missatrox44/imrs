@@ -125,7 +125,10 @@ const Observations = ({ initialPage }: ObservationsProps) => {
             Recent Observations
           </h1>
           <p className="text-muted-foreground">
-            Biodiversity observations on Indio Mountains Research Station from <a rel="noreferrer noopener" target="_blank" href="https://www.inaturalist.org/" >iNaturalist</a>.
+            Biodiversity observations on Indio Mountains Research Station from{' '}
+            <a rel="noreferrer noopener" target="_blank" href="https://www.inaturalist.org/">
+              iNaturalist<span className="sr-only"> (opens in new tab)</span>
+            </a>.
           </p>
           <p className="text-muted-foreground font-bold">
             Click any observation card to view full observation details.
@@ -135,7 +138,11 @@ const Observations = ({ initialPage }: ObservationsProps) => {
 
         <div className="sticky top-16 z-40 bg-background py-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             {selectedGroup !== 'all' ? (
-              <span className="text-sm text-muted-foreground">
+              <span
+                className="text-sm text-muted-foreground"
+                role="status"
+                aria-live="polite"
+              >
                 Showing {filteredObservations.length} of {observations.length} observations
               </span>
             ) : (
@@ -146,7 +153,7 @@ const Observations = ({ initialPage }: ObservationsProps) => {
               value={selectedGroup}
               onValueChange={(value) => setSelectedGroup(value as TaxonGroup)}
             >
-              <SelectTrigger className="w-48 cursor-pointer">
+              <SelectTrigger aria-label="Filter by group" className="w-48 cursor-pointer">
                 <SelectValue placeholder="Filter by group" />
               </SelectTrigger>
               <SelectContent>
@@ -172,12 +179,23 @@ const Observations = ({ initialPage }: ObservationsProps) => {
               target="_blank"
               rel="noopener noreferrer"
             >
+              <span className="sr-only">
+                {observation.species_guess ||
+                  observation.taxon?.preferred_common_name ||
+                  'Observation'}{' '}
+                (opens in new tab)
+              </span>
               <Card className="h-full flex flex-col gradient-card shadow-card hover:shadow-hover transition-all duration-300 overflow-hidden">
                 {getPhotoUrl(observation.photos) && (
                   <div className="aspect-square overflow-hidden">
                     <img
                       src={getPhotoUrl(observation.photos)!}
-                      alt={observation.species_guess || 'Unknown species'}
+                      alt={
+                        observation.species_guess ||
+                        observation.taxon?.preferred_common_name ||
+                        observation.taxon?.name ||
+                        `Observation #${observation.id}`
+                      }
                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                       onError={(e) => {
                         ; (e.target as HTMLImageElement).style.display = 'none'
@@ -228,10 +246,16 @@ const Observations = ({ initialPage }: ObservationsProps) => {
             </Link>
           ))}
 
-          {isFetchingNextPage &&
-            Array.from({ length: SKELETON_COUNT }).map((_, i) => (
-              <ObservationCardSkeleton key={`skeleton-${i}`} />
-            ))}
+          {isFetchingNextPage && (
+            <>
+              <span className="sr-only" role="status">
+                Loading more observations
+              </span>
+              {Array.from({ length: SKELETON_COUNT }).map((_, i) => (
+                <ObservationCardSkeleton key={`skeleton-${i}`} />
+              ))}
+            </>
+          )}
         </section>
 
         {/* infinite scroll sentinel */}

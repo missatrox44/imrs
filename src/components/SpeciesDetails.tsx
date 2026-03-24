@@ -12,12 +12,11 @@ import type { Observation } from '@/types/observation'
 import type { Species } from '@/types/species'
 
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Route } from '@/routes/species.$speciesId'
 import { formatDate } from '@/lib/formatDate'
 import { getPhotoUrl } from '@/lib/getPhotoUrl'
-import { ALL_CATEGORIES } from '@/data/constants'
 
 interface TaxonomyRow {
   rank: string
@@ -234,6 +233,7 @@ export function SpeciesDetails() {
             <Card className="gradient-card shadow-card">
               <CardHeader>
                 <CardTitle>Recent Observations</CardTitle>
+                <CardDescription>Sourced from iNaturalist, not necessarily observed at IMRS</CardDescription>
               </CardHeader>
 
               <CardContent>
@@ -255,6 +255,12 @@ export function SpeciesDetails() {
                           target="_blank"
                           rel="noopener noreferrer"
                         >
+                          <span className="sr-only">
+                            {observation.species_guess ||
+                              observation.taxon?.preferred_common_name ||
+                              'Observation'}{' '}
+                            (opens in new tab)
+                          </span>
                           <Card className="border hover:shadow-lg transition-shadow cursor-pointer overflow-hidden">
                             <CardContent className="p-4">
                               {(() => {
@@ -265,7 +271,9 @@ export function SpeciesDetails() {
                                       src={photoUrl}
                                       alt={
                                         observation.species_guess ||
-                                        'Observation'
+                                        observation.taxon?.preferred_common_name ||
+                                        observation.taxon?.name ||
+                                        `Observation #${observation.id}`
                                       }
                                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                                       onError={(e) => {
@@ -327,7 +335,7 @@ export function SpeciesDetails() {
               </CardHeader>
               <CardContent className="p-0">
                 <div className="divide-y divide-border">
-                  {taxonomyRows.map((row, index) => (
+                  {taxonomyRows.map((row) => (
                     <div
                       key={row.rank}
                       className="px-4 py-3 hover:bg-muted/30 transition-colors"

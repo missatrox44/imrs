@@ -22,12 +22,12 @@ export default function Header() {
 
   return (
     <header className="border-b border-border bg-card sticky top-0 z-50">
-      <nav>
+      <nav aria-label="Primary navigation">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             {/* LOGO + TITLE */}
             <Link to="/" className="flex items-center space-x-2">
-              <img src="/toad.png" alt="IMRS Logo" className="h-8 md:h-10" />
+              <img src="/toad.png" alt="" aria-hidden="true" className="h-8 md:h-10" />
               <span className="font-semibold text-foreground text-sm md:text-lg">
                 IMRS Biodiversity Explorer
               </span>
@@ -47,7 +47,12 @@ export default function Header() {
                     asChild
                     className="text-sm font-medium "
                   >
-                    <Link to={item.to}>{item.label}</Link>
+                    <Link
+                      to={item.to}
+                      aria-current={isActive ? 'page' : undefined}
+                    >
+                      {item.label}
+                    </Link>
                   </Button>
                 )
               })}
@@ -57,10 +62,12 @@ export default function Header() {
             <Drawer open={open} onOpenChange={setOpen}>
               <DrawerTrigger asChild className="lg:hidden">
                 <button
+                  aria-label="Open navigation menu"
+                  aria-expanded={open}
                   className="
-                    p-2 text-foreground 
+                    p-2 text-foreground
                     hover:bg-muted transition-colors
-                    
+
                   "
                 >
                   <Menu size={22} />
@@ -74,14 +81,10 @@ export default function Header() {
                   
                 "
               >
-                {/* <DrawerHeader className="border-b border-border pb-4">
-                  <DrawerTitle className="text-lg font-semibold">
-                    Navigation
-                  </DrawerTitle>
-                  <DrawerDescription className="text-muted-foreground">
-                    Explore the archive
-                  </DrawerDescription>
-                </DrawerHeader> */}
+                <DrawerHeader className="sr-only">
+                  <DrawerTitle>Navigation</DrawerTitle>
+                  <DrawerDescription>Site navigation menu</DrawerDescription>
+                </DrawerHeader>
 
                 {/* NAV ITEMS */}
                 <div className="flex flex-col p-4 space-y-3">
@@ -94,6 +97,7 @@ export default function Header() {
                       <DrawerClose asChild key={item.to}>
                         <Link
                           to={item.to}
+                          aria-current={isActive ? 'page' : undefined}
                           className={`
                             block w-full px-4 py-3
                             border border-border shadow-card

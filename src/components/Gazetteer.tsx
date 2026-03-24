@@ -104,6 +104,15 @@ const Gazetteer = () => {
                           'ring-4 ring-accent shadow-lg bg-accent/10',
                       )}
                       onClick={() => setSelectedId(entry.id)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault()
+                          setSelectedId(entry.id)
+                        }
+                      }}
+                      role="button"
+                      tabIndex={0}
+                      aria-pressed={entry.id === selectedId}
                     >
                       <CardHeader>
                         <CardTitle className="text-xl">{entry.name}</CardTitle>

@@ -75,13 +75,20 @@ export const navItems = [
   { to: '/observations', label: 'Observations' },
   { to: '/species', label: 'Species Index' },
   { to: '/gazetteer', label: 'Gazetteer' },
+  { to: '/weather', label: 'Weather' },
 ]
 
 export const externalLinks = [
   { to: 'https://www.utep.edu/science/indio/', label: 'IMRS' },
-  { to: 'https://www.inaturalist.org/', label: 'iNaturalist' },
+  // { to: 'https://www.inaturalist.org/', label: 'iNaturalist' },
+  { to: 'https://www.inaturalist.org/places/indio-mountains-research-station', label: 'iNaturalist'}
 ]
 
 // export const otherLinks = [
 //   { to: 'https://github.com/missatrox44/imrs/issues', label: 'Report an issue' }
 // ]
+
+export const CACHE_HEADERS = {
+  'Content-Type': 'application/json',
+  'Cache-Control': 'public, max-age=86400, s-maxage=604800',
+}

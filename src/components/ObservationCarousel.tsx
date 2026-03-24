@@ -53,13 +53,24 @@ export function ObservationCarousel({observations, obsCount}: {observations: Arr
                       rel="noopener noreferrer"
                       className="block h-full"
                     >
+                      <span className="sr-only">
+                        {observation.species_guess ||
+                          observation.taxon?.preferred_common_name ||
+                          'Observation'}{' '}
+                        (opens in new tab)
+                      </span>
                       <Card className="border hover:shadow-lg transition-shadow cursor-pointer overflow-hidden h-full">
                         <CardContent className="p-4 flex flex-col h-full">
                           {getPhotoUrl(observation.photos) && (
                             <div className="aspect-square overflow-hidden mb-3 shrink-0">
                               <img
                                 src={getPhotoUrl(observation.photos)!}
-                                alt={observation.species_guess || 'Observation'}
+                                alt={
+                                  observation.species_guess ||
+                                  observation.taxon?.preferred_common_name ||
+                                  observation.taxon?.name ||
+                                  `Observation #${observation.id}`
+                                }
                                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                                 onError={(e) => {
                                   ;(
