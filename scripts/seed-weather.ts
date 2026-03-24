@@ -263,9 +263,12 @@ function main() {
 
   console.log(`\nDone! Database created at ${DB_PATH}`)
   console.log('\nTo push to Turso:')
-  console.log('  turso db shell <your-db-name> < weather-schema.sql')
+  console.log('  turso db shell imrs < weather-schema.sql')
   console.log('  -- or --')
   console.log('  turso db import imrs-weather.db')
 }
 
 main()
+
+// TO RUN:
+  // npx tsx scripts/seed-weather.ts 

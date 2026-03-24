@@ -95,54 +95,53 @@ export default function WeatherTimeSeriesPanel({
   const hasRightAxis = series.some((s) => s.yAxisId === 'right')
 
   return (
-    <ResponsiveContainer width="100%" height={height}>
-      <ComposedChart
-        data={data}
-        margin={{ top: 4, right: hasRightAxis ? 10 : 30, left: 0, bottom: 0 }}
-        syncId="weather"
-      >
-        <CartesianGrid stroke={WEATHER_COLORS.gridLine} strokeDasharray="3 3" />
+    <div>
+      <div className="flex justify-between px-1 mb-0.5">
+        <span className="text-xs text-muted-foreground font-medium">
+          {yAxisLabel}
+        </span>
+        {hasRightAxis && rightYAxisLabel && (
+          <span className="text-xs text-muted-foreground font-medium">
+            {rightYAxisLabel}
+          </span>
+        )}
+      </div>
+      <ResponsiveContainer width="100%" height={height}>
+        <ComposedChart
+          data={data}
+          margin={{ top: 4, right: hasRightAxis ? 10 : 30, left: 0, bottom: 0 }}
+          syncId="weather"
+        >
+          <CartesianGrid stroke={WEATHER_COLORS.gridLine} strokeDasharray="3 3" />
 
-        <XAxis
-          dataKey="date"
-          tickFormatter={formatDate}
-          interval={tickInterval}
-          tick={showXAxis ? { fontSize: 11, fill: WEATHER_COLORS.text } : false}
-          tickLine={false}
-          axisLine={{ stroke: WEATHER_COLORS.gridLine }}
-          height={showXAxis ? 30 : 5}
-        />
+          <XAxis
+            dataKey="date"
+            tickFormatter={formatDate}
+            interval={tickInterval}
+            tick={showXAxis ? { fontSize: 11, fill: WEATHER_COLORS.text } : false}
+            tickLine={false}
+            axisLine={{ stroke: WEATHER_COLORS.gridLine }}
+            height={showXAxis ? 30 : 5}
+          />
 
-        <YAxis
-          yAxisId="left"
-          tick={{ fontSize: 11, fill: WEATHER_COLORS.text }}
-          tickLine={false}
-          axisLine={false}
-          width={45}
-          label={{
-            value: yAxisLabel,
-            position: 'insideTopLeft',
-            offset: -5,
-            style: { fontSize: 11, fill: WEATHER_COLORS.text },
-          }}
-        />
-
-        {hasRightAxis && (
           <YAxis
-            yAxisId="right"
-            orientation="right"
+            yAxisId="left"
             tick={{ fontSize: 11, fill: WEATHER_COLORS.text }}
             tickLine={false}
             axisLine={false}
             width={45}
-            label={{
-              value: rightYAxisLabel ?? '',
-              position: 'insideTopRight',
-              offset: -5,
-              style: { fontSize: 11, fill: WEATHER_COLORS.text },
-            }}
           />
-        )}
+
+          {hasRightAxis && (
+            <YAxis
+              yAxisId="right"
+              orientation="right"
+              tick={{ fontSize: 11, fill: WEATHER_COLORS.text }}
+              tickLine={false}
+              axisLine={false}
+              width={45}
+            />
+          )}
 
         <Tooltip content={<CustomTooltip />} />
         <Legend wrapperStyle={{ fontSize: 12 }} iconType="line" />
@@ -229,5 +228,6 @@ export default function WeatherTimeSeriesPanel({
         )}
       </ComposedChart>
     </ResponsiveContainer>
+    </div>
   )
 }

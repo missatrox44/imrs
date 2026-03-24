@@ -72,7 +72,7 @@ export default function WeatherTimeSeries({
       isLoading={isLoading}
       minHeight={850}
     >
-      <div className="space-y-1">
+      <div className="space-y-6">
         {/* Panel 1: Temperature + Dew Point (°C) */}
         <WeatherTimeSeriesPanel
           data={chartData}
