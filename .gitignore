@@ -21,3 +21,4 @@ specimens.tsv
 /imrs_boundary.kml
 *.sql
 specimens.json
+*.local.md
