@@ -6,8 +6,8 @@ import { Route } from '@/routes/weather'
 import { useWeatherDaily, useWeatherSummary } from '@/hooks/useWeatherData'
 
 export default function WeatherDashboard() {
-  const { year, season, variable } = Route.useSearch()
-  const filters: WeatherFilters = { year, season, variable }
+  const { year, season } = Route.useSearch()
+  const filters: WeatherFilters = { year, season }
 
   const { data: summary, isLoading: summaryLoading } =
     useWeatherSummary(filters)
@@ -34,7 +34,6 @@ export default function WeatherDashboard() {
       <section className="mb-8">
         <WeatherTimeSeries
           data={daily}
-          variable={variable}
           isLoading={dailyLoading}
         />
       </section>

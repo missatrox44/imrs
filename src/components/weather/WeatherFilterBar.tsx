@@ -1,21 +1,11 @@
 import { useNavigate } from '@tanstack/react-router'
 import { RotateCcw } from 'lucide-react'
-import type { Season, WeatherVariable } from '@/types/weather'
+import type { Season } from '@/types/weather'
 import { Route } from '@/routes/weather'
 import { Button } from '@/components/ui/button'
 import { SEASONS } from '@/lib/weatherUtils'
 
 const YEARS = ['all', '2020', '2021', '2022', '2023', '2024'] as const
-
-const VARIABLES: Array<{ key: WeatherVariable; label: string }> = [
-  { key: 'all', label: 'All' },
-  { key: 'temp', label: 'Temperature' },
-  { key: 'humidity', label: 'Humidity' },
-  { key: 'wind', label: 'Wind' },
-  { key: 'precip', label: 'Precipitation' },
-  { key: 'pressure', label: 'Pressure' },
-  { key: 'dewpoint', label: 'Dew Point' },
-]
 
 const SEASON_OPTIONS: Array<{ key: Season; label: string }> = [
   { key: 'all', label: 'All Seasons' },
@@ -27,12 +17,12 @@ const SEASON_OPTIONS: Array<{ key: Season; label: string }> = [
 
 export default function WeatherFilterBar() {
   const navigate = useNavigate()
-  const { year, season, variable } = Route.useSearch()
+  const { year, season } = Route.useSearch()
 
   const setFilter = (key: string, value: string) => {
     navigate({
       to: '/weather',
-      search: { year, season, variable, [key]: value },
+      search: { year, season, [key]: value },
       replace: true,
     })
   }
@@ -40,13 +30,12 @@ export default function WeatherFilterBar() {
   const resetFilters = () => {
     navigate({
       to: '/weather',
-      search: { year: 'all', season: 'all', variable: 'all' },
+      search: { year: 'all', season: 'all' },
       replace: true,
     })
   }
 
-  const hasActiveFilters =
-    year !== 'all' || season !== 'all' || variable !== 'all'
+  const hasActiveFilters = year !== 'all' || season !== 'all'
 
   return (
     <div className="space-y-4">
@@ -85,25 +74,6 @@ export default function WeatherFilterBar() {
               }`}
             >
               {s.label}
-            </Button>
-          ))}
-        </div>
-      </div>
-
-      <div className="flex flex-wrap items-center gap-3">
-        <span className="text-sm font-medium text-muted-foreground">
-          Variable
-        </span>
-        <div className="flex flex-wrap gap-1.5">
-          {VARIABLES.map((v) => (
-            <Button
-              key={v.key}
-              variant={variable === v.key ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setFilter('variable', v.key)}
-              className="cursor-pointer"
-            >
-              {v.label}
             </Button>
           ))}
         </div>

@@ -19,6 +19,27 @@ import XLSX from 'xlsx'
 const DB_PATH = path.join(process.cwd(), 'imrs-weather.db')
 const DATA_YEARS = [2020, 2021, 2022, 2023, 2024]
 
+// Physical bounds for sensor validation — readings outside these ranges
+// indicate sensor malfunction and the entire row is dropped.
+const BOUNDS: Record<string, { min: number; max: number }> = {
+  rain_mm: { min: 0, max: 100 },
+  wind_speed: { min: 0, max: 160 },
+  gust_speed: { min: 0, max: 200 },
+  pressure: { min: 600, max: 700 },
+  temp_c: { min: -15, max: 55 },
+  rh_pct: { min: 0, max: 100 },
+  dewpt_c: { min: -30, max: 40 },
+}
+
+function isWithinBounds(
+  value: number | null,
+  field: keyof typeof BOUNDS,
+): boolean {
+  if (value == null) return true
+  const { min, max } = BOUNDS[field]
+  return value >= min && value <= max
+}
+
 // Excel serial date → ISO string
 // Excel epoch: Dec 30, 1899 (due to the 1900 leap year bug)
 function excelDateToISO(serial: number): string {
@@ -134,6 +155,24 @@ function insertReadings(db: Database.Database) {
       const tempC = r[6] != null ? Number(r[6]) : null
       const rhPct = r[7] != null ? Number(r[7]) : null
       const dewptC = r[8] != null ? Number(r[8]) : null
+
+      // Validate all fields — if any are outside physical bounds, skip the row
+      const values: Array<[number | null, keyof typeof BOUNDS]> = [
+        [rain, 'rain_mm'],
+        [windSpeed, 'wind_speed'],
+        [gustSpeed, 'gust_speed'],
+        [pressure, 'pressure'],
+        [tempC, 'temp_c'],
+        [rhPct, 'rh_pct'],
+        [dewptC, 'dewpt_c'],
+      ]
+      const badField = values.find(([v, f]) => !isWithinBounds(v, f))
+      if (badField) {
+        console.warn(
+          `  Skipping row ${i} (${isoDate}): ${badField[1]}=${badField[0]} out of bounds`,
+        )
+        continue
+      }
 
       rows.push([isoDate, rain, windSpeed, gustSpeed, pressure, tempC, rhPct, dewptC])
     }

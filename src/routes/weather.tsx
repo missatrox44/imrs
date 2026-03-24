@@ -1,12 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
-import type { Season, WeatherVariable } from '@/types/weather'
+import type { Season } from '@/types/weather'
 import { Loader } from '@/components/Loader'
 import WeatherDashboard from '@/components/weather/WeatherDashboard'
 
 type WeatherSearch = {
   year: string
   season: Season
-  variable: WeatherVariable
 }
 
 export const Route = createFileRoute('/weather')({
@@ -15,7 +14,6 @@ export const Route = createFileRoute('/weather')({
   validateSearch: (search: Record<string, unknown>): WeatherSearch => ({
     year: (search.year as string | undefined) ?? 'all',
     season: (search.season as Season | undefined) ?? 'all',
-    variable: (search.variable as WeatherVariable | undefined) ?? 'all',
   }),
 
   loader: async ({ location }) => {

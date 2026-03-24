@@ -17,7 +17,6 @@ export type WeatherView =
 export interface WeatherFilters {
   year: string
   season: Season
-  variable: WeatherVariable
 }
 
 export interface WeatherDailyRow {

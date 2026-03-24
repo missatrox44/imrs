@@ -67,7 +67,6 @@ export function useWeatherMonsoon() {
       fetchWeather<Array<MonsoonComparison>>('monsoon', {
         year: 'all',
         season: 'all',
-        variable: 'all',
       }),
     staleTime: WEATHER_STALE_TIME,
     gcTime: WEATHER_GC_TIME,
