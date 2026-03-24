@@ -1,7 +1,6 @@
 import { createServerFileRoute } from '@tanstack/react-start/server'
 import type { WeatherSummary } from '@/types/weather'
 import { getTurso } from '@/server/turso'
-import { getWeatherDb } from '@/server/db'
 import {
   rowToDaily,
   rowToHourly,
@@ -16,11 +15,7 @@ import {
   summaryQuery,
   windDistributionQueryFromReadings,
 } from '@/server/weatherQueries'
-
-const CACHE_HEADERS = {
-  'Content-Type': 'application/json',
-  'Cache-Control': 'public, max-age=86400, s-maxage=604800',
-}
+import { CACHE_HEADERS } from '@/data/constants'
 
 interface QueryResult {
   rows: Array<Record<string, unknown>>
@@ -30,19 +25,9 @@ async function executeQuery(
   sql: string,
   args: Array<string | number>,
 ): Promise<QueryResult> {
-  // Try Turso first
-  try {
-    const client = getTurso()
-    const result = await client.execute({ sql, args })
-    return { rows: result.rows as unknown as Array<Record<string, unknown>> }
-  } catch (tursoError) {
-    console.warn('[API/weather] Turso failed, falling back to local SQLite')
-  }
-
-  // Fallback to local SQLite
-  const db = getWeatherDb()
-  const rows = db.prepare(sql).all(...args) as Array<Record<string, unknown>>
-  return { rows }
+  const client = getTurso()
+  const result = await client.execute({ sql, args })
+  return { rows: result.rows as unknown as Array<Record<string, unknown>> }
 }
 
 export const ServerRoute = createServerFileRoute('/api/weather').methods({

@@ -87,3 +87,8 @@ export const externalLinks = [
 // export const otherLinks = [
 //   { to: 'https://github.com/missatrox44/imrs/issues', label: 'Report an issue' }
 // ]
+
+export const CACHE_HEADERS = {
+  'Content-Type': 'application/json',
+  'Cache-Control': 'public, max-age=86400, s-maxage=604800',
+}
