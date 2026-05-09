@@ -52,7 +52,7 @@ export const GazetteerRolodex = () => {
           >
             <ChevronLeft className="size-4" />
           </Button>
-          <span className="text-sm text-muted-foreground min-w-[80px] text-center">
+          <span className="text-sm text-muted-foreground min-w-20 text-center">
             {activeIndex + 1} of {sortedEntries.length}
           </span>
           <Button
@@ -67,7 +67,7 @@ export const GazetteerRolodex = () => {
         </div>
 
         {/* Card Stack Container */}
-        <div className="relative w-full max-w-lg h-[340px] perspective-1000">
+        <div className="relative w-full max-w-lg h-85 perspective-1000">
           <AnimatePresence mode="popLayout">
             {sortedEntries.map((entry, index) => {
               const offset = index - activeIndex
