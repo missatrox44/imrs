@@ -25,6 +25,9 @@ const config = defineConfig({
     tailwindcss(),
     tanstackStart({
       customViteReactPlugin: true,
+      tsr: {
+        routeFileIgnorePattern: '\\.(test|spec)\\.',
+      },
     }),
     viteReact(),
   ],

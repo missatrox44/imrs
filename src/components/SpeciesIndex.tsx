@@ -12,6 +12,12 @@ import { SpeciesTableView } from '@/components/SpeciesTableView'
 import { Card, CardContent } from '@/components/ui/card'
 import { AdvancedSearch } from '@/components/AdvancedSearch'
 import { SearchInput } from '@/components/SearchInput'
+import {
+  applySearchTerm,
+  applyTaxonomicFilters,
+  filterByCategory,
+  sortSpecies,
+} from '@/components/speciesFilter'
 import { Route } from '@/routes/species.index'
 
 export type TaxonomicFilters = {
@@ -53,55 +59,14 @@ const SpeciesIndex = () => {
     setSortDirection('asc')
   }, [])
 
-  // Filter based on search term and taxonomic filters
-  const filterSpecies = (items: Array<Species>) => {
-    let result = items
-
-    // Apply taxonomic filters
-    for (const [key, value] of Object.entries(taxonomicFilters)) {
-      if (value) {
-        result = result.filter(
-          (s) => s[key as keyof Species]?.toString().toLowerCase() === value.toLowerCase(),
-        )
-      }
-    }
-
-    // Apply search term
-    if (searchTerm) {
-      const lowerTerm = searchTerm.toLowerCase()
-      result = result.filter(
-        (s) =>
-          (s.genus && s.genus.toLowerCase().includes(lowerTerm)) ||
-          (s.species && s.species.toLowerCase().includes(lowerTerm)) ||
-          (s.species_common_name &&
-            s.species_common_name.toLowerCase().includes(lowerTerm)) ||
-          (s.family && s.family.toLowerCase().includes(lowerTerm)),
-      )
-    }
-
-    return result
-  }
-
   const getFilteredItems = (cat: Category) => {
-    const items =
-      cat === 'all'
-        ? species
-        : species.filter((s: Species) => s.category === cat)
-    return filterSpecies(items)
+    const byCategory = filterByCategory(species, cat)
+    const byTaxonomy = applyTaxonomicFilters(byCategory, taxonomicFilters)
+    return applySearchTerm(byTaxonomy, searchTerm)
   }
 
   const filtered = getFilteredItems(category)
-
-  const sorted = filtered.slice().sort((a, b) => {
-    const aEmpty = !a.genus && !a.species
-    const bEmpty = !b.genus && !b.species
-    if (aEmpty !== bEmpty) return aEmpty ? 1 : -1
-
-    const genusA = (a.genus ?? '').toLowerCase()
-    const genusB = (b.genus ?? '').toLowerCase()
-    const cmp = genusA.localeCompare(genusB) || (a.species ?? '').toLowerCase().localeCompare((b.species ?? '').toLowerCase())
-    return sortDirection === 'asc' ? cmp : -cmp
-  })
+  const sorted = sortSpecies(filtered, sortDirection)
 
   const getCategoryCount = (cat: Category) => {
     return getFilteredItems(cat).length
