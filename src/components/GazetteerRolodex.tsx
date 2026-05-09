@@ -8,24 +8,18 @@ import {
   Mountain,
 } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
-import type { GazetteerEntry } from '@/types/gazetteer'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { GAZETTEER_ROLODEX } from '@/data/gazetteer'
 import { formatElevation } from '@/lib/formatElevation'
 import { formatCoordinates } from '@/lib/formatCoordinates'
 
-export const hasCoordinates = (
-  entry: GazetteerEntry,
-): entry is GazetteerEntry & { latitude: number; longitude: number } =>
-  typeof entry.latitude === 'number' && typeof entry.longitude === 'number'
-
 export const GazetteerRolodex = () => {
   const [activeIndex, setActiveIndex] = useState(0)
   const shouldReduceMotion = useReducedMotion()
 
   const sortedEntries = useMemo(() => {
-    return [...GAZETTEER_ROLODEX].sort((a, b) => a.name.localeCompare(b.name))
+    return GAZETTEER_ROLODEX.toSorted((a, b) => a.name.localeCompare(b.name))
   }, [])
 
   const nextCard = () => {
@@ -56,7 +50,7 @@ export const GazetteerRolodex = () => {
             onClick={prevCard}
             aria-label="Previous location"
           >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft className="size-4" />
           </Button>
           <span className="text-sm text-muted-foreground min-w-[80px] text-center">
             {activeIndex + 1} of {sortedEntries.length}
@@ -68,7 +62,7 @@ export const GazetteerRolodex = () => {
             onClick={nextCard}
             aria-label="Next location"
           >
-            <ChevronRight className="h-4 w-4" />
+            <ChevronRight className="size-4" />
           </Button>
         </div>
 
@@ -116,7 +110,7 @@ export const GazetteerRolodex = () => {
                     {/* Card Header Tab */}
                     <div className="bg-muted/50 border-b border-border px-6 py-3">
                       <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-primary" />
+                        <div className="size-2 rounded-full bg-primary" />
                         <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
                           {entry.name.charAt(0)}
                         </span>
@@ -138,14 +132,14 @@ export const GazetteerRolodex = () => {
                           variant="secondary"
                           className="flex items-center gap-1"
                         >
-                          <MapPin className="w-3 h-3" />
+                          <MapPin className="size-3" />
                           {formatCoordinates(entry.latitude, entry.longitude)}
                         </Badge>
                         <Badge
                           variant="secondary"
                           className="flex items-center gap-1"
                         >
-                          <Mountain className="w-3 h-3" />
+                          <Mountain className="size-3" />
                           {formatElevation(entry.elevationMeters)}
                         </Badge>
                       </div>
@@ -171,7 +165,7 @@ export const GazetteerRolodex = () => {
               <button
                 key={entry.id}
                 onClick={() => setActiveIndex(index)}
-                className={`w-2 h-2 rounded-full transition-colors ${
+                className={`size-2 rounded-full transition-colors ${
                   index === activeIndex
                     ? 'bg-primary'
                     : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
@@ -191,7 +185,7 @@ export const GazetteerRolodex = () => {
         <Button asChild size="lg" className="mt-8">
           <Link to="/gazetteer" className="flex items-center gap-2">
             View All Locations
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="size-4" />
           </Link>
         </Button>
       </div>

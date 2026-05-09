@@ -14,12 +14,12 @@ export function ObservationCardSkeleton() {
 
       <CardContent className="space-y-3 mt-auto">
         <div className="flex items-center gap-2">
-          <Skeleton className="h-4 w-4 rounded-full" />
+          <Skeleton className="size-4 rounded-full" />
           <Skeleton className="h-3 w-24" />
         </div>
 
         <div className="flex items-center gap-2">
-          <Skeleton className="h-4 w-4 rounded-full" />
+          <Skeleton className="size-4 rounded-full" />
           <Skeleton className="h-3 w-20" />
         </div>
 

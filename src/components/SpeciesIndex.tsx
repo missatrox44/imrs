@@ -138,7 +138,7 @@ const SpeciesIndex = () => {
                 : 'text-muted-foreground hover:text-foreground'
                 }`}
             >
-              <LayoutGrid className="w-4 h-4" />
+              <LayoutGrid className="size-4" />
             </button>
             <button
               onClick={() => setView('table')}
@@ -149,7 +149,7 @@ const SpeciesIndex = () => {
                 : 'text-muted-foreground hover:text-foreground'
                 }`}
             >
-              <TableIcon className="w-4 h-4" />
+              <TableIcon className="size-4" />
             </button>
           </div>
         </div>

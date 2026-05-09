@@ -135,7 +135,7 @@ const Gazetteer = () => {
                                   variant="secondary"
                                   className="flex items-center gap-1"
                                 >
-                                  <MapPin className="w-3 h-3" />
+                                  <MapPin className="size-3" />
                                   {formatCoordinates(
                                     entry.latitude,
                                     entry.longitude,
@@ -148,7 +148,7 @@ const Gazetteer = () => {
                                   variant="secondary"
                                   className="flex items-center gap-1"
                                 >
-                                  <Mountain className="w-3 h-3" />
+                                  <Mountain className="size-3" />
                                   {formatElevation(entry.elevationMeters)}
                                 </Badge>
                               )}

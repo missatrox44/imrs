@@ -104,7 +104,7 @@ export const SpeciesGridView = ({ items }: { items: Array<Species> }) => {
                   </div>
 
                   {/* <div className="flex justify-end pt-4">
-              <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+              <ChevronRight className="size-5 text-muted-foreground group-hover:text-primary transition-colors" />
             </div> */}
                 </div>
               </CardContent>

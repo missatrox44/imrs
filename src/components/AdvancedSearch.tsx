@@ -98,7 +98,7 @@ export function AdvancedSearch({
     <div className="bg-card border border-border p-4 mb-6">
       {/* Header */}
       <div className="flex items-center gap-2 mb-3">
-        <SlidersHorizontal className="w-4 h-4 text-muted-foreground" />
+        <SlidersHorizontal className="size-4 text-muted-foreground" />
         <span className="text-sm font-medium text-foreground">
           Filters & Sorting
         </span>
@@ -152,7 +152,7 @@ export function AdvancedSearch({
                 htmlFor={filterId}
                 className="text-xs text-muted-foreground font-medium flex items-center gap-1"
               >
-                <Filter className="w-3 h-3" aria-hidden="true" /> {label}
+                <Filter className="size-3" aria-hidden="true" /> {label}
               </label>
 
               <Select
@@ -184,7 +184,7 @@ export function AdvancedSearch({
       {/* Sort Options */}
       <div className="flex flex-wrap items-center gap-3 mt-4 pt-3 border-t border-border">
         <div className="flex items-center gap-2">
-          <ArrowUpDown className="w-4 h-4 text-muted-foreground" />
+          <ArrowUpDown className="size-4 text-muted-foreground" />
           <span className="text-xs text-muted-foreground font-medium">
             Sort species by:
           </span>
@@ -212,7 +212,7 @@ export function AdvancedSearch({
           onClick={onResetFilters}
           className="h-8 text-xs text-muted-foreground hover:text-foreground cursor-pointer"
         >
-          <RotateCcw className="w-3 h-3 mr-1" />
+          <RotateCcw className="size-3 mr-1" />
           Reset Filters
         </Button>
       </div>

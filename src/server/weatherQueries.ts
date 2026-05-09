@@ -5,10 +5,7 @@ interface WhereClause {
   args: Array<string | number>
 }
 
-export function buildWhereClause(
-  year: string,
-  season: string,
-): WhereClause {
+function buildWhereClause(year: string, season: string): WhereClause {
   const conditions: Array<string> = []
   const args: Array<string | number> = []
 
@@ -88,28 +85,6 @@ export function monsoonQuery() {
     GROUP BY year
     ORDER BY year`,
     args: [],
-  }
-}
-
-export function windDistributionQuery(year: string, season: string) {
-  const { sql, args } = buildWhereClause(year, season)
-  return {
-    sql: `SELECT
-      CASE
-        WHEN wind_speed < 5 THEN '0-5'
-        WHEN wind_speed < 10 THEN '5-10'
-        WHEN wind_speed < 20 THEN '10-20'
-        WHEN wind_speed < 30 THEN '20-30'
-        ELSE '30+'
-      END as range,
-      COUNT(*) as count,
-      SUM(CASE WHEN gust_speed >= 30 THEN 1 ELSE 0 END) as gust_count
-    FROM weather_readings
-    WHERE wind_speed IS NOT NULL
-      ${sql ? 'AND ' + sql.replace('WHERE ', '') : ''}
-    GROUP BY range
-    ORDER BY CAST(range AS REAL)`,
-    args,
   }
 }
 

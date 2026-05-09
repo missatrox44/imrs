@@ -27,8 +27,8 @@ export const Home = () => {
           <Link to="/observations" className="no-underline">
             <Card className="gradient-card shadow-md hover:shadow-xl transition-shadow duration-300 group cursor-pointer">
               <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <Eye className="w-8 h-8 text-primary-foreground" />
+                <div className="size-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <Eye className="size-8 text-primary-foreground" />
                 </div>
                 <h2 className="text-2xl font-semibold text-foreground mb-4">
                   Recent Observations
@@ -46,8 +46,8 @@ export const Home = () => {
           <Link to="/species" search={{ category: 'all' }} className="no-underline">
             <Card className="gradient-card shadow-md hover:shadow-xl transition-shadow duration-300 group cursor-pointer">
               <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <BookOpen className="w-8 h-8 text-accent-foreground" />
+                <div className="size-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <BookOpen className="size-8 text-accent-foreground" />
                 </div>
                 <h2 className="text-2xl font-semibold text-foreground mb-4">
                   Species Index

@@ -63,7 +63,7 @@ export const Footer = () => {
                     className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-1 cursor-pointer"
                   >
                     {link.label}{' '}
-                    <ExternalLink className="w-3 h-3" aria-hidden="true" />
+                    <ExternalLink className="size-3" aria-hidden="true" />
                     <span className="sr-only"> (opens in new tab)</span>
                   </a>
                 </li>
@@ -80,7 +80,7 @@ export const Footer = () => {
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-1 cursor-pointer"
                 >
-                  <Bug className="w-3 h-3" aria-hidden="true" /> Report an Issue
+                  <Bug className="size-3" aria-hidden="true" /> Report an Issue
                   <span className="sr-only"> (opens in new tab)</span>
                 </a>
               </li>
@@ -97,7 +97,7 @@ export const Footer = () => {
               rel="noopener noreferrer"
               className="hover:text-foreground transition-colors inline-flex items-center gap-1 cursor-pointer"
             >
-              GitHub <Github className="w-3 h-3" aria-hidden="true" />
+              GitHub <Github className="size-3" aria-hidden="true" />
               <span className="sr-only"> (opens in new tab)</span>
             </a>
 

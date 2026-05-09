@@ -220,18 +220,18 @@ const Observations = ({ initialPage }: ObservationsProps) => {
 
                 <CardContent className="space-y-3 mt-auto">
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <User className="w-4 h-4" />
+                    <User className="size-4" />
                     <span>{observation.user?.login || 'Anonymous'}</span>
                   </div>
 
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Calendar className="w-4 h-4" />
+                    <Calendar className="size-4" />
                     <span>{formatDate(observation.observed_on_string)}</span>
                   </div>
 
                   {observation.place_guess && (
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <MapPin className="w-4 h-4" />
+                      <MapPin className="size-4" />
                       <span className="line-clamp-1">
                         {observation.place_guess}
                       </span>

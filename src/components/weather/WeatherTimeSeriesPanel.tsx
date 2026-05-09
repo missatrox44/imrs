@@ -165,9 +165,9 @@ export default function WeatherTimeSeriesPanel({
           />
         )}
 
-        {monsoonRanges.map((range, i) => (
+        {monsoonRanges.map((range) => (
           <ReferenceArea
-            key={i}
+            key={range.start}
             x1={range.start}
             x2={range.end}
             yAxisId="left"

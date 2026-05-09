@@ -74,7 +74,7 @@ export const SpeciesTableView = ({ items }: { items: Array<Species> }) => {
                     {item.family || '-'}
                   </td>
                   <td className="p-4 align-middle">
-                    <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary relative z-20" />
+                    <ChevronRight className="size-4 text-muted-foreground group-hover:text-primary relative z-20" />
                   </td>
                 </tr>
               ))}

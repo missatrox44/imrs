@@ -1,20 +1,37 @@
 import { createServerFn } from '@tanstack/react-start'
-import type { WeatherSummary } from '@/types/weather'
+import type { Season, WeatherSummary } from '@/types/weather'
 import { getTurso } from '@/server/turso'
 import { sparklineQuery, summaryQuery } from '@/server/weatherQueries'
 
+const VALID_SEASONS: ReadonlyArray<Season> = [
+  'all',
+  'winter',
+  'premonsoon',
+  'monsoon',
+  'postmonsoon',
+]
+
 interface WeatherFilterInput {
   year: string
-  season: string
+  season: Season
+}
+
+function validateWeatherInput(input: unknown): WeatherFilterInput {
+  if (input === null || typeof input !== 'object') {
+    throw new Error('Weather input must be an object')
+  }
+  const { year, season } = input as Record<string, unknown>
+  if (typeof year !== 'string') {
+    throw new Error('year must be a string')
+  }
+  if (typeof season !== 'string' || !VALID_SEASONS.includes(season as Season)) {
+    throw new Error(`season must be one of: ${VALID_SEASONS.join(', ')}`)
+  }
+  return { year, season: season as Season }
 }
 
 export const fetchWeatherSummary = createServerFn({ method: 'GET' })
-  .validator(
-    (input: WeatherFilterInput): WeatherFilterInput => ({
-      year: input.year,
-      season: input.season,
-    }),
-  )
+  .validator(validateWeatherInput)
   .handler(async ({ data }): Promise<WeatherSummary> => {
     const client = getTurso()
 

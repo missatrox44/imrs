@@ -22,7 +22,7 @@ export const SearchInput = ({
         {placeholder}
       </label>
       <Search
-        className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4"
+        className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground size-4"
         aria-hidden="true"
       />
       <Input
