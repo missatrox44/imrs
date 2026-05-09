@@ -181,7 +181,7 @@ export function SpeciesDetails() {
                   <h1 className="scientific-name text-2xl font-medium">
                     {scientificName}
                   </h1>
-                  <h2 className="text-3xl font-bold text-foreground">
+                  <h2 className="text-3xl font-semibold text-foreground">
                     {species.species_common_name}
                   </h2>
                   {species.authorship && (

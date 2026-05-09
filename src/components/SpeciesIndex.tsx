@@ -1,8 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import {
-  LayoutGrid,
-  Table as TableIcon,
-} from 'lucide-react'
+import { LayoutGrid, Table as TableIcon } from 'lucide-react'
 import { useMediaQuery } from '@uidotdev/usehooks'
 import { useNavigate } from '@tanstack/react-router'
 import { SpeciesGridView } from './SpeciesGridView'
@@ -43,7 +40,9 @@ const SpeciesIndex = () => {
   const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState('')
   const [view, setView] = useState<'grid' | 'table'>('grid')
-  const [taxonomicFilters, setTaxonomicFilters] = useState<TaxonomicFilters>(EMPTY_TAXONOMIC_FILTERS)
+  const [taxonomicFilters, setTaxonomicFilters] = useState<TaxonomicFilters>(
+    EMPTY_TAXONOMIC_FILTERS,
+  )
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
   const isMobile = useMediaQuery('(max-width: 767px)')
 
@@ -83,7 +82,7 @@ const SpeciesIndex = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
           <div>
-            <h1 className="text-3xl font-bold mb-2">Species Index</h1>
+            <h1 className="text-3xl font-semibold mb-2">Species Index</h1>
             <p className="text-muted-foreground">
               Comprehensive database of species documented on IMRS.
             </p>
@@ -98,10 +97,11 @@ const SpeciesIndex = () => {
               onClick={() => setView('grid')}
               aria-label="Grid view"
               aria-pressed={view === 'grid'}
-              className={`p-2 transition-all ${view === 'grid'
-                ? 'bg-background shadow-sm text-foreground'
-                : 'text-muted-foreground hover:text-foreground'
-                }`}
+              className={`p-2 transition-all ${
+                view === 'grid'
+                  ? 'bg-background shadow-sm text-foreground'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
             >
               <LayoutGrid className="size-4" />
             </button>
@@ -109,10 +109,11 @@ const SpeciesIndex = () => {
               onClick={() => setView('table')}
               aria-label="Table view"
               aria-pressed={view === 'table'}
-              className={`p-2 transition-all ${view === 'table'
-                ? 'bg-background shadow-sm text-foreground'
-                : 'text-muted-foreground hover:text-foreground'
-                }`}
+              className={`p-2 transition-all ${
+                view === 'table'
+                  ? 'bg-background shadow-sm text-foreground'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
             >
               <TableIcon className="size-4" />
             </button>
@@ -144,8 +145,7 @@ const SpeciesIndex = () => {
           role="status"
           aria-live="polite"
         >
-          Showing {sorted.length}{' '}
-          {category === 'all' ? 'species' : category}
+          Showing {sorted.length} {category === 'all' ? 'species' : category}
         </div>
 
         {sorted.length === 0 ? (

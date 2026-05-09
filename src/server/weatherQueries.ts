@@ -5,19 +5,23 @@ interface WhereClause {
   args: Array<string | number>
 }
 
+function parseYears(year: string): Array<number> {
+  if (year === 'all') return []
+  return year.split(',').reduce<Array<number>>((acc, part) => {
+    const n = Number(part)
+    if (!Number.isNaN(n)) acc.push(n)
+    return acc
+  }, [])
+}
+
 function buildWhereClause(year: string, season: string): WhereClause {
   const conditions: Array<string> = []
   const args: Array<string | number> = []
 
-  if (year !== 'all') {
-    const years = year
-      .split(',')
-      .map(Number)
-      .filter((n) => !Number.isNaN(n))
-    if (years.length > 0) {
-      conditions.push(`year IN (${years.map(() => '?').join(',')})`)
-      args.push(...years)
-    }
+  const years = parseYears(year)
+  if (years.length > 0) {
+    conditions.push(`year IN (${years.map(() => '?').join(',')})`)
+    args.push(...years)
   }
 
   const months = getSeasonMonthsClause(season)
@@ -99,17 +103,12 @@ export function windDistributionQueryFromReadings(
   const conditions: Array<string> = ['wind_speed IS NOT NULL']
   const args: Array<string | number> = []
 
-  if (year !== 'all') {
-    const years = year
-      .split(',')
-      .map(Number)
-      .filter((n) => !Number.isNaN(n))
-    if (years.length > 0) {
-      conditions.push(
-        `CAST(strftime('%Y', recorded_at) AS INTEGER) IN (${years.map(() => '?').join(',')})`,
-      )
-      args.push(...years)
-    }
+  const years = parseYears(year)
+  if (years.length > 0) {
+    conditions.push(
+      `CAST(strftime('%Y', recorded_at) AS INTEGER) IN (${years.map(() => '?').join(',')})`,
+    )
+    args.push(...years)
   }
 
   const months = getSeasonMonthsClause(season)

@@ -32,7 +32,7 @@ export const GazetteerRolodex = () => {
 
   return (
     <section className="text-center mt-20 container mx-auto">
-      <h2 className="text-3xl font-bold text-foreground mb-4">
+      <h2 className="text-3xl font-semibold text-foreground mb-4">
         Explore Locations
       </h2>
       <p className="text-muted-foreground mb-8 max-w-2xl mx-auto text-balance">
@@ -119,7 +119,7 @@ export const GazetteerRolodex = () => {
 
                     {/* Card Content */}
                     <div className="p-6 space-y-4">
-                      <h3 className="text-2xl font-bold text-foreground">
+                      <h3 className="text-2xl font-semibold text-foreground">
                         {entry.name}
                       </h3>
 

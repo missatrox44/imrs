@@ -97,8 +97,10 @@ export const SpeciesGridView = ({ items }: { items: Array<Species> }) => {
                               item.order_name,
                               item.family,
                             ]
-                              .map((crumb) => crumb?.trim())
-                              .filter(Boolean)
+                              .flatMap((crumb) => {
+                                const trimmed = crumb?.trim()
+                                return trimmed ? [trimmed] : []
+                              })
                               .join(' › ')}
                           </p>
 

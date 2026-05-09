@@ -26,7 +26,11 @@ export const SpeciesTableView = ({ items }: { items: Array<Species> }) => {
   const virtualItems = virtualizer.getVirtualItems()
 
   return (
-    <div className="border bg-card" role="table" aria-label="Species index results">
+    <div
+      className="border bg-card"
+      role="table"
+      aria-label="Species index results"
+    >
       <div role="rowgroup">
         <div role="row" className={`border-b ${rowGridClass}`}>
           <div role="columnheader" className={headerCellClass}>
@@ -44,10 +48,16 @@ export const SpeciesTableView = ({ items }: { items: Array<Species> }) => {
           <div role="columnheader" className={headerCellClass}>
             Class
           </div>
-          <div role="columnheader" className={`${headerCellClass} hidden lg:flex`}>
+          <div
+            role="columnheader"
+            className={`${headerCellClass} hidden lg:flex`}
+          >
             Order
           </div>
-          <div role="columnheader" className={`${headerCellClass} hidden md:flex`}>
+          <div
+            role="columnheader"
+            className={`${headerCellClass} hidden md:flex`}
+          >
             Family
           </div>
           <div role="columnheader" className={headerCellClass}>
@@ -86,7 +96,10 @@ export const SpeciesTableView = ({ items }: { items: Array<Species> }) => {
               <div role="cell" className="p-4 flex items-center">
                 {item.category && getCategoryIcon(item.category)}
               </div>
-              <div role="cell" className="p-4 flex items-center font-medium relative min-w-0">
+              <div
+                role="cell"
+                className="p-4 flex items-center font-medium relative min-w-0"
+              >
                 <Link
                   to="/species/$speciesId"
                   params={{ speciesId: String(item.id) }}
@@ -106,10 +119,16 @@ export const SpeciesTableView = ({ items }: { items: Array<Species> }) => {
               <div role="cell" className="p-4 flex items-center truncate">
                 {item.class_name || '-'}
               </div>
-              <div role="cell" className="p-4 hidden lg:flex items-center truncate">
+              <div
+                role="cell"
+                className="p-4 hidden lg:flex items-center truncate"
+              >
                 {item.order_name || '-'}
               </div>
-              <div role="cell" className="p-4 hidden md:flex items-center truncate">
+              <div
+                role="cell"
+                className="p-4 hidden md:flex items-center truncate"
+              >
                 {item.family || '-'}
               </div>
               <div role="cell" className="p-4 flex items-center">

@@ -30,7 +30,10 @@ function capitalize(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
 }
 
-function getUniqueValues(items: Array<Species>, key: keyof Species): Array<string> {
+function getUniqueValues(
+  items: Array<Species>,
+  key: keyof Species,
+): Array<string> {
   const values = new Set<string>()
   for (const item of items) {
     const val = item[key]
@@ -52,13 +55,13 @@ export function AdvancedSearch({
   sortDirection,
   onSortChange,
 }: AdvancedSearchProps) {
-
   // Compute cascading options for each taxonomic rank
   const taxonomicOptions = useMemo(() => {
     // Start with species filtered by category
-    const baseItems = activeCategory === 'all'
-      ? species
-      : species.filter((s) => s.category === activeCategory)
+    const baseItems =
+      activeCategory === 'all'
+        ? species
+        : species.filter((s) => s.category === activeCategory)
 
     const options: Record<string, Array<string>> = {}
 
@@ -71,7 +74,9 @@ export function AdvancedSearch({
         const selectedValue = taxonomicFilters[higherRank.key]
         if (selectedValue) {
           filtered = filtered.filter(
-            (s) => s[higherRank.key as keyof Species]?.toString().toLowerCase() === selectedValue.toLowerCase(),
+            (s) =>
+              s[higherRank.key as keyof Species]?.toString().toLowerCase() ===
+              selectedValue.toLowerCase(),
           )
         }
       }
@@ -81,7 +86,10 @@ export function AdvancedSearch({
     return options
   }, [species, activeCategory, taxonomicFilters])
 
-  const handleFilterChange = (rankKey: keyof TaxonomicFilters, value: string | null) => {
+  const handleFilterChange = (
+    rankKey: keyof TaxonomicFilters,
+    value: string | null,
+  ) => {
     const newFilters = { ...taxonomicFilters }
     newFilters[rankKey] = value
 
@@ -168,7 +176,14 @@ export function AdvancedSearch({
                   <SelectValue placeholder="All" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All {label.endsWith('y') ? `${label.slice(0, -1)}ies` : label.endsWith('s') ? `${label}es` : `${label}s`}</SelectItem>
+                  <SelectItem value="all">
+                    All{' '}
+                    {label.endsWith('y')
+                      ? `${label.slice(0, -1)}ies`
+                      : label.endsWith('s')
+                        ? `${label}es`
+                        : `${label}s`}
+                  </SelectItem>
                   {options.map((item) => (
                     <SelectItem key={item} value={item}>
                       {item}

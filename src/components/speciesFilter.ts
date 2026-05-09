@@ -39,7 +39,9 @@ export function filterByCategory(
   items: Array<Species>,
   category: Category,
 ): Array<Species> {
-  return category === 'all' ? items : items.filter((s) => s.category === category)
+  return category === 'all'
+    ? items
+    : items.filter((s) => s.category === category)
 }
 
 export function sortSpecies(

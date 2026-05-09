@@ -52,8 +52,11 @@ export const ImageCarousel = () => {
             })
           }
         > */}
-          {[...CAROUSEL_IMAGES, ...CAROUSEL_IMAGES].map((image, index) => (
-            <div key={index} className="shrink-0 w-48 md:w-56">
+          {[
+            ...CAROUSEL_IMAGES.map((image) => ({ image, copy: 'a' as const })),
+            ...CAROUSEL_IMAGES.map((image) => ({ image, copy: 'b' as const })),
+          ].map(({ image, copy }) => (
+            <div key={`${copy}-${image.src}`} className="shrink-0 w-48 md:w-56">
               <Card className="border-0 overflow-hidden">
                 <CardContent className="p-0">
                   <img

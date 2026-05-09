@@ -12,7 +12,7 @@ export const Home = () => {
       <main className="mx-auto px-4 py-12 container">
         {/* Hero Section */}
         <section className="text-center max-w-4xl mx-auto mb-16">
-          <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
+          <h1 className="text-4xl md:text-6xl font-semibold text-foreground mb-6">
             IMRS Biodiversity
             <span className="gradient-hero bg-clip-text text-foreground">
               {' '}
