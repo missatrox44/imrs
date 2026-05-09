@@ -5,6 +5,7 @@ import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { Analytics } from '@vercel/analytics/react'
+import { LazyMotion, domAnimation } from 'framer-motion'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import appCss from '../styles.css?url'
@@ -90,23 +91,24 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <html lang="en">
-        <head>
-          <HeadContent />
-        </head>
-        <body>
-          <a
-            href="#main-content"
-            className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-primary focus:text-primary-foreground focus:px-4 focus:py-2 focus:text-sm focus:font-medium"
-          >
-            Skip to main content
-          </a>
-          <Header />
-          <div id="main-content">{children}</div>
-          <Footer />
-          <TanStackRouterDevtools position="bottom-right" />
-          <ReactQueryDevtools buttonPosition="bottom-left" />
-          {/* <TanstackDevtools
+      <LazyMotion features={domAnimation} strict>
+        <html lang="en">
+          <head>
+            <HeadContent />
+          </head>
+          <body>
+            <a
+              href="#main-content"
+              className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-primary focus:text-primary-foreground focus:px-4 focus:py-2 focus:text-sm focus:font-medium"
+            >
+              Skip to main content
+            </a>
+            <Header />
+            <div id="main-content">{children}</div>
+            <Footer />
+            <TanStackRouterDevtools position="bottom-right" />
+            <ReactQueryDevtools buttonPosition="bottom-left" />
+            {/* <TanstackDevtools
           config={{
             position: 'bottom-left',
           }}
@@ -117,10 +119,11 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             },
           ]}
         />  */}
-          <Scripts />
-          <Analytics />
-        </body>
-      </html>
+            <Scripts />
+            <Analytics />
+          </body>
+        </html>
+      </LazyMotion>
     </QueryClientProvider>
   )
 }

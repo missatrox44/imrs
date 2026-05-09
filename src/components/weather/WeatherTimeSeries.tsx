@@ -1,9 +1,10 @@
-import { useMemo, useState } from 'react'
+import { Suspense, lazy, useMemo, useState } from 'react'
 import WeatherChartCard from './WeatherChartCard'
-import WeatherTimeSeriesPanel from './WeatherTimeSeriesPanel'
 import type { WeatherDailyRow } from '@/types/weather'
 import { WEATHER_COLORS } from '@/lib/weatherColors'
 import { isMonsoonMonth } from '@/lib/weatherUtils'
+
+const WeatherTimeSeriesPanel = lazy(() => import('./WeatherTimeSeriesPanel'))
 
 interface WeatherTimeSeriesProps {
   data: Array<WeatherDailyRow> | undefined
@@ -52,7 +53,10 @@ export default function WeatherTimeSeries({
       }
     }
     if (currentStart) {
-      ranges.push({ start: currentStart, end: data[data.length - 1].date_local })
+      ranges.push({
+        start: currentStart,
+        end: data[data.length - 1].date_local,
+      })
     }
     return ranges
   }, [data])
@@ -74,131 +78,133 @@ export default function WeatherTimeSeries({
       isLoading={isLoading}
       minHeight={850}
     >
-      <div className="space-y-6">
-        {/* Panel 1: Temperature + Dew Point (°C) */}
-        <WeatherTimeSeriesPanel
-          data={chartData}
-          height={200}
-          yAxisLabel="°C"
-          showXAxis={false}
-          showBrush={false}
-          brushIndex={brushIndex}
-          onBrushChange={handleBrushChange}
-          monsoonRanges={monsoonRanges}
-          tickInterval={tickInterval}
-          series={[
-            {
-              dataKey: 'tempRange',
-              type: 'area',
-              color: WEATHER_COLORS.temp,
-              fill: WEATHER_COLORS.temp,
-              fillOpacity: 0.15,
-              strokeWidth: 0,
-              name: 'Daily Range (°C)',
-            },
-            {
-              dataKey: 'tempAvg',
-              type: 'line',
-              color: WEATHER_COLORS.temp,
-              strokeWidth: 1.5,
-              name: 'Temp Avg (°C)',
-            },
-            {
-              dataKey: 'dewpoint',
-              type: 'line',
-              color: WEATHER_COLORS.dewpoint,
-              strokeWidth: 1.5,
-              name: 'Dew Point (°C)',
-            },
-          ]}
-        />
+      <Suspense fallback={<div className="h-[850px]" aria-hidden="true" />}>
+        <div className="space-y-6">
+          {/* Panel 1: Temperature + Dew Point (°C) */}
+          <WeatherTimeSeriesPanel
+            data={chartData}
+            height={200}
+            yAxisLabel="°C"
+            showXAxis={false}
+            showBrush={false}
+            brushIndex={brushIndex}
+            onBrushChange={handleBrushChange}
+            monsoonRanges={monsoonRanges}
+            tickInterval={tickInterval}
+            series={[
+              {
+                dataKey: 'tempRange',
+                type: 'area',
+                color: WEATHER_COLORS.temp,
+                fill: WEATHER_COLORS.temp,
+                fillOpacity: 0.15,
+                strokeWidth: 0,
+                name: 'Daily Range (°C)',
+              },
+              {
+                dataKey: 'tempAvg',
+                type: 'line',
+                color: WEATHER_COLORS.temp,
+                strokeWidth: 1.5,
+                name: 'Temp Avg (°C)',
+              },
+              {
+                dataKey: 'dewpoint',
+                type: 'line',
+                color: WEATHER_COLORS.dewpoint,
+                strokeWidth: 1.5,
+                name: 'Dew Point (°C)',
+              },
+            ]}
+          />
 
-        {/* Panel 2: Humidity + Precipitation (% / mm) */}
-        <WeatherTimeSeriesPanel
-          data={chartData}
-          height={200}
-          yAxisLabel="%"
-          rightYAxisLabel="mm"
-          showXAxis={false}
-          showBrush={false}
-          brushIndex={brushIndex}
-          onBrushChange={handleBrushChange}
-          monsoonRanges={monsoonRanges}
-          tickInterval={tickInterval}
-          series={[
-            {
-              dataKey: 'humidity',
-              type: 'line',
-              color: WEATHER_COLORS.humidity,
-              strokeWidth: 1.5,
-              name: 'Humidity (%)',
-            },
-            {
-              dataKey: 'precip',
-              type: 'bar',
-              color: WEATHER_COLORS.precip,
-              fillOpacity: 0.7,
-              barSize: 3,
-              name: 'Rain (mm)',
-              yAxisId: 'right',
-            },
-          ]}
-        />
+          {/* Panel 2: Humidity + Precipitation (% / mm) */}
+          <WeatherTimeSeriesPanel
+            data={chartData}
+            height={200}
+            yAxisLabel="%"
+            rightYAxisLabel="mm"
+            showXAxis={false}
+            showBrush={false}
+            brushIndex={brushIndex}
+            onBrushChange={handleBrushChange}
+            monsoonRanges={monsoonRanges}
+            tickInterval={tickInterval}
+            series={[
+              {
+                dataKey: 'humidity',
+                type: 'line',
+                color: WEATHER_COLORS.humidity,
+                strokeWidth: 1.5,
+                name: 'Humidity (%)',
+              },
+              {
+                dataKey: 'precip',
+                type: 'bar',
+                color: WEATHER_COLORS.precip,
+                fillOpacity: 0.7,
+                barSize: 3,
+                name: 'Rain (mm)',
+                yAxisId: 'right',
+              },
+            ]}
+          />
 
-        {/* Panel 3: Wind Speed + Gust Speed (km/hr) */}
-        <WeatherTimeSeriesPanel
-          data={chartData}
-          height={200}
-          yAxisLabel="km/hr"
-          showXAxis={false}
-          showBrush={false}
-          brushIndex={brushIndex}
-          onBrushChange={handleBrushChange}
-          monsoonRanges={monsoonRanges}
-          tickInterval={tickInterval}
-          series={[
-            {
-              dataKey: 'wind',
-              type: 'line',
-              color: WEATHER_COLORS.wind,
-              strokeWidth: 1.5,
-              name: 'Wind Avg (km/hr)',
-            },
-            {
-              dataKey: 'gustMax',
-              type: 'line',
-              color: WEATHER_COLORS.gust,
-              strokeWidth: 1,
-              strokeDasharray: '4 2',
-              name: 'Gust Max (km/hr)',
-            },
-          ]}
-        />
+          {/* Panel 3: Wind Speed + Gust Speed (km/hr) */}
+          <WeatherTimeSeriesPanel
+            data={chartData}
+            height={200}
+            yAxisLabel="km/hr"
+            showXAxis={false}
+            showBrush={false}
+            brushIndex={brushIndex}
+            onBrushChange={handleBrushChange}
+            monsoonRanges={monsoonRanges}
+            tickInterval={tickInterval}
+            series={[
+              {
+                dataKey: 'wind',
+                type: 'line',
+                color: WEATHER_COLORS.wind,
+                strokeWidth: 1.5,
+                name: 'Wind Avg (km/hr)',
+              },
+              {
+                dataKey: 'gustMax',
+                type: 'line',
+                color: WEATHER_COLORS.gust,
+                strokeWidth: 1,
+                strokeDasharray: '4 2',
+                name: 'Gust Max (km/hr)',
+              },
+            ]}
+          />
 
-        {/* Panel 4: Pressure (mm Hg) — with x-axis labels and brush */}
-        <WeatherTimeSeriesPanel
-          data={chartData}
-          height={200}
-          yAxisLabel="mm Hg"
-          showXAxis={true}
-          showBrush={true}
-          brushIndex={brushIndex}
-          onBrushChange={handleBrushChange}
-          monsoonRanges={monsoonRanges}
-          tickInterval={tickInterval}
-          series={[
-            {
-              dataKey: 'pressure',
-              type: 'area',
-              color: WEATHER_COLORS.pressure,
-              fill: WEATHER_COLORS.pressure,
-              fillOpacity: 0.1,
-              strokeWidth: 1.5,
-              name: 'Pressure (mm Hg)',
-            },
-          ]}
-        />
-      </div>
+          {/* Panel 4: Pressure (mm Hg) — with x-axis labels and brush */}
+          <WeatherTimeSeriesPanel
+            data={chartData}
+            height={200}
+            yAxisLabel="mm Hg"
+            showXAxis={true}
+            showBrush={true}
+            brushIndex={brushIndex}
+            onBrushChange={handleBrushChange}
+            monsoonRanges={monsoonRanges}
+            tickInterval={tickInterval}
+            series={[
+              {
+                dataKey: 'pressure',
+                type: 'area',
+                color: WEATHER_COLORS.pressure,
+                fill: WEATHER_COLORS.pressure,
+                fillOpacity: 0.1,
+                strokeWidth: 1.5,
+                name: 'Pressure (mm Hg)',
+              },
+            ]}
+          />
+        </div>
+      </Suspense>
     </WeatherChartCard>
   )
 }

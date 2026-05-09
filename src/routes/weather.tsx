@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import type { Season } from '@/types/weather'
 import { Loader } from '@/components/Loader'
 import WeatherDashboard from '@/components/weather/WeatherDashboard'
+import { fetchWeatherSummary } from '@/server/weatherService'
 
 type WeatherSearch = {
   year: string
@@ -16,15 +17,11 @@ export const Route = createFileRoute('/weather')({
 
   ssr: 'data-only',
 
-  loader: async ({ location }) => {
-    const params = new URLSearchParams({
-      view: 'summary',
-      year: (location.search as WeatherSearch).year,
-      season: (location.search as WeatherSearch).season,
+  loader: ({ location }) => {
+    const search = location.search as WeatherSearch
+    return fetchWeatherSummary({
+      data: { year: search.year, season: search.season },
     })
-    const res = await fetch(`/api/weather?${params}`)
-    if (!res.ok) throw new Error('Failed to fetch weather data')
-    return res.json()
   },
 
   pendingComponent: () => <Loader dataTitle="weather data" />,
