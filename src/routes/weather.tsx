@@ -9,12 +9,12 @@ type WeatherSearch = {
 }
 
 export const Route = createFileRoute('/weather')({
-  ssr: 'data-only',
-
   validateSearch: (search: Record<string, unknown>): WeatherSearch => ({
     year: (search.year as string | undefined) ?? 'all',
     season: (search.season as Season | undefined) ?? 'all',
   }),
+
+  ssr: 'data-only',
 
   loader: async ({ location }) => {
     const params = new URLSearchParams({

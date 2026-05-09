@@ -86,8 +86,7 @@ export const Route = createRootRoute({
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
-  const queryClient = new QueryClient()
-  // const queryClient = React.useMemo(() => new QueryClient(), []);
+  const [queryClient] = React.useState(() => new QueryClient())
 
   return (
     <QueryClientProvider client={queryClient}>

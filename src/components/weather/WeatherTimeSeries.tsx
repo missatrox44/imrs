@@ -39,14 +39,14 @@ export default function WeatherTimeSeries({
     const ranges: Array<{ start: string; end: string }> = []
     let currentStart: string | null = null
 
-    for (const row of data) {
+    for (const [i, row] of data.entries()) {
       const inMonsoon = isMonsoonMonth(row.month)
       if (inMonsoon && !currentStart) {
         currentStart = row.date_local
       } else if (!inMonsoon && currentStart) {
         ranges.push({
           start: currentStart,
-          end: data[data.indexOf(row) - 1]?.date_local || currentStart,
+          end: data[i - 1]?.date_local || currentStart,
         })
         currentStart = null
       }

@@ -4,11 +4,11 @@ import SpeciesIndex from '@/components/SpeciesIndex'
 import { Loader } from '@/components/Loader'
 
 export const Route = createFileRoute('/species/')({
-  ssr: 'data-only',
-
   validateSearch: (search: Record<string, unknown>): { category: Category } => ({
     category: (search.category || 'all') as Category,
   }),
+
+  ssr: 'data-only',
 
   loader: async () => {
     const res = await fetch('/api/species')
