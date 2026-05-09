@@ -111,7 +111,9 @@ export default function WeatherStatCards({
     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
       <StatCard
         label="Avg Daily High"
-        value={summary.avgDailyHigh != null ? summary.avgDailyHigh.toFixed(1) : '—'}
+        value={
+          summary.avgDailyHigh != null ? summary.avgDailyHigh.toFixed(1) : '—'
+        }
         unit="°C"
         icon={<Thermometer className="size-4" />}
         sparkData={summary.sparklines.temp}
@@ -120,7 +122,9 @@ export default function WeatherStatCards({
       />
       <StatCard
         label="Total Precipitation"
-        value={summary.totalPrecip != null ? summary.totalPrecip.toFixed(1) : '—'}
+        value={
+          summary.totalPrecip != null ? summary.totalPrecip.toFixed(1) : '—'
+        }
         unit="mm"
         icon={<CloudRain className="size-4" />}
         sparkData={summary.sparklines.precip}
@@ -129,7 +133,9 @@ export default function WeatherStatCards({
       />
       <StatCard
         label="Avg Humidity"
-        value={summary.avgHumidity != null ? summary.avgHumidity.toFixed(1) : '—'}
+        value={
+          summary.avgHumidity != null ? summary.avgHumidity.toFixed(1) : '—'
+        }
         unit="%"
         icon={<Droplets className="size-4" />}
         sparkData={summary.sparklines.humidity}
@@ -138,7 +144,9 @@ export default function WeatherStatCards({
       />
       <StatCard
         label="Avg Wind Speed"
-        value={summary.avgWindSpeed != null ? summary.avgWindSpeed.toFixed(1) : '—'}
+        value={
+          summary.avgWindSpeed != null ? summary.avgWindSpeed.toFixed(1) : '—'
+        }
         unit="km/hr"
         icon={<Wind className="size-4" />}
         sparkData={summary.sparklines.wind}

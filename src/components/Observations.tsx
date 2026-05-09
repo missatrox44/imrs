@@ -5,18 +5,32 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 import { useInView } from 'react-intersection-observer'
 
 import type { Observation } from '@/types/observation'
-import type { TaxonGroup } from '@/types/taxon';
+import type { TaxonGroup } from '@/types/taxon'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { Badge } from '@/components/ui/badge'
 // import { Loader } from '@/components/Loader'
 import EmptyState from '@/components/EmptyState'
 import { formatDate } from '@/lib/formatDate'
 import { getPhotoUrl } from '@/lib/getPhotoUrl'
 import { ObservationCardSkeleton } from '@/components/ObservationCardSkeleton'
-import { GC_TIME, ORDER, ORDER_BY, PER_PAGE, PLACE_ID, SKELETON_COUNT, STALE_TIME, iNaturalistUrl } from '@/data/constants'
+import {
+  GC_TIME,
+  ORDER,
+  ORDER_BY,
+  PER_PAGE,
+  PLACE_ID,
+  SKELETON_COUNT,
+  STALE_TIME,
+  iNaturalistUrl,
+} from '@/data/constants'
 import { GROUP_TO_TAXON_ID } from '@/types/taxon'
-
 
 interface ObservationsPage {
   page: number
@@ -27,7 +41,6 @@ interface ObservationsPage {
 interface ObservationsProps {
   initialPage: ObservationsPage
 }
-
 
 const Observations = ({ initialPage }: ObservationsProps) => {
   const [selectedGroup, setSelectedGroup] = useState<TaxonGroup>('all')
@@ -42,7 +55,6 @@ const Observations = ({ initialPage }: ObservationsProps) => {
       initialPageParam: 1,
 
       queryFn: async ({ pageParam }) => {
-
         iNaturalistUrl.search = new URLSearchParams({
           place_id: PLACE_ID,
           order: ORDER,
@@ -82,7 +94,7 @@ const Observations = ({ initialPage }: ObservationsProps) => {
 
       // monthly updates → long cache
       staleTime: STALE_TIME,
-      gcTime: GC_TIME
+      gcTime: GC_TIME,
     })
 
   // flatten pages
@@ -95,27 +107,22 @@ const Observations = ({ initialPage }: ObservationsProps) => {
     }
   }, [inView, hasNextPage, isFetching, fetchNextPage])
 
-
   const filteredObservations = useMemo(() => {
     if (selectedGroup === 'all') return observations
 
     const targetTaxonId = GROUP_TO_TAXON_ID[selectedGroup]
     if (!targetTaxonId) return observations
 
-    return observations.filter(obs => {
+    return observations.filter((obs) => {
       // Check if observation's taxon hierarchy includes the target group
       const taxonIds = obs.taxon?.ancestor_ids || []
       return taxonIds.includes(targetTaxonId)
     })
   }, [observations, selectedGroup])
 
-
-
   if (!observations.length) {
     return <EmptyState />
   }
-
-
 
   return (
     <div className="min-h-screen bg-background">
@@ -126,51 +133,59 @@ const Observations = ({ initialPage }: ObservationsProps) => {
           </h1>
           <p className="text-muted-foreground">
             Biodiversity observations on Indio Mountains Research Station from{' '}
-            <a rel="noreferrer noopener" target="_blank" href="https://www.inaturalist.org/">
+            <a
+              rel="noreferrer noopener"
+              target="_blank"
+              href="https://www.inaturalist.org/"
+            >
               iNaturalist<span className="sr-only"> (opens in new tab)</span>
-            </a>.
+            </a>
+            .
           </p>
           <p className="text-muted-foreground font-bold">
             Click any observation card to view full observation details.
           </p>
-
         </section>
 
         <div className="sticky top-16 z-40 bg-background py-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-            {selectedGroup !== 'all' ? (
-              <span
-                className="text-sm text-muted-foreground"
-                role="status"
-                aria-live="polite"
-              >
-                Showing {filteredObservations.length} of {observations.length} observations
-              </span>
-            ) : (
-              <span />
-            )}
-
-            <Select
-              value={selectedGroup}
-              onValueChange={(value) => setSelectedGroup(value as TaxonGroup)}
+          {selectedGroup !== 'all' ? (
+            <span
+              className="text-sm text-muted-foreground"
+              role="status"
+              aria-live="polite"
             >
-              <SelectTrigger aria-label="Filter by group" className="w-48 cursor-pointer">
-                <SelectValue placeholder="Filter by group" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Groups</SelectItem>
-                <SelectItem value="plants">Plants</SelectItem>
-                {/* <SelectItem value="fungi">Fungi</SelectItem> */}
-                <SelectItem value="mammals">Mammals</SelectItem>
-                <SelectItem value="birds">Birds</SelectItem>
-                <SelectItem value="reptiles">Reptiles</SelectItem>
-                <SelectItem value="amphibians">Amphibians</SelectItem>
-                {/* <SelectItem value="fish">Fish</SelectItem> */}
-                <SelectItem value="insects">Insects</SelectItem>
-                <SelectItem value="arachnid">Arachnids</SelectItem>
-                {/* <SelectItem value="invertebrates">Other Invertebrates</SelectItem> */}
-              </SelectContent>
-            </Select>
-          </div>
+              Showing {filteredObservations.length} of {observations.length}{' '}
+              observations
+            </span>
+          ) : (
+            <span />
+          )}
+
+          <Select
+            value={selectedGroup}
+            onValueChange={(value) => setSelectedGroup(value as TaxonGroup)}
+          >
+            <SelectTrigger
+              aria-label="Filter by group"
+              className="w-48 cursor-pointer"
+            >
+              <SelectValue placeholder="Filter by group" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Groups</SelectItem>
+              <SelectItem value="plants">Plants</SelectItem>
+              {/* <SelectItem value="fungi">Fungi</SelectItem> */}
+              <SelectItem value="mammals">Mammals</SelectItem>
+              <SelectItem value="birds">Birds</SelectItem>
+              <SelectItem value="reptiles">Reptiles</SelectItem>
+              <SelectItem value="amphibians">Amphibians</SelectItem>
+              {/* <SelectItem value="fish">Fish</SelectItem> */}
+              <SelectItem value="insects">Insects</SelectItem>
+              <SelectItem value="arachnid">Arachnids</SelectItem>
+              {/* <SelectItem value="invertebrates">Other Invertebrates</SelectItem> */}
+            </SelectContent>
+          </Select>
+        </div>
         <section className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredObservations.map((observation) => (
             <Link
@@ -198,7 +213,7 @@ const Observations = ({ initialPage }: ObservationsProps) => {
                       }
                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                       onError={(e) => {
-                        ; (e.target as HTMLImageElement).style.display = 'none'
+                        ;(e.target as HTMLImageElement).style.display = 'none'
                       }}
                     />
                   </div>

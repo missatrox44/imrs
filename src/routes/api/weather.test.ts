@@ -78,7 +78,10 @@ describe('GET /api/weather', () => {
     await callGet({ view: 'daily', year: '2024', season: 'monsoon' })
 
     expect(execute).toHaveBeenCalledTimes(1)
-    const callArg = execute.mock.calls[0][0] as { sql: string; args: Array<unknown> }
+    const callArg = execute.mock.calls[0][0] as {
+      sql: string
+      args: Array<unknown>
+    }
     expect(callArg.args).toContain(2024) // year filter
     expect(callArg.args).toEqual(expect.arrayContaining([7, 8, 9])) // monsoon months
     expect(callArg.sql).toMatch(/WHERE/)

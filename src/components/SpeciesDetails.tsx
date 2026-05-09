@@ -12,7 +12,13 @@ import type { Observation } from '@/types/observation'
 import type { Species } from '@/types/species'
 
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Route } from '@/routes/species.$speciesId'
 import { formatDate } from '@/lib/formatDate'
@@ -139,7 +145,9 @@ export function SpeciesDetails() {
                 The requested species could not be found in our database.
               </p>
               <Button asChild>
-                <Link to="/species" search={{ category: 'all' }}>Back to Species Index</Link>
+                <Link to="/species" search={{ category: 'all' }}>
+                  Back to Species Index
+                </Link>
               </Button>
             </CardContent>
           </Card>
@@ -233,7 +241,9 @@ export function SpeciesDetails() {
             <Card className="gradient-card shadow-card">
               <CardHeader>
                 <CardTitle>Recent Observations</CardTitle>
-                <CardDescription>Sourced from iNaturalist, not necessarily observed at IMRS</CardDescription>
+                <CardDescription>
+                  Sourced from iNaturalist, not necessarily observed at IMRS
+                </CardDescription>
               </CardHeader>
 
               <CardContent>
@@ -271,7 +281,8 @@ export function SpeciesDetails() {
                                       src={photoUrl}
                                       alt={
                                         observation.species_guess ||
-                                        observation.taxon?.preferred_common_name ||
+                                        observation.taxon
+                                          ?.preferred_common_name ||
                                         observation.taxon?.name ||
                                         `Observation #${observation.id}`
                                       }

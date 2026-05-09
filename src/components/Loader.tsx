@@ -10,5 +10,5 @@ export const Loader = ({ dataTitle }: { dataTitle: string }) => {
         </div>
       </div>
     </section>
-  );
-};
+  )
+}

@@ -19,11 +19,14 @@ const fixture: Array<Species> = [
   { id: 2, category: 'birds', genus: 'Falco', species: 'peregrinus' },
 ]
 
-function renderAdvancedSearch(overrides: Partial<Parameters<typeof AdvancedSearch>[0]> = {}) {
+function renderAdvancedSearch(
+  overrides: Partial<Parameters<typeof AdvancedSearch>[0]> = {},
+) {
   const props = {
     activeCategory: 'all' as const,
     onCategoryChange: vi.fn(),
-    getCategoryCount: (cat: string) => (cat === 'all' ? 2 : cat === 'mammals' ? 1 : 0),
+    getCategoryCount: (cat: string) =>
+      cat === 'all' ? 2 : cat === 'mammals' ? 1 : 0,
     species: fixture,
     taxonomicFilters: EMPTY_FILTERS,
     onTaxonomicFilterChange: vi.fn(),

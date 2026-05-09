@@ -10,7 +10,10 @@ function buildWhereClause(year: string, season: string): WhereClause {
   const args: Array<string | number> = []
 
   if (year !== 'all') {
-    const years = year.split(',').map(Number).filter((n) => !Number.isNaN(n))
+    const years = year
+      .split(',')
+      .map(Number)
+      .filter((n) => !Number.isNaN(n))
     if (years.length > 0) {
       conditions.push(`year IN (${years.map(() => '?').join(',')})`)
       args.push(...years)
@@ -97,7 +100,10 @@ export function windDistributionQueryFromReadings(
   const args: Array<string | number> = []
 
   if (year !== 'all') {
-    const years = year.split(',').map(Number).filter((n) => !Number.isNaN(n))
+    const years = year
+      .split(',')
+      .map(Number)
+      .filter((n) => !Number.isNaN(n))
     if (years.length > 0) {
       conditions.push(
         `CAST(strftime('%Y', recorded_at) AS INTEGER) IN (${years.map(() => '?').join(',')})`,

@@ -12,28 +12,52 @@ export const SpeciesTableView = ({ items }: { items: Array<Species> }) => {
             <caption className="sr-only">Species index results</caption>
             <thead className="[&_tr]:border-b">
               <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
-                <th scope="col" className="h-12 px-4 align-middle font-medium text-muted-foreground w-12.5">
+                <th
+                  scope="col"
+                  className="h-12 px-4 align-middle font-medium text-muted-foreground w-12.5"
+                >
                   Type
                 </th>
-                <th scope="col" className="h-12 px-4 align-middle font-medium text-muted-foreground">
+                <th
+                  scope="col"
+                  className="h-12 px-4 align-middle font-medium text-muted-foreground"
+                >
                   Scientific Name
                 </th>
-                <th scope="col" className="h-12 px-4 align-middle font-medium text-muted-foreground">
+                <th
+                  scope="col"
+                  className="h-12 px-4 align-middle font-medium text-muted-foreground"
+                >
                   Common Name
                 </th>
-                <th scope="col" className="h-12 px-4 align-middle font-medium text-muted-foreground">
+                <th
+                  scope="col"
+                  className="h-12 px-4 align-middle font-medium text-muted-foreground"
+                >
                   Phylum
                 </th>
-                <th scope="col" className="h-12 px-4 align-middle font-medium text-muted-foreground">
+                <th
+                  scope="col"
+                  className="h-12 px-4 align-middle font-medium text-muted-foreground"
+                >
                   Class
                 </th>
-                <th scope="col" className="h-12 px-4 align-middle font-medium text-muted-foreground hidden lg:table-cell">
+                <th
+                  scope="col"
+                  className="h-12 px-4 align-middle font-medium text-muted-foreground hidden lg:table-cell"
+                >
                   Order
                 </th>
-                <th scope="col" className="h-12 px-4 align-middle font-medium text-muted-foreground hidden md:table-cell">
+                <th
+                  scope="col"
+                  className="h-12 px-4 align-middle font-medium text-muted-foreground hidden md:table-cell"
+                >
                   Family
                 </th>
-                <th scope="col" className="h-12 px-4 align-middle font-medium text-muted-foreground w-12.5">
+                <th
+                  scope="col"
+                  className="h-12 px-4 align-middle font-medium text-muted-foreground w-12.5"
+                >
                   <span className="sr-only">Details</span>
                 </th>
               </tr>
@@ -61,12 +85,8 @@ export const SpeciesTableView = ({ items }: { items: Array<Species> }) => {
                   <td className="p-4 align-middle">
                     {item.species_common_name || '-'}
                   </td>
-                  <td className="p-4 align-middle">
-                    {item.phylum || '-'}
-                  </td>
-                  <td className="p-4 align-middle">
-                    {item.class_name || '-'}
-                  </td>
+                  <td className="p-4 align-middle">{item.phylum || '-'}</td>
+                  <td className="p-4 align-middle">{item.class_name || '-'}</td>
                   <td className="p-4 align-middle hidden lg:table-cell">
                     {item.order_name || '-'}
                   </td>

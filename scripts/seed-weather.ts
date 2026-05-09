@@ -174,7 +174,16 @@ function insertReadings(db: Database.Database) {
         continue
       }
 
-      rows.push([isoDate, rain, windSpeed, gustSpeed, pressure, tempC, rhPct, dewptC])
+      rows.push([
+        isoDate,
+        rain,
+        windSpeed,
+        gustSpeed,
+        pressure,
+        tempC,
+        rhPct,
+        dewptC,
+      ])
     }
 
     console.log(`  Parsed ${rows.length} readings from ${year}`)
@@ -210,7 +219,9 @@ function aggregateDaily(db: Database.Database) {
     FROM weather_readings
     GROUP BY DATE(recorded_at)
   `)
-  const count = db.prepare('SELECT COUNT(*) as c FROM weather_daily').get() as { c: number }
+  const count = db.prepare('SELECT COUNT(*) as c FROM weather_daily').get() as {
+    c: number
+  }
   console.log(`  Daily rows: ${count.c}`)
 }
 
@@ -230,7 +241,9 @@ function aggregateHourly(db: Database.Database) {
     FROM weather_readings
     GROUP BY DATE(recorded_at), CAST(strftime('%H', recorded_at) AS INTEGER)
   `)
-  const count = db.prepare('SELECT COUNT(*) as c FROM weather_hourly').get() as { c: number }
+  const count = db
+    .prepare('SELECT COUNT(*) as c FROM weather_hourly')
+    .get() as { c: number }
   console.log(`  Hourly rows: ${count.c}`)
 }
 
@@ -271,4 +284,4 @@ function main() {
 main()
 
 // TO RUN:
-  // npx tsx scripts/seed-weather.ts 
+// npx tsx scripts/seed-weather.ts

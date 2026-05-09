@@ -3,8 +3,8 @@
 //   };
 export const formatElevation = (meters?: number): string => {
   if (meters === undefined) {
-    return "Unknown elevation";
+    return 'Unknown elevation'
   }
 
-  return `${meters.toLocaleString()} m`;
-};
+  return `${meters.toLocaleString()} m`
+}

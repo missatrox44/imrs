@@ -1,5 +1,5 @@
 import { createClient } from '@libsql/client'
-import type { Client } from '@libsql/client';
+import type { Client } from '@libsql/client'
 
 let _client: Client | null = null
 

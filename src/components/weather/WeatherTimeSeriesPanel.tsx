@@ -76,14 +76,19 @@ function CustomTooltip({ active, payload, label }: any) {
           const [low, high] = entry.value
           return (
             <div key={entry.dataKey} style={{ color: entry.color }}>
-              <p>Daily Low (°C)': {low != null ? Number(low).toFixed(1) : '—'}</p>
-              <p>Daily High (°C)': {high != null ? Number(high).toFixed(1) : '—'}</p>
+              <p>
+                Daily Low (°C)': {low != null ? Number(low).toFixed(1) : '—'}
+              </p>
+              <p>
+                Daily High (°C)': {high != null ? Number(high).toFixed(1) : '—'}
+              </p>
             </div>
           )
         }
         return (
           <p key={entry.dataKey} style={{ color: entry.color }}>
-            {entry.name}: {entry.value != null ? Number(entry.value).toFixed(1) : '—'}
+            {entry.name}:{' '}
+            {entry.value != null ? Number(entry.value).toFixed(1) : '—'}
           </p>
         )
       })}
@@ -119,168 +124,178 @@ export default function WeatherTimeSeriesPanel({
         )}
       </div>
       <div style={{ overflow: 'visible' }} className="[&_svg]:overflow-visible">
-      <ResponsiveContainer width="100%" height={height}>
-        <ComposedChart
-          data={data}
-          margin={{ top: 4, right: 40, left: 10, bottom: 0 }}
-          syncId="weather"
-        >
-          <CartesianGrid stroke={WEATHER_COLORS.gridLine} strokeDasharray="3 3" />
+        <ResponsiveContainer width="100%" height={height}>
+          <ComposedChart
+            data={data}
+            margin={{ top: 4, right: 40, left: 10, bottom: 0 }}
+            syncId="weather"
+          >
+            <CartesianGrid
+              stroke={WEATHER_COLORS.gridLine}
+              strokeDasharray="3 3"
+            />
 
-          <XAxis
-            dataKey="date"
-            tickFormatter={formatDate}
-            interval={tickInterval}
-            tick={showXAxis ? { fontSize: 11, fill: WEATHER_COLORS.text } : false}
-            tickLine={false}
-            axisLine={{ stroke: WEATHER_COLORS.gridLine }}
-            height={showXAxis ? 30 : 5}
-          />
+            <XAxis
+              dataKey="date"
+              tickFormatter={formatDate}
+              interval={tickInterval}
+              tick={
+                showXAxis ? { fontSize: 11, fill: WEATHER_COLORS.text } : false
+              }
+              tickLine={false}
+              axisLine={{ stroke: WEATHER_COLORS.gridLine }}
+              height={showXAxis ? 30 : 5}
+            />
 
-          <YAxis
-            yAxisId="left"
-            tick={{ fontSize: 11, fill: WEATHER_COLORS.text }}
-            tickLine={false}
-            axisLine={false}
-            width={45}
-          />
-
-          {hasRightAxis && (
             <YAxis
-              yAxisId="right"
-              orientation="right"
+              yAxisId="left"
               tick={{ fontSize: 11, fill: WEATHER_COLORS.text }}
               tickLine={false}
               axisLine={false}
               width={45}
             />
-          )}
 
-        <Tooltip content={<CustomTooltip />} />
-        {!showBrush && (
-          <Legend
-            wrapperStyle={{ fontSize: 12 }}
-            iconType="line"
-            verticalAlign="bottom"
-          />
-        )}
-
-        {monsoonRanges.map((range) => (
-          <ReferenceArea
-            key={range.start}
-            x1={range.start}
-            x2={range.end}
-            yAxisId="left"
-            fill={WEATHER_COLORS.monsoon}
-            fillOpacity={0.08}
-            strokeOpacity={0}
-          />
-        ))}
-
-        {series.map((s) => {
-          const yAxisId = s.yAxisId ?? 'left'
-
-          if (s.type === 'area') {
-            return (
-              <Area
-                key={s.dataKey}
-                yAxisId={yAxisId}
-                type="monotone"
-                dataKey={s.dataKey}
-                stroke={s.strokeWidth ? s.color : 'none'}
-                strokeWidth={s.strokeWidth ?? 0}
-                fill={s.fill ?? s.color}
-                fillOpacity={s.fillOpacity ?? 0.15}
-                baseValue={s.baseValue}
-                name={s.name}
-                dot={s.dot ?? false}
-                activeDot={s.activeDot ?? false}
-                legendType={s.legendType ?? 'line'}
+            {hasRightAxis && (
+              <YAxis
+                yAxisId="right"
+                orientation="right"
+                tick={{ fontSize: 11, fill: WEATHER_COLORS.text }}
+                tickLine={false}
+                axisLine={false}
+                width={45}
               />
-            )
-          }
+            )}
 
-          if (s.type === 'bar') {
-            return (
-              <Bar
-                key={s.dataKey}
-                yAxisId={yAxisId}
-                dataKey={s.dataKey}
-                fill={s.color}
-                fillOpacity={s.fillOpacity ?? 0.6}
-                name={s.name}
-                barSize={s.barSize ?? 3}
+            <Tooltip content={<CustomTooltip />} />
+            {!showBrush && (
+              <Legend
+                wrapperStyle={{ fontSize: 12 }}
+                iconType="line"
+                verticalAlign="bottom"
               />
-            )
-          }
+            )}
 
-          return (
-            <Line
-              key={s.dataKey}
-              yAxisId={yAxisId}
-              type="monotone"
-              dataKey={s.dataKey}
-              stroke={s.color}
-              strokeWidth={s.strokeWidth ?? 1.5}
-              strokeDasharray={s.strokeDasharray}
-              strokeOpacity={s.strokeOpacity ?? 1}
-              dot={false}
-              name={s.name}
-            />
-          )
-        })}
+            {monsoonRanges.map((range) => (
+              <ReferenceArea
+                key={range.start}
+                x1={range.start}
+                x2={range.end}
+                yAxisId="left"
+                fill={WEATHER_COLORS.monsoon}
+                fillOpacity={0.08}
+                strokeOpacity={0}
+              />
+            ))}
 
-      </ComposedChart>
-    </ResponsiveContainer>
-    </div>
-    {showBrush && (
-      <>
-        <div className="flex justify-center gap-4 py-1" style={{ fontSize: 12 }}>
-          {series.map((s) => (
-            <div key={s.dataKey} className="flex items-center gap-1.5">
-              <svg width="14" height="14">
-                <line
-                  x1="0"
-                  y1="7"
-                  x2="14"
-                  y2="7"
+            {series.map((s) => {
+              const yAxisId = s.yAxisId ?? 'left'
+
+              if (s.type === 'area') {
+                return (
+                  <Area
+                    key={s.dataKey}
+                    yAxisId={yAxisId}
+                    type="monotone"
+                    dataKey={s.dataKey}
+                    stroke={s.strokeWidth ? s.color : 'none'}
+                    strokeWidth={s.strokeWidth ?? 0}
+                    fill={s.fill ?? s.color}
+                    fillOpacity={s.fillOpacity ?? 0.15}
+                    baseValue={s.baseValue}
+                    name={s.name}
+                    dot={s.dot ?? false}
+                    activeDot={s.activeDot ?? false}
+                    legendType={s.legendType ?? 'line'}
+                  />
+                )
+              }
+
+              if (s.type === 'bar') {
+                return (
+                  <Bar
+                    key={s.dataKey}
+                    yAxisId={yAxisId}
+                    dataKey={s.dataKey}
+                    fill={s.color}
+                    fillOpacity={s.fillOpacity ?? 0.6}
+                    name={s.name}
+                    barSize={s.barSize ?? 3}
+                  />
+                )
+              }
+
+              return (
+                <Line
+                  key={s.dataKey}
+                  yAxisId={yAxisId}
+                  type="monotone"
+                  dataKey={s.dataKey}
                   stroke={s.color}
-                  strokeWidth={2}
+                  strokeWidth={s.strokeWidth ?? 1.5}
+                  strokeDasharray={s.strokeDasharray}
+                  strokeOpacity={s.strokeOpacity ?? 1}
+                  dot={false}
+                  name={s.name}
                 />
-              </svg>
-              <span style={{ color: s.color }}>{s.name}</span>
-            </div>
-          ))}
-        </div>
-        <div style={{ overflow: 'visible' }} className="[&_svg]:overflow-visible">
-          <ResponsiveContainer width="100%" height={56}>
-            <ComposedChart
-              data={data}
-              margin={{ top: 0, right: 40, left: 10, bottom: 0 }}
-              syncId="weather"
-            >
-              <Brush
-                dataKey="date"
-                height={36}
-                stroke={WEATHER_COLORS.gridLine}
-                tickFormatter={formatDate}
-                travellerWidth={8}
-                startIndex={brushIndex?.[0]}
-                endIndex={brushIndex?.[1]}
-                onChange={(range: any) => {
-                  if (range?.startIndex != null && range?.endIndex != null) {
-                    onBrushChange(range.startIndex, range.endIndex)
-                  }
-                }}
-              />
-            </ComposedChart>
-          </ResponsiveContainer>
-        </div>
-        <p className="text-center text-xs text-muted-foreground mt-1">
-          Drag the handles or slide the bar to zoom all panels
-        </p>
-      </>
-    )}
+              )
+            })}
+          </ComposedChart>
+        </ResponsiveContainer>
+      </div>
+      {showBrush && (
+        <>
+          <div
+            className="flex justify-center gap-4 py-1"
+            style={{ fontSize: 12 }}
+          >
+            {series.map((s) => (
+              <div key={s.dataKey} className="flex items-center gap-1.5">
+                <svg width="14" height="14">
+                  <line
+                    x1="0"
+                    y1="7"
+                    x2="14"
+                    y2="7"
+                    stroke={s.color}
+                    strokeWidth={2}
+                  />
+                </svg>
+                <span style={{ color: s.color }}>{s.name}</span>
+              </div>
+            ))}
+          </div>
+          <div
+            style={{ overflow: 'visible' }}
+            className="[&_svg]:overflow-visible"
+          >
+            <ResponsiveContainer width="100%" height={56}>
+              <ComposedChart
+                data={data}
+                margin={{ top: 0, right: 40, left: 10, bottom: 0 }}
+                syncId="weather"
+              >
+                <Brush
+                  dataKey="date"
+                  height={36}
+                  stroke={WEATHER_COLORS.gridLine}
+                  tickFormatter={formatDate}
+                  travellerWidth={8}
+                  startIndex={brushIndex?.[0]}
+                  endIndex={brushIndex?.[1]}
+                  onChange={(range: any) => {
+                    if (range?.startIndex != null && range?.endIndex != null) {
+                      onBrushChange(range.startIndex, range.endIndex)
+                    }
+                  }}
+                />
+              </ComposedChart>
+            </ResponsiveContainer>
+          </div>
+          <p className="text-center text-xs text-muted-foreground mt-1">
+            Drag the handles or slide the bar to zoom all panels
+          </p>
+        </>
+      )}
     </div>
   )
 }

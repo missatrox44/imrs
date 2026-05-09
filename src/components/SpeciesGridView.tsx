@@ -30,9 +30,11 @@ export const SpeciesGridView = ({ items }: { items: Array<Species> }) => {
                             </span>
                           )}
                           <h3 className="scientific-name text-lg font-medium truncate group-hover:underline">
-                            {item.genus || item.species
-                              ? `${item.genus ?? ''} ${item.species ?? ''}`.trim()
-                              : <em>Species not identified</em>}
+                            {item.genus || item.species ? (
+                              `${item.genus ?? ''} ${item.species ?? ''}`.trim()
+                            ) : (
+                              <em>Species not identified</em>
+                            )}
                           </h3>
                         </div>
 

@@ -25,13 +25,14 @@ export const STATS = [
 
 export const PER_PAGE = 50
 export const SKELETON_COUNT = 8
-export const iNaturalistUrl = new URL('https://api.inaturalist.org/v1/observations')
+export const iNaturalistUrl = new URL(
+  'https://api.inaturalist.org/v1/observations',
+)
 export const PLACE_ID = '225419'
 export const ORDER = 'desc'
 export const ORDER_BY = 'observed_on'
 export const STALE_TIME = 1000 * 60 * 60 * 24 * 30 // 30 days
 export const GC_TIME = 1000 * 60 * 60 * 24 * 60 // 60 days
-
 
 export const TAXONOMIC_RANKS = [
   { key: 'kingdom' as const, label: 'Kingdom' },
@@ -68,7 +69,7 @@ export const CAROUSEL_IMAGES = [
   { src: 'imgs/carousel_11.webp', alt: 'IMRS landscape photograph 11' },
   { src: 'imgs/carousel_12.webp', alt: 'IMRS landscape photograph 12' },
   { src: 'imgs/carousel_13.webp', alt: 'IMRS landscape photograph 13' },
-];
+]
 
 export const navItems = [
   { to: '/', label: 'Home' },
@@ -81,7 +82,10 @@ export const navItems = [
 export const externalLinks = [
   { to: 'https://www.utep.edu/science/indio/', label: 'IMRS' },
   // { to: 'https://www.inaturalist.org/', label: 'iNaturalist' },
-  { to: 'https://www.inaturalist.org/places/indio-mountains-research-station', label: 'iNaturalist'}
+  {
+    to: 'https://www.inaturalist.org/places/indio-mountains-research-station',
+    label: 'iNaturalist',
+  },
 ]
 
 // export const otherLinks = [

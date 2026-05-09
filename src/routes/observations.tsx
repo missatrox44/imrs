@@ -1,8 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router'
 import Observations from '@/components/Observations'
 import { Loader } from '@/components/Loader'
-import { ORDER, ORDER_BY, PER_PAGE, PLACE_ID, iNaturalistUrl } from '@/data/constants'
-
+import {
+  ORDER,
+  ORDER_BY,
+  PER_PAGE,
+  PLACE_ID,
+  iNaturalistUrl,
+} from '@/data/constants'
 
 export const Route = createFileRoute('/observations')({
   ssr: 'data-only',
@@ -22,7 +27,7 @@ export const Route = createFileRoute('/observations')({
     }
 
     const data = await res.json()
-        // console.log('[iNat observation example]', data.results[0])
+    // console.log('[iNat observation example]', data.results[0])
 
     return {
       page: 1,
@@ -46,7 +51,7 @@ export const Route = createFileRoute('/observations')({
       },
     ],
   }),
-  
+
   pendingComponent: () => <Loader dataTitle="observations" />,
   component: RouteComponent,
 })
