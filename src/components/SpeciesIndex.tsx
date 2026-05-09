@@ -1,8 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import {
-  LayoutGrid,
-  Table as TableIcon,
-} from 'lucide-react'
+import { LayoutGrid, Table as TableIcon } from 'lucide-react'
 import { useMediaQuery } from '@uidotdev/usehooks'
 import { useNavigate } from '@tanstack/react-router'
 import { SpeciesGridView } from './SpeciesGridView'
@@ -12,6 +9,12 @@ import { SpeciesTableView } from '@/components/SpeciesTableView'
 import { Card, CardContent } from '@/components/ui/card'
 import { AdvancedSearch } from '@/components/AdvancedSearch'
 import { SearchInput } from '@/components/SearchInput'
+import {
+  applySearchTerm,
+  applyTaxonomicFilters,
+  filterByCategory,
+  sortSpecies,
+} from '@/components/speciesFilter'
 import { Route } from '@/routes/species.index'
 
 export type TaxonomicFilters = {
@@ -37,7 +40,9 @@ const SpeciesIndex = () => {
   const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState('')
   const [view, setView] = useState<'grid' | 'table'>('grid')
-  const [taxonomicFilters, setTaxonomicFilters] = useState<TaxonomicFilters>(EMPTY_TAXONOMIC_FILTERS)
+  const [taxonomicFilters, setTaxonomicFilters] = useState<TaxonomicFilters>(
+    EMPTY_TAXONOMIC_FILTERS,
+  )
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
   const isMobile = useMediaQuery('(max-width: 767px)')
 
@@ -53,55 +58,14 @@ const SpeciesIndex = () => {
     setSortDirection('asc')
   }, [])
 
-  // Filter based on search term and taxonomic filters
-  const filterSpecies = (items: Array<Species>) => {
-    let result = items
-
-    // Apply taxonomic filters
-    for (const [key, value] of Object.entries(taxonomicFilters)) {
-      if (value) {
-        result = result.filter(
-          (s) => s[key as keyof Species]?.toString().toLowerCase() === value.toLowerCase(),
-        )
-      }
-    }
-
-    // Apply search term
-    if (searchTerm) {
-      const lowerTerm = searchTerm.toLowerCase()
-      result = result.filter(
-        (s) =>
-          (s.genus && s.genus.toLowerCase().includes(lowerTerm)) ||
-          (s.species && s.species.toLowerCase().includes(lowerTerm)) ||
-          (s.species_common_name &&
-            s.species_common_name.toLowerCase().includes(lowerTerm)) ||
-          (s.family && s.family.toLowerCase().includes(lowerTerm)),
-      )
-    }
-
-    return result
-  }
-
   const getFilteredItems = (cat: Category) => {
-    const items =
-      cat === 'all'
-        ? species
-        : species.filter((s: Species) => s.category === cat)
-    return filterSpecies(items)
+    const byCategory = filterByCategory(species, cat)
+    const byTaxonomy = applyTaxonomicFilters(byCategory, taxonomicFilters)
+    return applySearchTerm(byTaxonomy, searchTerm)
   }
 
   const filtered = getFilteredItems(category)
-
-  const sorted = filtered.slice().sort((a, b) => {
-    const aEmpty = !a.genus && !a.species
-    const bEmpty = !b.genus && !b.species
-    if (aEmpty !== bEmpty) return aEmpty ? 1 : -1
-
-    const genusA = (a.genus ?? '').toLowerCase()
-    const genusB = (b.genus ?? '').toLowerCase()
-    const cmp = genusA.localeCompare(genusB) || (a.species ?? '').toLowerCase().localeCompare((b.species ?? '').toLowerCase())
-    return sortDirection === 'asc' ? cmp : -cmp
-  })
+  const sorted = sortSpecies(filtered, sortDirection)
 
   const getCategoryCount = (cat: Category) => {
     return getFilteredItems(cat).length
@@ -118,7 +82,7 @@ const SpeciesIndex = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
           <div>
-            <h1 className="text-3xl font-bold mb-2">Species Index</h1>
+            <h1 className="text-3xl font-semibold mb-2">Species Index</h1>
             <p className="text-muted-foreground">
               Comprehensive database of species documented on IMRS.
             </p>
@@ -133,23 +97,25 @@ const SpeciesIndex = () => {
               onClick={() => setView('grid')}
               aria-label="Grid view"
               aria-pressed={view === 'grid'}
-              className={`p-2 transition-all ${view === 'grid'
-                ? 'bg-background shadow-sm text-foreground'
-                : 'text-muted-foreground hover:text-foreground'
-                }`}
+              className={`p-2 transition-all ${
+                view === 'grid'
+                  ? 'bg-background shadow-sm text-foreground'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
             >
-              <LayoutGrid className="w-4 h-4" />
+              <LayoutGrid className="size-4" />
             </button>
             <button
               onClick={() => setView('table')}
               aria-label="Table view"
               aria-pressed={view === 'table'}
-              className={`p-2 transition-all ${view === 'table'
-                ? 'bg-background shadow-sm text-foreground'
-                : 'text-muted-foreground hover:text-foreground'
-                }`}
+              className={`p-2 transition-all ${
+                view === 'table'
+                  ? 'bg-background shadow-sm text-foreground'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
             >
-              <TableIcon className="w-4 h-4" />
+              <TableIcon className="size-4" />
             </button>
           </div>
         </div>
@@ -179,8 +145,7 @@ const SpeciesIndex = () => {
           role="status"
           aria-live="polite"
         >
-          Showing {sorted.length}{' '}
-          {category === 'all' ? 'species' : category}
+          Showing {sorted.length} {category === 'all' ? 'species' : category}
         </div>
 
         {sorted.length === 0 ? (

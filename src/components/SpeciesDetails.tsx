@@ -12,7 +12,13 @@ import type { Observation } from '@/types/observation'
 import type { Species } from '@/types/species'
 
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Route } from '@/routes/species.$speciesId'
 import { formatDate } from '@/lib/formatDate'
@@ -139,7 +145,9 @@ export function SpeciesDetails() {
                 The requested species could not be found in our database.
               </p>
               <Button asChild>
-                <Link to="/species" search={{ category: 'all' }}>Back to Species Index</Link>
+                <Link to="/species" search={{ category: 'all' }}>
+                  Back to Species Index
+                </Link>
               </Button>
             </CardContent>
           </Card>
@@ -156,7 +164,7 @@ export function SpeciesDetails() {
       <div className="container mx-auto px-4 py-8">
         <Button variant="ghost" asChild className="mb-6">
           <Link to="/species" search={{ category: 'all' }}>
-            <ArrowLeft className="w-4 h-4 mr-2" />
+            <ArrowLeft className="size-4 mr-2" />
             Back to Species Index
           </Link>
         </Button>
@@ -173,7 +181,7 @@ export function SpeciesDetails() {
                   <h1 className="scientific-name text-2xl font-medium">
                     {scientificName}
                   </h1>
-                  <h2 className="text-3xl font-bold text-foreground">
+                  <h2 className="text-3xl font-semibold text-foreground">
                     {species.species_common_name}
                   </h2>
                   {species.authorship && (
@@ -233,7 +241,9 @@ export function SpeciesDetails() {
             <Card className="gradient-card shadow-card">
               <CardHeader>
                 <CardTitle>Recent Observations</CardTitle>
-                <CardDescription>Sourced from iNaturalist, not necessarily observed at IMRS</CardDescription>
+                <CardDescription>
+                  Sourced from iNaturalist, not necessarily observed at IMRS
+                </CardDescription>
               </CardHeader>
 
               <CardContent>
@@ -271,7 +281,8 @@ export function SpeciesDetails() {
                                       src={photoUrl}
                                       alt={
                                         observation.species_guess ||
-                                        observation.taxon?.preferred_common_name ||
+                                        observation.taxon
+                                          ?.preferred_common_name ||
                                         observation.taxon?.name ||
                                         `Observation #${observation.id}`
                                       }
@@ -285,7 +296,7 @@ export function SpeciesDetails() {
                                   </div>
                                 ) : (
                                   <div className="aspect-square flex items-center justify-center mb-3 bg-muted/10 text-muted-foreground">
-                                    <ImageOff className="w-6 h-6" />
+                                    <ImageOff className="size-6" />
                                   </div>
                                 )
                               })()}
@@ -293,7 +304,7 @@ export function SpeciesDetails() {
                               <div className="space-y-2">
                                 {/* User */}
                                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                  <User className="w-3 h-3" />
+                                  <User className="size-3" />
                                   <span>
                                     {observation.user?.login || 'Anonymous'}
                                   </span>
@@ -301,7 +312,7 @@ export function SpeciesDetails() {
 
                                 {/* Date */}
                                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                  <Calendar className="w-3 h-3" />
+                                  <Calendar className="size-3" />
                                   <span>
                                     {formatDate(observation.observed_on_string)}
                                   </span>
@@ -310,7 +321,7 @@ export function SpeciesDetails() {
                                 {/* Location */}
                                 {observation.place_guess && (
                                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                    <MapPin className="w-3 h-3" />
+                                    <MapPin className="size-3" />
                                     <span className="line-clamp-1">
                                       {observation.place_guess}
                                     </span>
@@ -342,7 +353,7 @@ export function SpeciesDetails() {
                       style={{ paddingLeft: `${1 + row.level * 0.5}rem` }}
                     >
                       <div className="flex items-start gap-2">
-                        <ChevronRight className="w-3 h-3 mt-1.5 text-muted-foreground/50 shrink-0" />
+                        <ChevronRight className="size-3 mt-1.5 text-muted-foreground/50 shrink-0" />
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-2 flex-wrap">
                             <span className="text-xs text-muted-foreground uppercase tracking-wide">

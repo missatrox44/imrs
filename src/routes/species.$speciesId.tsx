@@ -1,16 +1,15 @@
 import { createFileRoute } from '@tanstack/react-router'
-import type { Species } from '@/types/species'
 import type { Observation } from '@/types/observation'
 
 import { Loader } from '@/components/Loader'
 import { SpeciesDetails } from '@/components/SpeciesDetails'
+import { fetchAllSpecies } from '@/server/speciesService'
 
 export const Route = createFileRoute('/species/$speciesId')({
   // Fetch the species + recent observations for this ID
   loader: async ({ params }) => {
     const { speciesId } = params
-    const res = await fetch('/api/species')
-    const all: Array<Species> = await res.json()
+    const all = await fetchAllSpecies()
 
     const species = all.find((s) => String(s.id) === String(speciesId)) ?? null
 
@@ -40,11 +39,10 @@ export const Route = createFileRoute('/species/$speciesId')({
     return { species, observations }
   },
 
-
   head: ({ loaderData }) => {
-      if (!loaderData || !loaderData.species) {
-    return {}
-  }
+    if (!loaderData || !loaderData.species) {
+      return {}
+    }
     const { species } = loaderData
 
     const scientificName = [species.genus, species.species]
@@ -71,7 +69,6 @@ export const Route = createFileRoute('/species/$speciesId')({
       ],
     }
   },
-
 
   pendingComponent: () => <Loader dataTitle="species details" />,
 

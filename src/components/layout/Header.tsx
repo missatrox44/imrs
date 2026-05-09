@@ -26,15 +26,20 @@ export default function Header() {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             {/* LOGO + TITLE */}
-            <Link to="/" className="flex items-center space-x-2">
-              <img src="/toad.png" alt="" aria-hidden="true" className="h-8 md:h-10" />
+            <Link to="/" className="flex items-center gap-2">
+              <img
+                src="/toad.png"
+                alt=""
+                aria-hidden="true"
+                className="h-8 md:h-10"
+              />
               <span className="font-semibold text-foreground text-sm md:text-lg">
                 IMRS Biodiversity Explorer
               </span>
             </Link>
 
             {/* DESKTOP NAV */}
-            <div className="hidden lg:flex items-center space-x-2">
+            <div className="hidden lg:flex items-center gap-2">
               {navItems.map((item) => {
                 const isActive =
                   pathname === item.to ||
@@ -87,7 +92,7 @@ export default function Header() {
                 </DrawerHeader>
 
                 {/* NAV ITEMS */}
-                <div className="flex flex-col p-4 space-y-3">
+                <div className="flex flex-col p-4 gap-3">
                   {navItems.map((item) => {
                     const isActive =
                       pathname === item.to ||
@@ -104,9 +109,10 @@ export default function Header() {
                             text-lg tracking-wide
                             
                             transition-colors
-                            ${isActive
-                              ? 'bg-primary text-primary-foreground'
-                              : 'bg-card hover:bg-muted'
+                            ${
+                              isActive
+                                ? 'bg-primary text-primary-foreground'
+                                : 'bg-card hover:bg-muted'
                             }
                           `}
                         >

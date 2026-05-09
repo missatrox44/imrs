@@ -1,18 +1,4 @@
 export type Season = 'all' | 'winter' | 'premonsoon' | 'monsoon' | 'postmonsoon'
-export type WeatherVariable =
-  | 'all'
-  | 'temp'
-  | 'humidity'
-  | 'wind'
-  | 'precip'
-  | 'pressure'
-  | 'dewpoint'
-export type WeatherView =
-  | 'summary'
-  | 'daily'
-  | 'hourly'
-  | 'monsoon'
-  | 'wind'
 
 export interface WeatherFilters {
   year: string

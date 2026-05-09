@@ -24,5 +24,6 @@ function RouteComponent() {
   return (
     <>
       <Gazetteer />
-    </>)
+    </>
+  )
 }

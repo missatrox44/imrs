@@ -52,7 +52,7 @@ const Gazetteer = () => {
     <main className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-2">
+          <h1 className="text-4xl font-semibold text-foreground mb-2">
             IMRS Gazetteer
           </h1>
           <p className="text-muted-foreground md:text-balance">
@@ -135,7 +135,7 @@ const Gazetteer = () => {
                                   variant="secondary"
                                   className="flex items-center gap-1"
                                 >
-                                  <MapPin className="w-3 h-3" />
+                                  <MapPin className="size-3" />
                                   {formatCoordinates(
                                     entry.latitude,
                                     entry.longitude,
@@ -148,7 +148,7 @@ const Gazetteer = () => {
                                   variant="secondary"
                                   className="flex items-center gap-1"
                                 >
-                                  <Mountain className="w-3 h-3" />
+                                  <Mountain className="size-3" />
                                   {formatElevation(entry.elevationMeters)}
                                 </Badge>
                               )}

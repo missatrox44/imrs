@@ -4,7 +4,6 @@ import { getTurso } from '@/server/turso'
 import { rowToSpecies } from '@/server/speciesMapper'
 import { CACHE_HEADERS } from '@/data/constants'
 
-
 export const ServerRoute = createServerFileRoute('/api/species').methods({
   GET: async () => {
     try {

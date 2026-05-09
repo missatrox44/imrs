@@ -11,8 +11,13 @@ export const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
           {/* Logo & About */}
           <div className="md:col-span-4">
-            <Link to="/" className="flex items-center space-x-2 mb-2">
-              <img src="/toad.png" alt="" aria-hidden="true" className="h-8 md:h-10" />
+            <Link to="/" className="flex items-center gap-2 mb-2">
+              <img
+                src="/toad.png"
+                alt=""
+                aria-hidden="true"
+                className="h-8 md:h-10"
+              />
               <span className="font-semibold text-foreground text-sm md:text-lg">
                 IMRS Biodiversity Explorer
               </span>
@@ -24,7 +29,10 @@ export const Footer = () => {
           </div>
 
           {/* Quick Links */}
-          <nav aria-label="Footer navigation" className="md:col-span-3 md:col-start-6">
+          <nav
+            aria-label="Footer navigation"
+            className="md:col-span-3 md:col-start-6"
+          >
             <h3 className="font-semibold text-foreground mb-3">Quick Links</h3>
             <ul className="space-y-2 text-sm">
               {navItems.map((item) => (
@@ -55,7 +63,7 @@ export const Footer = () => {
                     className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-1 cursor-pointer"
                   >
                     {link.label}{' '}
-                    <ExternalLink className="w-3 h-3" aria-hidden="true" />
+                    <ExternalLink className="size-3" aria-hidden="true" />
                     <span className="sr-only"> (opens in new tab)</span>
                   </a>
                 </li>
@@ -72,7 +80,7 @@ export const Footer = () => {
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-1 cursor-pointer"
                 >
-                  <Bug className="w-3 h-3" aria-hidden="true" /> Report an Issue
+                  <Bug className="size-3" aria-hidden="true" /> Report an Issue
                   <span className="sr-only"> (opens in new tab)</span>
                 </a>
               </li>
@@ -89,7 +97,7 @@ export const Footer = () => {
               rel="noopener noreferrer"
               className="hover:text-foreground transition-colors inline-flex items-center gap-1 cursor-pointer"
             >
-              GitHub <Github className="w-3 h-3" aria-hidden="true" />
+              GitHub <Github className="size-3" aria-hidden="true" />
               <span className="sr-only"> (opens in new tab)</span>
             </a>
 

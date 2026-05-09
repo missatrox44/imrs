@@ -30,7 +30,10 @@ function capitalize(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
 }
 
-function getUniqueValues(items: Array<Species>, key: keyof Species): Array<string> {
+function getUniqueValues(
+  items: Array<Species>,
+  key: keyof Species,
+): Array<string> {
   const values = new Set<string>()
   for (const item of items) {
     const val = item[key]
@@ -52,13 +55,13 @@ export function AdvancedSearch({
   sortDirection,
   onSortChange,
 }: AdvancedSearchProps) {
-
   // Compute cascading options for each taxonomic rank
   const taxonomicOptions = useMemo(() => {
     // Start with species filtered by category
-    const baseItems = activeCategory === 'all'
-      ? species
-      : species.filter((s) => s.category === activeCategory)
+    const baseItems =
+      activeCategory === 'all'
+        ? species
+        : species.filter((s) => s.category === activeCategory)
 
     const options: Record<string, Array<string>> = {}
 
@@ -71,7 +74,9 @@ export function AdvancedSearch({
         const selectedValue = taxonomicFilters[higherRank.key]
         if (selectedValue) {
           filtered = filtered.filter(
-            (s) => s[higherRank.key as keyof Species]?.toString().toLowerCase() === selectedValue.toLowerCase(),
+            (s) =>
+              s[higherRank.key as keyof Species]?.toString().toLowerCase() ===
+              selectedValue.toLowerCase(),
           )
         }
       }
@@ -81,7 +86,10 @@ export function AdvancedSearch({
     return options
   }, [species, activeCategory, taxonomicFilters])
 
-  const handleFilterChange = (rankKey: keyof TaxonomicFilters, value: string | null) => {
+  const handleFilterChange = (
+    rankKey: keyof TaxonomicFilters,
+    value: string | null,
+  ) => {
     const newFilters = { ...taxonomicFilters }
     newFilters[rankKey] = value
 
@@ -98,7 +106,7 @@ export function AdvancedSearch({
     <div className="bg-card border border-border p-4 mb-6">
       {/* Header */}
       <div className="flex items-center gap-2 mb-3">
-        <SlidersHorizontal className="w-4 h-4 text-muted-foreground" />
+        <SlidersHorizontal className="size-4 text-muted-foreground" />
         <span className="text-sm font-medium text-foreground">
           Filters & Sorting
         </span>
@@ -152,7 +160,7 @@ export function AdvancedSearch({
                 htmlFor={filterId}
                 className="text-xs text-muted-foreground font-medium flex items-center gap-1"
               >
-                <Filter className="w-3 h-3" aria-hidden="true" /> {label}
+                <Filter className="size-3" aria-hidden="true" /> {label}
               </label>
 
               <Select
@@ -168,7 +176,14 @@ export function AdvancedSearch({
                   <SelectValue placeholder="All" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All {label.endsWith('y') ? `${label.slice(0, -1)}ies` : label.endsWith('s') ? `${label}es` : `${label}s`}</SelectItem>
+                  <SelectItem value="all">
+                    All{' '}
+                    {label.endsWith('y')
+                      ? `${label.slice(0, -1)}ies`
+                      : label.endsWith('s')
+                        ? `${label}es`
+                        : `${label}s`}
+                  </SelectItem>
                   {options.map((item) => (
                     <SelectItem key={item} value={item}>
                       {item}
@@ -184,7 +199,7 @@ export function AdvancedSearch({
       {/* Sort Options */}
       <div className="flex flex-wrap items-center gap-3 mt-4 pt-3 border-t border-border">
         <div className="flex items-center gap-2">
-          <ArrowUpDown className="w-4 h-4 text-muted-foreground" />
+          <ArrowUpDown className="size-4 text-muted-foreground" />
           <span className="text-xs text-muted-foreground font-medium">
             Sort species by:
           </span>
@@ -212,7 +227,7 @@ export function AdvancedSearch({
           onClick={onResetFilters}
           className="h-8 text-xs text-muted-foreground hover:text-foreground cursor-pointer"
         >
-          <RotateCcw className="w-3 h-3 mr-1" />
+          <RotateCcw className="size-3 mr-1" />
           Reset Filters
         </Button>
       </div>

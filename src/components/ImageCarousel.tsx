@@ -1,4 +1,4 @@
-import { motion, useReducedMotion } from 'framer-motion'
+import { m, useReducedMotion } from 'framer-motion'
 import { Card, CardContent } from '@/components/ui/card'
 import { CAROUSEL_IMAGES } from '@/data/constants'
 
@@ -6,7 +6,7 @@ export const ImageCarousel = () => {
   const shouldReduceMotion = useReducedMotion()
 
   return (
-    <motion.section
+    <m.section
       className="
         mt-20
         relative
@@ -22,7 +22,7 @@ export const ImageCarousel = () => {
       transition={{ duration: shouldReduceMotion ? 0 : 0.6 }}
     >
       <section className="overflow-hidden">
-        <motion.div
+        <m.div
           className="flex gap-4 w-max"
           animate={shouldReduceMotion ? {} : { x: ['0%', '-50%'] }}
           transition={
@@ -37,7 +37,7 @@ export const ImageCarousel = () => {
           }
           // whileHover={{ animationPlayState: 'paused' }}
         >
-          {/* <motion.div
+          {/* <m.div
           className="flex gap-4 w-max"
           animate={controls}
           onHoverStart={() => controls.stop()}
@@ -52,22 +52,25 @@ export const ImageCarousel = () => {
             })
           }
         > */}
-          {[...CAROUSEL_IMAGES, ...CAROUSEL_IMAGES].map((image, index) => (
-            <div key={index} className="shrink-0 w-48 md:w-56">
+          {[
+            ...CAROUSEL_IMAGES.map((image) => ({ image, copy: 'a' as const })),
+            ...CAROUSEL_IMAGES.map((image) => ({ image, copy: 'b' as const })),
+          ].map(({ image, copy }) => (
+            <div key={`${copy}-${image.src}`} className="shrink-0 w-48 md:w-56">
               <Card className="border-0 overflow-hidden">
                 <CardContent className="p-0">
                   <img
                     src={image.src}
                     alt={image.alt}
                     className="w-full h-40 md:h-48 object-cover"
-                    loading='lazy'
+                    loading="lazy"
                   />
                 </CardContent>
               </Card>
             </div>
           ))}
-        </motion.div>
+        </m.div>
       </section>
-    </motion.section>
+    </m.section>
   )
 }

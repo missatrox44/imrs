@@ -8,7 +8,7 @@ const EmptyState = () => {
       <Card className="max-w-md w-full text-center">
         <CardContent className="py-12 space-y-4">
           <div className="flex justify-center">
-            <Leaf className="w-10 h-10 text-muted-foreground" />
+            <Leaf className="size-10 text-muted-foreground" />
           </div>
 
           <h2 className="text-xl font-semibold text-foreground">

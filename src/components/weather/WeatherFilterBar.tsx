@@ -86,7 +86,7 @@ export default function WeatherFilterBar() {
           onClick={resetFilters}
           className="cursor-pointer"
         >
-          <RotateCcw className="w-3 h-3 mr-1" />
+          <RotateCcw className="size-3 mr-1" />
           Reset filters
         </Button>
       )}

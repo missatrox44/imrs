@@ -1,44 +1,40 @@
-import { useMemo, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ArrowRight, ChevronLeft, ChevronRight, MapPin, Mountain } from "lucide-react";
-import { Link } from "@tanstack/react-router";
-import type { GazetteerEntry } from "@/types/gazetteer";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { GAZETTEER_ROLODEX } from "@/data/gazetteer";
-import { formatElevation } from "@/lib/formatElevation";
-import { formatCoordinates } from "@/lib/formatCoordinates";
-
-export const hasCoordinates = (
-  entry: GazetteerEntry
-): entry is GazetteerEntry & { latitude: number; longitude: number } =>
-  typeof entry.latitude === "number" &&
-  typeof entry.longitude === "number";
+import { useMemo, useState } from 'react'
+import { AnimatePresence, m, useReducedMotion } from 'framer-motion'
+import {
+  ArrowRight,
+  ChevronLeft,
+  ChevronRight,
+  MapPin,
+  Mountain,
+} from 'lucide-react'
+import { Link } from '@tanstack/react-router'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { GAZETTEER_ROLODEX } from '@/data/gazetteer'
+import { formatElevation } from '@/lib/formatElevation'
+import { formatCoordinates } from '@/lib/formatCoordinates'
 
 export const GazetteerRolodex = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const shouldReduceMotion = useReducedMotion();
+  const [activeIndex, setActiveIndex] = useState(0)
+  const shouldReduceMotion = useReducedMotion()
 
   const sortedEntries = useMemo(() => {
-    return [...GAZETTEER_ROLODEX].sort((a, b) => a.name.localeCompare(b.name));
-  }, []);
-
+    return GAZETTEER_ROLODEX.toSorted((a, b) => a.name.localeCompare(b.name))
+  }, [])
 
   const nextCard = () => {
-    setActiveIndex((prev) => 
-      prev < sortedEntries.length - 1 ? prev + 1 : 0
-    );
-  };
+    setActiveIndex((prev) => (prev < sortedEntries.length - 1 ? prev + 1 : 0))
+  }
 
   const prevCard = () => {
-    setActiveIndex((prev) => 
-      prev > 0 ? prev - 1 : sortedEntries.length - 1
-    );
-  };
+    setActiveIndex((prev) => (prev > 0 ? prev - 1 : sortedEntries.length - 1))
+  }
 
   return (
     <section className="text-center mt-20 container mx-auto">
-      <h2 className="text-3xl font-bold text-foreground mb-4">Explore Locations</h2>
+      <h2 className="text-3xl font-semibold text-foreground mb-4">
+        Explore Locations
+      </h2>
       <p className="text-muted-foreground mb-8 max-w-2xl mx-auto text-balance">
         Discover the diverse locations on Indio Mountains Research Station
       </p>
@@ -54,9 +50,9 @@ export const GazetteerRolodex = () => {
             onClick={prevCard}
             aria-label="Previous location"
           >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft className="size-4" />
           </Button>
-          <span className="text-sm text-muted-foreground min-w-[80px] text-center">
+          <span className="text-sm text-muted-foreground min-w-20 text-center">
             {activeIndex + 1} of {sortedEntries.length}
           </span>
           <Button
@@ -66,55 +62,55 @@ export const GazetteerRolodex = () => {
             onClick={nextCard}
             aria-label="Next location"
           >
-            <ChevronRight className="h-4 w-4" />
+            <ChevronRight className="size-4" />
           </Button>
         </div>
 
         {/* Card Stack Container */}
-        <div className="relative w-full max-w-lg h-[340px] perspective-1000">
+        <div className="relative w-full max-w-lg h-85 perspective-1000">
           <AnimatePresence mode="popLayout">
             {sortedEntries.map((entry, index) => {
-              const offset = index - activeIndex;
-              const isVisible = Math.abs(offset) <= 2;
-              
-              if (!isVisible) return null;
+              const offset = index - activeIndex
+              const isVisible = Math.abs(offset) <= 2
+
+              if (!isVisible) return null
 
               return (
-                <motion.div
+                <m.div
                   key={entry.id}
                   className="absolute inset-0 w-full"
-                  initial={{ 
-                    rotateX: offset > 0 ? -15 : 15, 
+                  initial={{
+                    rotateX: offset > 0 ? -15 : 15,
                     y: offset * 20,
                     scale: 1 - Math.abs(offset) * 0.05,
-                    opacity: 0 
+                    opacity: 0,
                   }}
-                  animate={{ 
+                  animate={{
                     rotateX: offset * -8,
                     y: offset * 25,
                     scale: 1 - Math.abs(offset) * 0.05,
                     zIndex: 10 - Math.abs(offset),
-                    opacity: 1 - Math.abs(offset) * 0.3
+                    opacity: 1 - Math.abs(offset) * 0.3,
                   }}
-                  exit={{ 
+                  exit={{
                     rotateX: offset < 0 ? -15 : 15,
-                    opacity: 0 
+                    opacity: 0,
                   }}
                   transition={
                     shouldReduceMotion
                       ? { duration: 0 }
                       : { type: 'spring', stiffness: 300, damping: 30 }
                   }
-                  style={{ 
-                    transformStyle: "preserve-3d",
-                    pointerEvents: offset === 0 ? "auto" : "none"
+                  style={{
+                    transformStyle: 'preserve-3d',
+                    pointerEvents: offset === 0 ? 'auto' : 'none',
                   }}
                 >
                   <div className="bg-card border border-border rounded-xl shadow-lg overflow-hidden h-full">
                     {/* Card Header Tab */}
                     <div className="bg-muted/50 border-b border-border px-6 py-3">
                       <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-primary" />
+                        <div className="size-2 rounded-full bg-primary" />
                         <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
                           {entry.name.charAt(0)}
                         </span>
@@ -123,7 +119,7 @@ export const GazetteerRolodex = () => {
 
                     {/* Card Content */}
                     <div className="p-6 space-y-4">
-                      <h3 className="text-2xl font-bold text-foreground">
+                      <h3 className="text-2xl font-semibold text-foreground">
                         {entry.name}
                       </h3>
 
@@ -132,13 +128,18 @@ export const GazetteerRolodex = () => {
                       </p>
 
                       <div className="flex flex-wrap gap-2 pt-2">
-                        <Badge variant="secondary" className="flex items-center gap-1">
-                          
-                          <MapPin className="w-3 h-3" />
+                        <Badge
+                          variant="secondary"
+                          className="flex items-center gap-1"
+                        >
+                          <MapPin className="size-3" />
                           {formatCoordinates(entry.latitude, entry.longitude)}
                         </Badge>
-                        <Badge variant="secondary" className="flex items-center gap-1">
-                          <Mountain className="w-3 h-3" />
+                        <Badge
+                          variant="secondary"
+                          className="flex items-center gap-1"
+                        >
+                          <Mountain className="size-3" />
                           {formatElevation(entry.elevationMeters)}
                         </Badge>
                       </div>
@@ -151,8 +152,8 @@ export const GazetteerRolodex = () => {
                       <div className="h-px bg-border/50" />
                     </div>
                   </div>
-                </motion.div>
-              );
+                </m.div>
+              )
             })}
           </AnimatePresence>
         </div>
@@ -164,16 +165,18 @@ export const GazetteerRolodex = () => {
               <button
                 key={entry.id}
                 onClick={() => setActiveIndex(index)}
-                className={`w-2 h-2 rounded-full transition-colors ${
-                  index === activeIndex 
-                    ? "bg-primary" 
-                    : "bg-muted-foreground/30 hover:bg-muted-foreground/50"
+                className={`size-2 rounded-full transition-colors ${
+                  index === activeIndex
+                    ? 'bg-primary'
+                    : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
                 }`}
                 aria-label={`Go to ${entry.name}`}
               />
             ))}
             {sortedEntries.length > 10 && (
-              <span className="text-xs text-muted-foreground ml-1">+{sortedEntries.length - 10}</span>
+              <span className="text-xs text-muted-foreground ml-1">
+                +{sortedEntries.length - 10}
+              </span>
             )}
           </div>
         )}
@@ -182,10 +185,10 @@ export const GazetteerRolodex = () => {
         <Button asChild size="lg" className="mt-8">
           <Link to="/gazetteer" className="flex items-center gap-2">
             View All Locations
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="size-4" />
           </Link>
         </Button>
       </div>
     </section>
-  );
-};
+  )
+}

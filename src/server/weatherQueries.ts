@@ -5,19 +5,23 @@ interface WhereClause {
   args: Array<string | number>
 }
 
-export function buildWhereClause(
-  year: string,
-  season: string,
-): WhereClause {
+function parseYears(year: string): Array<number> {
+  if (year === 'all') return []
+  return year.split(',').reduce<Array<number>>((acc, part) => {
+    const n = Number(part)
+    if (!Number.isNaN(n)) acc.push(n)
+    return acc
+  }, [])
+}
+
+function buildWhereClause(year: string, season: string): WhereClause {
   const conditions: Array<string> = []
   const args: Array<string | number> = []
 
-  if (year !== 'all') {
-    const years = year.split(',').map(Number).filter((n) => !Number.isNaN(n))
-    if (years.length > 0) {
-      conditions.push(`year IN (${years.map(() => '?').join(',')})`)
-      args.push(...years)
-    }
+  const years = parseYears(year)
+  if (years.length > 0) {
+    conditions.push(`year IN (${years.map(() => '?').join(',')})`)
+    args.push(...years)
   }
 
   const months = getSeasonMonthsClause(season)
@@ -91,28 +95,6 @@ export function monsoonQuery() {
   }
 }
 
-export function windDistributionQuery(year: string, season: string) {
-  const { sql, args } = buildWhereClause(year, season)
-  return {
-    sql: `SELECT
-      CASE
-        WHEN wind_speed < 5 THEN '0-5'
-        WHEN wind_speed < 10 THEN '5-10'
-        WHEN wind_speed < 20 THEN '10-20'
-        WHEN wind_speed < 30 THEN '20-30'
-        ELSE '30+'
-      END as range,
-      COUNT(*) as count,
-      SUM(CASE WHEN gust_speed >= 30 THEN 1 ELSE 0 END) as gust_count
-    FROM weather_readings
-    WHERE wind_speed IS NOT NULL
-      ${sql ? 'AND ' + sql.replace('WHERE ', '') : ''}
-    GROUP BY range
-    ORDER BY CAST(range AS REAL)`,
-    args,
-  }
-}
-
 // Wind distribution needs year/month from the timestamp, so override for readings table
 export function windDistributionQueryFromReadings(
   year: string,
@@ -121,14 +103,12 @@ export function windDistributionQueryFromReadings(
   const conditions: Array<string> = ['wind_speed IS NOT NULL']
   const args: Array<string | number> = []
 
-  if (year !== 'all') {
-    const years = year.split(',').map(Number).filter((n) => !Number.isNaN(n))
-    if (years.length > 0) {
-      conditions.push(
-        `CAST(strftime('%Y', recorded_at) AS INTEGER) IN (${years.map(() => '?').join(',')})`,
-      )
-      args.push(...years)
-    }
+  const years = parseYears(year)
+  if (years.length > 0) {
+    conditions.push(
+      `CAST(strftime('%Y', recorded_at) AS INTEGER) IN (${years.map(() => '?').join(',')})`,
+    )
+    args.push(...years)
   }
 
   const months = getSeasonMonthsClause(season)

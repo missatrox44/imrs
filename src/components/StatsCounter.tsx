@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import {
-  motion,
+  m,
   useInView,
   useReducedMotion,
   useSpring,
@@ -31,7 +31,7 @@ const AnimatedCounter = ({
     }
   }, [isInView, spring, value])
 
-  return <motion.span ref={ref}>{display}</motion.span>
+  return <m.span ref={ref}>{display}</m.span>
 }
 
 export const StatsCounter = () => {
@@ -39,7 +39,7 @@ export const StatsCounter = () => {
 
   return (
     <>
-      <motion.section
+      <m.section
         className="mt-20 text-center container mx-auto"
         initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -57,7 +57,7 @@ export const StatsCounter = () => {
             </div>
           ))}
         </div>
-      </motion.section>
+      </m.section>
     </>
   )
 }

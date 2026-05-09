@@ -111,36 +111,44 @@ export default function WeatherStatCards({
     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
       <StatCard
         label="Avg Daily High"
-        value={summary.avgDailyHigh != null ? summary.avgDailyHigh.toFixed(1) : '—'}
+        value={
+          summary.avgDailyHigh != null ? summary.avgDailyHigh.toFixed(1) : '—'
+        }
         unit="°C"
-        icon={<Thermometer className="w-4 h-4" />}
+        icon={<Thermometer className="size-4" />}
         sparkData={summary.sparklines.temp}
         color={WEATHER_COLORS.temp}
         borderColor={WEATHER_COLORS.temp}
       />
       <StatCard
         label="Total Precipitation"
-        value={summary.totalPrecip != null ? summary.totalPrecip.toFixed(1) : '—'}
+        value={
+          summary.totalPrecip != null ? summary.totalPrecip.toFixed(1) : '—'
+        }
         unit="mm"
-        icon={<CloudRain className="w-4 h-4" />}
+        icon={<CloudRain className="size-4" />}
         sparkData={summary.sparklines.precip}
         color={WEATHER_COLORS.precip}
         borderColor={WEATHER_COLORS.precip}
       />
       <StatCard
         label="Avg Humidity"
-        value={summary.avgHumidity != null ? summary.avgHumidity.toFixed(1) : '—'}
+        value={
+          summary.avgHumidity != null ? summary.avgHumidity.toFixed(1) : '—'
+        }
         unit="%"
-        icon={<Droplets className="w-4 h-4" />}
+        icon={<Droplets className="size-4" />}
         sparkData={summary.sparklines.humidity}
         color={WEATHER_COLORS.humidity}
         borderColor={WEATHER_COLORS.humidity}
       />
       <StatCard
         label="Avg Wind Speed"
-        value={summary.avgWindSpeed != null ? summary.avgWindSpeed.toFixed(1) : '—'}
+        value={
+          summary.avgWindSpeed != null ? summary.avgWindSpeed.toFixed(1) : '—'
+        }
         unit="km/hr"
-        icon={<Wind className="w-4 h-4" />}
+        icon={<Wind className="size-4" />}
         sparkData={summary.sparklines.wind}
         color={WEATHER_COLORS.wind}
         borderColor={WEATHER_COLORS.wind}
