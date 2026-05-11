@@ -64,7 +64,7 @@ const Gazetteer = () => {
         {/* Desktop: side-by-side | Mobile: stacked */}
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Map panel */}
-          <div className="h-[40vh] lg:h-[calc(80vh-6rem)] lg:w-1/2 xl:w-3/5 lg:sticky lg:top-6 rounded-sm border overflow-hidden">
+          <div className="isolate h-[40vh] lg:h-[calc(80vh-6rem)] lg:w-1/2 xl:w-3/5 lg:sticky lg:top-6 rounded-sm border overflow-hidden">
             {MapComponent ? (
               <MapComponent
                 entries={filteredAndSortedEntries}
