@@ -1,4 +1,5 @@
-import { Bug, ExternalLink, Github } from 'lucide-react'
+import { Bug, ExternalLink } from 'lucide-react'
+import { FaGithub } from 'react-icons/fa'
 import { Link } from '@tanstack/react-router'
 import { externalLinks, navItems } from '@/data/constants'
 
@@ -97,7 +98,7 @@ export const Footer = () => {
               rel="noopener noreferrer"
               className="hover:text-foreground transition-colors inline-flex items-center gap-1 cursor-pointer"
             >
-              GitHub <Github className="size-3" aria-hidden="true" />
+              GitHub <FaGithub className="size-3" aria-hidden="true" />
               <span className="sr-only"> (opens in new tab)</span>
             </a>
 
