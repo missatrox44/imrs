@@ -49,8 +49,8 @@ The **IMRS Biodiversity Explorer** transforms this static data into a living, in
 
 ### Prerequisites
 
-- Node.js (v18+)
-- npm or pnpm
+- Node.js (v22+, see `.nvmrc`)
+- pnpm (the repo pins a version via the `packageManager` field)
 - SQLite3 (for local database management)
 
 ### Installation
@@ -65,7 +65,7 @@ The **IMRS Biodiversity Explorer** transforms this static data into a living, in
 2. **Install dependencies**
 
    ```bash
-   npm install
+   pnpm install
    ```
 
 3. **Environment Setup**
@@ -79,7 +79,7 @@ The **IMRS Biodiversity Explorer** transforms this static data into a living, in
 
 4. **Run the development server**
    ```bash
-   npm run dev
+   pnpm dev
    ```
    Open [http://localhost:3000](http://localhost:3000) to view the app.
 

@@ -1,11 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { Route } from './weather'
 
-import { ServerRoute } from './weather'
-
-vi.mock('@tanstack/react-start/server', () => ({
-  createServerFileRoute: () => ({
-    methods: (handlers: Record<string, unknown>) => handlers,
-  }),
+// Mock createFileRoute so `Route` is just the config object passed to it,
+// letting us invoke the server `GET` handler directly from the test.
+// vitest hoists vi.mock above the import, so `Route` receives the mock.
+vi.mock('@tanstack/react-router', () => ({
+  createFileRoute: () => (options: Record<string, unknown>) => options,
 }))
 
 const execute = vi.fn()
@@ -13,14 +13,16 @@ vi.mock('@/server/turso', () => ({
   getTurso: () => ({ execute }),
 }))
 
-type Handlers = {
-  GET: (ctx: { request: Request }) => Promise<Response>
+type RouteConfig = {
+  server: {
+    handlers: { GET: (ctx: { request: Request }) => Promise<Response> }
+  }
 }
 
 function callGet(query: Record<string, string> = {}) {
   const params = new URLSearchParams(query)
   const request = new Request(`http://localhost/api/weather?${params}`)
-  return (ServerRoute as unknown as Handlers).GET({ request })
+  return (Route as unknown as RouteConfig).server.handlers.GET({ request })
 }
 
 describe('GET /api/weather', () => {

@@ -2,13 +2,18 @@
  * Seed script: parse Excel weather data files and create imrs-weather.db
  *
  * Usage:
- *   npx tsx scripts/seed-weather.ts
+ *   pnpm dlx tsx scripts/seed-weather.ts
  *
  * Expects files named Indio_weather_data_[year]_Hill_station.xlsx in project root.
  * Creates imrs-weather.db with three tables:
  *   - weather_readings (raw 15-min data)
  *   - weather_daily (pre-aggregated daily)
  *   - weather_hourly (pre-aggregated hourly)
+ *
+ * NOTE: The `xlsx` (SheetJS) package was removed because the npm registry only
+ * carries vulnerable versions (prototype pollution + ReDoS). This script will
+ * not run until re-tooled with a maintained Excel reader (e.g. `exceljs`) or
+ * the patched SheetJS CDN build. Excluded from tsconfig until then.
  */
 
 import path from 'node:path'

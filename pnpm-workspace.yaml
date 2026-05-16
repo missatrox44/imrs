@@ -1,0 +1,11 @@
+# pnpm settings (pnpm 11+). See https://pnpm.io/settings
+
+# Explicit allowlist of dependencies permitted to run install/build scripts.
+# pnpm blocks lifecycle scripts by default; anything not listed here will not
+# run postinstall/build scripts. Keep this list minimal — only native modules
+# that genuinely need to compile a binary.
+allowBuilds:
+  '@parcel/watcher': true
+  better-sqlite3: true
+  esbuild: true
+  unrs-resolver: true

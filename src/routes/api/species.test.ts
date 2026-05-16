@@ -1,14 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { Route } from './species'
 
-// Import after vi.mock so the mocks are wired up.
-import { ServerRoute } from './species'
-
-// Mock createServerFileRoute so `.methods({ GET })` returns the handlers
-// object directly — we want to invoke `GET` from the test.
-vi.mock('@tanstack/react-start/server', () => ({
-  createServerFileRoute: () => ({
-    methods: (handlers: Record<string, unknown>) => handlers,
-  }),
+// Mock createFileRoute so `Route` is just the config object passed to it,
+// letting us invoke the server `GET` handler directly from the test.
+// vitest hoists vi.mock above the import, so `Route` receives the mock.
+vi.mock('@tanstack/react-router', () => ({
+  createFileRoute: () => (options: Record<string, unknown>) => options,
 }))
 
 const execute = vi.fn()
@@ -16,7 +13,11 @@ vi.mock('@/server/turso', () => ({
   getTurso: () => ({ execute }),
 }))
 
-type Handlers = { GET: () => Promise<Response> }
+type RouteConfig = {
+  server: { handlers: { GET: () => Promise<Response> } }
+}
+
+const callGet = () => (Route as unknown as RouteConfig).server.handlers.GET()
 
 describe('GET /api/species', () => {
   beforeEach(() => execute.mockReset())
@@ -30,7 +31,7 @@ describe('GET /api/species', () => {
       ],
     })
 
-    const res = await (ServerRoute as unknown as Handlers).GET()
+    const res = await callGet()
 
     expect(res.status).toBe(200)
     expect(res.headers.get('Content-Type')).toBe('application/json')
@@ -50,7 +51,7 @@ describe('GET /api/species', () => {
     vi.spyOn(console, 'error').mockImplementation(() => {})
     execute.mockRejectedValueOnce(new Error('connection refused'))
 
-    const res = await (ServerRoute as unknown as Handlers).GET()
+    const res = await callGet()
 
     expect(res.status).toBe(500)
     expect(res.headers.get('Content-Type')).toBe('application/json')

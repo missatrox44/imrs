@@ -8,8 +8,6 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createServerRootRoute } from '@tanstack/react-start/server'
-
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WeatherRouteImport } from './routes/weather'
 import { Route as ObservationsRouteImport } from './routes/observations'
@@ -17,10 +15,8 @@ import { Route as GazetteerRouteImport } from './routes/gazetteer'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SpeciesIndexRouteImport } from './routes/species.index'
 import { Route as SpeciesSpeciesIdRouteImport } from './routes/species.$speciesId'
-import { ServerRoute as ApiWeatherServerRouteImport } from './routes/api/weather'
-import { ServerRoute as ApiSpeciesServerRouteImport } from './routes/api/species'
-
-const rootServerRouteImport = createServerRootRoute()
+import { Route as ApiWeatherRouteImport } from './routes/api/weather'
+import { Route as ApiSpeciesRouteImport } from './routes/api/species'
 
 const WeatherRoute = WeatherRouteImport.update({
   id: '/weather',
@@ -52,15 +48,15 @@ const SpeciesSpeciesIdRoute = SpeciesSpeciesIdRouteImport.update({
   path: '/species/$speciesId',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiWeatherServerRoute = ApiWeatherServerRouteImport.update({
+const ApiWeatherRoute = ApiWeatherRouteImport.update({
   id: '/api/weather',
   path: '/api/weather',
-  getParentRoute: () => rootServerRouteImport,
+  getParentRoute: () => rootRouteImport,
 } as any)
-const ApiSpeciesServerRoute = ApiSpeciesServerRouteImport.update({
+const ApiSpeciesRoute = ApiSpeciesRouteImport.update({
   id: '/api/species',
   path: '/api/species',
-  getParentRoute: () => rootServerRouteImport,
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -68,14 +64,18 @@ export interface FileRoutesByFullPath {
   '/gazetteer': typeof GazetteerRoute
   '/observations': typeof ObservationsRoute
   '/weather': typeof WeatherRoute
+  '/api/species': typeof ApiSpeciesRoute
+  '/api/weather': typeof ApiWeatherRoute
   '/species/$speciesId': typeof SpeciesSpeciesIdRoute
-  '/species': typeof SpeciesIndexRoute
+  '/species/': typeof SpeciesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/gazetteer': typeof GazetteerRoute
   '/observations': typeof ObservationsRoute
   '/weather': typeof WeatherRoute
+  '/api/species': typeof ApiSpeciesRoute
+  '/api/weather': typeof ApiWeatherRoute
   '/species/$speciesId': typeof SpeciesSpeciesIdRoute
   '/species': typeof SpeciesIndexRoute
 }
@@ -85,6 +85,8 @@ export interface FileRoutesById {
   '/gazetteer': typeof GazetteerRoute
   '/observations': typeof ObservationsRoute
   '/weather': typeof WeatherRoute
+  '/api/species': typeof ApiSpeciesRoute
+  '/api/weather': typeof ApiWeatherRoute
   '/species/$speciesId': typeof SpeciesSpeciesIdRoute
   '/species/': typeof SpeciesIndexRoute
 }
@@ -95,14 +97,18 @@ export interface FileRouteTypes {
     | '/gazetteer'
     | '/observations'
     | '/weather'
+    | '/api/species'
+    | '/api/weather'
     | '/species/$speciesId'
-    | '/species'
+    | '/species/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/gazetteer'
     | '/observations'
     | '/weather'
+    | '/api/species'
+    | '/api/weather'
     | '/species/$speciesId'
     | '/species'
   id:
@@ -111,6 +117,8 @@ export interface FileRouteTypes {
     | '/gazetteer'
     | '/observations'
     | '/weather'
+    | '/api/species'
+    | '/api/weather'
     | '/species/$speciesId'
     | '/species/'
   fileRoutesById: FileRoutesById
@@ -120,33 +128,10 @@ export interface RootRouteChildren {
   GazetteerRoute: typeof GazetteerRoute
   ObservationsRoute: typeof ObservationsRoute
   WeatherRoute: typeof WeatherRoute
+  ApiSpeciesRoute: typeof ApiSpeciesRoute
+  ApiWeatherRoute: typeof ApiWeatherRoute
   SpeciesSpeciesIdRoute: typeof SpeciesSpeciesIdRoute
   SpeciesIndexRoute: typeof SpeciesIndexRoute
-}
-export interface FileServerRoutesByFullPath {
-  '/api/species': typeof ApiSpeciesServerRoute
-  '/api/weather': typeof ApiWeatherServerRoute
-}
-export interface FileServerRoutesByTo {
-  '/api/species': typeof ApiSpeciesServerRoute
-  '/api/weather': typeof ApiWeatherServerRoute
-}
-export interface FileServerRoutesById {
-  __root__: typeof rootServerRouteImport
-  '/api/species': typeof ApiSpeciesServerRoute
-  '/api/weather': typeof ApiWeatherServerRoute
-}
-export interface FileServerRouteTypes {
-  fileServerRoutesByFullPath: FileServerRoutesByFullPath
-  fullPaths: '/api/species' | '/api/weather'
-  fileServerRoutesByTo: FileServerRoutesByTo
-  to: '/api/species' | '/api/weather'
-  id: '__root__' | '/api/species' | '/api/weather'
-  fileServerRoutesById: FileServerRoutesById
-}
-export interface RootServerRouteChildren {
-  ApiSpeciesServerRoute: typeof ApiSpeciesServerRoute
-  ApiWeatherServerRoute: typeof ApiWeatherServerRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -182,7 +167,7 @@ declare module '@tanstack/react-router' {
     '/species/': {
       id: '/species/'
       path: '/species'
-      fullPath: '/species'
+      fullPath: '/species/'
       preLoaderRoute: typeof SpeciesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -193,23 +178,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SpeciesSpeciesIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-  }
-}
-declare module '@tanstack/react-start/server' {
-  interface ServerFileRoutesByPath {
     '/api/weather': {
       id: '/api/weather'
       path: '/api/weather'
       fullPath: '/api/weather'
-      preLoaderRoute: typeof ApiWeatherServerRouteImport
-      parentRoute: typeof rootServerRouteImport
+      preLoaderRoute: typeof ApiWeatherRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/species': {
       id: '/api/species'
       path: '/api/species'
       fullPath: '/api/species'
-      preLoaderRoute: typeof ApiSpeciesServerRouteImport
-      parentRoute: typeof rootServerRouteImport
+      preLoaderRoute: typeof ApiSpeciesRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -219,16 +200,20 @@ const rootRouteChildren: RootRouteChildren = {
   GazetteerRoute: GazetteerRoute,
   ObservationsRoute: ObservationsRoute,
   WeatherRoute: WeatherRoute,
+  ApiSpeciesRoute: ApiSpeciesRoute,
+  ApiWeatherRoute: ApiWeatherRoute,
   SpeciesSpeciesIdRoute: SpeciesSpeciesIdRoute,
   SpeciesIndexRoute: SpeciesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-const rootServerRouteChildren: RootServerRouteChildren = {
-  ApiSpeciesServerRoute: ApiSpeciesServerRoute,
-  ApiWeatherServerRoute: ApiWeatherServerRoute,
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
 }
-export const serverRouteTree = rootServerRouteImport
-  ._addFileChildren(rootServerRouteChildren)
-  ._addFileTypes<FileServerRouteTypes>()

@@ -4,13 +4,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Commands
 
-- `npm run dev` — Start dev server (port 3000)
-- `npm run build` — Production build (outputs to `.output/`)
-- `npm run serve` — Preview production build
-- `npm run test` — Run tests (Vitest)
-- `npm run lint` — Run ESLint
-- `npm run format` — Run Prettier
-- `npm run check` — Format + lint fix
+This project uses **pnpm** (pinned via the `packageManager` field in `package.json`).
+
+- `pnpm dev` — Start dev server (port 3000)
+- `pnpm build` — Production build (outputs to `.output/`)
+- `pnpm serve` — Preview production build
+- `pnpm test` — Run tests (Vitest)
+- `pnpm lint` — Run ESLint
+- `pnpm format` — Run Prettier
+- `pnpm check` — Format + lint fix
 
 ## Architecture
 
