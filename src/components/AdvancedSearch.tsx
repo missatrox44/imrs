@@ -80,7 +80,7 @@ export function AdvancedSearch({
           )
         }
       }
-      options[rank.key] = getUniqueValues(filtered, rank.key as keyof Species)
+      options[rank.key] = getUniqueValues(filtered, rank.key)
     }
 
     return options

@@ -31,7 +31,7 @@ function validateWeatherInput(input: unknown): WeatherFilterInput {
 }
 
 export const fetchWeatherSummary = createServerFn({ method: 'GET' })
-  .validator(validateWeatherInput)
+  .inputValidator(validateWeatherInput)
   .handler(async ({ data }): Promise<WeatherSummary> => {
     const client = getTurso()
 
