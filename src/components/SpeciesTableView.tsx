@@ -4,6 +4,7 @@ import { ChevronRight } from 'lucide-react'
 import { useWindowVirtualizer } from '@tanstack/react-virtual'
 import type { Species } from '@/types/species'
 import { getCategoryIcon } from '@/lib/getCategoryIcon'
+import { speciesPath } from '@/lib/speciesSlug'
 
 const ROW_HEIGHT = 57
 
@@ -49,7 +50,7 @@ const SpeciesRow = memo(function SpeciesRow({
       >
         <Link
           to="/species/$speciesId"
-          params={{ speciesId: String(item.id) }}
+          params={{ speciesId: speciesPath(item) }}
           className="before:absolute before:inset-0 before:z-10 truncate"
         >
           <span className="scientific-name relative z-20 group-hover:underline">

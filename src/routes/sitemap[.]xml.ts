@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { getTurso } from '@/server/turso'
 import { CACHE_HEADERS, SITE_URL } from '@/data/constants'
+import { speciesPath } from '@/lib/speciesSlug'
 
 const STATIC_ROUTES = ['/', '/species', '/observations', '/gazetteer', '/weather']
 
@@ -10,12 +11,20 @@ export const Route = createFileRoute('/sitemap.xml')({
       GET: async () => {
         try {
           const client = getTurso()
-          const result = await client.execute('SELECT id FROM specimens')
+          const result = await client.execute(
+            'SELECT id, genus, species FROM specimens',
+          )
 
           const speciesUrls = result.rows
-            .map((row) => row.id)
-            .filter((id) => id != null)
-            .map((id) => `  <url><loc>${SITE_URL}/species/${id}</loc></url>`)
+            .filter((row) => row.id != null)
+            .map((row) => {
+              const path = speciesPath({
+                id: Number(row.id),
+                genus: row.genus == null ? undefined : String(row.genus),
+                species: row.species == null ? undefined : String(row.species),
+              })
+              return `  <url><loc>${SITE_URL}/species/${path}</loc></url>`
+            })
             .join('\n')
 
           const staticUrls = STATIC_ROUTES.map(

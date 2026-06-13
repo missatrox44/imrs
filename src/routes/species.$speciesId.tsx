@@ -1,4 +1,4 @@
-import { createFileRoute, notFound } from '@tanstack/react-router'
+import { createFileRoute, notFound, redirect } from '@tanstack/react-router'
 import type { Observation } from '@/types/observation'
 
 import { Loader } from '@/components/Loader'
@@ -7,17 +7,32 @@ import { fetchAllSpecies } from '@/server/speciesService'
 import { fetchObservations } from '@/lib/inat'
 import { SITE_URL } from '@/data/constants'
 import { getPhotoUrl } from '@/lib/getPhotoUrl'
+import { parseSpeciesId, speciesPath } from '@/lib/speciesSlug'
 
 export const Route = createFileRoute('/species/$speciesId')({
   // Fetch the species + recent observations for this ID
   loader: async ({ params }) => {
-    const { speciesId } = params
+    const id = parseSpeciesId(params.speciesId)
+    if (id == null) {
+      throw notFound()
+    }
+
     const all = await fetchAllSpecies()
 
-    const species = all.find((s) => String(s.id) === String(speciesId))
+    const species = all.find((s) => s.id === id)
 
     if (!species) {
       throw notFound()
+    }
+
+    // Canonicalize the URL: bare-ID or stale-slug hits 301 to the slug form.
+    const canonical = speciesPath(species)
+    if (params.speciesId !== canonical) {
+      throw redirect({
+        to: '/species/$speciesId',
+        params: { speciesId: canonical },
+        statusCode: 301,
+      })
     }
 
     let observations: Array<Observation> = []
@@ -43,7 +58,7 @@ export const Route = createFileRoute('/species/$speciesId')({
     return { species, observations }
   },
 
-  head: ({ loaderData, params }) => {
+  head: ({ loaderData }) => {
     if (!loaderData) {
       return {}
     }
@@ -53,7 +68,7 @@ export const Route = createFileRoute('/species/$speciesId')({
       .filter(Boolean)
       .join(' ')
 
-    const canonicalUrl = `${SITE_URL}/species/${params.speciesId}`
+    const canonicalUrl = `${SITE_URL}/species/${speciesPath(species)}`
     const photoUrl = getPhotoUrl(observations[0]?.photos)
 
     const taxonLd: Record<string, unknown> = {

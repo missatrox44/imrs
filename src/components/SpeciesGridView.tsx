@@ -6,6 +6,7 @@ import type { Species } from '@/types/species'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { getCategoryIcon } from '@/lib/getCategoryIcon'
+import { speciesPath } from '@/lib/speciesSlug'
 
 const ESTIMATED_ROW_HEIGHT = 160
 
@@ -13,7 +14,7 @@ const SpeciesCard = memo(function SpeciesCard({ item }: { item: Species }) {
   return (
     <Link
       to="/species/$speciesId"
-      params={{ speciesId: String(item.id) }}
+      params={{ speciesId: speciesPath(item) }}
       className="h-full block group"
     >
       <Card className="gradient-card shadow-card hover:shadow-hover transition-all duration-300 cursor-pointer h-full hover:bg-muted/50">
