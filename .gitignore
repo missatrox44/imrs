@@ -22,3 +22,5 @@ specimens.tsv
 *.sql
 specimens.json
 *.local.md
+.vscode
+.agents
