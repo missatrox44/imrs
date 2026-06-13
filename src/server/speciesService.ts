@@ -7,8 +7,6 @@ export const fetchAllSpecies = createServerFn({ method: 'GET' }).handler(
   async (): Promise<Array<Species>> => {
     const client = getTurso()
     const result = await client.execute('SELECT * FROM specimens')
-    return result.rows
-      .map(rowToSpecies)
-      .filter((s): s is Species => s !== null)
+    return result.rows.map(rowToSpecies).filter((s): s is Species => s !== null)
   },
 )

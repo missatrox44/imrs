@@ -83,9 +83,7 @@ export default function WeatherTimeSeries({
       minHeight={minHeight}
     >
       <Suspense
-        fallback={
-          <div style={{ height: minHeight }} aria-hidden="true" />
-        }
+        fallback={<div style={{ height: minHeight }} aria-hidden="true" />}
       >
         <div className="space-y-6">
           {/* Panel 1: Temperature + Dew Point (°C) */}

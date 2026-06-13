@@ -3,7 +3,13 @@ import { getTurso } from '@/server/turso'
 import { CACHE_HEADERS, SITE_URL } from '@/data/constants'
 import { speciesPath } from '@/lib/speciesSlug'
 
-const STATIC_ROUTES = ['/', '/species', '/observations', '/gazetteer', '/weather']
+const STATIC_ROUTES = [
+  '/',
+  '/species',
+  '/observations',
+  '/gazetteer',
+  '/weather',
+]
 
 export const Route = createFileRoute('/sitemap.xml')({
   server: {

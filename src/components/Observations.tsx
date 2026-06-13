@@ -20,12 +20,7 @@ import EmptyState from '@/components/EmptyState'
 import { formatDate } from '@/lib/formatDate'
 import { getPhotoUrl } from '@/lib/getPhotoUrl'
 import { ObservationCardSkeleton } from '@/components/ObservationCardSkeleton'
-import {
-  GC_TIME,
-  PER_PAGE,
-  SKELETON_COUNT,
-  STALE_TIME,
-} from '@/data/constants'
+import { GC_TIME, PER_PAGE, SKELETON_COUNT, STALE_TIME } from '@/data/constants'
 import { fetchObservations } from '@/lib/inat'
 import { GROUP_TO_TAXON_ID } from '@/types/taxon'
 
@@ -173,94 +168,103 @@ const Observations = ({ initialPage }: ObservationsProps) => {
             </SelectContent>
           </Select>
         </div>
-        <section className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredObservations.map((observation) => (
-            <Link
-              key={observation.id}
-              to={observation.uri || '#'}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span className="sr-only">
-                {observation.species_guess ||
-                  observation.taxon?.preferred_common_name ||
-                  'Observation'}{' '}
-                (opens in new tab)
-              </span>
-              <Card className="h-full flex flex-col gradient-card shadow-card hover:shadow-hover transition-all duration-300 overflow-hidden">
-                {getPhotoUrl(observation.photos) && (
-                  <div className="aspect-square overflow-hidden">
-                    <img
-                      src={getPhotoUrl(observation.photos)!}
-                      alt={
-                        observation.species_guess ||
-                        observation.taxon?.preferred_common_name ||
-                        observation.taxon?.name ||
-                        `Observation #${observation.id}`
-                      }
-                      loading="lazy"
-                      decoding="async"
-                      width={500}
-                      height={500}
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                      onError={(e) => {
-                        ;(e.target as HTMLImageElement).style.display = 'none'
-                      }}
-                    />
-                  </div>
-                )}
-
-                <CardHeader className="pb-3 space-y-1">
-                  <h2 className="font-semibold text-foreground line-clamp-2">
+        <section>
+          <ul className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {filteredObservations.map((observation) => (
+              <li key={observation.id}>
+                <Link
+                  to={observation.uri || '#'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block h-full"
+                >
+                  <span className="sr-only">
                     {observation.species_guess ||
                       observation.taxon?.preferred_common_name ||
-                      'Unknown Species'}
-                  </h2>
+                      'Observation'}{' '}
+                    (opens in new tab)
+                  </span>
+                  <Card className="h-full flex flex-col gradient-card shadow-card hover:shadow-hover transition-all duration-300 overflow-hidden">
+                    {getPhotoUrl(observation.photos) && (
+                      <div className="aspect-square overflow-hidden">
+                        <img
+                          src={getPhotoUrl(observation.photos)!}
+                          alt={
+                            observation.species_guess ||
+                            observation.taxon?.preferred_common_name ||
+                            observation.taxon?.name ||
+                            `Observation #${observation.id}`
+                          }
+                          loading="lazy"
+                          decoding="async"
+                          width={500}
+                          height={500}
+                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                          onError={(e) => {
+                            ;(e.target as HTMLImageElement).style.display =
+                              'none'
+                          }}
+                        />
+                      </div>
+                    )}
 
-                  {observation.taxon?.name && (
-                    <p className="italic text-sm text-muted-foreground line-clamp-1">
-                      {observation.taxon.name}
-                    </p>
-                  )}
-                </CardHeader>
+                    <CardHeader className="pb-3 space-y-1">
+                      <h2 className="font-semibold text-foreground line-clamp-2">
+                        {observation.species_guess ||
+                          observation.taxon?.preferred_common_name ||
+                          'Unknown Species'}
+                      </h2>
 
-                <CardContent className="space-y-3 mt-auto">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <User className="size-4" />
-                    <span>{observation.user?.login || 'Anonymous'}</span>
-                  </div>
+                      {observation.taxon?.name && (
+                        <p className="italic text-sm text-muted-foreground line-clamp-1">
+                          {observation.taxon.name}
+                        </p>
+                      )}
+                    </CardHeader>
 
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Calendar className="size-4" />
-                    <span>{formatDate(observation.observed_on_string)}</span>
-                  </div>
+                    <CardContent className="space-y-3 mt-auto">
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <User className="size-4" />
+                        <span>{observation.user?.login || 'Anonymous'}</span>
+                      </div>
 
-                  {observation.place_guess && (
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <MapPin className="size-4" />
-                      <span className="line-clamp-1">
-                        {observation.place_guess}
-                      </span>
-                    </div>
-                  )}
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <Calendar className="size-4" />
+                        <span>
+                          {formatDate(observation.observed_on_string)}
+                        </span>
+                      </div>
 
-                  <Badge variant="secondary" className="w-fit">
-                    ID #{observation.id}
-                  </Badge>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
+                      {observation.place_guess && (
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <MapPin className="size-4" />
+                          <span className="line-clamp-1">
+                            {observation.place_guess}
+                          </span>
+                        </div>
+                      )}
+
+                      <Badge variant="secondary" className="w-fit">
+                        ID #{observation.id}
+                      </Badge>
+                    </CardContent>
+                  </Card>
+                </Link>
+              </li>
+            ))}
+
+            {isFetchingNextPage &&
+              Array.from({ length: SKELETON_COUNT }).map((_, i) => (
+                <li key={`skeleton-${i}`}>
+                  <ObservationCardSkeleton />
+                </li>
+              ))}
+          </ul>
 
           {isFetchingNextPage && (
-            <>
-              <span className="sr-only" role="status">
-                Loading more observations
-              </span>
-              {Array.from({ length: SKELETON_COUNT }).map((_, i) => (
-                <ObservationCardSkeleton key={`skeleton-${i}`} />
-              ))}
-            </>
+            <span className="sr-only" role="status">
+              Loading more observations
+            </span>
           )}
         </section>
 

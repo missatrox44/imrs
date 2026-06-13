@@ -21,18 +21,18 @@ describe('slugifyBinomial', () => {
 
 describe('speciesPath', () => {
   it('prefixes the id to the slug', () => {
-    expect(speciesPath({ id: 2, genus: 'Notiosorex', species: 'crawfordi' })).toBe(
-      '2-notiosorex-crawfordi',
-    )
+    expect(
+      speciesPath({ id: 2, genus: 'Notiosorex', species: 'crawfordi' }),
+    ).toBe('2-notiosorex-crawfordi')
   })
 
   it('disambiguates identical binomials by id', () => {
-    expect(speciesPath({ id: 380, genus: 'Packera', species: 'tampicana' })).toBe(
-      '380-packera-tampicana',
-    )
-    expect(speciesPath({ id: 381, genus: 'Packera', species: 'tampicana' })).toBe(
-      '381-packera-tampicana',
-    )
+    expect(
+      speciesPath({ id: 380, genus: 'Packera', species: 'tampicana' }),
+    ).toBe('380-packera-tampicana')
+    expect(
+      speciesPath({ id: 381, genus: 'Packera', species: 'tampicana' }),
+    ).toBe('381-packera-tampicana')
   })
 
   it('falls back to the bare id when there is no binomial', () => {

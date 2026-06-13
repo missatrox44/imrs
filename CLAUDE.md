@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This project uses **pnpm** (pinned via the `packageManager` field in `package.json`).
 
-- `pnpm dev` — Start dev server (port 3000)
+- `pnpm dev` — Start dev server (port 3001)
 - `pnpm build` — Production build (outputs to `.output/`)
 - `pnpm serve` — Preview production build
 - `pnpm test` — Run tests (Vitest)

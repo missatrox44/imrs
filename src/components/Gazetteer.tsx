@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils'
 const Gazetteer = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedId, setSelectedId] = useState<string | null>(null)
-  const cardRefs = useRef<Record<string, HTMLDivElement | null>>({})
+  const cardRefs = useRef<Record<string, HTMLLIElement | null>>({})
   const [MapComponent, setMapComponent] =
     useState<ComponentType<GazetteerMapProps> | null>(null)
 
@@ -92,42 +92,44 @@ const Gazetteer = () => {
               />
             </div>
 
-            <section className="space-y-4">
+            <section>
               {filteredAndSortedEntries.length > 0 ? (
-                filteredAndSortedEntries.map((entry) => (
-                  <div
-                    key={entry.id}
-                    ref={(el) => {
-                      cardRefs.current[entry.id] = el
-                    }}
-                  >
-                    <Card
-                      className={cn(
-                        'hover:shadow-md transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-                        entry.id === selectedId &&
-                          'ring-4 ring-accent shadow-lg bg-accent/10',
-                      )}
-                      onClick={() => setSelectedId(entry.id)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault()
-                          setSelectedId(entry.id)
-                        }
+                <ul className="space-y-4">
+                  {filteredAndSortedEntries.map((entry) => (
+                    <li
+                      key={entry.id}
+                      ref={(el) => {
+                        cardRefs.current[entry.id] = el
                       }}
-                      role="button"
-                      tabIndex={0}
-                      aria-pressed={entry.id === selectedId}
                     >
-                      <CardHeader>
-                        <CardTitle className="text-xl">{entry.name}</CardTitle>
-                        {entry.alternateNames?.length ? (
-                          <p className="text-sm text-muted-foreground italic">
-                            aka {entry.alternateNames.join(', ')}
-                          </p>
-                        ) : null}
-                      </CardHeader>
-                      <CardContent>
-                        <div>
+                      <Card
+                        className={cn(
+                          'hover:shadow-md transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+                          entry.id === selectedId &&
+                            'ring-4 ring-accent shadow-lg bg-accent/10',
+                        )}
+                        onClick={() => setSelectedId(entry.id)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault()
+                            setSelectedId(entry.id)
+                          }
+                        }}
+                        role="button"
+                        tabIndex={0}
+                        aria-pressed={entry.id === selectedId}
+                      >
+                        <CardHeader>
+                          <CardTitle as="h2" className="text-xl">
+                            {entry.name}
+                          </CardTitle>
+                          {entry.alternateNames?.length ? (
+                            <p className="text-sm text-muted-foreground italic">
+                              aka {entry.alternateNames.join(', ')}
+                            </p>
+                          ) : null}
+                        </CardHeader>
+                        <CardContent>
                           <div className="flex-1 space-y-3">
                             <p className="text-muted-foreground">
                               {entry.description}
@@ -159,11 +161,11 @@ const Gazetteer = () => {
                               )}
                             </div>
                           </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                ))
+                        </CardContent>
+                      </Card>
+                    </li>
+                  ))}
+                </ul>
               ) : (
                 <Card>
                   <CardContent className="py-8 text-center">

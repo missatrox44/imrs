@@ -139,7 +139,7 @@ export function SpeciesDetails() {
   const conservationRanks = getConservationRanks(species)
 
   return (
-    <div className="min-h-screen bg-background">
+    <main className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         <Button variant="ghost" asChild className="mb-6">
           <Link to="/species" search={{ category: 'all' }}>
@@ -219,10 +219,8 @@ export function SpeciesDetails() {
 
             <Card className="gradient-card shadow-card">
               <CardHeader>
-                <CardTitle>Recent Observations</CardTitle>
-                <CardDescription>
-                  Sourced from iNaturalist
-                </CardDescription>
+                <CardTitle as="h2">Recent Observations</CardTitle>
+                <CardDescription>Sourced from iNaturalist</CardDescription>
               </CardHeader>
 
               <CardContent>
@@ -327,10 +325,10 @@ export function SpeciesDetails() {
           </div>
 
           {/* Sidebar */}
-          <div className="space-y-6">
+          <aside className="space-y-6">
             <Card className="gradient-card shadow-card">
               <CardHeader>
-                <CardTitle>Taxonomic Classification</CardTitle>
+                <CardTitle as="h2">Taxonomic Classification</CardTitle>
               </CardHeader>
               <CardContent className="p-0">
                 <div className="divide-y divide-border">
@@ -372,7 +370,7 @@ export function SpeciesDetails() {
             {conservationRanks.length > 0 && (
               <Card className="gradient-card shadow-card">
                 <CardHeader>
-                  <CardTitle>Species Status</CardTitle>
+                  <CardTitle as="h2">Species Status</CardTitle>
                   <CardDescription>
                     Conservation assessments. Source: NatureServe Explorer and
                     the IUCN Red List.
@@ -398,7 +396,7 @@ export function SpeciesDetails() {
             {/* Extra Details */}
             {/* <Card className="gradient-card shadow-card">
               <CardHeader>
-                <CardTitle>Details</CardTitle>
+                <CardTitle as="h2">Details</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex justify-between">
@@ -434,9 +432,9 @@ export function SpeciesDetails() {
 
               </CardContent>
             </Card> */}
-          </div>
+          </aside>
         </div>
       </div>
-    </div>
+    </main>
   )
 }

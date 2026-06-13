@@ -26,9 +26,14 @@ function CardHeader({ className, ref, ...props }: DivProps) {
   )
 }
 
-function CardTitle({ className, ref, ...props }: DivProps) {
+function CardTitle({
+  as: Comp = 'div',
+  className,
+  ref,
+  ...props
+}: DivProps & { as?: React.ElementType }) {
   return (
-    <div
+    <Comp
       ref={ref}
       className={cn('font-semibold leading-none tracking-tight', className)}
       {...props}
