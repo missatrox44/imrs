@@ -34,7 +34,7 @@ export const Footer = () => {
             aria-label="Footer navigation"
             className="md:col-span-3 md:col-start-6"
           >
-            <h3 className="font-semibold text-foreground mb-3">Quick Links</h3>
+            <h2 className="font-semibold text-foreground mb-3">Quick Links</h2>
             <ul className="space-y-2 text-sm">
               {navItems.map((item) => (
                 <li key={item.to}>
@@ -51,9 +51,9 @@ export const Footer = () => {
 
           {/* External Resources */}
           <div className="md:col-span-3">
-            <h3 className="font-semibold text-foreground mb-3">
+            <h2 className="font-semibold text-foreground mb-3">
               External Resources
-            </h3>
+            </h2>
             <ul className="space-y-2 text-sm">
               {externalLinks.map((link) => (
                 <li key={link.to}>
@@ -70,9 +70,9 @@ export const Footer = () => {
                 </li>
               ))}
             </ul>
-            <h3 className="font-semibold text-foreground mt-8 md:mt-3 mb-3">
+            <h2 className="font-semibold text-foreground mt-8 md:mt-3 mb-3">
               Support
-            </h3>
+            </h2>
             <ul className="space-y-2 text-sm">
               <li>
                 <a

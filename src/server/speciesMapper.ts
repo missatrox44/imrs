@@ -1,9 +1,14 @@
 // fixes type errors when mapping Turso rows to Species
 import type { Species } from '@/types/species'
 
-export function rowToSpecies(row: Record<string, unknown>): Species {
+export function rowToSpecies(row: Record<string, unknown>): Species | null {
+  const id = Number(row.id)
+  if (row.id == null || Number.isNaN(id)) {
+    return null
+  }
+
   return {
-    id: Number(row.id),
+    id,
 
     category: row.category as string | undefined,
     kingdom: row.kingdom as string | undefined,

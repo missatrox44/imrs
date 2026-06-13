@@ -32,7 +32,22 @@ describe('GET /api/weather', () => {
   it('returns 400 for an unknown view', async () => {
     const res = await callGet({ view: 'bogus' })
     expect(res.status).toBe(400)
-    expect(await res.json()).toEqual({ error: 'Unknown view: bogus' })
+    expect(await res.json()).toEqual({ error: 'Invalid query parameters' })
+  })
+
+  it('returns 400 for an invalid season', async () => {
+    const res = await callGet({ view: 'daily', season: 'bogus' })
+    expect(res.status).toBe(400)
+    expect(await res.json()).toEqual({ error: 'Invalid query parameters' })
+  })
+
+  it('accepts a comma-separated multi-year filter', async () => {
+    execute.mockResolvedValueOnce({ rows: [] })
+
+    const res = await callGet({ view: 'daily', year: '2023,2024' })
+
+    expect(res.status).toBe(200)
+    expect(execute).toHaveBeenCalledTimes(1)
   })
 
   it('daily view returns mapped daily rows with cache headers', async () => {

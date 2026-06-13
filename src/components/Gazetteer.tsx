@@ -64,7 +64,7 @@ const Gazetteer = () => {
         {/* Desktop: side-by-side | Mobile: stacked */}
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Map panel */}
-          <div className="isolate h-[40vh] lg:h-[calc(80vh-6rem)] lg:w-1/2 xl:w-3/5 lg:sticky lg:top-6 rounded-sm border overflow-hidden">
+          <div className="isolate h-[40vh] min-h-[320px] lg:h-[calc(80vh-6rem)] lg:w-1/2 xl:w-3/5 lg:sticky lg:top-6 rounded-sm border overflow-hidden">
             {MapComponent ? (
               <MapComponent
                 entries={filteredAndSortedEntries}
@@ -76,6 +76,10 @@ const Gazetteer = () => {
                 Loading map…
               </div>
             )}
+            <p className="sr-only">
+              Use Tab to navigate map pins. Arrow keys pan the map when focused.
+              Press Enter or Space on a card in the list to highlight its pin.
+            </p>
           </div>
 
           {/* Cards panel */}
@@ -99,7 +103,7 @@ const Gazetteer = () => {
                   >
                     <Card
                       className={cn(
-                        'hover:shadow-md transition-all cursor-pointer',
+                        'hover:shadow-md transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
                         entry.id === selectedId &&
                           'ring-4 ring-accent shadow-lg bg-accent/10',
                       )}
@@ -130,18 +134,19 @@ const Gazetteer = () => {
                             </p>
 
                             <div className="flex flex-wrap gap-2 text-sm">
-                              {entry.latitude && entry.longitude && (
-                                <Badge
-                                  variant="secondary"
-                                  className="flex items-center gap-1"
-                                >
-                                  <MapPin className="size-3" />
-                                  {formatCoordinates(
-                                    entry.latitude,
-                                    entry.longitude,
-                                  )}
-                                </Badge>
-                              )}
+                              {entry.latitude != null &&
+                                entry.longitude != null && (
+                                  <Badge
+                                    variant="secondary"
+                                    className="flex items-center gap-1"
+                                  >
+                                    <MapPin className="size-3" />
+                                    {formatCoordinates(
+                                      entry.latitude,
+                                      entry.longitude,
+                                    )}
+                                  </Badge>
+                                )}
 
                               {entry.elevationMeters && (
                                 <Badge

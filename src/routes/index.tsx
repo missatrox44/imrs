@@ -1,17 +1,19 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { SITE_URL } from '@/data/constants'
 import { Home } from '@/components/Home'
 
 export const Route = createFileRoute('/')({
   component: App,
   head: () => ({
-    title: 'IMRS Biodiversity Explorer',
     meta: [
+      { title: 'IMRS Biodiversity Explorer' },
       {
         name: 'description',
         content:
-          'A living archive of flora and fauna observations from Indio Mountains Research Station.',
+          'Explore species, recent iNaturalist observations, and weather data from the Indio Mountains Research Station — a 40,000-acre desert research preserve in West Texas.',
       },
     ],
+    links: [{ rel: 'canonical', href: SITE_URL + '/' }],
     scripts: [
       {
         type: 'application/ld+json',

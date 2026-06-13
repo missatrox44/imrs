@@ -3,6 +3,7 @@ import type { Season } from '@/types/weather'
 import { Loader } from '@/components/Loader'
 import WeatherDashboard from '@/components/weather/WeatherDashboard'
 import { fetchWeatherSummary } from '@/server/weatherService'
+import { SITE_URL } from '@/data/constants'
 
 type WeatherSearch = {
   year: string
@@ -27,7 +28,15 @@ export const Route = createFileRoute('/weather')({
   pendingComponent: () => <Loader dataTitle="weather data" />,
   component: WeatherPage,
   head: () => ({
-    title: 'Weather | IMRS',
+    meta: [
+      { title: 'Weather | IMRS' },
+      {
+        name: 'description',
+        content:
+          'Five years of 15-minute interval climate data from the Indio Mountains Research Station Hill weather station — temperature, precipitation, humidity, wind, and pressure charts.',
+      },
+    ],
+    links: [{ rel: 'canonical', href: SITE_URL + '/weather' }],
     scripts: [
       {
         type: 'application/ld+json',

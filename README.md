@@ -37,6 +37,17 @@ The **IMRS Biodiversity Explorer** transforms this static data into a living, in
 - **ORM/Querying**: Raw SQL & `better-sqlite3` / `@libsql/client`
 - **External API**: iNaturalist
 
+## Security
+
+Responses are served with a strict Content-Security-Policy and the usual
+hardening headers (`X-Frame-Options`, `X-Content-Type-Options`,
+`Referrer-Policy`, `Permissions-Policy`), configured via Nitro `routeRules` in
+`vite.config.ts` and applied at build time.
+
+Rate limiting and abuse protection are intentionally handled at the edge by the
+Vercel WAF / Firewall rather than in application code, so the app stays
+stateless and the same policy applies across all routes.
+
 ## Future Roadmap
 
 - **Authentication & Admin Dashboard**: Implement secure login for station administrators to manage and update the species index directly (CRUD operations).

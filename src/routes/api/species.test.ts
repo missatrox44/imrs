@@ -47,6 +47,23 @@ describe('GET /api/species', () => {
     expect(execute).toHaveBeenCalledWith('SELECT * FROM specimens')
   })
 
+  it('filters out rows with missing or non-numeric ids', async () => {
+    execute.mockResolvedValueOnce({
+      rows: [
+        { id: '1', genus: 'Canis', species: 'lupus' },
+        { id: 'not-a-number', genus: 'Bad', species: 'row' },
+        { genus: 'No', species: 'id' },
+      ],
+    })
+
+    const res = await callGet()
+
+    expect(res.status).toBe(200)
+    const body = await res.json()
+    expect(body).toHaveLength(1)
+    expect(body[0]).toMatchObject({ id: 1, genus: 'Canis' })
+  })
+
   it('returns 500 with an error JSON when the database throws', async () => {
     vi.spyOn(console, 'error').mockImplementation(() => {})
     execute.mockRejectedValueOnce(new Error('connection refused'))

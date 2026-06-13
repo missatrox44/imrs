@@ -12,6 +12,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import appCss from '../styles.css?url'
 import Header from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { SITE_URL } from '@/data/constants'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -42,7 +43,7 @@ export const Route = createRootRoute({
       },
       {
         property: 'og:image',
-        content: '/og.png',
+        content: `${SITE_URL}/og.png`,
       },
       {
         property: 'og:type',
@@ -67,7 +68,7 @@ export const Route = createRootRoute({
       },
       {
         name: 'twitter:image',
-        content: '/og.png',
+        content: `${SITE_URL}/og.png`,
       },
     ],
     links: [

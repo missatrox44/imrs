@@ -132,30 +132,6 @@ export function SpeciesDetails() {
     return rows
   }
 
-  if (!species) {
-    return (
-      <div className="min-h-screen bg-background">
-        <div className="container mx-auto px-4 py-8">
-          <Card>
-            <CardContent className="text-center py-12">
-              <h1 className="text-2xl font-semibold text-foreground mb-2">
-                Species Not Found
-              </h1>
-              <p className="text-muted-foreground mb-6">
-                The requested species could not be found in our database.
-              </p>
-              <Button asChild>
-                <Link to="/species" search={{ category: 'all' }}>
-                  Back to Species Index
-                </Link>
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    )
-  }
-
   const scientificName = `${species.genus} ${species.species}`
   const taxonomyRows = buildTaxonomyHierarchy(species)
 
@@ -286,6 +262,10 @@ export function SpeciesDetails() {
                                         observation.taxon?.name ||
                                         `Observation #${observation.id}`
                                       }
+                                      loading="lazy"
+                                      decoding="async"
+                                      width={500}
+                                      height={500}
                                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                                       onError={(e) => {
                                         ;(

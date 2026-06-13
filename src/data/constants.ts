@@ -1,5 +1,7 @@
 import type { Category } from '@/types/category'
 
+export const SITE_URL = 'https://imrs.vercel.app'
+
 export const STATS = [
   {
     value: 40000,
@@ -25,9 +27,6 @@ export const STATS = [
 
 export const PER_PAGE = 50
 export const SKELETON_COUNT = 8
-export const iNaturalistUrl = new URL(
-  'https://api.inaturalist.org/v1/observations',
-)
 export const PLACE_ID = '225419'
 export const ORDER = 'desc'
 export const ORDER_BY = 'observed_on'

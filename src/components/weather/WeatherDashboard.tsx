@@ -14,7 +14,7 @@ export default function WeatherDashboard() {
   const { data: daily, isLoading: dailyLoading } = useWeatherDaily(filters)
 
   return (
-    <main id="main-content" className="container mx-auto px-4 py-8">
+    <main className="container mx-auto px-4 py-8">
       <div className="space-y-2 mb-8">
         <h1 className="text-3xl font-semibold">Climate &amp; Weather</h1>
         <p className="text-sm text-muted-foreground">

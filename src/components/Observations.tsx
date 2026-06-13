@@ -22,14 +22,11 @@ import { getPhotoUrl } from '@/lib/getPhotoUrl'
 import { ObservationCardSkeleton } from '@/components/ObservationCardSkeleton'
 import {
   GC_TIME,
-  ORDER,
-  ORDER_BY,
   PER_PAGE,
-  PLACE_ID,
   SKELETON_COUNT,
   STALE_TIME,
-  iNaturalistUrl,
 } from '@/data/constants'
+import { fetchObservations } from '@/lib/inat'
 import { GROUP_TO_TAXON_ID } from '@/types/taxon'
 
 interface ObservationsPage {
@@ -54,30 +51,18 @@ const Observations = ({ initialPage }: ObservationsProps) => {
 
       initialPageParam: 1,
 
-      queryFn: async ({ pageParam }) => {
-        iNaturalistUrl.search = new URLSearchParams({
-          place_id: PLACE_ID,
-          order: ORDER,
-          order_by: ORDER_BY,
-          per_page: String(PER_PAGE),
-          page: String(pageParam),
-        }).toString()
-
-        const res = await fetch(iNaturalistUrl)
-
-        if (!res.ok) {
-          throw new Error('Failed to fetch more observations')
-        }
-
-        // eslint-disable-next-line no-shadow
-        const data = await res.json()
+      queryFn: async ({ pageParam, signal }) => {
+        const response = await fetchObservations(
+          { page: pageParam, per_page: PER_PAGE },
+          signal,
+        )
 
         // IMPORTANT: must match initialData.pages shape
         return {
           page: pageParam,
           per_page: PER_PAGE,
-          total_results: data.total_results,
-          results: data.results,
+          total_results: response.total_results,
+          results: response.results,
         }
       },
 
@@ -89,6 +74,8 @@ const Observations = ({ initialPage }: ObservationsProps) => {
 
       getNextPageParam: (lastPage) => {
         const loaded = lastPage.page * lastPage.per_page
+        // iNaturalist caps results at a 10,000-record window
+        if (loaded >= 10_000) return undefined
         return loaded < lastPage.total_results ? lastPage.page + 1 : undefined
       },
 
@@ -211,6 +198,10 @@ const Observations = ({ initialPage }: ObservationsProps) => {
                         observation.taxon?.name ||
                         `Observation #${observation.id}`
                       }
+                      loading="lazy"
+                      decoding="async"
+                      width={500}
+                      height={500}
                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                       onError={(e) => {
                         ;(e.target as HTMLImageElement).style.display = 'none'
@@ -220,11 +211,11 @@ const Observations = ({ initialPage }: ObservationsProps) => {
                 )}
 
                 <CardHeader className="pb-3 space-y-1">
-                  <h3 className="font-semibold text-foreground line-clamp-2">
+                  <h2 className="font-semibold text-foreground line-clamp-2">
                     {observation.species_guess ||
                       observation.taxon?.preferred_common_name ||
                       'Unknown Species'}
-                  </h3>
+                  </h2>
 
                   {observation.taxon?.name && (
                     <p className="italic text-sm text-muted-foreground line-clamp-1">
