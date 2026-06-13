@@ -18,12 +18,25 @@ import { Badge } from '@/components/ui/badge'
 // import { Loader } from '@/components/Loader'
 import EmptyState from '@/components/EmptyState'
 import { formatDate } from '@/lib/formatDate'
+import { getCategoryIcon } from '@/lib/getCategoryIcon'
 import { getPhotoUrl } from '@/lib/getPhotoUrl'
 import { getSoundUrl } from '@/lib/getSoundUrl'
 import { ObservationCardSkeleton } from '@/components/ObservationCardSkeleton'
 import { GC_TIME, PER_PAGE, SKELETON_COUNT, STALE_TIME } from '@/data/constants'
 import { fetchObservations } from '@/lib/inat'
 import { GROUP_TO_TAXON_ID } from '@/types/taxon'
+
+// Filterable groups shown in the dropdown (fungi, fish, and other
+// invertebrates are intentionally omitted for now).
+const GROUP_OPTIONS: Array<{ value: TaxonGroup; label: string }> = [
+  { value: 'plants', label: 'Plants' },
+  { value: 'mammals', label: 'Mammals' },
+  { value: 'birds', label: 'Birds' },
+  { value: 'reptiles', label: 'Reptiles' },
+  { value: 'amphibians', label: 'Amphibians' },
+  { value: 'insects', label: 'Insects' },
+  { value: 'arachnid', label: 'Arachnids' },
+]
 
 interface ObservationsPage {
   page: number
@@ -156,16 +169,14 @@ const Observations = ({ initialPage }: ObservationsProps) => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Groups</SelectItem>
-              <SelectItem value="plants">Plants</SelectItem>
-              {/* <SelectItem value="fungi">Fungi</SelectItem> */}
-              <SelectItem value="mammals">Mammals</SelectItem>
-              <SelectItem value="birds">Birds</SelectItem>
-              <SelectItem value="reptiles">Reptiles</SelectItem>
-              <SelectItem value="amphibians">Amphibians</SelectItem>
-              {/* <SelectItem value="fish">Fish</SelectItem> */}
-              <SelectItem value="insects">Insects</SelectItem>
-              <SelectItem value="arachnid">Arachnids</SelectItem>
-              {/* <SelectItem value="invertebrates">Other Invertebrates</SelectItem> */}
+              {GROUP_OPTIONS.map(({ value, label }) => (
+                <SelectItem key={value} value={value}>
+                  <span className="flex items-center gap-2">
+                    {getCategoryIcon(value)}
+                    {label}
+                  </span>
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
