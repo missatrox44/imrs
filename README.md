@@ -4,55 +4,37 @@
 
 ## The Challenge
 
-For years, the biodiversity records of the **Indio Mountains Research Station (IMRS)**—a 40,000-acre research facility in the Chihuahuan Desert managed by UTEP—were locked away in a static PDF handbook: _[Natural Resources and Physical Environment of Indio Mountains Research Station](https://www.utep.edu/science/indio/_files/docs/imrs%20natural%20resources.pdf)_.
+For years, the biodiversity records of the **Indio Mountains Research Station (IMRS)**, a 40,000-acre research facility in the Chihuahuan Desert managed by UTEP, were locked away in a static PDF handbook: _[Natural Resources and Physical Environment of Indio Mountains Research Station](https://www.utep.edu/science/indio/_files/docs/imrs%20natural%20resources.pdf)_.
 
-While authoritative, this format made it difficult for students, researchers, and visitors to quickly identify species, cross-reference data, or access information while in the field.
+While authoritative, this format made it difficult for students, researchers, and visitors to quickly identify species, cross-reference data, or prepare for their upcoming trip to IMRS.
 
 ## The Solution
 
-The **IMRS Biodiversity Explorer** transforms this static data into a living, interactive digital resource. By normalizing the handbook's data into a structured SQL database and integrating real-time observations from iNaturalist, this application provides a powerful tool for exploring the station's flora and fauna.
+The **IMRS Biodiversity Explorer** turns that handbook into a living, interactive website. Anyone such as a student, a researcher, or a curious visitor, can search the station's plants and animals, see where recent sightings have been reported, check how each species is doing conservation-wise, and explore five years of on-site weather. It's the field guide and the data prospective researchers and visitors alike can use to prepare for their trip.
+## Features
 
-## Key Features
-
-- **Digital Species Catalog**: A fully searchable and filterable database of all species recorded in the station's history.
-  - **Dual Views**: Switch between a visual Grid View for browsing and a detailed Table View for data analysis.
-  - **Advanced Filtering**: Filter by Taxonomy (Kingdom, Phylum, Class, Order, Family, Genus).
-  - **Smart Search**: Instantly find species by scientific or common names.
-- **Recent Observations**: Real-time integration with the **iNaturalist API** to display the latest confirmed sightings at the station.
-- **Gazetteer**: A reference for key geographical locations within the research station.
+- **Species Catalog** — search and filter every species ever recorded at the station, in a visual grid or a detailed table.
+- **Conservation Status** — at-a-glance badges show how each species is doing, drawn from NatureServe and the IUCN Red List.
+- **Recent Observations** — Real-time integration with the **iNaturalist API** to display the latest confirmed sightings at IMRS
+- **Climate & Weather** — five years (2020–2024) of the station's weather, charted and filterable by year and season.
+- **Gazetteer** — an interactive map of the named places across the station.
 
 ## Technology Stack
 
-**Frontend**
-
-- **Framework**: [TanStack Start](https://tanstack.com/start) (React)
-- **Routing**: [TanStack Router](https://tanstack.com/router)
-- **Data Fetching**: [TanStack Query](https://tanstack.com/query)
+- **Framework**: [TanStack Start](https://tanstack.com/start) (React) — Router, Query, Table & Virtual
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/) & [ShadCN UI](https://ui.shadcn.com/)
 - **Maps**: Leaflet / React-Leaflet
+- **Database**: [Turso](https://turso.tech/) (cloud SQLite) via `@libsql/client`
+- **External API**: [iNaturalist](https://www.inaturalist.org/)
 
-**Backend & Data**
+Also uses Recharts (weather charts), Framer Motion (animation), Zod (validation),
+and Vercel Analytics / Speed Insights.
 
-- **Database**: [SQLite3](https://sqlite.org/) (Local) / [Turso](https://turso.tech/) (Production)
-- **ORM/Querying**: Raw SQL & `better-sqlite3` / `@libsql/client`
-- **External API**: iNaturalist
 
-## Security
-
-Responses are served with a strict Content-Security-Policy and the usual
-hardening headers (`X-Frame-Options`, `X-Content-Type-Options`,
-`Referrer-Policy`, `Permissions-Policy`), configured via Nitro `routeRules` in
-`vite.config.ts` and applied at build time.
-
-Rate limiting and abuse protection are intentionally handled at the edge by the
-Vercel WAF / Firewall rather than in application code, so the app stays
-stateless and the same policy applies across all routes.
-
-## Future Roadmap
+## Roadmap
 
 - **Authentication & Admin Dashboard**: Implement secure login for station administrators to manage and update the species index directly (CRUD operations).
-- **Weather Integration**: Visualize historical and real-time climate data from on-site weather stations to correlate biodiversity trends with environmental conditions.
-- **Open Source**: Prepare the codebase for public contribution, assisting other field stations in digitizing their records.
+- **Open Source**: The codebase is clean and well-tested; the remaining work is a contribution guide (`CONTRIBUTING.md`) and setup docs to help other field stations digitize their records.
 
 ---
 
@@ -60,7 +42,7 @@ stateless and the same policy applies across all routes.
 
 ### Prerequisites
 
-- Node.js (v22+, see `.nvmrc`)
+- Node.js (v24, see `.nvmrc`)
 - pnpm (the repo pins a version via the `packageManager` field)
 - SQLite3 (for local database management)
 
@@ -92,7 +74,7 @@ stateless and the same policy applies across all routes.
    ```bash
    pnpm dev
    ```
-   Open [http://localhost:3000](http://localhost:3000) to view the app.
+   Open [http://localhost:3001](http://localhost:3001) to view the app.
 
 ---
 

@@ -27,8 +27,8 @@ This project uses **pnpm** (pinned via the `packageManager` field in `package.js
 
 ### Database
 
-- **Development**: Local SQLite via `better-sqlite3` — reads `imrs-species.db` from project root. Singleton in `src/server/db.ts`.
-- **Production**: Turso (cloud SQLite) via `@libsql/client` — configured in `src/server/turso.ts`.
+- **Runtime (both dev and production)**: reads from Turso (cloud SQLite) via `@libsql/client`. Client singleton in `src/server/turso.ts` (`getTurso()`), accessed through `src/server/speciesService.ts` and `src/server/weatherService.ts`. There is no local `better-sqlite3` runtime path — point `TURSO_DATABASE_URL` at a `file:` URL for local data.
+- **Data pipeline**: `imrs-species.db` / `imrs-weather.db` are build artifacts produced locally by the seed scripts (`scripts/seed-*.ts` use `better-sqlite3`) and pushed to Turso — they are not read by the app directly.
 - Single table `specimens` with full taxonomic hierarchy (kingdom through species).
 - `src/server/speciesMapper.ts` maps raw DB rows to the `Species` TypeScript type.
 
@@ -53,7 +53,7 @@ Prettier enforced: no semicolons, single quotes, trailing commas.
 
 ## Environment Variables
 
-Copy `.env.sample` to `.env`. For local dev, only `DATABASE_URL` is needed (e.g., `file:local.db`). Production requires `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN`.
+Env vars live in `.env.local` (the dev server loads it automatically). Both local and production require `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` — `getTurso()` throws if either is missing. For local data, set `TURSO_DATABASE_URL=file:imrs-species.db` with any non-empty `TURSO_AUTH_TOKEN` (required but ignored for `file:` URLs).
 
 ## Accessibility
 
