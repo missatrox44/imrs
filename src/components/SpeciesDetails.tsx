@@ -20,9 +20,11 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { ConservationBadge } from '@/components/ConservationBadge'
 import { Route } from '@/routes/species.$speciesId'
 import { formatDate } from '@/lib/formatDate'
 import { getPhotoUrl } from '@/lib/getPhotoUrl'
+import { SOURCE_LABELS, getConservationRanks } from '@/lib/conservation'
 
 interface TaxonomyRow {
   rank: string
@@ -134,6 +136,7 @@ export function SpeciesDetails() {
 
   const scientificName = `${species.genus} ${species.species}`
   const taxonomyRows = buildTaxonomyHierarchy(species)
+  const conservationRanks = getConservationRanks(species)
 
   return (
     <div className="min-h-screen bg-background">
@@ -218,7 +221,7 @@ export function SpeciesDetails() {
               <CardHeader>
                 <CardTitle>Recent Observations</CardTitle>
                 <CardDescription>
-                  Sourced from iNaturalist, not necessarily observed at IMRS
+                  Sourced from iNaturalist
                 </CardDescription>
               </CardHeader>
 
@@ -255,7 +258,7 @@ export function SpeciesDetails() {
                                   <div className="aspect-square overflow-hidden mb-3 relative">
                                     {observation.atImrs && (
                                       <Badge className="absolute top-2 left-2 z-10">
-                                        Observed at IMRS
+                                        IMRS Observation
                                       </Badge>
                                     )}
                                     <img
@@ -364,6 +367,34 @@ export function SpeciesDetails() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Species Status */}
+            {conservationRanks.length > 0 && (
+              <Card className="gradient-card shadow-card">
+                <CardHeader>
+                  <CardTitle>Species Status</CardTitle>
+                  <CardDescription>
+                    Conservation assessments. Source: NatureServe Explorer and
+                    the IUCN Red List.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <div className="divide-y divide-border">
+                    {conservationRanks.map((rank) => (
+                      <div
+                        key={rank.source}
+                        className="px-4 py-3 flex items-center justify-between gap-2 hover:bg-muted/30 transition-colors"
+                      >
+                        <span className="text-xs text-muted-foreground uppercase tracking-wide">
+                          {SOURCE_LABELS[rank.source]}
+                        </span>
+                        <ConservationBadge rank={rank} variant="full" />
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
             {/* Extra Details */}
             {/* <Card className="gradient-card shadow-card">
               <CardHeader>

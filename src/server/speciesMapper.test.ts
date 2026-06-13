@@ -53,6 +53,28 @@ describe('rowToSpecies', () => {
     expect(result?.collectors_field_numbers).toBe('CFN-12')
   })
 
+  it('passes through conservation status fields', () => {
+    const result = rowToSpecies({
+      id: 1,
+      iucn_category: 'EN',
+      natureserve_grank: 'G2',
+      natureserve_srank_tx: 'S1',
+      natureserve_id: 'ELEMENT_GLOBAL.2.100925',
+    })
+    expect(result?.iucn_category).toBe('EN')
+    expect(result?.natureserve_grank).toBe('G2')
+    expect(result?.natureserve_srank_tx).toBe('S1')
+    expect(result?.natureserve_id).toBe('ELEMENT_GLOBAL.2.100925')
+  })
+
+  it('returns undefined for missing conservation status fields', () => {
+    const result = rowToSpecies({ id: 1 })
+    expect(result?.iucn_category).toBeUndefined()
+    expect(result?.natureserve_grank).toBeUndefined()
+    expect(result?.natureserve_srank_tx).toBeUndefined()
+    expect(result?.natureserve_id).toBeUndefined()
+  })
+
   it('returns null when source id is non-numeric', () => {
     expect(rowToSpecies({ id: 'not-a-number' })).toBeNull()
   })

@@ -37,5 +37,9 @@ export function rowToSpecies(row: Record<string, unknown>): Species | null {
     note: row.note as string | undefined,
     species_common_name: row.species_common_name as string | undefined,
     records: row.records as string | undefined,
+    iucn_category: row.iucn_category as string | undefined,
+    natureserve_grank: row.natureserve_grank as string | undefined,
+    natureserve_srank_tx: row.natureserve_srank_tx as string | undefined,
+    natureserve_id: row.natureserve_id as string | undefined,
   }
 }

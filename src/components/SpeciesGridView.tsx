@@ -5,12 +5,15 @@ import { useWindowVirtualizer } from '@tanstack/react-virtual'
 import type { Species } from '@/types/species'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { ConservationBadge } from '@/components/ConservationBadge'
 import { getCategoryIcon } from '@/lib/getCategoryIcon'
+import { getMostAtRiskRank } from '@/lib/conservation'
 import { speciesPath } from '@/lib/speciesSlug'
 
 const ESTIMATED_ROW_HEIGHT = 160
 
 const SpeciesCard = memo(function SpeciesCard({ item }: { item: Species }) {
+  const status = getMostAtRiskRank(item)
   return (
     <Link
       to="/species/$speciesId"
@@ -54,11 +57,16 @@ const SpeciesCard = memo(function SpeciesCard({ item }: { item: Species }) {
                     .join(' › ')}
                 </p>
 
-                {(item.family_common_name || item.family) && (
+                {(status || item.family_common_name || item.family) && (
                   <div className="flex flex-wrap items-center gap-2">
-                    <Badge variant="secondary" className="text-xs">
-                      {item.family_common_name || item.family}
-                    </Badge>
+                    {status && (
+                      <ConservationBadge rank={status} variant="compact" />
+                    )}
+                    {(item.family_common_name || item.family) && (
+                      <Badge variant="secondary" className="text-xs">
+                        {item.family_common_name || item.family}
+                      </Badge>
+                    )}
                   </div>
                 )}
               </div>

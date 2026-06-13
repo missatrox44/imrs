@@ -143,7 +143,11 @@ CREATE TABLE specimens (
   collectors_field_numbers TEXT,
   note TEXT,
   species_common_name TEXT,
-  records TEXT
+  records TEXT,
+  iucn_category TEXT,
+  natureserve_grank TEXT,
+  natureserve_srank_tx TEXT,
+  natureserve_id TEXT
 );
 
 # Import Data (ensure specimens.tsv is in root)
@@ -177,6 +181,53 @@ turso config set token "YOUR_TOKEN"
 # Import
 turso db import imrs-species.db
 ```
+
+### 3. Conservation Status
+
+The four `iucn_category` / `natureserve_*` columns are populated by a seed
+script that fetches conservation status from two free sources:
+
+- **NatureServe Explorer** — no API key. Provides the global G-rank and the
+  Texas subnational S-rank.
+- **IUCN Red List API v4** — free, but requires a registered token. Set
+  `IUCN_API_TOKEN` in `.env.local`. If it's omitted, the script seeds
+  NatureServe only and skips IUCN.
+
+These calls happen only at seed time — the app makes no external conservation
+requests at runtime. The script adds the columns idempotently (so it's safe on
+an existing DB) and is resumable (it skips species that already have data; pass
+`--force` to reprocess all).
+
+```bash
+# Seed the local DB (NatureServe + IUCN)
+IUCN_API_TOKEN=your_token npx tsx scripts/seed-conservation.ts
+```
+
+To propagate the seeded data to the **existing** production Turso DB, update it
+in place. `turso db import` only ever creates a _new_ database, so it can't
+update the live one — instead generate an idempotent migration from the local
+DB and apply it with `turso db shell`:
+
+```bash
+# Generate ALTERs + UPDATEs from the freshly-seeded local DB
+{
+  echo "ALTER TABLE specimens ADD COLUMN iucn_category TEXT;"
+  echo "ALTER TABLE specimens ADD COLUMN natureserve_grank TEXT;"
+  echo "ALTER TABLE specimens ADD COLUMN natureserve_srank_tx TEXT;"
+  echo "ALTER TABLE specimens ADD COLUMN natureserve_id TEXT;"
+  sqlite3 imrs-species.db "SELECT 'UPDATE specimens SET iucn_category='||quote(iucn_category)||', natureserve_grank='||quote(natureserve_grank)||', natureserve_srank_tx='||quote(natureserve_srank_tx)||', natureserve_id='||quote(natureserve_id)||' WHERE id='||id||';' FROM specimens WHERE iucn_category IS NOT NULL OR natureserve_grank IS NOT NULL OR natureserve_srank_tx IS NOT NULL OR natureserve_id IS NOT NULL;"
+} > conservation-updates.sql
+
+# Apply to the production DB (the ALTERs are one-time; ignore "duplicate column" if re-running)
+turso db shell <your-db> < conservation-updates.sql
+rm conservation-updates.sql
+```
+
+> The columns must exist in production for the badges to render. If one is
+> missing the app degrades gracefully (no badge) — it does not error.
+
+Conservation data courtesy of [NatureServe Explorer](https://explorer.natureserve.org/)
+and the [IUCN Red List](https://www.iucnredlist.org/).
 
 ---
 
