@@ -46,6 +46,8 @@ interface FetchObservationsParams {
   page?: number
   per_page?: number
   taxon_name?: string
+  place_id?: string
+  photos?: boolean
 }
 
 export async function fetchObservations(
@@ -56,10 +58,18 @@ export async function fetchObservations(
 
   if (params.taxon_name) {
     url.searchParams.set('taxon_name', params.taxon_name)
-  } else {
+  }
+  if (params.place_id) {
+    url.searchParams.set('place_id', params.place_id)
+    url.searchParams.set('order', ORDER)
+    url.searchParams.set('order_by', ORDER_BY)
+  } else if (!params.taxon_name) {
     url.searchParams.set('place_id', PLACE_ID)
     url.searchParams.set('order', ORDER)
     url.searchParams.set('order_by', ORDER_BY)
+  }
+  if (params.photos) {
+    url.searchParams.set('photos', 'true')
   }
   url.searchParams.set('per_page', String(params.per_page ?? PER_PAGE))
   if (params.page != null) {

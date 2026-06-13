@@ -8,7 +8,7 @@ import {
   MapPin,
   User,
 } from 'lucide-react'
-import type { Observation } from '@/types/observation'
+import type { DisplayObservation } from '@/types/observation'
 import type { Species } from '@/types/species'
 
 import { Button } from '@/components/ui/button'
@@ -234,7 +234,7 @@ export function SpeciesDetails() {
                   <div className="grid sm:grid-cols-2 gap-4">
                     {observations
                       .slice(0, 4)
-                      .map((observation: Observation) => (
+                      .map((observation: DisplayObservation) => (
                         <Link
                           key={observation.id}
                           to={observation.uri || '#'}
@@ -252,7 +252,12 @@ export function SpeciesDetails() {
                               {(() => {
                                 const photoUrl = getPhotoUrl(observation.photos)
                                 return photoUrl ? (
-                                  <div className="aspect-square overflow-hidden mb-3">
+                                  <div className="aspect-square overflow-hidden mb-3 relative">
+                                    {observation.atImrs && (
+                                      <Badge className="absolute top-2 left-2 z-10">
+                                        Observed at IMRS
+                                      </Badge>
+                                    )}
                                     <img
                                       src={photoUrl}
                                       alt={

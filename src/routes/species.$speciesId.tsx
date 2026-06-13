@@ -1,11 +1,11 @@
 import { createFileRoute, notFound, redirect } from '@tanstack/react-router'
-import type { Observation } from '@/types/observation'
+import type { DisplayObservation } from '@/types/observation'
 
 import { Loader } from '@/components/Loader'
 import { SpeciesDetails } from '@/components/SpeciesDetails'
 import { fetchAllSpecies } from '@/server/speciesService'
 import { fetchObservations } from '@/lib/inat'
-import { SITE_URL } from '@/data/constants'
+import { PLACE_ID, SITE_URL } from '@/data/constants'
 import { getPhotoUrl } from '@/lib/getPhotoUrl'
 import { parseSpeciesId, speciesPath } from '@/lib/speciesSlug'
 
@@ -35,7 +35,7 @@ export const Route = createFileRoute('/species/$speciesId')({
       })
     }
 
-    let observations: Array<Observation> = []
+    let observations: Array<DisplayObservation> = []
 
     // Build a scientific name from genus + species
     const scientificName = [species.genus, species.species]
@@ -44,11 +44,27 @@ export const Route = createFileRoute('/species/$speciesId')({
 
     if (scientificName.length > 0) {
       try {
-        const data = await fetchObservations({
+        const imrs = await fetchObservations({
           taxon_name: scientificName,
-          per_page: 6,
+          place_id: PLACE_ID,
+          photos: true,
+          per_page: 4,
         })
-        observations = data.results
+        const imrsTagged = imrs.results.map((o) => ({ ...o, atImrs: true }))
+        if (imrsTagged.length < 4) {
+          const general = await fetchObservations({
+            taxon_name: scientificName,
+            photos: true,
+            per_page: 8,
+          })
+          const imrsIds = new Set(imrsTagged.map((o) => o.id))
+          const fill = general.results
+            .filter((o) => !imrsIds.has(o.id))
+            .map((o) => ({ ...o, atImrs: false }))
+          observations = [...imrsTagged, ...fill].slice(0, 4)
+        } else {
+          observations = imrsTagged.slice(0, 4)
+        }
       } catch {
         // Keep the page renderable even if iNaturalist is unreachable.
         observations = []

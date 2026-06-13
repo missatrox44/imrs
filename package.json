@@ -4,7 +4,7 @@
   "type": "module",
   "packageManager": "pnpm@11.0.6",
   "scripts": {
-    "dev": "vite dev --port 3000",
+    "dev": "vite dev --port 3001",
     "start": "node .output/server/index.mjs",
     "build": "vite build",
     "serve": "vite preview",
