@@ -4,7 +4,7 @@ import type { DisplayObservation } from '@/types/observation'
 import { Loader } from '@/components/Loader'
 import { SpeciesDetails } from '@/components/SpeciesDetails'
 import { fetchAllSpecies } from '@/server/speciesService'
-import { fetchObservations } from '@/lib/inat'
+import { fetchObservations, taxonQueryName } from '@/lib/inat'
 import { PLACE_ID, SITE_URL } from '@/data/constants'
 import { getPhotoUrl } from '@/lib/getPhotoUrl'
 import { parseSpeciesId, speciesPath } from '@/lib/speciesSlug'
@@ -37,10 +37,9 @@ export const Route = createFileRoute('/species/$speciesId')({
 
     let observations: Array<DisplayObservation> = []
 
-    // Build a scientific name from genus + species
-    const scientificName = [species.genus, species.species]
-      .filter(Boolean)
-      .join(' ')
+    // Build the iNaturalist query name (drops placeholder epithets like "sp."
+    // so genus-only records query by genus instead of a name iNat rejects).
+    const scientificName = taxonQueryName(species.genus, species.species)
 
     if (scientificName.length > 0) {
       try {

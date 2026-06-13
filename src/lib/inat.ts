@@ -7,6 +7,17 @@ z.config({ jitless: true })
 
 export const INAT_TIMEOUT_MS = 10_000
 
+// Placeholder epithets that denote an unidentified species within a genus.
+// These are not real taxon names, so iNaturalist rejects them in taxon_name
+// queries — strip them so genus-only records query by genus instead.
+const PLACEHOLDER_EPITHETS = new Set(['sp.'])
+
+export function taxonQueryName(genus?: string, species?: string): string {
+  const epithet =
+    species && !PLACEHOLDER_EPITHETS.has(species.trim()) ? species : undefined
+  return [genus, epithet].filter(Boolean).join(' ')
+}
+
 // iNaturalist returns `null` (not absent) for missing fields, so every
 // optional field is `.nullish()` (accepts null | undefined).
 export const ObservationSchema = z.object({
@@ -22,6 +33,15 @@ export const ObservationSchema = z.object({
     .array(
       z.object({
         url: z.string().nullish(),
+      }),
+    )
+    .nullish(),
+  sounds: z
+    .array(
+      z.object({
+        file_url: z.string().nullish(),
+        file_content_type: z.string().nullish(),
+        hidden: z.boolean().nullish(),
       }),
     )
     .nullish(),

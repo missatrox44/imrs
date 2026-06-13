@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Calendar, MapPin, User } from 'lucide-react'
+import { AudioLines, Calendar, MapPin, User } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useInView } from 'react-intersection-observer'
@@ -19,6 +19,7 @@ import { Badge } from '@/components/ui/badge'
 import EmptyState from '@/components/EmptyState'
 import { formatDate } from '@/lib/formatDate'
 import { getPhotoUrl } from '@/lib/getPhotoUrl'
+import { getSoundUrl } from '@/lib/getSoundUrl'
 import { ObservationCardSkeleton } from '@/components/ObservationCardSkeleton'
 import { GC_TIME, PER_PAGE, SKELETON_COUNT, STALE_TIME } from '@/data/constants'
 import { fetchObservations } from '@/lib/inat'
@@ -170,88 +171,122 @@ const Observations = ({ initialPage }: ObservationsProps) => {
         </div>
         <section>
           <ul className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredObservations.map((observation) => (
-              <li key={observation.id}>
-                <Link
-                  to={observation.uri || '#'}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block h-full"
-                >
-                  <span className="sr-only">
-                    {observation.species_guess ||
-                      observation.taxon?.preferred_common_name ||
-                      'Observation'}{' '}
-                    (opens in new tab)
-                  </span>
-                  <Card className="h-full flex flex-col gradient-card shadow-card hover:shadow-hover transition-all duration-300 overflow-hidden">
-                    {getPhotoUrl(observation.photos) && (
-                      <div className="aspect-square overflow-hidden">
-                        <img
-                          src={getPhotoUrl(observation.photos)!}
-                          alt={
-                            observation.species_guess ||
-                            observation.taxon?.preferred_common_name ||
-                            observation.taxon?.name ||
-                            `Observation #${observation.id}`
-                          }
-                          loading="lazy"
-                          decoding="async"
-                          width={500}
-                          height={500}
-                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                          onError={(e) => {
-                            ;(e.target as HTMLImageElement).style.display =
-                              'none'
-                          }}
-                        />
-                      </div>
-                    )}
+            {filteredObservations.map((observation) => {
+              const photoUrl = getPhotoUrl(observation.photos)
+              const sound = getSoundUrl(observation.sounds)
+              const label =
+                observation.species_guess ||
+                observation.taxon?.preferred_common_name ||
+                `observation #${observation.id}`
 
-                    <CardHeader className="pb-3 space-y-1">
-                      <h2 className="font-semibold text-foreground line-clamp-2">
+              return (
+                <li key={observation.id}>
+                  <Card className="h-full flex flex-col gradient-card shadow-card hover:shadow-hover transition-all duration-300 overflow-hidden">
+                    <Link
+                      to={observation.uri || '#'}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex flex-1 flex-col"
+                    >
+                      <span className="sr-only">
                         {observation.species_guess ||
                           observation.taxon?.preferred_common_name ||
-                          'Unknown Species'}
-                      </h2>
-
-                      {observation.taxon?.name && (
-                        <p className="italic text-sm text-muted-foreground line-clamp-1">
-                          {observation.taxon.name}
-                        </p>
+                          'Observation'}{' '}
+                        (opens in new tab)
+                      </span>
+                      {photoUrl ? (
+                        <div className="aspect-square overflow-hidden">
+                          <img
+                            src={photoUrl}
+                            alt={
+                              observation.species_guess ||
+                              observation.taxon?.preferred_common_name ||
+                              observation.taxon?.name ||
+                              `Observation #${observation.id}`
+                            }
+                            loading="lazy"
+                            decoding="async"
+                            width={500}
+                            height={500}
+                            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                            onError={(e) => {
+                              ;(e.target as HTMLImageElement).style.display =
+                                'none'
+                            }}
+                          />
+                        </div>
+                      ) : (
+                        sound && (
+                          <div className="aspect-square flex items-center justify-center bg-muted">
+                            <AudioLines
+                              className="size-16 text-muted-foreground"
+                              aria-hidden="true"
+                            />
+                          </div>
+                        )
                       )}
-                    </CardHeader>
 
-                    <CardContent className="space-y-3 mt-auto">
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <User className="size-4" />
-                        <span>{observation.user?.login || 'Anonymous'}</span>
-                      </div>
+                      <CardHeader className="pb-3 space-y-1">
+                        <h2 className="font-semibold text-foreground line-clamp-2">
+                          {observation.species_guess ||
+                            observation.taxon?.preferred_common_name ||
+                            'Unknown Species'}
+                        </h2>
 
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <Calendar className="size-4" />
-                        <span>
-                          {formatDate(observation.observed_on_string)}
-                        </span>
-                      </div>
+                        {observation.taxon?.name && (
+                          <p className="italic text-sm text-muted-foreground line-clamp-1">
+                            {observation.taxon.name}
+                          </p>
+                        )}
+                      </CardHeader>
 
-                      {observation.place_guess && (
+                      <CardContent className="space-y-3 mt-auto">
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <MapPin className="size-4" />
-                          <span className="line-clamp-1">
-                            {observation.place_guess}
+                          <User className="size-4" />
+                          <span>{observation.user?.login || 'Anonymous'}</span>
+                        </div>
+
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <Calendar className="size-4" />
+                          <span>
+                            {formatDate(observation.observed_on_string)}
                           </span>
                         </div>
-                      )}
 
-                      <Badge variant="secondary" className="w-fit">
-                        ID #{observation.id}
-                      </Badge>
-                    </CardContent>
+                        {observation.place_guess && (
+                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <MapPin className="size-4" />
+                            <span className="line-clamp-1">
+                              {observation.place_guess}
+                            </span>
+                          </div>
+                        )}
+
+                        <Badge variant="secondary" className="w-fit">
+                          ID #{observation.id}
+                        </Badge>
+                      </CardContent>
+                    </Link>
+
+                    {sound && (
+                      <div className="px-6 pb-4">
+                        {/* iNaturalist sound recordings ship no caption track;
+                            the aria-label below provides the accessible name. */}
+                        {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+                        <audio
+                          controls
+                          preload="none"
+                          className="w-full"
+                          aria-label={`Audio recording for ${label}`}
+                        >
+                          <source src={sound.url} type={sound.type} />
+                        </audio>
+                      </div>
+                    )}
                   </Card>
-                </Link>
-              </li>
-            ))}
+                </li>
+              )
+            })}
 
             {isFetchingNextPage &&
               Array.from({ length: SKELETON_COUNT }).map((_, i) => (
