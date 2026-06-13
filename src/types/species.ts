@@ -25,4 +25,8 @@ export interface Species {
   note?: string
   species_common_name?: string
   records?: string
+  iucn_category?: string
+  natureserve_grank?: string
+  natureserve_srank_tx?: string
+  natureserve_id?: string
 }

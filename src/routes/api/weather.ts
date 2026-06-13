@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import type { WeatherSummary } from '@/types/weather'
+import { z } from 'zod'
 import { getTurso } from '@/server/turso'
 import {
   rowToDaily,
@@ -11,11 +11,23 @@ import {
   dailyQuery,
   hourlyQuery,
   monsoonQuery,
-  sparklineQuery,
-  summaryQuery,
   windDistributionQueryFromReadings,
 } from '@/server/weatherQueries'
+import { buildWeatherSummary } from '@/server/weatherTransforms'
 import { CACHE_HEADERS } from '@/data/constants'
+
+const querySchema = z.object({
+  view: z
+    .enum(['summary', 'daily', 'hourly', 'monsoon', 'wind'])
+    .default('daily'),
+  year: z
+    .string()
+    .regex(/^(all|\d{4}(,\d{4})*)$/)
+    .default('all'),
+  season: z
+    .enum(['all', 'winter', 'premonsoon', 'monsoon', 'postmonsoon'])
+    .default('all'),
+})
 
 interface QueryResult {
   rows: Array<Record<string, unknown>>
@@ -35,51 +47,25 @@ export const Route = createFileRoute('/api/weather')({
     handlers: {
       GET: async ({ request }) => {
         const url = new URL(request.url)
-        const view = url.searchParams.get('view') || 'daily'
-        const year = url.searchParams.get('year') || 'all'
-        const season = url.searchParams.get('season') || 'all'
+        const parsed = querySchema.safeParse(
+          Object.fromEntries(url.searchParams),
+        )
+
+        if (!parsed.success) {
+          return new Response(
+            JSON.stringify({ error: 'Invalid query parameters' }),
+            { status: 400, headers: { 'Content-Type': 'application/json' } },
+          )
+        }
+
+        const { view, year, season } = parsed.data
 
         try {
           switch (view) {
             case 'summary': {
-              const stats = summaryQuery(year, season)
-              const statsResult = await executeQuery(stats.sql, stats.args)
-              const row = statsResult.rows[0] || {}
-
-              const spark = sparklineQuery(year, season)
-              const sparkResult = await executeQuery(spark.sql, spark.args)
-
-              // Downsample sparklines to ~30 points
-              const sparkRows = sparkResult.rows
-              const step = Math.max(1, Math.floor(sparkRows.length / 30))
-              const temp: Array<number> = []
-              const precip: Array<number> = []
-              const humidity: Array<number> = []
-              const wind: Array<number> = []
-
-              for (let i = 0; i < sparkRows.length; i += step) {
-                const r = sparkRows[i]
-                if (r.temp_max != null) temp.push(Number(r.temp_max))
-                if (r.rain_total != null) precip.push(Number(r.rain_total))
-                if (r.rh_avg != null) humidity.push(Number(r.rh_avg))
-                if (r.wind_avg != null) wind.push(Number(r.wind_avg))
-              }
-
-              const summary: WeatherSummary = {
-                avgDailyHigh:
-                  row.avg_daily_high != null
-                    ? Number(row.avg_daily_high)
-                    : null,
-                totalPrecip:
-                  row.total_precip != null ? Number(row.total_precip) : null,
-                avgHumidity:
-                  row.avg_humidity != null ? Number(row.avg_humidity) : null,
-                avgWindSpeed:
-                  row.avg_wind_speed != null
-                    ? Number(row.avg_wind_speed)
-                    : null,
-                sparklines: { temp, precip, humidity, wind },
-              }
+              const summary = await buildWeatherSummary(year, season, (q) =>
+                executeQuery(q.sql, q.args).then((r) => r.rows),
+              )
 
               return new Response(JSON.stringify(summary), {
                 headers: CACHE_HEADERS,
@@ -121,18 +107,12 @@ export const Route = createFileRoute('/api/weather')({
                 headers: CACHE_HEADERS,
               })
             }
-
-            default:
-              return new Response(
-                JSON.stringify({ error: `Unknown view: ${view}` }),
-                {
-                  status: 400,
-                  headers: { 'Content-Type': 'application/json' },
-                },
-              )
           }
         } catch (error) {
-          console.error('[API/weather] Fetch failed:', error)
+          console.error(
+            '[API/weather] Fetch failed:',
+            error instanceof Error ? error.message : 'Unknown error',
+          )
           return new Response(
             JSON.stringify({ error: 'Failed to fetch weather data' }),
             { status: 500, headers: { 'Content-Type': 'application/json' } },

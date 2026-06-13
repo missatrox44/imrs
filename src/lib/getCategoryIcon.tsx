@@ -1,5 +1,5 @@
 import { Bird, Bug, Cat, Fish, Leaf, Turtle } from 'lucide-react'
-import { GiSuperMushroom } from 'react-icons/gi'
+import { GiSpiderAlt, GiSuperMushroom } from 'react-icons/gi'
 import { LiaFrogSolid } from 'react-icons/lia'
 import { LuWorm } from 'react-icons/lu'
 
@@ -16,7 +16,10 @@ export const getCategoryIcon = (category: string) => {
     case 'amphibians':
       return <LiaFrogSolid className="size-4" />
     case 'arthropods':
+    case 'insects':
       return <Bug className="size-4" />
+    case 'arachnid':
+      return <GiSpiderAlt className="size-4" />
     case 'fungi':
       return <GiSuperMushroom className="size-4" />
     case 'inverts':

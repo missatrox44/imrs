@@ -24,7 +24,9 @@ export default function WeatherChartCard({
     <Card className={className}>
       <CardHeader className="pb-2">
         <div className="flex items-center gap-2">
-          <CardTitle className="text-base">{title}</CardTitle>
+          <CardTitle as="h2" className="text-base">
+            {title}
+          </CardTitle>
           {badge && <Badge variant="outline">{badge}</Badge>}
         </div>
         {subtitle && (

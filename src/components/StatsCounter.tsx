@@ -38,26 +38,24 @@ export const StatsCounter = () => {
   const shouldReduceMotion = useReducedMotion()
 
   return (
-    <>
-      <m.section
-        className="mt-20 text-center container mx-auto"
-        initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: shouldReduceMotion ? 0 : 0.6 }}
-      >
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-2xl mx-auto">
-          {STATS.map((stat) => (
-            <div key={stat.label}>
-              <div className="text-3xl font-bold text-primary mb-2">
-                <AnimatedCounter value={stat.value} suffix={stat.suffix} />
-              </div>
-
-              <div className="text-sm text-muted-foreground">{stat.label}</div>
+    <m.section
+      className="mt-20 text-center container mx-auto"
+      initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: shouldReduceMotion ? 0 : 0.6 }}
+    >
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-2xl mx-auto">
+        {STATS.map((stat) => (
+          <div key={stat.label}>
+            <div className="text-3xl font-bold text-primary mb-2">
+              <AnimatedCounter value={stat.value} suffix={stat.suffix} />
             </div>
-          ))}
-        </div>
-      </m.section>
-    </>
+
+            <div className="text-sm text-muted-foreground">{stat.label}</div>
+          </div>
+        ))}
+      </div>
+    </m.section>
   )
 }

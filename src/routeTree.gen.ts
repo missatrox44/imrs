@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WeatherRouteImport } from './routes/weather'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ObservationsRouteImport } from './routes/observations'
 import { Route as GazetteerRouteImport } from './routes/gazetteer'
 import { Route as IndexRouteImport } from './routes/index'
@@ -21,6 +22,11 @@ import { Route as ApiSpeciesRouteImport } from './routes/api/species'
 const WeatherRoute = WeatherRouteImport.update({
   id: '/weather',
   path: '/weather',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ObservationsRoute = ObservationsRouteImport.update({
@@ -63,6 +69,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/gazetteer': typeof GazetteerRoute
   '/observations': typeof ObservationsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/weather': typeof WeatherRoute
   '/api/species': typeof ApiSpeciesRoute
   '/api/weather': typeof ApiWeatherRoute
@@ -73,6 +80,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/gazetteer': typeof GazetteerRoute
   '/observations': typeof ObservationsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/weather': typeof WeatherRoute
   '/api/species': typeof ApiSpeciesRoute
   '/api/weather': typeof ApiWeatherRoute
@@ -84,6 +92,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/gazetteer': typeof GazetteerRoute
   '/observations': typeof ObservationsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/weather': typeof WeatherRoute
   '/api/species': typeof ApiSpeciesRoute
   '/api/weather': typeof ApiWeatherRoute
@@ -96,6 +105,7 @@ export interface FileRouteTypes {
     | '/'
     | '/gazetteer'
     | '/observations'
+    | '/sitemap.xml'
     | '/weather'
     | '/api/species'
     | '/api/weather'
@@ -106,6 +116,7 @@ export interface FileRouteTypes {
     | '/'
     | '/gazetteer'
     | '/observations'
+    | '/sitemap.xml'
     | '/weather'
     | '/api/species'
     | '/api/weather'
@@ -116,6 +127,7 @@ export interface FileRouteTypes {
     | '/'
     | '/gazetteer'
     | '/observations'
+    | '/sitemap.xml'
     | '/weather'
     | '/api/species'
     | '/api/weather'
@@ -127,6 +139,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   GazetteerRoute: typeof GazetteerRoute
   ObservationsRoute: typeof ObservationsRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   WeatherRoute: typeof WeatherRoute
   ApiSpeciesRoute: typeof ApiSpeciesRoute
   ApiWeatherRoute: typeof ApiWeatherRoute
@@ -141,6 +154,13 @@ declare module '@tanstack/react-router' {
       path: '/weather'
       fullPath: '/weather'
       preLoaderRoute: typeof WeatherRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/observations': {
@@ -199,6 +219,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   GazetteerRoute: GazetteerRoute,
   ObservationsRoute: ObservationsRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   WeatherRoute: WeatherRoute,
   ApiSpeciesRoute: ApiSpeciesRoute,
   ApiWeatherRoute: ApiWeatherRoute,

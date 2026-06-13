@@ -3,6 +3,7 @@ import type { Category } from '@/types/category'
 import SpeciesIndex from '@/components/SpeciesIndex'
 import { Loader } from '@/components/Loader'
 import { fetchAllSpecies } from '@/server/speciesService'
+import { SITE_URL } from '@/data/constants'
 
 export const Route = createFileRoute('/species/')({
   validateSearch: (
@@ -18,7 +19,15 @@ export const Route = createFileRoute('/species/')({
   pendingComponent: () => <Loader dataTitle="species catalog" />,
   component: SpeciesIndex,
   head: () => ({
-    title: 'Species Index | IMRS',
+    meta: [
+      { title: 'Species Index | IMRS' },
+      {
+        name: 'description',
+        content:
+          'Searchable index of 1,200+ species documented at Indio Mountains Research Station, organized by kingdom, phylum, class, order, family, and genus.',
+      },
+    ],
+    links: [{ rel: 'canonical', href: SITE_URL + '/species' }],
     scripts: [
       {
         type: 'application/ld+json',

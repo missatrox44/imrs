@@ -165,13 +165,17 @@ export const GazetteerRolodex = () => {
               <button
                 key={entry.id}
                 onClick={() => setActiveIndex(index)}
-                className={`size-2 rounded-full transition-colors ${
-                  index === activeIndex
-                    ? 'bg-primary'
-                    : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
-                }`}
+                className="flex size-6 items-center justify-center"
                 aria-label={`Go to ${entry.name}`}
-              />
+              >
+                <span
+                  className={`size-2 rounded-full transition-colors ${
+                    index === activeIndex
+                      ? 'bg-primary'
+                      : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
+                  }`}
+                />
+              </button>
             ))}
             {sortedEntries.length > 10 && (
               <span className="text-xs text-muted-foreground ml-1">

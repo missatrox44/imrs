@@ -29,8 +29,9 @@ export const SearchInput = ({
         id={id}
         type="text"
         value={value}
-        onChange={(e) => onChange(e.target.value.slice(0, 100))}
+        onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
+        maxLength={100}
         className={value ? 'pl-10 pr-10' : 'pl-10'}
       />
       {value && (

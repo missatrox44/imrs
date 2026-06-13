@@ -4,7 +4,7 @@ export const WEATHER_COLORS = {
   precip: 'hsl(170, 50%, 40%)',
   wind: 'hsl(260, 40%, 50%)',
   gust: 'hsl(220, 35%, 60%)',
-  pressure: 'hsl(320, 35%, 50%)',
+  pressure: 'hsl(320, 35%, 44%)',
   dewpoint: 'hsl(180, 30%, 45%)',
   monsoon: 'hsl(170, 60%, 35%)',
   gridLine: 'hsl(35, 25%, 75%)',

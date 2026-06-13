@@ -4,7 +4,7 @@
   "type": "module",
   "packageManager": "pnpm@11.0.6",
   "scripts": {
-    "dev": "vite dev --port 3000",
+    "dev": "vite dev --port 3001",
     "start": "node .output/server/index.mjs",
     "build": "vite build",
     "serve": "vite preview",
@@ -49,7 +49,8 @@
     "redaxios": "^0.5.1",
     "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7",
-    "vaul": "^1.1.2"
+    "vaul": "^1.1.2",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.18",

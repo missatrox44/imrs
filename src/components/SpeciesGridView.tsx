@@ -1,13 +1,82 @@
-import { useRef } from 'react'
+import { memo, useRef } from 'react'
 import { Link } from '@tanstack/react-router'
 import { useMediaQuery } from '@uidotdev/usehooks'
 import { useWindowVirtualizer } from '@tanstack/react-virtual'
 import type { Species } from '@/types/species'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { ConservationBadge } from '@/components/ConservationBadge'
 import { getCategoryIcon } from '@/lib/getCategoryIcon'
+import { getMostAtRiskRank } from '@/lib/conservation'
+import { speciesPath } from '@/lib/speciesSlug'
 
 const ESTIMATED_ROW_HEIGHT = 160
+
+const SpeciesCard = memo(function SpeciesCard({ item }: { item: Species }) {
+  const status = getMostAtRiskRank(item)
+  return (
+    <Link
+      to="/species/$speciesId"
+      params={{ speciesId: speciesPath(item) }}
+      className="h-full block group"
+    >
+      <Card className="gradient-card shadow-card hover:shadow-hover transition-all duration-300 cursor-pointer h-full hover:bg-muted/50">
+        <CardContent className="p-4 sm:p-6 h-full">
+          <div className="flex flex-col h-full justify-between">
+            <div className="flex items-start gap-4">
+              <div className="flex-1 min-w-0">
+                <div className="flex flex-col gap-1 mb-2">
+                  <div className="flex items-center gap-2">
+                    {item.category && (
+                      <span className="text-muted-foreground group-hover:text-primary transition-colors">
+                        {getCategoryIcon(item.category)}
+                      </span>
+                    )}
+                    <h2 className="scientific-name text-lg font-medium truncate group-hover:underline">
+                      {item.genus || item.species ? (
+                        `${item.genus ?? ''} ${item.species ?? ''}`.trim()
+                      ) : (
+                        <em>Species not identified</em>
+                      )}
+                    </h2>
+                  </div>
+
+                  {item.species_common_name && (
+                    <span className="text-foreground font-semibold truncate">
+                      {item.species_common_name}
+                    </span>
+                  )}
+                </div>
+
+                <p className="text-xs text-muted-foreground font-mono mb-2 truncate">
+                  {[item.phylum, item.class_name, item.order_name, item.family]
+                    .flatMap((crumb) => {
+                      const trimmed = crumb?.trim()
+                      return trimmed ? [trimmed] : []
+                    })
+                    .join(' › ')}
+                </p>
+
+                {(status || item.family_common_name || item.family) && (
+                  <div className="flex flex-wrap items-center gap-2">
+                    {status && (
+                      <ConservationBadge rank={status} variant="compact" />
+                    )}
+                    {(item.family_common_name || item.family) && (
+                      <Badge variant="secondary" className="text-xs">
+                        {item.family_common_name || item.family}
+                      </Badge>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </Link>
+  )
+})
 
 export const SpeciesGridView = ({ items }: { items: Array<Species> }) => {
   const parentRef = useRef<HTMLDivElement>(null)
@@ -38,6 +107,7 @@ export const SpeciesGridView = ({ items }: { items: Array<Species> }) => {
       {virtualItems.map((virtualRow) => {
         const startIndex = virtualRow.index * lanes
         const rowItems = items.slice(startIndex, startIndex + lanes)
+        const translateY = virtualRow.start - virtualizer.options.scrollMargin
 
         return (
           <div
@@ -50,73 +120,11 @@ export const SpeciesGridView = ({ items }: { items: Array<Species> }) => {
               top: 0,
               left: 0,
               width: '100%',
-              transform: `translateY(${
-                virtualRow.start - virtualizer.options.scrollMargin
-              }px)`,
+              transform: `translateY(${translateY}px)`,
             }}
           >
             {rowItems.map((item) => (
-              <Link
-                key={item.id}
-                to="/species/$speciesId"
-                params={{ speciesId: String(item.id) }}
-                className="h-full block group"
-              >
-                <Card className="gradient-card shadow-card hover:shadow-hover transition-all duration-300 cursor-pointer h-full hover:bg-muted/50">
-                  <CardContent className="p-4 sm:p-6 h-full">
-                    <div className="flex flex-col h-full justify-between">
-                      <div className="flex items-start gap-4">
-                        <div className="flex-1 min-w-0">
-                          <div className="flex flex-col gap-1 mb-2">
-                            <div className="flex items-center gap-2">
-                              {item.category && (
-                                <span className="text-muted-foreground group-hover:text-primary transition-colors">
-                                  {getCategoryIcon(item.category)}
-                                </span>
-                              )}
-                              <h3 className="scientific-name text-lg font-medium truncate group-hover:underline">
-                                {item.genus || item.species ? (
-                                  `${item.genus ?? ''} ${item.species ?? ''}`.trim()
-                                ) : (
-                                  <em>Species not identified</em>
-                                )}
-                              </h3>
-                            </div>
-
-                            {item.species_common_name && (
-                              <span className="text-foreground font-semibold truncate">
-                                {item.species_common_name}
-                              </span>
-                            )}
-                          </div>
-
-                          <p className="text-xs text-muted-foreground font-mono mb-2 truncate">
-                            {[
-                              item.phylum,
-                              item.class_name,
-                              item.order_name,
-                              item.family,
-                            ]
-                              .flatMap((crumb) => {
-                                const trimmed = crumb?.trim()
-                                return trimmed ? [trimmed] : []
-                              })
-                              .join(' › ')}
-                          </p>
-
-                          {(item.family_common_name || item.family) && (
-                            <div className="flex flex-wrap items-center gap-2">
-                              <Badge variant="secondary" className="text-xs">
-                                {item.family_common_name || item.family}
-                              </Badge>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
+              <SpeciesCard key={item.id} item={item} />
             ))}
           </div>
         )

@@ -8,7 +8,7 @@ import {
   MapPin,
   User,
 } from 'lucide-react'
-import type { Observation } from '@/types/observation'
+import type { DisplayObservation } from '@/types/observation'
 import type { Species } from '@/types/species'
 
 import { Button } from '@/components/ui/button'
@@ -20,9 +20,11 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { ConservationBadge } from '@/components/ConservationBadge'
 import { Route } from '@/routes/species.$speciesId'
 import { formatDate } from '@/lib/formatDate'
 import { getPhotoUrl } from '@/lib/getPhotoUrl'
+import { SOURCE_LABELS, getConservationRanks } from '@/lib/conservation'
 
 interface TaxonomyRow {
   rank: string
@@ -132,35 +134,12 @@ export function SpeciesDetails() {
     return rows
   }
 
-  if (!species) {
-    return (
-      <div className="min-h-screen bg-background">
-        <div className="container mx-auto px-4 py-8">
-          <Card>
-            <CardContent className="text-center py-12">
-              <h1 className="text-2xl font-semibold text-foreground mb-2">
-                Species Not Found
-              </h1>
-              <p className="text-muted-foreground mb-6">
-                The requested species could not be found in our database.
-              </p>
-              <Button asChild>
-                <Link to="/species" search={{ category: 'all' }}>
-                  Back to Species Index
-                </Link>
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    )
-  }
-
   const scientificName = `${species.genus} ${species.species}`
   const taxonomyRows = buildTaxonomyHierarchy(species)
+  const conservationRanks = getConservationRanks(species)
 
   return (
-    <div className="min-h-screen bg-background">
+    <main className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         <Button variant="ghost" asChild className="mb-6">
           <Link to="/species" search={{ category: 'all' }}>
@@ -240,10 +219,8 @@ export function SpeciesDetails() {
 
             <Card className="gradient-card shadow-card">
               <CardHeader>
-                <CardTitle>Recent Observations</CardTitle>
-                <CardDescription>
-                  Sourced from iNaturalist, not necessarily observed at IMRS
-                </CardDescription>
+                <CardTitle as="h2">Recent Observations</CardTitle>
+                <CardDescription>Sourced from iNaturalist</CardDescription>
               </CardHeader>
 
               <CardContent>
@@ -258,7 +235,7 @@ export function SpeciesDetails() {
                   <div className="grid sm:grid-cols-2 gap-4">
                     {observations
                       .slice(0, 4)
-                      .map((observation: Observation) => (
+                      .map((observation: DisplayObservation) => (
                         <Link
                           key={observation.id}
                           to={observation.uri || '#'}
@@ -276,7 +253,12 @@ export function SpeciesDetails() {
                               {(() => {
                                 const photoUrl = getPhotoUrl(observation.photos)
                                 return photoUrl ? (
-                                  <div className="aspect-square overflow-hidden mb-3">
+                                  <div className="aspect-square overflow-hidden mb-3 relative">
+                                    {observation.atImrs && (
+                                      <Badge className="absolute top-2 left-2 z-10">
+                                        IMRS Observation
+                                      </Badge>
+                                    )}
                                     <img
                                       src={photoUrl}
                                       alt={
@@ -286,6 +268,10 @@ export function SpeciesDetails() {
                                         observation.taxon?.name ||
                                         `Observation #${observation.id}`
                                       }
+                                      loading="lazy"
+                                      decoding="async"
+                                      width={500}
+                                      height={500}
                                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                                       onError={(e) => {
                                         ;(
@@ -339,10 +325,10 @@ export function SpeciesDetails() {
           </div>
 
           {/* Sidebar */}
-          <div className="space-y-6">
+          <aside className="space-y-6">
             <Card className="gradient-card shadow-card">
               <CardHeader>
-                <CardTitle>Taxonomic Classification</CardTitle>
+                <CardTitle as="h2">Taxonomic Classification</CardTitle>
               </CardHeader>
               <CardContent className="p-0">
                 <div className="divide-y divide-border">
@@ -379,10 +365,38 @@ export function SpeciesDetails() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Species Status */}
+            {conservationRanks.length > 0 && (
+              <Card className="gradient-card shadow-card">
+                <CardHeader>
+                  <CardTitle as="h2">Species Status</CardTitle>
+                  <CardDescription>
+                    Conservation assessments. Source: NatureServe Explorer and
+                    the IUCN Red List.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <div className="divide-y divide-border">
+                    {conservationRanks.map((rank) => (
+                      <div
+                        key={rank.source}
+                        className="px-4 py-3 flex items-center justify-between gap-2 hover:bg-muted/30 transition-colors"
+                      >
+                        <span className="text-xs text-muted-foreground uppercase tracking-wide">
+                          {SOURCE_LABELS[rank.source]}
+                        </span>
+                        <ConservationBadge rank={rank} variant="full" />
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
             {/* Extra Details */}
             {/* <Card className="gradient-card shadow-card">
               <CardHeader>
-                <CardTitle>Details</CardTitle>
+                <CardTitle as="h2">Details</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex justify-between">
@@ -418,9 +432,9 @@ export function SpeciesDetails() {
 
               </CardContent>
             </Card> */}
-          </div>
+          </aside>
         </div>
       </div>
-    </div>
+    </main>
   )
 }

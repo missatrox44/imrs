@@ -1,4 +1,5 @@
 import { Suspense, lazy, useMemo, useState } from 'react'
+import { useMediaQuery } from '@uidotdev/usehooks'
 import WeatherChartCard from './WeatherChartCard'
 import type { WeatherDailyRow } from '@/types/weather'
 import { WEATHER_COLORS } from '@/lib/weatherColors'
@@ -16,6 +17,9 @@ export default function WeatherTimeSeries({
   isLoading,
 }: WeatherTimeSeriesProps) {
   const [brushIndex, setBrushIndex] = useState<[number, number] | null>(null)
+  const isMobile = useMediaQuery('(max-width: 640px)')
+  const panelHeight = isMobile ? 150 : 200
+  const minHeight = panelHeight * 4 + 250
 
   const chartData = useMemo(() => {
     if (!data) return []
@@ -76,14 +80,16 @@ export default function WeatherTimeSeries({
       badge="Daily"
       subtitle="Vertically aligned panels share the same date axis. Teal bands indicate monsoon season (Jul–Sep). Use the brush slider at the bottom to zoom."
       isLoading={isLoading}
-      minHeight={850}
+      minHeight={minHeight}
     >
-      <Suspense fallback={<div className="h-[850px]" aria-hidden="true" />}>
+      <Suspense
+        fallback={<div style={{ height: minHeight }} aria-hidden="true" />}
+      >
         <div className="space-y-6">
           {/* Panel 1: Temperature + Dew Point (°C) */}
           <WeatherTimeSeriesPanel
             data={chartData}
-            height={200}
+            height={panelHeight}
             yAxisLabel="°C"
             showXAxis={false}
             showBrush={false}
@@ -91,6 +97,7 @@ export default function WeatherTimeSeries({
             onBrushChange={handleBrushChange}
             monsoonRanges={monsoonRanges}
             tickInterval={tickInterval}
+            ariaLabel="Temperature and dew point over time, degrees Celsius"
             series={[
               {
                 dataKey: 'tempRange',
@@ -121,7 +128,7 @@ export default function WeatherTimeSeries({
           {/* Panel 2: Humidity + Precipitation (% / mm) */}
           <WeatherTimeSeriesPanel
             data={chartData}
-            height={200}
+            height={panelHeight}
             yAxisLabel="%"
             rightYAxisLabel="mm"
             showXAxis={false}
@@ -130,6 +137,7 @@ export default function WeatherTimeSeries({
             onBrushChange={handleBrushChange}
             monsoonRanges={monsoonRanges}
             tickInterval={tickInterval}
+            ariaLabel="Humidity and precipitation over time"
             series={[
               {
                 dataKey: 'humidity',
@@ -153,7 +161,7 @@ export default function WeatherTimeSeries({
           {/* Panel 3: Wind Speed + Gust Speed (km/hr) */}
           <WeatherTimeSeriesPanel
             data={chartData}
-            height={200}
+            height={panelHeight}
             yAxisLabel="km/hr"
             showXAxis={false}
             showBrush={false}
@@ -161,6 +169,7 @@ export default function WeatherTimeSeries({
             onBrushChange={handleBrushChange}
             monsoonRanges={monsoonRanges}
             tickInterval={tickInterval}
+            ariaLabel="Wind and gust speed over time"
             series={[
               {
                 dataKey: 'wind',
@@ -183,7 +192,7 @@ export default function WeatherTimeSeries({
           {/* Panel 4: Pressure (mm Hg) — with x-axis labels and brush */}
           <WeatherTimeSeriesPanel
             data={chartData}
-            height={200}
+            height={panelHeight}
             yAxisLabel="mm Hg"
             showXAxis={true}
             showBrush={true}
@@ -191,6 +200,7 @@ export default function WeatherTimeSeries({
             onBrushChange={handleBrushChange}
             monsoonRanges={monsoonRanges}
             tickInterval={tickInterval}
+            ariaLabel="Barometric pressure over time"
             series={[
               {
                 dataKey: 'pressure',

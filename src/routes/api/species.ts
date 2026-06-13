@@ -11,13 +11,18 @@ export const Route = createFileRoute('/api/species')({
         try {
           const client = getTurso()
           const result = await client.execute('SELECT * FROM specimens')
-          const specimens: Array<Species> = result.rows.map(rowToSpecies)
+          const specimens: Array<Species> = result.rows
+            .map(rowToSpecies)
+            .filter((s): s is Species => s !== null)
 
           return new Response(JSON.stringify(specimens), {
             headers: CACHE_HEADERS,
           })
         } catch (error) {
-          console.error('[API/species] Turso fetch failed:', error)
+          console.error(
+            '[API/species] Turso fetch failed:',
+            error instanceof Error ? error.message : 'Unknown error',
+          )
 
           return new Response(
             JSON.stringify({ error: 'Failed to fetch species data' }),

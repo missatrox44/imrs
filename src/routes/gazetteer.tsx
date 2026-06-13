@@ -1,10 +1,19 @@
 import { createFileRoute } from '@tanstack/react-router'
 import Gazetteer from '@/components/Gazetteer'
+import { SITE_URL } from '@/data/constants'
 
 export const Route = createFileRoute('/gazetteer')({
   component: RouteComponent,
   head: () => ({
-    title: 'Gazetteer | IMRS',
+    meta: [
+      { title: 'Gazetteer | IMRS' },
+      {
+        name: 'description',
+        content:
+          'Interactive map and directory of named geographic features, trails, springs, and research sites within Indio Mountains Research Station, with coordinates and elevations.',
+      },
+    ],
+    links: [{ rel: 'canonical', href: SITE_URL + '/gazetteer' }],
     scripts: [
       {
         type: 'application/ld+json',

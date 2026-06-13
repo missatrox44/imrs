@@ -4,44 +4,37 @@
 
 ## The Challenge
 
-For years, the biodiversity records of the **Indio Mountains Research Station (IMRS)**—a 40,000-acre research facility in the Chihuahuan Desert managed by UTEP—were locked away in a static PDF handbook: _[Natural Resources and Physical Environment of Indio Mountains Research Station](https://www.utep.edu/science/indio/_files/docs/imrs%20natural%20resources.pdf)_.
+For years, the biodiversity records of the **Indio Mountains Research Station (IMRS)**, a 40,000-acre research facility in the Chihuahuan Desert managed by UTEP, were locked away in a static PDF handbook: _[Natural Resources and Physical Environment of Indio Mountains Research Station](https://www.utep.edu/science/indio/_files/docs/imrs%20natural%20resources.pdf)_.
 
-While authoritative, this format made it difficult for students, researchers, and visitors to quickly identify species, cross-reference data, or access information while in the field.
+While authoritative, this format made it difficult for students, researchers, and visitors to quickly identify species, cross-reference data, or prepare for their upcoming trip to IMRS.
 
 ## The Solution
 
-The **IMRS Biodiversity Explorer** transforms this static data into a living, interactive digital resource. By normalizing the handbook's data into a structured SQL database and integrating real-time observations from iNaturalist, this application provides a powerful tool for exploring the station's flora and fauna.
+The **IMRS Biodiversity Explorer** turns that handbook into a living, interactive website. Anyone such as a student, a researcher, or a curious visitor, can search the station's plants and animals, see where recent sightings have been reported, check how each species is doing conservation-wise, and explore five years of on-site weather. It's the field guide and the data prospective researchers and visitors alike can use to prepare for their trip.
+## Features
 
-## Key Features
-
-- **Digital Species Catalog**: A fully searchable and filterable database of all species recorded in the station's history.
-  - **Dual Views**: Switch between a visual Grid View for browsing and a detailed Table View for data analysis.
-  - **Advanced Filtering**: Filter by Taxonomy (Kingdom, Phylum, Class, Order, Family, Genus).
-  - **Smart Search**: Instantly find species by scientific or common names.
-- **Recent Observations**: Real-time integration with the **iNaturalist API** to display the latest confirmed sightings at the station.
-- **Gazetteer**: A reference for key geographical locations within the research station.
+- **Species Catalog** — search and filter every species ever recorded at the station, in a visual grid or a detailed table.
+- **Conservation Status** — at-a-glance badges show how each species is doing, drawn from NatureServe and the IUCN Red List.
+- **Recent Observations** — Real-time integration with the **iNaturalist API** to display the latest confirmed sightings at IMRS
+- **Climate & Weather** — five years (2020–2024) of the station's weather, charted and filterable by year and season.
+- **Gazetteer** — an interactive map of the named places across the station.
 
 ## Technology Stack
 
-**Frontend**
-
-- **Framework**: [TanStack Start](https://tanstack.com/start) (React)
-- **Routing**: [TanStack Router](https://tanstack.com/router)
-- **Data Fetching**: [TanStack Query](https://tanstack.com/query)
+- **Framework**: [TanStack Start](https://tanstack.com/start) (React) — Router, Query, Table & Virtual
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/) & [ShadCN UI](https://ui.shadcn.com/)
 - **Maps**: Leaflet / React-Leaflet
+- **Database**: [Turso](https://turso.tech/) (cloud SQLite) via `@libsql/client`
+- **External API**: [iNaturalist](https://www.inaturalist.org/)
 
-**Backend & Data**
+Also uses Recharts (weather charts), Framer Motion (animation), Zod (validation),
+and Vercel Analytics / Speed Insights.
 
-- **Database**: [SQLite3](https://sqlite.org/) (Local) / [Turso](https://turso.tech/) (Production)
-- **ORM/Querying**: Raw SQL & `better-sqlite3` / `@libsql/client`
-- **External API**: iNaturalist
 
-## Future Roadmap
+## Roadmap
 
 - **Authentication & Admin Dashboard**: Implement secure login for station administrators to manage and update the species index directly (CRUD operations).
-- **Weather Integration**: Visualize historical and real-time climate data from on-site weather stations to correlate biodiversity trends with environmental conditions.
-- **Open Source**: Prepare the codebase for public contribution, assisting other field stations in digitizing their records.
+- **Open Source**: The codebase is clean and well-tested; the remaining work is a contribution guide (`CONTRIBUTING.md`) and setup docs to help other field stations digitize their records.
 
 ---
 
@@ -49,7 +42,7 @@ The **IMRS Biodiversity Explorer** transforms this static data into a living, in
 
 ### Prerequisites
 
-- Node.js (v22+, see `.nvmrc`)
+- Node.js (v24, see `.nvmrc`)
 - pnpm (the repo pins a version via the `packageManager` field)
 - SQLite3 (for local database management)
 
@@ -81,7 +74,7 @@ The **IMRS Biodiversity Explorer** transforms this static data into a living, in
    ```bash
    pnpm dev
    ```
-   Open [http://localhost:3000](http://localhost:3000) to view the app.
+   Open [http://localhost:3001](http://localhost:3001) to view the app.
 
 ---
 
@@ -132,7 +125,11 @@ CREATE TABLE specimens (
   collectors_field_numbers TEXT,
   note TEXT,
   species_common_name TEXT,
-  records TEXT
+  records TEXT,
+  iucn_category TEXT,
+  natureserve_grank TEXT,
+  natureserve_srank_tx TEXT,
+  natureserve_id TEXT
 );
 
 # Import Data (ensure specimens.tsv is in root)
@@ -166,6 +163,53 @@ turso config set token "YOUR_TOKEN"
 # Import
 turso db import imrs-species.db
 ```
+
+### 3. Conservation Status
+
+The four `iucn_category` / `natureserve_*` columns are populated by a seed
+script that fetches conservation status from two free sources:
+
+- **NatureServe Explorer** — no API key. Provides the global G-rank and the
+  Texas subnational S-rank.
+- **IUCN Red List API v4** — free, but requires a registered token. Set
+  `IUCN_API_TOKEN` in `.env.local`. If it's omitted, the script seeds
+  NatureServe only and skips IUCN.
+
+These calls happen only at seed time — the app makes no external conservation
+requests at runtime. The script adds the columns idempotently (so it's safe on
+an existing DB) and is resumable (it skips species that already have data; pass
+`--force` to reprocess all).
+
+```bash
+# Seed the local DB (NatureServe + IUCN)
+IUCN_API_TOKEN=your_token npx tsx scripts/seed-conservation.ts
+```
+
+To propagate the seeded data to the **existing** production Turso DB, update it
+in place. `turso db import` only ever creates a _new_ database, so it can't
+update the live one — instead generate an idempotent migration from the local
+DB and apply it with `turso db shell`:
+
+```bash
+# Generate ALTERs + UPDATEs from the freshly-seeded local DB
+{
+  echo "ALTER TABLE specimens ADD COLUMN iucn_category TEXT;"
+  echo "ALTER TABLE specimens ADD COLUMN natureserve_grank TEXT;"
+  echo "ALTER TABLE specimens ADD COLUMN natureserve_srank_tx TEXT;"
+  echo "ALTER TABLE specimens ADD COLUMN natureserve_id TEXT;"
+  sqlite3 imrs-species.db "SELECT 'UPDATE specimens SET iucn_category='||quote(iucn_category)||', natureserve_grank='||quote(natureserve_grank)||', natureserve_srank_tx='||quote(natureserve_srank_tx)||', natureserve_id='||quote(natureserve_id)||' WHERE id='||id||';' FROM specimens WHERE iucn_category IS NOT NULL OR natureserve_grank IS NOT NULL OR natureserve_srank_tx IS NOT NULL OR natureserve_id IS NOT NULL;"
+} > conservation-updates.sql
+
+# Apply to the production DB (the ALTERs are one-time; ignore "duplicate column" if re-running)
+turso db shell <your-db> < conservation-updates.sql
+rm conservation-updates.sql
+```
+
+> The columns must exist in production for the badges to render. If one is
+> missing the app degrades gracefully (no badge) — it does not error.
+
+Conservation data courtesy of [NatureServe Explorer](https://explorer.natureserve.org/)
+and the [IUCN Red List](https://www.iucnredlist.org/).
 
 ---
 

@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { LayoutGrid, Table as TableIcon } from 'lucide-react'
-import { useMediaQuery } from '@uidotdev/usehooks'
+import { useDebounce, useMediaQuery } from '@uidotdev/usehooks'
 import { useNavigate } from '@tanstack/react-router'
 import { SpeciesGridView } from './SpeciesGridView'
 import type { Species } from '@/types/species'
@@ -39,6 +39,7 @@ const SpeciesIndex = () => {
   const { category } = Route.useSearch()
   const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState('')
+  const debouncedSearchTerm = useDebounce(searchTerm, 300)
   const [view, setView] = useState<'grid' | 'table'>('grid')
   const [taxonomicFilters, setTaxonomicFilters] = useState<TaxonomicFilters>(
     EMPTY_TAXONOMIC_FILTERS,
@@ -58,18 +59,30 @@ const SpeciesIndex = () => {
     setSortDirection('asc')
   }, [])
 
-  const getFilteredItems = (cat: Category) => {
-    const byCategory = filterByCategory(species, cat)
-    const byTaxonomy = applyTaxonomicFilters(byCategory, taxonomicFilters)
-    return applySearchTerm(byTaxonomy, searchTerm)
-  }
+  const getFilteredItems = useCallback(
+    (cat: Category) => {
+      const byCategory = filterByCategory(species, cat)
+      const byTaxonomy = applyTaxonomicFilters(byCategory, taxonomicFilters)
+      return applySearchTerm(byTaxonomy, debouncedSearchTerm)
+    },
+    [species, taxonomicFilters, debouncedSearchTerm],
+  )
 
   const filtered = getFilteredItems(category)
   const sorted = sortSpecies(filtered, sortDirection)
 
-  const getCategoryCount = (cat: Category) => {
-    return getFilteredItems(cat).length
-  }
+  const categoryCounts = useMemo(() => {
+    const counts = new Map<Category, number>()
+    return (cat: Category) => {
+      const cached = counts.get(cat)
+      if (cached != null) return cached
+      const count = getFilteredItems(cat).length
+      counts.set(cat, count)
+      return count
+    }
+  }, [getFilteredItems])
+
+  const getCategoryCount = (cat: Category) => categoryCounts(cat)
 
   useEffect(() => {
     if (isMobile && view !== 'grid') {
@@ -152,8 +165,8 @@ const SpeciesIndex = () => {
           <Card>
             <CardContent className="text-center py-12">
               <p className="text-muted-foreground">
-                {searchTerm
-                  ? `No results found for "${searchTerm}" in ${category}.`
+                {debouncedSearchTerm
+                  ? `No results found for "${debouncedSearchTerm}" in ${category}.`
                   : category === 'all'
                     ? 'No species data available.'
                     : `No ${category} data available.`}

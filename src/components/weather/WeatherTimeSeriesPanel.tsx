@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import {
   Area,
   Bar,
@@ -49,6 +50,7 @@ interface WeatherTimeSeriesPanelProps {
   onBrushChange: (start: number, end: number) => void
   monsoonRanges: Array<MonsoonRange>
   tickInterval: number
+  ariaLabel?: string
 }
 
 function formatDate(dateStr: string) {
@@ -108,8 +110,26 @@ export default function WeatherTimeSeriesPanel({
   onBrushChange,
   monsoonRanges,
   tickInterval,
+  ariaLabel,
 }: WeatherTimeSeriesPanelProps) {
   const hasRightAxis = series.some((s) => s.yAxisId === 'right')
+
+  // Compute a brief screen-reader summary for the primary series
+  const srSummary = useMemo(() => {
+    const primaryKey = series[0]?.dataKey
+    if (!primaryKey || data.length === 0) return null
+    const values = data
+      .map((d) => {
+        const v = d[primaryKey]
+        return Array.isArray(v) ? (v[0] as number) : (v as number | null)
+      })
+      .filter((v): v is number => v != null)
+    if (values.length === 0) return null
+    const min = Math.min(...values).toFixed(1)
+    const max = Math.max(...values).toFixed(1)
+    const latest = values[values.length - 1].toFixed(1)
+    return `${series[0].name}: min ${min}, max ${max}, latest ${latest} ${yAxisLabel}`
+  }, [data, series, yAxisLabel])
 
   return (
     <div>
@@ -123,7 +143,17 @@ export default function WeatherTimeSeriesPanel({
           </span>
         )}
       </div>
-      <div style={{ overflow: 'visible' }} className="[&_svg]:overflow-visible">
+      {srSummary && (
+        <p className="sr-only" aria-live="polite">
+          {srSummary}
+        </p>
+      )}
+      <div
+        role="img"
+        aria-label={ariaLabel}
+        style={{ overflow: 'visible' }}
+        className="[&_svg]:overflow-visible"
+      >
         <ResponsiveContainer width="100%" height={height}>
           <ComposedChart
             data={data}
