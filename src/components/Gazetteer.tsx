@@ -1,70 +1,17 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Layers, MapPin, Mountain, Star } from 'lucide-react'
+import { useMediaQuery } from '@uidotdev/usehooks'
+import { Layers } from 'lucide-react'
 import type { ComponentType } from 'react'
 import type { GazetteerMapProps } from '@/components/GazetteerMap'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import { GAZETTEER_ENTRIES } from '@/data/gazetteer'
-import { formatCoordinates } from '@/lib/formatCoordinates'
-import { formatElevation } from '@/lib/formatElevation'
 import { SearchInput } from '@/components/SearchInput'
-import { cn } from '@/lib/utils'
-
-const MapLegend = () => (
-  <div
-    className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground"
-    role="group"
-    aria-label="Map legend"
-  >
-    <span className="font-medium text-foreground">Legend:</span>
-    <span className="flex items-center gap-1.5">
-      <Star
-        className="size-3.5 shrink-0"
-        style={{ fill: 'hsl(42, 85%, 55%)', stroke: 'hsl(25, 20%, 15%)' }}
-        aria-hidden="true"
-      />
-      Featured location
-    </span>
-    <span className="flex items-center gap-1.5">
-      <span
-        className="size-3 shrink-0 rounded-full"
-        style={{
-          background: 'hsl(25, 20%, 15%)',
-          border: '2px solid hsl(42, 45%, 94%)',
-        }}
-        aria-hidden="true"
-      />
-      Location
-    </span>
-    <span className="flex items-center gap-1.5">
-      <span
-        className="h-0.5 w-5 shrink-0 rounded-full"
-        style={{ background: 'hsl(205, 65%, 45%)' }}
-        aria-hidden="true"
-      />
-      Rio Grande
-    </span>
-    <span className="flex items-center gap-1.5">
-      <span
-        className="w-5 shrink-0"
-        style={{ borderTop: '2px dashed hsl(95, 70%, 50%)' }}
-        aria-hidden="true"
-      />
-      Roads
-    </span>
-    <span className="flex items-center gap-1.5">
-      <span
-        className="size-3 shrink-0 rounded-[2px]"
-        style={{
-          border: '2px solid hsl(25, 20%, 15%)',
-          background: 'hsl(35, 50%, 65%)',
-        }}
-        aria-hidden="true"
-      />
-      Station boundary
-    </span>
-  </div>
-)
+import { MapLegend } from '@/components/GazetteerMapLegend'
+import { GazetteerCardList } from '@/components/GazetteerCardList'
+import {
+  GazetteerMobileSheet,
+  SHEET_MID,
+  SHEET_PEEK,
+} from '@/components/GazetteerMobileSheet'
 
 const Gazetteer = () => {
   const [searchTerm, setSearchTerm] = useState('')
@@ -72,6 +19,8 @@ const Gazetteer = () => {
   const cardRefs = useRef<Record<string, HTMLLIElement | null>>({})
   const [MapComponent, setMapComponent] =
     useState<ComponentType<GazetteerMapProps> | null>(null)
+  const isMobile = useMediaQuery('(max-width: 1023.98px)')
+  const [snap, setSnap] = useState<number | string | null>(SHEET_PEEK)
 
   // Dynamically import leaflet map only on the client
   useEffect(() => {
@@ -104,6 +53,62 @@ const Gazetteer = () => {
     }
   }, [selectedId])
 
+  // On mobile, selecting a card drops the sheet to half height so the
+  // flown-to pin is visible above it.
+  const handleMobileSelect = (id: string) => {
+    setSelectedId(id)
+    setSnap(SHEET_MID)
+  }
+
+  // The mobile view is a full-screen map + sheet — lock page scroll so the
+  // footer (rendered after <main> in the root layout) stays below the fold.
+  useEffect(() => {
+    if (!isMobile) return
+    const previous = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = previous
+    }
+  }, [isMobile])
+
+  const mapInner = MapComponent ? (
+    <MapComponent
+      entries={filteredAndSortedEntries}
+      selectedId={selectedId}
+      onPinClick={setSelectedId}
+    />
+  ) : (
+    <div className="h-full w-full flex items-center justify-center bg-muted text-muted-foreground">
+      Loading map…
+    </div>
+  )
+
+  if (isMobile) {
+    return (
+      <main className="bg-background">
+        <h1 className="sr-only">IMRS Gazetteer</h1>
+        <div className="isolate z-0 h-[calc(100dvh-4rem)] w-full">
+          {mapInner}
+          <p className="sr-only">
+            Use Tab to navigate map pins. Arrow keys pan the map when focused.
+            Press Enter or Space on a card in the list to highlight its pin.
+          </p>
+        </div>
+        <GazetteerMobileSheet
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
+          entries={filteredAndSortedEntries}
+          totalCount={GAZETTEER_ENTRIES.length}
+          selectedId={selectedId}
+          onSelect={handleMobileSelect}
+          cardRefs={cardRefs}
+          snap={snap}
+          setSnap={setSnap}
+        />
+      </main>
+    )
+  }
+
   return (
     <main className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
@@ -134,17 +139,7 @@ const Gazetteer = () => {
             </div>
             <MapLegend />
             <div className="isolate h-[40vh] min-h-[320px] lg:h-[calc(80vh-6rem)] rounded-sm border overflow-hidden">
-              {MapComponent ? (
-                <MapComponent
-                  entries={filteredAndSortedEntries}
-                  selectedId={selectedId}
-                  onPinClick={setSelectedId}
-                />
-              ) : (
-                <div className="h-full w-full flex items-center justify-center bg-muted text-muted-foreground">
-                  Loading map…
-                </div>
-              )}
+              {mapInner}
               <p className="sr-only">
                 Use Tab to navigate map pins. Arrow keys pan the map when
                 focused. Press Enter or Space on a card in the list to highlight
@@ -164,97 +159,14 @@ const Gazetteer = () => {
                 />
               </div>
 
-              <section>
-                {filteredAndSortedEntries.length > 0 ? (
-                  <ul className="space-y-4">
-                    {filteredAndSortedEntries.map((entry) => (
-                      <li
-                        key={entry.id}
-                        ref={(el) => {
-                          cardRefs.current[entry.id] = el
-                        }}
-                      >
-                        <Card
-                          className={cn(
-                            'hover:shadow-md transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-                            entry.id === selectedId &&
-                              'ring-4 ring-accent shadow-lg bg-accent/10',
-                          )}
-                          onClick={() => setSelectedId(entry.id)}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter' || e.key === ' ') {
-                              e.preventDefault()
-                              setSelectedId(entry.id)
-                            }
-                          }}
-                          role="button"
-                          tabIndex={0}
-                          aria-pressed={entry.id === selectedId}
-                        >
-                          <CardHeader>
-                            <CardTitle as="h2" className="text-xl">
-                              {entry.name}
-                            </CardTitle>
-                            {entry.alternateNames?.length ? (
-                              <p className="text-sm text-muted-foreground italic">
-                                aka {entry.alternateNames.join(', ')}
-                              </p>
-                            ) : null}
-                          </CardHeader>
-                          <CardContent>
-                            <div className="flex-1 space-y-3">
-                              <p className="text-muted-foreground">
-                                {entry.description}
-                              </p>
-
-                              <div className="flex flex-wrap gap-2 text-sm">
-                                {entry.latitude != null &&
-                                  entry.longitude != null && (
-                                    <Badge
-                                      variant="secondary"
-                                      className="flex items-center gap-1"
-                                    >
-                                      <MapPin className="size-3" />
-                                      {formatCoordinates(
-                                        entry.latitude,
-                                        entry.longitude,
-                                      )}
-                                    </Badge>
-                                  )}
-
-                                {entry.elevationMeters && (
-                                  <Badge
-                                    variant="secondary"
-                                    className="flex items-center gap-1"
-                                  >
-                                    <Mountain className="size-3" />
-                                    {formatElevation(entry.elevationMeters)}
-                                  </Badge>
-                                )}
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <Card>
-                    <CardContent className="py-8 text-center">
-                      <p className="text-muted-foreground">
-                        No locations found matching "{searchTerm}"
-                      </p>
-                    </CardContent>
-                  </Card>
-                )}
-              </section>
-
-              {filteredAndSortedEntries.length > 0 && (
-                <div className="mt-6 text-center text-sm text-muted-foreground">
-                  Showing {filteredAndSortedEntries.length} of{' '}
-                  {GAZETTEER_ENTRIES.length} locations
-                </div>
-              )}
+              <GazetteerCardList
+                entries={filteredAndSortedEntries}
+                totalCount={GAZETTEER_ENTRIES.length}
+                selectedId={selectedId}
+                onSelect={setSelectedId}
+                cardRefs={cardRefs}
+                searchTerm={searchTerm}
+              />
             </div>
           </div>
         </div>
