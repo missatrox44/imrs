@@ -14,6 +14,7 @@ import { formatCoordinates } from '@/lib/formatCoordinates'
 import { formatElevation } from '@/lib/formatElevation'
 import boundaryData from '@/data/imrs-boundary.geojson'
 import riverData from '@/data/rio-grande.geojson'
+import roadData from '@/data/imrs-roads.geojson'
 
 const defaultIcon = L.divIcon({
   className: '',
@@ -168,6 +169,21 @@ export function GazetteerMap({
               url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
             />
           </LayersControl.BaseLayer>
+          <LayersControl.Overlay checked name="Roads">
+            <GeoJSON
+              data={roadData}
+              filter={(feature: GeoJSON.Feature) =>
+                feature.geometry.type === 'LineString' ||
+                feature.geometry.type === 'MultiLineString'
+              }
+              style={{
+                color: 'hsl(95, 70%, 50%)',
+                weight: 2,
+                opacity: 0.85,
+                dashArray: '5 4',
+              }}
+            />
+          </LayersControl.Overlay>
         </LayersControl>
         <GeoJSON
           data={boundaryData}
