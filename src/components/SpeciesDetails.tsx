@@ -4,6 +4,7 @@ import {
   ArrowLeft,
   Calendar,
   ChevronRight,
+  ExternalLink,
   ImageOff,
   MapPin,
   User,
@@ -25,6 +26,10 @@ import { Route } from '@/routes/species.$speciesId'
 import { formatDate } from '@/lib/formatDate'
 import { getPhotoUrl } from '@/lib/getPhotoUrl'
 import { SOURCE_LABELS, getConservationRanks } from '@/lib/conservation'
+import {
+  getPublicationsForSpecies,
+  publicationTypeLabel,
+} from '@/lib/publications'
 
 interface TaxonomyRow {
   rank: string
@@ -137,6 +142,7 @@ export function SpeciesDetails() {
   const scientificName = `${species.genus} ${species.species}`
   const taxonomyRows = buildTaxonomyHierarchy(species)
   const conservationRanks = getConservationRanks(species)
+  const speciesPublications = getPublicationsForSpecies(species.id)
 
   return (
     <main className="min-h-screen bg-background">
@@ -381,12 +387,56 @@ export function SpeciesDetails() {
                     {conservationRanks.map((rank) => (
                       <div
                         key={rank.source}
-                        className="px-4 py-3 flex items-center justify-between gap-2 hover:bg-muted/30 transition-colors"
+                        className="px-6 py-3 flex items-center justify-between gap-2 hover:bg-muted/30 transition-colors"
                       >
                         <span className="text-xs text-muted-foreground uppercase tracking-wide">
                           {SOURCE_LABELS[rank.source]}
                         </span>
                         <ConservationBadge rank={rank} variant="full" />
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Research & Publications */}
+            {speciesPublications.length > 0 && (
+              <Card className="gradient-card shadow-card">
+                <CardHeader>
+                  <CardTitle as="h2">Research &amp; Publications</CardTitle>
+                  <CardDescription>
+                    Theses and dissertations featuring this species.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <div className="divide-y divide-border">
+                    {speciesPublications.map((pub) => (
+                      <div
+                        key={pub.id}
+                        className="px-6 py-3 hover:bg-muted/30 transition-colors"
+                      >
+                        {pub.url ? (
+                          <Link
+                            to={pub.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="font-medium text-primary hover:underline inline-flex items-start gap-1"
+                          >
+                            {pub.title}
+                            <ExternalLink
+                              className="size-3 mt-1 shrink-0"
+                              aria-hidden="true"
+                            />
+                            <span className="sr-only"> (opens in new tab)</span>
+                          </Link>
+                        ) : (
+                          <span className="font-medium">{pub.title}</span>
+                        )}
+                        <p className="text-sm text-muted-foreground">
+                          {pub.authors} · {pub.year} ·{' '}
+                          {publicationTypeLabel(pub.type)}
+                        </p>
                       </div>
                     ))}
                   </div>
