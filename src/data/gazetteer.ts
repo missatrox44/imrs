@@ -87,6 +87,7 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     longitude: -104.986,
     elevationMeters: 1339,
     alternateNames: ['Road Tank'],
+    featured: true,
   },
   {
     id: 'cottonwood-canyon-tank',
@@ -247,6 +248,7 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     latitude: 30.7972,
     longitude: -105.011,
     elevationMeters: 1263,
+    featured: true,
   },
   {
     id: 'echo-spring-canyon',
@@ -342,6 +344,7 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     longitude: -105.01583,
     elevationMeters: 1230,
     alternateNames: ['IMRS HQ', 'Bailey Evans Ranch House'],
+    featured: true,
   },
   {
     id: 'imrs',
@@ -502,6 +505,7 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     latitude: 30.7495,
     longitude: -105.026,
     elevationMeters: 1688,
+    featured: true,
   },
   {
     id: 'purple-sage-mine-road',
@@ -608,6 +612,7 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     latitude: 30.66716,
     longitude: -104.993,
     elevationMeters: 960.8,
+    featured: true,
   },
   {
     id: 'the-narrows',
@@ -707,51 +712,6 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
   },
 ]
 
-export const GAZETTEER_ROLODEX: Array<GazetteerEntry> = [
-  {
-    id: 'bailey-evans-peak',
-    name: 'Bailey Evans Peak',
-    description:
-      'Highest mountain peak east-northeast of Indio Ranch House. Also known as Mount Everest.',
-    latitude: 30.781661,
-    longitude: -105.004167,
-    elevationMeters: 1461.6,
-    alternateNames: ['Mount Everest'],
-  },
-  {
-    id: 'mesquite-tank',
-    name: 'Mesquite Tank',
-    description: 'Tank near Bailey Evens Arroyo west-southwest of IMRS HQ.',
-    latitude: 30.76153,
-    longitude: -105.031,
-    elevationMeters: 1167,
-  },
-  {
-    id: 'red-tank',
-    name: 'Red Tank',
-    description:
-      'Large seasonally dry impoundment along River Road west of Eagle Canyon; contains pit-fall trap array.',
-    latitude: 30.73067,
-    longitude: -104.988,
-    elevationMeters: 1195.6,
-  },
-  {
-    id: 'corral-tank',
-    name: 'Corral Tank',
-    description:
-      'Northernmost seasonal impoundment near Double Tank Corral; often holds water early or late in the year.',
-    latitude: 30.78729,
-    longitude: -104.986,
-    elevationMeters: 1339,
-    alternateNames: ['Road Tank'],
-  },
-  {
-    id: 'woodpecker-well',
-    name: 'Woodpecker Well',
-    description:
-      'Dysfunctional water well on Main Road northwest of IMRS HQ; contains pit-fall trap array.',
-    latitude: 30.81784,
-    longitude: -105.054,
-    elevationMeters: 1246.2,
-  },
-]
+export const GAZETTEER_ROLODEX: Array<GazetteerEntry> = GAZETTEER_ENTRIES.filter(
+  (entry) => entry.featured,
+)

@@ -7,4 +7,5 @@ export interface GazetteerEntry {
   elevationMeters?: number
   alternateNames?: Array<string>
   references?: Array<string>
+  featured?: boolean
 }
