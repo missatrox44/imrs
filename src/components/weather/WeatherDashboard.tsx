@@ -1,3 +1,5 @@
+import { useMediaQuery } from '@uidotdev/usehooks'
+import { Monitor } from 'lucide-react'
 import WeatherFilterBar from './WeatherFilterBar'
 import WeatherStatCards from './WeatherStatCards'
 import WeatherTimeSeries from './WeatherTimeSeries'
@@ -8,6 +10,7 @@ import { useWeatherDaily, useWeatherSummary } from '@/hooks/useWeatherData'
 export default function WeatherDashboard() {
   const { year, season } = Route.useSearch()
   const filters: WeatherFilters = { year, season }
+  const isMobile = useMediaQuery('(max-width: 767px)')
 
   const { data: summary, isLoading: summaryLoading } =
     useWeatherSummary(filters)
@@ -23,6 +26,19 @@ export default function WeatherDashboard() {
         </p>
       </div>
 
+      {isMobile && (
+        <div
+          role="note"
+          className="mb-6 flex items-start gap-2 rounded-md border bg-muted/40 px-3 py-2 text-sm text-muted-foreground"
+        >
+          <Monitor className="size-4 shrink-0 mt-0.5" aria-hidden="true" />
+          <span>
+            For the full set of interactive climate charts, this page is best
+            experienced on a larger screen.
+          </span>
+        </div>
+      )}
+
       <section className="mb-8">
         <WeatherFilterBar />
       </section>
@@ -31,9 +47,11 @@ export default function WeatherDashboard() {
         <WeatherStatCards summary={summary} isLoading={summaryLoading} />
       </section>
 
-      <section className="mb-8">
-        <WeatherTimeSeries data={daily} isLoading={dailyLoading} />
-      </section>
+      {!isMobile && (
+        <section className="mb-8">
+          <WeatherTimeSeries data={daily} isLoading={dailyLoading} />
+        </section>
+      )}
     </main>
   )
 }
