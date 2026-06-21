@@ -406,7 +406,7 @@ export function SpeciesDetails() {
                 <CardHeader>
                   <CardTitle as="h2">Research &amp; Publications</CardTitle>
                   <CardDescription>
-                    Theses and dissertations featuring this species.
+                    Theses, papers, and notes featuring this species.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
@@ -435,6 +435,7 @@ export function SpeciesDetails() {
                         )}
                         <p className="text-sm text-muted-foreground">
                           {pub.authors} · {pub.year} ·{' '}
+                          {pub.venue ? <>{pub.venue} · </> : null}
                           {publicationTypeLabel(pub.type)}
                         </p>
                       </div>

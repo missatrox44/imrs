@@ -253,8 +253,7 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
   {
     id: 'echo-spring-canyon',
     name: 'Echo Spring Canyon',
-    description:
-      'Alternate name for Echo Creek Canyon; see Echo Creek Canyon.',
+    description: 'Alternate name for Echo Creek Canyon; see Echo Creek Canyon.',
 
     alternateNames: ['Echo Creek Canyon'],
   },
@@ -712,6 +711,5 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
   },
 ]
 
-export const GAZETTEER_ROLODEX: Array<GazetteerEntry> = GAZETTEER_ENTRIES.filter(
-  (entry) => entry.featured,
-)
+export const GAZETTEER_ROLODEX: Array<GazetteerEntry> =
+  GAZETTEER_ENTRIES.filter((entry) => entry.featured)

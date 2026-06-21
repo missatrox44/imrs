@@ -118,7 +118,7 @@ export const Footer = () => {
               rel="noopener noreferrer"
               className="hover:text-foreground transition-colors inline-flex items-center gap-1 cursor-pointer"
             >
-            <FaGithub className="size-3" aria-hidden="true" />
+              <FaGithub className="size-3" aria-hidden="true" />
               <span className="sr-only"> (opens in new tab)</span>
             </a>
 

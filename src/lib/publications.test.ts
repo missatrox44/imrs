@@ -20,15 +20,16 @@ const fixtures: Array<Publication> = [
 
 describe('getPublicationsForSpecies', () => {
   it('returns only publications listing the species id', () => {
-    expect(
-      getPublicationsForSpecies(2, fixtures).map((p) => p.id),
-    ).toEqual(['a'])
+    expect(getPublicationsForSpecies(2, fixtures).map((p) => p.id)).toEqual([
+      'a',
+    ])
   })
 
   it('sorts matches newest first', () => {
-    expect(
-      getPublicationsForSpecies(1, fixtures).map((p) => p.id),
-    ).toEqual(['b', 'a'])
+    expect(getPublicationsForSpecies(1, fixtures).map((p) => p.id)).toEqual([
+      'b',
+      'a',
+    ])
   })
 
   it('returns an empty array when no publication matches', () => {
@@ -40,5 +41,7 @@ describe('publicationTypeLabel', () => {
   it('maps types to display labels', () => {
     expect(publicationTypeLabel('thesis')).toBe('Thesis')
     expect(publicationTypeLabel('dissertation')).toBe('Dissertation')
+    expect(publicationTypeLabel('article')).toBe('Journal Article')
+    expect(publicationTypeLabel('note')).toBe('Natural History Note')
   })
 })

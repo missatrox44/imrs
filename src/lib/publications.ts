@@ -14,6 +14,8 @@ export function getPublicationsForSpecies(
 const TYPE_LABELS: Record<Publication['type'], string> = {
   thesis: 'Thesis',
   dissertation: 'Dissertation',
+  article: 'Journal Article',
+  note: 'Natural History Note',
 }
 
 export function publicationTypeLabel(type: Publication['type']): string {
