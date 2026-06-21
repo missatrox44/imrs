@@ -102,6 +102,27 @@ const featuredSelectedIcon = L.divIcon({
 const IMRS_CENTER: L.LatLngExpression = [30.77, -105.0]
 const IMRS_ZOOM = 12
 
+function MapResizeHandler() {
+  const map = useMap()
+
+  useEffect(() => {
+    let frame = 0
+    const handleResize = () => {
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(() => map.invalidateSize())
+    }
+    window.addEventListener('resize', handleResize)
+    window.addEventListener('orientationchange', handleResize)
+    return () => {
+      cancelAnimationFrame(frame)
+      window.removeEventListener('resize', handleResize)
+      window.removeEventListener('orientationchange', handleResize)
+    }
+  }, [map])
+
+  return null
+}
+
 function FlyToSelected({
   entries,
   selectedId,
@@ -203,6 +224,7 @@ export function GazetteerMap({
             opacity: 0.85,
           }}
         />
+        <MapResizeHandler />
         <FlyToSelected entries={entries} selectedId={selectedId} />
         {entriesWithCoords.map((entry) => (
           <Marker

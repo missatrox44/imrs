@@ -51,7 +51,11 @@ const PHOEBE: Observation = {
   ],
   place_guess: 'Van Horn, TX 79855, USA',
   uri: 'https://www.inaturalist.org/observations/156226897',
-  taxon: { id: 17009, name: 'Sayornis saya', preferred_common_name: "Say's Phoebe" },
+  taxon: {
+    id: 17009,
+    name: 'Sayornis saya',
+    preferred_common_name: "Say's Phoebe",
+  },
 }
 
 const ORTHOPTERA: Observation = {
@@ -129,7 +133,10 @@ describe('Observations audio rendering', () => {
     const { container } = await renderObservations([PHOEBE])
 
     const audio = container.querySelector('audio')
-    expect(audio).toHaveAttribute('aria-label', "Audio recording for Say's Phoebe")
+    expect(audio).toHaveAttribute(
+      'aria-label',
+      "Audio recording for Say's Phoebe",
+    )
     expect(audio?.querySelector('source')).toHaveAttribute(
       'src',
       'https://static.inaturalist.org/sounds/653577.wav?1682257038',

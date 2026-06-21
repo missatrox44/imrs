@@ -24,3 +24,4 @@ specimens.json
 *.local.md
 .vscode
 .agents
+.playwright-mcp

@@ -11,6 +11,7 @@ While authoritative, this format made it difficult for students, researchers, an
 ## The Solution
 
 The **IMRS Biodiversity Explorer** turns that handbook into a living, interactive website. Anyone such as a student, a researcher, or a curious visitor, can search the station's plants and animals, see where recent sightings have been reported, check how each species is doing conservation-wise, and explore five years of on-site weather. It's the field guide and the data prospective researchers and visitors alike can use to prepare for their trip.
+
 ## Features
 
 - **Species Catalog** — search and filter every species ever recorded at the station, in a visual grid or a detailed table.
@@ -29,7 +30,6 @@ The **IMRS Biodiversity Explorer** turns that handbook into a living, interactiv
 
 Also uses Recharts (weather charts), Framer Motion (animation), Zod (validation),
 and Vercel Analytics / Speed Insights.
-
 
 ## Roadmap
 
