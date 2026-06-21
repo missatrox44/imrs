@@ -1,5 +1,5 @@
 import { Bug, ExternalLink } from 'lucide-react'
-import { FaGithub } from 'react-icons/fa'
+import { FaFacebook, FaGithub, FaInstagram } from 'react-icons/fa'
 import { Link } from '@tanstack/react-router'
 import { externalLinks, navItems } from '@/data/constants'
 
@@ -93,12 +93,32 @@ export const Footer = () => {
 
           <div className="flex items-center gap-4">
             <a
+              href="https://www.facebook.com/groups/1167540990406903/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-foreground transition-colors cursor-pointer"
+            >
+              <FaFacebook className="size-4" aria-hidden="true" />
+              <span className="sr-only">Facebook (opens in new tab)</span>
+            </a>
+
+            <a
+              href="https://www.instagram.com/indio_mountains_utep/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-foreground transition-colors cursor-pointer"
+            >
+              <FaInstagram className="size-4" aria-hidden="true" />
+              <span className="sr-only">Instagram (opens in new tab)</span>
+            </a>
+
+            <a
               href="https://github.com/missatrox44/imrs"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-foreground transition-colors inline-flex items-center gap-1 cursor-pointer"
             >
-              GitHub <FaGithub className="size-3" aria-hidden="true" />
+            <FaGithub className="size-3" aria-hidden="true" />
               <span className="sr-only"> (opens in new tab)</span>
             </a>
 

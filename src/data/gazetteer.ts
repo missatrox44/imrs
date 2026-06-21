@@ -87,6 +87,7 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     longitude: -104.986,
     elevationMeters: 1339,
     alternateNames: ['Road Tank'],
+    featured: true,
   },
   {
     id: 'cottonwood-canyon-tank',
@@ -201,6 +202,13 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     alternateNames: ['North Twin Tanks', 'Wrong Red Tank'],
   },
   {
+    id: 'echo-creek',
+    name: 'Echo Creek',
+    description: 'Alternate name for Echo Creek Canyon; see Echo Creek Canyon.',
+
+    alternateNames: ['Echo Creek Canyon'],
+  },
+  {
     id: 'echo-creek-canyon',
     name: 'Echo Creek Canyon',
     description:
@@ -233,6 +241,24 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
       'Ridgeline extending east-southeast and west-northwest from Echo Peak.',
   },
   {
+    id: 'echo-spring',
+    name: 'Echo Spring',
+    description:
+      'Permanent spring in Echo Creek Canyon about 2.5 km north of IMRS HQ; contains a pit-fall trap array.',
+    latitude: 30.7972,
+    longitude: -105.011,
+    elevationMeters: 1263,
+    featured: true,
+  },
+  {
+    id: 'echo-spring-canyon',
+    name: 'Echo Spring Canyon',
+    description:
+      'Alternate name for Echo Creek Canyon; see Echo Creek Canyon.',
+
+    alternateNames: ['Echo Creek Canyon'],
+  },
+  {
     id: 'flat-top-mountain',
     name: 'Flat Top Mountain',
     description:
@@ -256,7 +282,7 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     description:
       'Summit of ridge south-southeast of Indio Pass, south of Double Tank Corral and west of Eagle Pass.',
     latitude: 30.76944,
-    longitude: -104.8175,
+    longitude: -104.8175, // NOTE: longitude appears erroneous in source (inconsistent with "0.5 km W of Eagle Pass") but preserved as written
     elevationMeters: 5130, // NOTE: elevation appears erroneous in source but preserved as written
   },
   {
@@ -310,6 +336,17 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
       'Mountain pass over the Indio Mountains traversed by Main Road; summit lies just east of Echo Canyon Overlook.',
   },
   {
+    id: 'indio-ranch-house',
+    name: 'Indio Ranch House',
+    description:
+      'Old Bailey Evans Ranch House and central facilities of IMRS HQ, including two dorm/bathroom buildings, the old Ranch House Lab, a computer lab, a surgery building, a director’s bedroom building, the Jerry Johnson Assembly Hall (kitchen and classroom), and an ATV storage shed; powered by solar electricity. Contains pit-fall trap arrays.',
+    latitude: 30.77667,
+    longitude: -105.01583,
+    elevationMeters: 1230,
+    alternateNames: ['IMRS HQ', 'Bailey Evans Ranch House'],
+    featured: true,
+  },
+  {
     id: 'imrs',
     name: 'IMRS',
     description: 'Abbreviation for UTEP’s Indio Mountains Research Station.',
@@ -360,7 +397,7 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     name: 'Monroe’s Nose',
     description:
       'Angular prominence south of Echo Spring and visible from Echo Canyon Overlook.',
-    latitude: 30.33333,
+    latitude: 30.33333, // NOTE: latitude appears erroneous in source (should be near Echo Spring, ~30.79) but preserved as written
     longitude: -105.00833,
     elevationMeters: 1415.2,
   },
@@ -468,6 +505,7 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     latitude: 30.7495,
     longitude: -105.026,
     elevationMeters: 1688,
+    featured: true,
   },
   {
     id: 'purple-sage-mine-road',
@@ -521,6 +559,13 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
       'Gravel road running north from the Green River near The Box through South Gate and Campo Bonito to Main Road.',
   },
   {
+    id: 'road-tank',
+    name: 'Road Tank',
+    description: 'Alternate name for Corral Tank; see Corral Tank.',
+
+    alternateNames: ['Corral Tank'],
+  },
+  {
     id: 'scotts-crossing',
     name: 'Scott’s Crossing',
     description:
@@ -567,6 +612,7 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
     latitude: 30.66716,
     longitude: -104.993,
     elevationMeters: 960.8,
+    featured: true,
   },
   {
     id: 'the-narrows',
@@ -666,51 +712,6 @@ export const GAZETTEER_ENTRIES: Array<GazetteerEntry> = [
   },
 ]
 
-export const GAZETTEER_ROLODEX: Array<GazetteerEntry> = [
-  {
-    id: 'bailey-evans-peak',
-    name: 'Bailey Evans Peak',
-    description:
-      'Highest mountain peak east-northeast of Indio Ranch House. Also known as Mount Everest.',
-    latitude: 30.781661,
-    longitude: -105.004167,
-    elevationMeters: 1461.6,
-    alternateNames: ['Mount Everest'],
-  },
-  {
-    id: 'mesquite-tank',
-    name: 'Mesquite Tank',
-    description: 'Tank near Bailey Evens Arroyo west-southwest of IMRS HQ.',
-    latitude: 30.76153,
-    longitude: -105.031,
-    elevationMeters: 1167,
-  },
-  {
-    id: 'red-tank',
-    name: 'Red Tank',
-    description:
-      'Large seasonally dry impoundment along River Road west of Eagle Canyon; contains pit-fall trap array.',
-    latitude: 30.73067,
-    longitude: -104.988,
-    elevationMeters: 1195.6,
-  },
-  {
-    id: 'corral-tank',
-    name: 'Corral Tank',
-    description:
-      'Northernmost seasonal impoundment near Double Tank Corral; often holds water early or late in the year.',
-    latitude: 30.78729,
-    longitude: -104.986,
-    elevationMeters: 1339,
-    alternateNames: ['Road Tank'],
-  },
-  {
-    id: 'woodpecker-well',
-    name: 'Woodpecker Well',
-    description:
-      'Dysfunctional water well on Main Road northwest of IMRS HQ; contains pit-fall trap array.',
-    latitude: 30.81784,
-    longitude: -105.054,
-    elevationMeters: 1246.2,
-  },
-]
+export const GAZETTEER_ROLODEX: Array<GazetteerEntry> = GAZETTEER_ENTRIES.filter(
+  (entry) => entry.featured,
+)

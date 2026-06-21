@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { MapPin, Mountain } from 'lucide-react'
+import { Layers, MapPin, Mountain, Star } from 'lucide-react'
 import type { ComponentType } from 'react'
 import type { GazetteerMapProps } from '@/components/GazetteerMap'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -9,6 +9,62 @@ import { formatCoordinates } from '@/lib/formatCoordinates'
 import { formatElevation } from '@/lib/formatElevation'
 import { SearchInput } from '@/components/SearchInput'
 import { cn } from '@/lib/utils'
+
+const MapLegend = () => (
+  <div
+    className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground"
+    role="group"
+    aria-label="Map legend"
+  >
+    <span className="font-medium text-foreground">Legend:</span>
+    <span className="flex items-center gap-1.5">
+      <Star
+        className="size-3.5 shrink-0"
+        style={{ fill: 'hsl(42, 85%, 55%)', stroke: 'hsl(25, 20%, 15%)' }}
+        aria-hidden="true"
+      />
+      Featured location
+    </span>
+    <span className="flex items-center gap-1.5">
+      <span
+        className="size-3 shrink-0 rounded-full"
+        style={{
+          background: 'hsl(25, 20%, 15%)',
+          border: '2px solid hsl(42, 45%, 94%)',
+        }}
+        aria-hidden="true"
+      />
+      Location
+    </span>
+    <span className="flex items-center gap-1.5">
+      <span
+        className="h-0.5 w-5 shrink-0 rounded-full"
+        style={{ background: 'hsl(205, 65%, 45%)' }}
+        aria-hidden="true"
+      />
+      Rio Grande
+    </span>
+    <span className="flex items-center gap-1.5">
+      <span
+        className="w-5 shrink-0"
+        style={{ borderTop: '2px dashed hsl(95, 70%, 50%)' }}
+        aria-hidden="true"
+      />
+      Roads
+    </span>
+    <span className="flex items-center gap-1.5">
+      <span
+        className="size-3 shrink-0 rounded-[2px]"
+        style={{
+          border: '2px solid hsl(25, 20%, 15%)',
+          background: 'hsl(35, 50%, 65%)',
+        }}
+        aria-hidden="true"
+      />
+      Station boundary
+    </span>
+  </div>
+)
 
 const Gazetteer = () => {
   const [searchTerm, setSearchTerm] = useState('')
@@ -63,23 +119,38 @@ const Gazetteer = () => {
 
         {/* Desktop: side-by-side | Mobile: stacked */}
         <div className="flex flex-col lg:flex-row gap-6">
-          {/* Map panel */}
-          <div className="isolate h-[40vh] min-h-[320px] lg:h-[calc(80vh-6rem)] lg:w-1/2 xl:w-3/5 lg:sticky lg:top-6 rounded-sm border overflow-hidden">
-            {MapComponent ? (
-              <MapComponent
-                entries={filteredAndSortedEntries}
-                selectedId={selectedId}
-                onPinClick={setSelectedId}
-              />
-            ) : (
-              <div className="h-full w-full flex items-center justify-center bg-muted text-muted-foreground">
-                Loading map…
-              </div>
-            )}
-            <p className="sr-only">
-              Use Tab to navigate map pins. Arrow keys pan the map when focused.
-              Press Enter or Space on a card in the list to highlight its pin.
-            </p>
+          {/* Map column: legend + map */}
+          <div className="lg:w-1/2 xl:w-3/5 lg:sticky lg:top-6 flex flex-col gap-3">
+            <div className="text-xs text-muted-foreground space-y-1">
+              <p className="flex items-center gap-1.5">
+                Click the layers icon
+                <Layers className="size-3.5 shrink-0" aria-hidden="true" />
+                (top-right of the map) to:
+              </p>
+              <ul className="list-disc pl-5 space-y-0.5">
+                <li>Switch between Satellite and Street (2D) views</li>
+                <li>Toggle the Roads overlay on or off</li>
+              </ul>
+            </div>
+            <MapLegend />
+            <div className="isolate h-[40vh] min-h-[320px] lg:h-[calc(80vh-6rem)] rounded-sm border overflow-hidden">
+              {MapComponent ? (
+                <MapComponent
+                  entries={filteredAndSortedEntries}
+                  selectedId={selectedId}
+                  onPinClick={setSelectedId}
+                />
+              ) : (
+                <div className="h-full w-full flex items-center justify-center bg-muted text-muted-foreground">
+                  Loading map…
+                </div>
+              )}
+              <p className="sr-only">
+                Use Tab to navigate map pins. Arrow keys pan the map when
+                focused. Press Enter or Space on a card in the list to highlight
+                its pin.
+              </p>
+            </div>
           </div>
 
           {/* Cards panel */}

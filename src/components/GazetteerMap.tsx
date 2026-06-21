@@ -13,6 +13,8 @@ import type { GazetteerEntry } from '@/types/gazetteer'
 import { formatCoordinates } from '@/lib/formatCoordinates'
 import { formatElevation } from '@/lib/formatElevation'
 import boundaryData from '@/data/imrs-boundary.geojson'
+import riverData from '@/data/rio-grande.geojson'
+import roadData from '@/data/imrs-roads.geojson'
 
 const defaultIcon = L.divIcon({
   className: '',
@@ -54,6 +56,47 @@ const selectedIcon = L.divIcon({
   iconSize: [24, 24],
   iconAnchor: [12, 12],
   popupAnchor: [0, -12],
+})
+
+const starSvg = (size: number) => `<svg
+    width="${size}"
+    height="${size}"
+    viewBox="0 0 24 24"
+    fill="hsl(42, 85%, 55%)"
+    stroke="hsl(25, 20%, 15%)"
+    stroke-width="2"
+    stroke-linejoin="round"
+    style="filter: drop-shadow(0 1px 4px rgba(0,0,0,0.4));"
+  ><polygon points="12,2 15,9 22.5,9.5 16.5,14.5 18.5,22 12,17.5 5.5,22 7.5,14.5 1.5,9.5 9,9" /></svg>`
+
+const featuredIcon = L.divIcon({
+  className: '',
+  html: `<div style="
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  ">${starSvg(22)}</div>`,
+  iconSize: [24, 24],
+  iconAnchor: [12, 12],
+  popupAnchor: [0, -10],
+})
+
+const featuredSelectedIcon = L.divIcon({
+  className: '',
+  html: `<div style="
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px hsl(42, 85%, 55%, 0.4);
+  ">${starSvg(30)}</div>`,
+  iconSize: [32, 32],
+  iconAnchor: [16, 16],
+  popupAnchor: [0, -14],
 })
 
 const IMRS_CENTER: L.LatLngExpression = [30.77, -105.0]
@@ -126,6 +169,21 @@ export function GazetteerMap({
               url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
             />
           </LayersControl.BaseLayer>
+          <LayersControl.Overlay checked name="Roads">
+            <GeoJSON
+              data={roadData}
+              filter={(feature: GeoJSON.Feature) =>
+                feature.geometry.type === 'LineString' ||
+                feature.geometry.type === 'MultiLineString'
+              }
+              style={{
+                color: 'hsl(95, 70%, 50%)',
+                weight: 2,
+                opacity: 0.85,
+                dashArray: '5 4',
+              }}
+            />
+          </LayersControl.Overlay>
         </LayersControl>
         <GeoJSON
           data={boundaryData}
@@ -137,12 +195,28 @@ export function GazetteerMap({
             fillOpacity: 0.08,
           }}
         />
+        <GeoJSON
+          data={riverData}
+          style={{
+            color: 'hsl(205, 65%, 45%)',
+            weight: 3,
+            opacity: 0.85,
+          }}
+        />
         <FlyToSelected entries={entries} selectedId={selectedId} />
         {entriesWithCoords.map((entry) => (
           <Marker
             key={entry.id}
             position={[entry.latitude!, entry.longitude!]}
-            icon={entry.id === selectedId ? selectedIcon : defaultIcon}
+            icon={
+              entry.featured
+                ? entry.id === selectedId
+                  ? featuredSelectedIcon
+                  : featuredIcon
+                : entry.id === selectedId
+                  ? selectedIcon
+                  : defaultIcon
+            }
             title={entry.name}
             alt={entry.name}
             eventHandlers={{
