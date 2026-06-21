@@ -53,11 +53,16 @@ const Gazetteer = () => {
     }
   }, [selectedId])
 
+  // Clicking the already-selected entry toggles it off.
+  const toggleSelected = (id: string) =>
+    setSelectedId((prev) => (prev === id ? null : id))
+
   // On mobile, selecting a card drops the sheet to half height so the
-  // flown-to pin is visible above it.
+  // flown-to pin is visible above it; deselecting leaves the sheet as-is.
   const handleMobileSelect = (id: string) => {
-    setSelectedId(id)
-    setSnap(SHEET_MID)
+    const isSelecting = selectedId !== id
+    setSelectedId(isSelecting ? id : null)
+    if (isSelecting) setSnap(SHEET_MID)
   }
 
   // The mobile view is a full-screen map + sheet — lock page scroll so the
@@ -75,7 +80,7 @@ const Gazetteer = () => {
     <MapComponent
       entries={filteredAndSortedEntries}
       selectedId={selectedId}
-      onPinClick={setSelectedId}
+      onPinClick={toggleSelected}
     />
   ) : (
     <div className="h-full w-full flex items-center justify-center bg-muted text-muted-foreground">
@@ -163,7 +168,7 @@ const Gazetteer = () => {
                 entries={filteredAndSortedEntries}
                 totalCount={GAZETTEER_ENTRIES.length}
                 selectedId={selectedId}
-                onSelect={setSelectedId}
+                onSelect={toggleSelected}
                 cardRefs={cardRefs}
                 searchTerm={searchTerm}
               />
