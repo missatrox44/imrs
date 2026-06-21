@@ -13,6 +13,7 @@ import type { GazetteerEntry } from '@/types/gazetteer'
 import { formatCoordinates } from '@/lib/formatCoordinates'
 import { formatElevation } from '@/lib/formatElevation'
 import boundaryData from '@/data/imrs-boundary.geojson'
+import riverData from '@/data/rio-grande.geojson'
 
 const defaultIcon = L.divIcon({
   className: '',
@@ -176,6 +177,14 @@ export function GazetteerMap({
             opacity: 0.6,
             fillColor: 'hsl(35, 50%, 65%)',
             fillOpacity: 0.08,
+          }}
+        />
+        <GeoJSON
+          data={riverData}
+          style={{
+            color: 'hsl(205, 65%, 45%)',
+            weight: 3,
+            opacity: 0.85,
           }}
         />
         <FlyToSelected entries={entries} selectedId={selectedId} />
