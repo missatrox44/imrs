@@ -3,6 +3,7 @@ import { Monitor } from 'lucide-react'
 import WeatherFilterBar from './WeatherFilterBar'
 import WeatherStatCards from './WeatherStatCards'
 import WeatherTimeSeries from './WeatherTimeSeries'
+// import WeatherDataRequestDialog from './WeatherDataRequestDialog'
 import type { WeatherFilters } from '@/types/weather'
 import { Route } from '@/routes/weather'
 import { useWeatherDaily, useWeatherSummary } from '@/hooks/useWeatherData'
@@ -18,12 +19,15 @@ export default function WeatherDashboard() {
 
   return (
     <main className="container mx-auto px-4 py-8">
-      <div className="space-y-2 mb-8">
-        <h1 className="text-3xl font-semibold">Climate &amp; Weather</h1>
-        <p className="text-sm text-muted-foreground">
-          Hill Station &middot; Indio Mountains Research Station &middot;
-          2020&ndash;2024
-        </p>
+      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="space-y-2">
+          <h1 className="text-3xl font-semibold">Climate &amp; Weather</h1>
+          <p className="text-sm text-muted-foreground">
+            Hill Station &middot; Indio Mountains Research Station &middot;
+            2020&ndash;2024
+          </p>
+        </div>
+        {/* <WeatherDataRequestDialog /> */}
       </div>
 
       {isMobile && (

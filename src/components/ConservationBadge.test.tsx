@@ -42,4 +42,11 @@ describe('ConservationBadge', () => {
     render(<ConservationBadge rank={rank('natureserve-global', 'G5')} />)
     expect(screen.getByLabelText(/Secure/).className).toMatch(/bg-green-700/)
   })
+
+  it('uses the flag (teal) class for the binary SGCN designation', () => {
+    render(<ConservationBadge rank={rank('texas-sgcn', 'SGCN')} />)
+    expect(screen.getByLabelText(/Texas SGCN: Listed/).className).toMatch(
+      /bg-teal-700/,
+    )
+  })
 })

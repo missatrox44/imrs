@@ -29,4 +29,5 @@ export interface Species {
   natureserve_grank?: string
   natureserve_srank_tx?: string
   natureserve_id?: string
+  texas_sgcn?: string
 }

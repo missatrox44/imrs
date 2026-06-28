@@ -87,6 +87,22 @@ describe('normalizeRank', () => {
       'Presumed Extirpated',
     )
   })
+
+  it('maps Texas SGCN to a binary flag (severity 0, flag tier)', () => {
+    const rank = normalizeRank('texas-sgcn', 'SGCN')
+    expect(rank).toMatchObject({
+      source: 'texas-sgcn',
+      code: 'SGCN',
+      severity: 0,
+      tier: 'flag',
+      label: 'Listed',
+    })
+  })
+
+  it('returns null for an absent SGCN flag', () => {
+    expect(normalizeRank('texas-sgcn', null)).toBeNull()
+    expect(normalizeRank('texas-sgcn', '')).toBeNull()
+  })
 })
 
 describe('getConservationRanks', () => {
@@ -106,6 +122,13 @@ describe('getConservationRanks', () => {
     )
     expect(ranks).toHaveLength(1)
     expect(ranks[0].tier).toBe('unknown')
+  })
+
+  it('appends the SGCN flag in last position', () => {
+    const ranks = getConservationRanks(
+      speciesWith({ iucn_category: 'EN', texas_sgcn: 'SGCN' }),
+    )
+    expect(ranks.map((r) => r.source)).toEqual(['iucn', 'texas-sgcn'])
   })
 
   it('returns an empty array when there is no data', () => {
@@ -135,7 +158,18 @@ describe('getMostAtRiskRank', () => {
     ).toBeNull()
   })
 
+  it('omits secure (green) ranks from the grid badge', () => {
+    expect(getMostAtRiskRank(speciesWith({ iucn_category: 'LC' }))).toBeNull()
+    expect(
+      getMostAtRiskRank(speciesWith({ natureserve_grank: 'G5' })),
+    ).toBeNull()
+  })
+
   it('returns null when there is no evaluated rank', () => {
     expect(getMostAtRiskRank(speciesWith({}))).toBeNull()
+  })
+
+  it('ignores the binary SGCN flag (kept off the grid badge)', () => {
+    expect(getMostAtRiskRank(speciesWith({ texas_sgcn: 'SGCN' }))).toBeNull()
   })
 })

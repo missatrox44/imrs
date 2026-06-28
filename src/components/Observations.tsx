@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AudioLines, Calendar, MapPin, User } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { useInfiniteQuery } from '@tanstack/react-query'
@@ -22,7 +22,13 @@ import { getCategoryIcon } from '@/lib/getCategoryIcon'
 import { getPhotoUrl } from '@/lib/getPhotoUrl'
 import { getSoundUrl } from '@/lib/getSoundUrl'
 import { ObservationCardSkeleton } from '@/components/ObservationCardSkeleton'
-import { GC_TIME, PER_PAGE, SKELETON_COUNT, STALE_TIME } from '@/data/constants'
+import {
+  FIRST_OBSERVATION_YEAR,
+  GC_TIME,
+  PER_PAGE,
+  SKELETON_COUNT,
+  STALE_TIME,
+} from '@/data/constants'
 import { fetchObservations } from '@/lib/inat'
 import { GROUP_TO_TAXON_ID } from '@/types/taxon'
 
@@ -38,6 +44,22 @@ const GROUP_OPTIONS: Array<{ value: TaxonGroup; label: string }> = [
   { value: 'arachnid', label: 'Arachnids' },
 ]
 
+type MediaType = 'all' | 'photos' | 'audio'
+
+// Media filter temporarily hidden from the UI (see commented-out Select below).
+// const MEDIA_OPTIONS: Array<{ value: MediaType; label: string }> = [
+//   { value: 'all', label: 'All Media' },
+//   { value: 'photos', label: 'Photos' },
+//   { value: 'audio', label: 'Audio' },
+// ]
+
+// Stable, filter-independent descending year range for the Year dropdown.
+const CURRENT_YEAR = new Date().getFullYear()
+const YEAR_OPTIONS = Array.from(
+  { length: CURRENT_YEAR - FIRST_OBSERVATION_YEAR + 1 },
+  (_, i) => String(CURRENT_YEAR - i),
+)
+
 interface ObservationsPage {
   page: number
   per_page: number
@@ -50,19 +72,35 @@ interface ObservationsProps {
 
 const Observations = ({ initialPage }: ObservationsProps) => {
   const [selectedGroup, setSelectedGroup] = useState<TaxonGroup>('all')
+  // Media filter hidden from UI for now; stays wired into the query (always
+  // 'all') so re-enabling only means restoring the setter + the Select below.
+  const [mediaType] = useState<MediaType>('all')
+  const [selectedYear, setSelectedYear] = useState<string>('all')
+  const isUnfiltered =
+    selectedGroup === 'all' && mediaType === 'all' && selectedYear === 'all'
   const { ref, inView } = useInView({
     rootMargin: '200px',
   })
 
   const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } =
     useInfiniteQuery({
-      queryKey: ['observations'],
+      queryKey: ['observations', selectedGroup, mediaType, selectedYear],
 
       initialPageParam: 1,
 
       queryFn: async ({ pageParam, signal }) => {
         const response = await fetchObservations(
-          { page: pageParam, per_page: PER_PAGE },
+          {
+            page: pageParam,
+            per_page: PER_PAGE,
+            taxon_id:
+              selectedGroup === 'all'
+                ? undefined
+                : GROUP_TO_TAXON_ID[selectedGroup],
+            photos: mediaType === 'photos' ? true : undefined,
+            sounds: mediaType === 'audio' ? true : undefined,
+            year: selectedYear === 'all' ? undefined : selectedYear,
+          },
           signal,
         )
 
@@ -75,11 +113,12 @@ const Observations = ({ initialPage }: ObservationsProps) => {
         }
       },
 
-      // Seed page 1 from SSR loader
-      initialData: {
-        pages: [initialPage],
-        pageParams: [1],
-      },
+      // Seed page 1 from SSR loader — only for the unfiltered view, so filtered
+      // queries fetch fresh from the API rather than reusing the seeded page.
+      // Function form keeps `data` typed as possibly undefined (it is, while a
+      // filtered query loads its first page).
+      initialData: () =>
+        isUnfiltered ? { pages: [initialPage], pageParams: [1] } : undefined,
 
       getNextPageParam: (lastPage) => {
         const loaded = lastPage.page * lastPage.per_page
@@ -93,8 +132,9 @@ const Observations = ({ initialPage }: ObservationsProps) => {
       gcTime: GC_TIME,
     })
 
-  // flatten pages
-  const observations = data.pages.flatMap((page) => page.results)
+  // flatten pages (data is undefined while a freshly-filtered query loads)
+  const observations = data?.pages.flatMap((page) => page.results) ?? []
+  const totalResults = data?.pages[0]?.total_results ?? 0
 
   // Infinite scroll trigger
   useEffect(() => {
@@ -103,20 +143,8 @@ const Observations = ({ initialPage }: ObservationsProps) => {
     }
   }, [inView, hasNextPage, isFetching, fetchNextPage])
 
-  const filteredObservations = useMemo(() => {
-    if (selectedGroup === 'all') return observations
-
-    const targetTaxonId = GROUP_TO_TAXON_ID[selectedGroup]
-    if (!targetTaxonId) return observations
-
-    return observations.filter((obs) => {
-      // Check if observation's taxon hierarchy includes the target group
-      const taxonIds = obs.taxon?.ancestor_ids || []
-      return taxonIds.includes(targetTaxonId)
-    })
-  }, [observations, selectedGroup])
-
-  if (!observations.length) {
+  // Genuinely empty feed (no filters applied) → friendly empty state.
+  if (isUnfiltered && !isFetching && observations.length === 0) {
     return <EmptyState />
   }
 
@@ -143,169 +171,227 @@ const Observations = ({ initialPage }: ObservationsProps) => {
           </p>
         </section>
 
-        <div className="sticky top-16 z-40 bg-background py-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          {selectedGroup !== 'all' ? (
+        <div className="sticky top-16 z-40 bg-background py-4 flex flex-col gap-3">
+          {!isUnfiltered && (
             <span
               className="text-sm text-muted-foreground"
               role="status"
               aria-live="polite"
             >
-              Showing {filteredObservations.length} of {observations.length}{' '}
-              observations
+              Showing {totalResults} matching observations
             </span>
-          ) : (
-            <span />
           )}
 
-          <Select
-            value={selectedGroup}
-            onValueChange={(value) => setSelectedGroup(value as TaxonGroup)}
-          >
-            <SelectTrigger
-              aria-label="Filter by group"
-              className="w-48 cursor-pointer"
+          <div className="flex flex-row gap-2 sm:flex-wrap sm:items-center">
+            <Select
+              value={selectedGroup}
+              onValueChange={(value) => setSelectedGroup(value as TaxonGroup)}
             >
-              <SelectValue placeholder="Filter by group" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Groups</SelectItem>
-              {GROUP_OPTIONS.map(({ value, label }) => (
-                <SelectItem key={value} value={value}>
-                  <span className="flex items-center gap-2">
-                    {getCategoryIcon(value)}
+              <SelectTrigger
+                aria-label="Filter by group"
+                className="flex-1 cursor-pointer sm:w-48 sm:flex-none"
+              >
+                <SelectValue placeholder="Filter by group" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Groups</SelectItem>
+                {GROUP_OPTIONS.map(({ value, label }) => (
+                  <SelectItem key={value} value={value}>
+                    <span className="flex items-center gap-2">
+                      {getCategoryIcon(value)}
+                      {label}
+                    </span>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            {/* Media filter temporarily hidden from the UI (kept for re-enabling):
+            <Select
+              value={mediaType}
+              onValueChange={(value) => setMediaType(value as MediaType)}
+            >
+              <SelectTrigger
+                aria-label="Filter by media type"
+                className="flex-1 cursor-pointer sm:w-48 sm:flex-none"
+              >
+                <SelectValue placeholder="Filter by media type" />
+              </SelectTrigger>
+              <SelectContent>
+                {MEDIA_OPTIONS.map(({ value, label }) => (
+                  <SelectItem key={value} value={value}>
                     {label}
-                  </span>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            */}
+
+            <Select value={selectedYear} onValueChange={setSelectedYear}>
+              <SelectTrigger
+                aria-label="Filter by year"
+                className="flex-1 cursor-pointer sm:w-48 sm:flex-none"
+              >
+                <SelectValue placeholder="Filter by year" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Years</SelectItem>
+                {YEAR_OPTIONS.map((year) => (
+                  <SelectItem key={year} value={year}>
+                    {year}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
         <section>
-          <ul className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredObservations.map((observation) => {
-              const photoUrl = getPhotoUrl(observation.photos)
-              const sound = getSoundUrl(observation.sounds)
-              const label =
-                observation.species_guess ||
-                observation.taxon?.preferred_common_name ||
-                `observation #${observation.id}`
+          {observations.length === 0 ? (
+            isFetching ? (
+              <ul className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {Array.from({ length: SKELETON_COUNT }).map((_, i) => (
+                  <li key={`skeleton-${i}`}>
+                    <ObservationCardSkeleton />
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p
+                className="py-12 text-center text-muted-foreground"
+                role="status"
+              >
+                No observations match these filters.
+              </p>
+            )
+          ) : (
+            <ul className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {observations.map((observation) => {
+                const photoUrl = getPhotoUrl(observation.photos)
+                const sound = getSoundUrl(observation.sounds)
+                const label =
+                  observation.species_guess ||
+                  observation.taxon?.preferred_common_name ||
+                  `observation #${observation.id}`
 
-              return (
-                <li key={observation.id}>
-                  <Card className="h-full flex flex-col gradient-card shadow-card hover:shadow-hover transition-all duration-300 overflow-hidden">
-                    <Link
-                      to={observation.uri || '#'}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex flex-1 flex-col"
-                    >
-                      <span className="sr-only">
-                        {observation.species_guess ||
-                          observation.taxon?.preferred_common_name ||
-                          'Observation'}{' '}
-                        (opens in new tab)
-                      </span>
-                      {photoUrl ? (
-                        <div className="aspect-square overflow-hidden">
-                          <img
-                            src={photoUrl}
-                            alt={
-                              observation.species_guess ||
-                              observation.taxon?.preferred_common_name ||
-                              observation.taxon?.name ||
-                              `Observation #${observation.id}`
-                            }
-                            loading="lazy"
-                            decoding="async"
-                            width={500}
-                            height={500}
-                            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                            onError={(e) => {
-                              ;(e.target as HTMLImageElement).style.display =
-                                'none'
-                            }}
-                          />
-                        </div>
-                      ) : (
-                        sound && (
-                          <div className="aspect-square flex items-center justify-center bg-muted">
-                            <AudioLines
-                              className="size-16 text-muted-foreground"
-                              aria-hidden="true"
-                            />
-                          </div>
-                        )
-                      )}
-
-                      <CardHeader className="pb-3 space-y-1">
-                        <h2 className="font-semibold text-foreground line-clamp-2">
+                return (
+                  <li key={observation.id}>
+                    <Card className="h-full flex flex-col gradient-card shadow-card hover:shadow-hover transition-all duration-300 overflow-hidden">
+                      <Link
+                        to={observation.uri || '#'}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex flex-1 flex-col"
+                      >
+                        <span className="sr-only">
                           {observation.species_guess ||
                             observation.taxon?.preferred_common_name ||
-                            'Unknown Species'}
-                        </h2>
-
-                        {observation.taxon?.name && (
-                          <p className="italic text-sm text-muted-foreground line-clamp-1">
-                            {observation.taxon.name}
-                          </p>
+                            'Observation'}{' '}
+                          (opens in new tab)
+                        </span>
+                        {photoUrl ? (
+                          <div className="aspect-square overflow-hidden">
+                            <img
+                              src={photoUrl}
+                              alt={
+                                observation.species_guess ||
+                                observation.taxon?.preferred_common_name ||
+                                observation.taxon?.name ||
+                                `Observation #${observation.id}`
+                              }
+                              loading="lazy"
+                              decoding="async"
+                              width={500}
+                              height={500}
+                              className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                              onError={(e) => {
+                                ;(e.target as HTMLImageElement).style.display =
+                                  'none'
+                              }}
+                            />
+                          </div>
+                        ) : (
+                          sound && (
+                            <div className="aspect-square flex items-center justify-center bg-muted">
+                              <AudioLines
+                                className="size-16 text-muted-foreground"
+                                aria-hidden="true"
+                              />
+                            </div>
+                          )
                         )}
-                      </CardHeader>
 
-                      <CardContent className="space-y-3 mt-auto">
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <User className="size-4" />
-                          <span>{observation.user?.login || 'Anonymous'}</span>
-                        </div>
+                        <CardHeader className="pb-3 space-y-1">
+                          <h2 className="font-semibold text-foreground line-clamp-2">
+                            {observation.species_guess ||
+                              observation.taxon?.preferred_common_name ||
+                              'Unknown Species'}
+                          </h2>
 
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <Calendar className="size-4" />
-                          <span>
-                            {formatDate(observation.observed_on_string)}
-                          </span>
-                        </div>
+                          {observation.taxon?.name && (
+                            <p className="italic text-sm text-muted-foreground line-clamp-1">
+                              {observation.taxon.name}
+                            </p>
+                          )}
+                        </CardHeader>
 
-                        {observation.place_guess && (
+                        <CardContent className="space-y-3 mt-auto">
                           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <MapPin className="size-4" />
-                            <span className="line-clamp-1">
-                              {observation.place_guess}
+                            <User className="size-4" />
+                            <span>
+                              {observation.user?.login || 'Anonymous'}
                             </span>
                           </div>
-                        )}
 
-                        <Badge variant="secondary" className="w-fit">
-                          ID #{observation.id}
-                        </Badge>
-                      </CardContent>
-                    </Link>
+                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <Calendar className="size-4" />
+                            <span>
+                              {formatDate(observation.observed_on_string)}
+                            </span>
+                          </div>
 
-                    {sound && (
-                      <div className="px-6 pb-4">
-                        {/* iNaturalist sound recordings ship no caption track;
+                          {observation.place_guess && (
+                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                              <MapPin className="size-4" />
+                              <span className="line-clamp-1">
+                                {observation.place_guess}
+                              </span>
+                            </div>
+                          )}
+
+                          <Badge variant="secondary" className="w-fit">
+                            ID #{observation.id}
+                          </Badge>
+                        </CardContent>
+                      </Link>
+
+                      {sound && (
+                        <div className="px-6 pb-4">
+                          {/* iNaturalist sound recordings ship no caption track;
                             the aria-label below provides the accessible name. */}
-                        {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-                        <audio
-                          controls
-                          preload="none"
-                          className="w-full"
-                          aria-label={`Audio recording for ${label}`}
-                        >
-                          <source src={sound.url} type={sound.type} />
-                        </audio>
-                      </div>
-                    )}
-                  </Card>
-                </li>
-              )
-            })}
+                          {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+                          <audio
+                            controls
+                            preload="none"
+                            className="w-full"
+                            aria-label={`Audio recording for ${label}`}
+                          >
+                            <source src={sound.url} type={sound.type} />
+                          </audio>
+                        </div>
+                      )}
+                    </Card>
+                  </li>
+                )
+              })}
 
-            {isFetchingNextPage &&
-              Array.from({ length: SKELETON_COUNT }).map((_, i) => (
-                <li key={`skeleton-${i}`}>
-                  <ObservationCardSkeleton />
-                </li>
-              ))}
-          </ul>
+              {isFetchingNextPage &&
+                Array.from({ length: SKELETON_COUNT }).map((_, i) => (
+                  <li key={`skeleton-${i}`}>
+                    <ObservationCardSkeleton />
+                  </li>
+                ))}
+            </ul>
+          )}
 
           {isFetchingNextPage && (
             <span className="sr-only" role="status">

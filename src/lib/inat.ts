@@ -66,8 +66,11 @@ interface FetchObservationsParams {
   page?: number
   per_page?: number
   taxon_name?: string
+  taxon_id?: number
   place_id?: string
   photos?: boolean
+  sounds?: boolean
+  year?: string
 }
 
 export async function fetchObservations(
@@ -88,8 +91,17 @@ export async function fetchObservations(
     url.searchParams.set('order', ORDER)
     url.searchParams.set('order_by', ORDER_BY)
   }
+  if (params.taxon_id != null) {
+    url.searchParams.set('taxon_id', String(params.taxon_id))
+  }
   if (params.photos) {
     url.searchParams.set('photos', 'true')
+  }
+  if (params.sounds) {
+    url.searchParams.set('sounds', 'true')
+  }
+  if (params.year) {
+    url.searchParams.set('year', params.year)
   }
   url.searchParams.set('per_page', String(params.per_page ?? PER_PAGE))
   if (params.page != null) {

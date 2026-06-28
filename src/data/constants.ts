@@ -30,6 +30,9 @@ export const SKELETON_COUNT = 8
 export const PLACE_ID = '225419'
 export const ORDER = 'desc'
 export const ORDER_BY = 'observed_on'
+// Floor for the observations Year filter (iNaturalist's inception year), so no
+// real observation year is ever excluded from the dropdown.
+export const FIRST_OBSERVATION_YEAR = 2008
 export const STALE_TIME = 1000 * 60 * 60 * 24 * 30 // 30 days
 export const GC_TIME = 1000 * 60 * 60 * 24 * 60 // 60 days
 
