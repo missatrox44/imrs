@@ -34,9 +34,12 @@ const SpeciesCard = memo(function SpeciesCard({ item }: { item: Species }) {
     setActive(false)
   }
 
-  useEffect(() => () => {
-    if (timerRef.current) clearTimeout(timerRef.current)
-  }, [])
+  useEffect(
+    () => () => {
+      if (timerRef.current) clearTimeout(timerRef.current)
+    },
+    [],
+  )
 
   const { url } = useSpeciesHoverImage(item, active)
   const onPhoto = active && !!url
