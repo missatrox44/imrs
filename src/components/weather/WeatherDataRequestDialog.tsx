@@ -1,6 +1,6 @@
 import { useId, useState } from 'react'
 import { z } from 'zod'
-import { Download } from 'lucide-react'
+import { Download, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -184,6 +184,7 @@ export default function WeatherDataRequestDialog() {
   const [values, setValues] = useState(initialValues)
   const [touched, setTouched] = useState<Record<string, boolean>>({})
   const [status, setStatus] = useState<SubmitStatus>('idle')
+  const [errorMessage, setErrorMessage] = useState('')
 
   const parsed = requestSchema.safeParse(values)
   const isValid = parsed.success
@@ -244,6 +245,7 @@ export default function WeatherDataRequestDialog() {
     setValues(initialValues)
     setTouched({})
     setStatus('idle')
+    setErrorMessage('')
   }
 
   async function handleSubmit(event: React.FormEvent) {
@@ -252,6 +254,13 @@ export default function WeatherDataRequestDialog() {
 
     const formId = import.meta.env.VITE_FORMSPREE_FORM_ID
     if (!formId) {
+      console.error(
+        'WeatherDataRequestDialog: VITE_FORMSPREE_FORM_ID is not set. ' +
+          'Set it in .env.local and restart the dev server to enable submissions.',
+      )
+      setErrorMessage(
+        'This form is not set up correctly yet, so requests cannot be sent. Please contact the site administrator.',
+      )
       setStatus('error')
       return
     }
@@ -270,11 +279,17 @@ export default function WeatherDataRequestDialog() {
           submittedAt: new Date().toISOString(),
         }),
       })
-      if (!response.ok) throw new Error('Request failed')
+      if (!response.ok) {
+        throw new Error(`Formspree responded with status ${response.status}`)
+      }
       setStatus('success')
       setValues(initialValues)
       setTouched({})
-    } catch {
+    } catch (error) {
+      console.error('WeatherDataRequestDialog: failed to send request', error)
+      setErrorMessage(
+        'Something went wrong sending your request. Please check your connection and try again.',
+      )
       setStatus('error')
     }
   }
@@ -297,10 +312,12 @@ export default function WeatherDataRequestDialog() {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Request raw weather data</DialogTitle>
-          <DialogDescription>
-            Tell us a bit about you and the data you need. We&rsquo;ll follow up
-            by email.
-          </DialogDescription>
+          {status !== 'success' && (
+            <DialogDescription>
+              Tell us a bit about you and the data you need. We&rsquo;ll follow
+              up by email.
+            </DialogDescription>
+          )}
         </DialogHeader>
 
         {status === 'success' ? (
@@ -655,8 +672,7 @@ export default function WeatherDataRequestDialog() {
 
               {status === 'error' && (
                 <p role="alert" className="text-sm text-destructive">
-                  Something went wrong sending your request. Please try again
-                  later.
+                  {errorMessage}
                 </p>
               )}
             </div>
@@ -667,7 +683,14 @@ export default function WeatherDataRequestDialog() {
                 disabled={status === 'submitting' || !isValid}
                 className="cursor-pointer"
               >
-                {status === 'submitting' ? 'Sending…' : 'Send request'}
+                {status === 'submitting' ? (
+                  <>
+                    <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+                    Sending…
+                  </>
+                ) : (
+                  'Send request'
+                )}
               </Button>
             </DialogFooter>
           </form>
