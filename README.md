@@ -177,11 +177,12 @@ that fetches conservation status from two free sources:
   NatureServe only and skips IUCN.
 
 A third source, **Texas SGCN** (Species of Greatest Conservation Need), comes
-from the TPWD State Wildlife Action Plan. TPWD has no public API, so its list
-ships as a static CSV at `src/data/tpwd-sgcn-list.csv` and is seeded by a
-separate script that flags the `texas_sgcn` column for any specimen whose
-binomial matches the list. SGCN is binary (listed / not listed), so it renders
-as a flag badge rather than a 1–5 rank.
+from the TPWD State Wildlife Action Plan. TPWD has no public API, so you must
+supply its list as a local CSV at `src/data/tpwd-sgcn-list.csv` (git-ignored, not
+committed — a fresh clone won't have it). It's then seeded by a separate script
+that flags the `texas_sgcn` column for any specimen whose binomial matches the
+list. SGCN is binary (listed / not listed), so it renders as a flag badge rather
+than a 1–5 rank.
 
 These calls happen only at seed time — the app makes no external conservation
 requests at runtime. The scripts add their columns idempotently (so they're safe

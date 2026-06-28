@@ -4,8 +4,9 @@
  *
  * Unlike NatureServe and IUCN (seeded from live APIs by seed-conservation.ts),
  * the Texas Parks & Wildlife Department (TPWD) State Wildlife Action Plan SGCN
- * list has no public API, so it ships as a static CSV checked into the repo at
- * src/data/tpwd-sgcn-list.csv. This script adds a nullable `texas_sgcn` column
+ * list has no public API. The operator must supply it as a local CSV at
+ * src/data/tpwd-sgcn-list.csv (git-ignored, not committed — a fresh clone won't
+ * have it). This script adds a nullable `texas_sgcn` column
  * to the existing `specimens` table and sets it to 'SGCN' for every specimen
  * whose binomial (genus + species) exactly matches a name on the list.
  *
