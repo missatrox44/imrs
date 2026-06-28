@@ -158,6 +158,13 @@ describe('getMostAtRiskRank', () => {
     ).toBeNull()
   })
 
+  it('omits secure (green) ranks from the grid badge', () => {
+    expect(getMostAtRiskRank(speciesWith({ iucn_category: 'LC' }))).toBeNull()
+    expect(
+      getMostAtRiskRank(speciesWith({ natureserve_grank: 'G5' })),
+    ).toBeNull()
+  })
+
   it('returns null when there is no evaluated rank', () => {
     expect(getMostAtRiskRank(speciesWith({}))).toBeNull()
   })

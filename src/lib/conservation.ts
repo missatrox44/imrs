@@ -191,14 +191,17 @@ export function getConservationRanks(
 }
 
 /**
- * The most at-risk evaluated rank, for the grid card badge. Lowest severity
- * (≥ 1) wins; ties break by source order (IUCN > Global > Texas). Returns null
- * when the species has no evaluated rank, so cards aren't littered with gray
- * "not evaluated" badges.
+ * The most at-risk evaluated rank, for the grid card badge. Only ranks of
+ * conservation concern qualify (severity 1–3: critical/high/moderate); secure
+ * "green" ranks (severity 4–5) and not-evaluated ranks (severity 0) are
+ * intentionally omitted so grid cards highlight only at-risk species. Lowest
+ * severity wins; ties break by source order (IUCN > Global > Texas). Returns
+ * null when the species has no at-risk rank. The full set of ranks, green
+ * included, is still shown on the detail page via getConservationRanks.
  */
 export function getMostAtRiskRank(species: Species): ConservationRank | null {
   const ranked = getConservationRanks(species).filter(
-    (rank) => rank.severity >= 1,
+    (rank) => rank.severity >= 1 && rank.severity <= 3,
   )
   if (ranked.length === 0) return null
   return ranked.reduce((worst, rank) =>
