@@ -86,3 +86,32 @@ export function pickLatestIucnCategory(
   const latest = assessments.find((a) => a.latest) ?? assessments[0]
   return latest.red_list_category_code ?? null
 }
+
+// --- Texas SGCN (static TPWD State Wildlife Action Plan list) ---
+
+/**
+ * Parse the lowercased binomial scientific names from the TPWD SGCN CSV.
+ *
+ * The CSV header is `taxonomic_group,scientific_name,...` — only column 2
+ * (`scientific_name`) is needed, and neither it nor column 1 contains embedded
+ * commas (the only messy quoted field, `general_habitat`, is last), so a plain
+ * comma split taking index 1 is safe. The header row is skipped.
+ */
+export function parseSgcnBinomials(csvText: string): Set<string> {
+  const names = new Set<string>()
+  const lines = csvText.split(/\r?\n/)
+  for (const line of lines.slice(1)) {
+    const name = line.split(',')[1]?.trim().toLowerCase()
+    if (name) names.add(name)
+  }
+  return names
+}
+
+/** Whether a genus + species is on the SGCN list (exact binomial match). */
+export function isSgcnListed(
+  genus: string,
+  species: string,
+  listed: Set<string>,
+): boolean {
+  return listed.has(`${genus.trim()} ${species.trim()}`.toLowerCase())
+}

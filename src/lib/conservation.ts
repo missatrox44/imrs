@@ -11,12 +11,14 @@ export type ConservationSource =
   | 'iucn'
   | 'natureserve-global'
   | 'natureserve-tx'
+  | 'texas-sgcn'
 
 export type ConservationTier =
   | 'critical'
   | 'high'
   | 'moderate'
   | 'secure'
+  | 'flag'
   | 'unknown'
 
 export interface ConservationRank {
@@ -34,6 +36,7 @@ export const SOURCE_LABELS: Record<ConservationSource, string> = {
   iucn: 'IUCN Red List',
   'natureserve-global': 'NatureServe Global',
   'natureserve-tx': 'NatureServe (Texas)',
+  'texas-sgcn': 'Texas SGCN',
 }
 
 function severityToTier(severity: number): ConservationTier {
@@ -145,21 +148,36 @@ function normalizeIucn(raw: string): ConservationRank | null {
   }
 }
 
+// Texas SGCN is a binary designation (a species is on the State Wildlife Action
+// Plan list or it isn't), so it doesn't fit the 1–5 severity scale. It gets its
+// own `flag` tier with severity 0, which keeps it off the grid's most-at-risk
+// badge (filtered to severity ≥ 1) while still rendering on the detail page.
+function normalizeSgcn(): ConservationRank {
+  return {
+    source: 'texas-sgcn',
+    code: 'SGCN',
+    severity: 0,
+    tier: 'flag',
+    label: 'Listed',
+  }
+}
+
 /** Normalize a single raw code, or null if absent/unrecognized. */
 export function normalizeRank(
   source: ConservationSource,
   code: string | null | undefined,
 ): ConservationRank | null {
   if (code == null || code.trim() === '') return null
-  return source === 'iucn'
-    ? normalizeIucn(code)
-    : normalizeNatureServe(source, code)
+  if (source === 'iucn') return normalizeIucn(code)
+  if (source === 'texas-sgcn') return normalizeSgcn()
+  return normalizeNatureServe(source, code)
 }
 
 /**
  * All available ranks for a species, in fixed display order
- * (IUCN → NatureServe Global → NatureServe Texas). Includes "not evaluated"
- * ranks (informative on the detail page); absent fields are skipped.
+ * (IUCN → NatureServe Global → NatureServe Texas → Texas SGCN). Includes
+ * "not evaluated" ranks (informative on the detail page); absent fields are
+ * skipped.
  */
 export function getConservationRanks(
   species: Species,
@@ -168,6 +186,7 @@ export function getConservationRanks(
     normalizeRank('iucn', species.iucn_category),
     normalizeRank('natureserve-global', species.natureserve_grank),
     normalizeRank('natureserve-tx', species.natureserve_srank_tx),
+    normalizeRank('texas-sgcn', species.texas_sgcn),
   ].filter((rank): rank is ConservationRank => rank !== null)
 }
 

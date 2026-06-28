@@ -15,7 +15,7 @@ The **IMRS Biodiversity Explorer** turns that handbook into a living, interactiv
 ## Features
 
 - **Species Catalog** — search and filter every species ever recorded at the station, in a visual grid or a detailed table.
-- **Conservation Status** — at-a-glance badges show how each species is doing, drawn from NatureServe and the IUCN Red List.
+- **Conservation Status** — at-a-glance badges show how each species is doing, drawn from NatureServe, the IUCN Red List, and the Texas SGCN (Species of Greatest Conservation Need) list.
 - **Recent Observations** — Real-time integration with the **iNaturalist API** to display the latest confirmed sightings at IMRS
 - **Climate & Weather** — five years (2020–2024) of the station's weather, charted and filterable by year and season.
 - **Gazetteer** — an interactive map of the named places across the station.
@@ -129,7 +129,8 @@ CREATE TABLE specimens (
   iucn_category TEXT,
   natureserve_grank TEXT,
   natureserve_srank_tx TEXT,
-  natureserve_id TEXT
+  natureserve_id TEXT,
+  texas_sgcn TEXT
 );
 
 # Import Data (ensure specimens.tsv is in root)
@@ -166,8 +167,8 @@ turso db import imrs-species.db
 
 ### 3. Conservation Status
 
-The four `iucn_category` / `natureserve_*` columns are populated by a seed
-script that fetches conservation status from two free sources:
+The `iucn_category` / `natureserve_*` columns are populated by a seed script
+that fetches conservation status from two free sources:
 
 - **NatureServe Explorer** — no API key. Provides the global G-rank and the
   Texas subnational S-rank.
@@ -175,14 +176,24 @@ script that fetches conservation status from two free sources:
   `IUCN_API_TOKEN` in `.env.local`. If it's omitted, the script seeds
   NatureServe only and skips IUCN.
 
+A third source, **Texas SGCN** (Species of Greatest Conservation Need), comes
+from the TPWD State Wildlife Action Plan. TPWD has no public API, so its list
+ships as a static CSV at `src/data/tpwd-sgcn-list.csv` and is seeded by a
+separate script that flags the `texas_sgcn` column for any specimen whose
+binomial matches the list. SGCN is binary (listed / not listed), so it renders
+as a flag badge rather than a 1–5 rank.
+
 These calls happen only at seed time — the app makes no external conservation
-requests at runtime. The script adds the columns idempotently (so it's safe on
-an existing DB) and is resumable (it skips species that already have data; pass
-`--force` to reprocess all).
+requests at runtime. The scripts add their columns idempotently (so they're safe
+on an existing DB); `seed-conservation.ts` is resumable (it skips species that
+already have data; pass `--force` to reprocess all).
 
 ```bash
 # Seed the local DB (NatureServe + IUCN)
 IUCN_API_TOKEN=your_token npx tsx scripts/seed-conservation.ts
+
+# Seed the Texas SGCN flag (no token needed)
+npx tsx scripts/seed-sgcn.ts
 ```
 
 To propagate the seeded data to the **existing** production Turso DB, update it
@@ -197,7 +208,8 @@ DB and apply it with `turso db shell`:
   echo "ALTER TABLE specimens ADD COLUMN natureserve_grank TEXT;"
   echo "ALTER TABLE specimens ADD COLUMN natureserve_srank_tx TEXT;"
   echo "ALTER TABLE specimens ADD COLUMN natureserve_id TEXT;"
-  sqlite3 imrs-species.db "SELECT 'UPDATE specimens SET iucn_category='||quote(iucn_category)||', natureserve_grank='||quote(natureserve_grank)||', natureserve_srank_tx='||quote(natureserve_srank_tx)||', natureserve_id='||quote(natureserve_id)||' WHERE id='||id||';' FROM specimens WHERE iucn_category IS NOT NULL OR natureserve_grank IS NOT NULL OR natureserve_srank_tx IS NOT NULL OR natureserve_id IS NOT NULL;"
+  echo "ALTER TABLE specimens ADD COLUMN texas_sgcn TEXT;"
+  sqlite3 imrs-species.db "SELECT 'UPDATE specimens SET iucn_category='||quote(iucn_category)||', natureserve_grank='||quote(natureserve_grank)||', natureserve_srank_tx='||quote(natureserve_srank_tx)||', natureserve_id='||quote(natureserve_id)||', texas_sgcn='||quote(texas_sgcn)||' WHERE id='||id||';' FROM specimens WHERE iucn_category IS NOT NULL OR natureserve_grank IS NOT NULL OR natureserve_srank_tx IS NOT NULL OR natureserve_id IS NOT NULL OR texas_sgcn IS NOT NULL;"
 } > conservation-updates.sql
 
 # Apply to the production DB (the ALTERs are one-time; ignore "duplicate column" if re-running)
@@ -208,8 +220,9 @@ rm conservation-updates.sql
 > The columns must exist in production for the badges to render. If one is
 > missing the app degrades gracefully (no badge) — it does not error.
 
-Conservation data courtesy of [NatureServe Explorer](https://explorer.natureserve.org/)
-and the [IUCN Red List](https://www.iucnredlist.org/).
+Conservation data courtesy of [NatureServe Explorer](https://explorer.natureserve.org/),
+the [IUCN Red List](https://www.iucnredlist.org/), and the
+[Texas Parks & Wildlife SGCN list](https://tpwd.texas.gov/wildlife/wildlife-diversity/swap/sgcn/).
 
 ---
 

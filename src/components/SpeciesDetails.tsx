@@ -378,8 +378,8 @@ export function SpeciesDetails() {
                 <CardHeader>
                   <CardTitle as="h2">Species Status</CardTitle>
                   <CardDescription>
-                    Conservation assessments. Source: NatureServe Explorer and
-                    the IUCN Red List.
+                    Conservation assessments. Source: NatureServe Explorer, the
+                    IUCN Red List, and Texas Parks &amp; Wildlife (SGCN).
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">

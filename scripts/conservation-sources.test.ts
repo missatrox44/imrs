@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest'
 import {
   extractNatureServe,
   findNatureServeMatch,
+  isSgcnListed,
+  parseSgcnBinomials,
   pickLatestIucnCategory,
   pickTexasSRank,
 } from './conservation-sources'
@@ -98,5 +100,37 @@ describe('pickLatestIucnCategory', () => {
   it('returns null for empty or missing assessments', () => {
     expect(pickLatestIucnCategory([])).toBeNull()
     expect(pickLatestIucnCategory(undefined)).toBeNull()
+  })
+})
+
+describe('parseSgcnBinomials', () => {
+  // A trailing quoted habitat field with embedded commas must not corrupt the
+  // scientific_name read (column 2 always precedes it).
+  const CSV = [
+    'taxonomic_group,scientific_name,common_name,federal_status,general_habitat',
+    'Amphibians,Anaxyrus houstonensis,Houston toad,E,"Forests, dunes, and pools"',
+    'Mammals,Corynorhinus townsendii,Townsend’s big-eared bat,Not Listed,"Caves, mines"',
+    '',
+  ].join('\n')
+
+  it('reads lowercased binomials from column 2, skipping the header', () => {
+    const names = parseSgcnBinomials(CSV)
+    expect(names.has('anaxyrus houstonensis')).toBe(true)
+    expect(names.has('corynorhinus townsendii')).toBe(true)
+    expect(names.has('scientific_name')).toBe(false)
+    expect(names.size).toBe(2)
+  })
+})
+
+describe('isSgcnListed', () => {
+  const listed = new Set(['corynorhinus townsendii'])
+
+  it('matches a binomial exactly, case- and whitespace-insensitive', () => {
+    expect(isSgcnListed('Corynorhinus', 'townsendii', listed)).toBe(true)
+    expect(isSgcnListed(' corynorhinus ', ' TOWNSENDII ', listed)).toBe(true)
+  })
+
+  it('does not match an absent binomial', () => {
+    expect(isSgcnListed('Canis', 'lupus', listed)).toBe(false)
   })
 })

@@ -10,6 +10,7 @@ const TIER_CLASSES: Record<ConservationTier, string> = {
   high: 'border-transparent bg-orange-600 text-white',
   moderate: 'border-transparent bg-amber-500 text-amber-950',
   secure: 'border-transparent bg-green-700 text-white',
+  flag: 'border-transparent bg-teal-700 text-white',
   unknown: 'border-transparent bg-gray-400 text-gray-900',
 }
 

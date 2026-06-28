@@ -41,5 +41,6 @@ export function rowToSpecies(row: Record<string, unknown>): Species | null {
     natureserve_grank: row.natureserve_grank as string | undefined,
     natureserve_srank_tx: row.natureserve_srank_tx as string | undefined,
     natureserve_id: row.natureserve_id as string | undefined,
+    texas_sgcn: row.texas_sgcn as string | undefined,
   }
 }
