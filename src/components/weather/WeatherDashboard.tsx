@@ -3,7 +3,7 @@ import { Monitor } from 'lucide-react'
 import WeatherFilterBar from './WeatherFilterBar'
 import WeatherStatCards from './WeatherStatCards'
 import WeatherTimeSeries from './WeatherTimeSeries'
-import WeatherDataRequestDialog from './WeatherDataRequestDialog'
+// import WeatherDataRequestDialog from './WeatherDataRequestDialog'
 import type { WeatherFilters } from '@/types/weather'
 import { Route } from '@/routes/weather'
 import { useWeatherDaily, useWeatherSummary } from '@/hooks/useWeatherData'
@@ -27,7 +27,7 @@ export default function WeatherDashboard() {
             2020&ndash;2024
           </p>
         </div>
-        <WeatherDataRequestDialog />
+        {/* <WeatherDataRequestDialog /> */}
       </div>
 
       {isMobile && (
