@@ -143,7 +143,7 @@ function SelectItem({
     <SelectPrimitive.Item
       ref={ref}
       className={cn(
-        'relative flex w-full cursor-default select-none items-center py-1.5 pl-2 pr-8 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+        'relative flex w-full cursor-pointer select-none items-center py-1.5 pl-2 pr-8 text-sm outline-none hover:bg-accent data-[highlighted]:bg-accent focus:bg-accent data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
         className,
       )}
       {...props}

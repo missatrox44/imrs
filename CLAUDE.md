@@ -55,6 +55,8 @@ Prettier enforced: no semicolons, single quotes, trailing commas.
 
 Env vars live in `.env.local` (the dev server loads it automatically). Both local and production require `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` — `getTurso()` throws if either is missing. For local data, set `TURSO_DATABASE_URL=file:imrs-species.db` with any non-empty `TURSO_AUTH_TOKEN` (required but ignored for `file:` URLs).
 
+The weather-data request form (`WeatherDataRequestDialog`) posts to Formspree using `VITE_FORMSPREE_FORM_ID` (the `VITE_` prefix exposes it to the client). Set it to your Formspree form ID; without it the form shows an error instead of submitting.
+
 ## Accessibility
 
 **Target**: WCAG 2.1 AA compliance.
