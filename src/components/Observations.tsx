@@ -46,11 +46,12 @@ const GROUP_OPTIONS: Array<{ value: TaxonGroup; label: string }> = [
 
 type MediaType = 'all' | 'photos' | 'audio'
 
-const MEDIA_OPTIONS: Array<{ value: MediaType; label: string }> = [
-  { value: 'all', label: 'All Media' },
-  { value: 'photos', label: 'Photos' },
-  { value: 'audio', label: 'Audio' },
-]
+// Media filter temporarily hidden from the UI (see commented-out Select below).
+// const MEDIA_OPTIONS: Array<{ value: MediaType; label: string }> = [
+//   { value: 'all', label: 'All Media' },
+//   { value: 'photos', label: 'Photos' },
+//   { value: 'audio', label: 'Audio' },
+// ]
 
 // Stable, filter-independent descending year range for the Year dropdown.
 const CURRENT_YEAR = new Date().getFullYear()
@@ -71,7 +72,9 @@ interface ObservationsProps {
 
 const Observations = ({ initialPage }: ObservationsProps) => {
   const [selectedGroup, setSelectedGroup] = useState<TaxonGroup>('all')
-  const [mediaType, setMediaType] = useState<MediaType>('all')
+  // Media filter hidden from UI for now; stays wired into the query (always
+  // 'all') so re-enabling only means restoring the setter + the Select below.
+  const [mediaType] = useState<MediaType>('all')
   const [selectedYear, setSelectedYear] = useState<string>('all')
   const isUnfiltered =
     selectedGroup === 'all' && mediaType === 'all' && selectedYear === 'all'
@@ -179,14 +182,14 @@ const Observations = ({ initialPage }: ObservationsProps) => {
             </span>
           )}
 
-          <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
+          <div className="flex flex-row gap-2 sm:flex-wrap sm:items-center">
             <Select
               value={selectedGroup}
               onValueChange={(value) => setSelectedGroup(value as TaxonGroup)}
             >
               <SelectTrigger
                 aria-label="Filter by group"
-                className="w-48 cursor-pointer"
+                className="flex-1 cursor-pointer sm:w-48 sm:flex-none"
               >
                 <SelectValue placeholder="Filter by group" />
               </SelectTrigger>
@@ -203,13 +206,14 @@ const Observations = ({ initialPage }: ObservationsProps) => {
               </SelectContent>
             </Select>
 
+            {/* Media filter temporarily hidden from the UI (kept for re-enabling):
             <Select
               value={mediaType}
               onValueChange={(value) => setMediaType(value as MediaType)}
             >
               <SelectTrigger
                 aria-label="Filter by media type"
-                className="w-48 cursor-pointer"
+                className="flex-1 cursor-pointer sm:w-48 sm:flex-none"
               >
                 <SelectValue placeholder="Filter by media type" />
               </SelectTrigger>
@@ -221,11 +225,12 @@ const Observations = ({ initialPage }: ObservationsProps) => {
                 ))}
               </SelectContent>
             </Select>
+            */}
 
             <Select value={selectedYear} onValueChange={setSelectedYear}>
               <SelectTrigger
                 aria-label="Filter by year"
-                className="w-48 cursor-pointer"
+                className="flex-1 cursor-pointer sm:w-48 sm:flex-none"
               >
                 <SelectValue placeholder="Filter by year" />
               </SelectTrigger>
