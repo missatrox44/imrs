@@ -2,6 +2,7 @@ import { BookOpen, Eye } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { StatsCounter } from './StatsCounter'
 import { GazetteerRolodex } from './GazetteerRolodex'
+import { WeatherMiniDashboard } from './WeatherMiniDashboard'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { ImageCarousel } from '@/components/ImageCarousel'
@@ -75,11 +76,19 @@ export const Home = () => {
               </CardContent>
             </Card>
           </Link>
+
+          {/* Variant 1: third action card — uncomment this AND change md:grid-cols-2 to md:grid-cols-3 on this section:
+          <WeatherActionCard />
+          */}
         </section>
+
+
 
         {/* Stats Section */}
         <StatsCounter />
       </main>
+
+
 
       {/* Carousel sits outside the container so it spans the full viewport width */}
       <ImageCarousel />
@@ -87,6 +96,10 @@ export const Home = () => {
       <div className="mx-auto px-4 pb-12 container">
         <GazetteerRolodex />
       </div>
+
+      <section className="max-w-4xl mx-auto mt-8 pb-12">
+        <WeatherMiniDashboard />
+      </section>
     </div>
   )
 }
