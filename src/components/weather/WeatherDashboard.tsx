@@ -1,4 +1,6 @@
+import { useEffect } from 'react'
 import { useMediaQuery } from '@uidotdev/usehooks'
+import { useLocation, useNavigate } from '@tanstack/react-router'
 import { Monitor } from 'lucide-react'
 import WeatherFilterBar from './WeatherFilterBar'
 import WeatherStatCards from './WeatherStatCards'
@@ -12,6 +14,18 @@ export default function WeatherDashboard() {
   const { year, season } = Route.useSearch()
   const filters: WeatherFilters = { year, season }
   const isMobile = useMediaQuery('(max-width: 767px)')
+
+  const { hash } = useLocation()
+  const navigate = useNavigate({ from: Route.fullPath })
+
+  // Open the request dialog when arriving from the homepage CTA
+  // (/weather#request-weather-data), then clear the hash so a refresh
+  // doesn't reopen it.
+  useEffect(() => {
+    if (hash !== 'request-weather-data') return
+    document.getElementById('request-weather-data')?.click()
+    navigate({ search: (prev) => prev, hash: '', replace: true })
+  }, [hash, navigate])
 
   const { data: summary, isLoading: summaryLoading } =
     useWeatherSummary(filters)

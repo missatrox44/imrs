@@ -34,6 +34,7 @@ export function WeatherMiniDashboard() {
               <Link
                 to="/weather"
                 search={{ year: 'all', season: 'all' }}
+                hash="request-weather-data"
                 className="text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground"
               >
                 Researchers: request the raw dataset →

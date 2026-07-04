@@ -93,11 +93,11 @@ export const Home = () => {
       {/* Carousel sits outside the container so it spans the full viewport width */}
       <ImageCarousel />
 
-      <div className="mx-auto px-4 pb-12 container">
+      <div className="mx-auto px-4 container">
         <GazetteerRolodex />
       </div>
 
-      <section className="max-w-4xl mx-auto mt-8 pb-12">
+      <section className="max-w-4xl mx-auto mt-20 pb-12">
         <WeatherMiniDashboard />
       </section>
     </div>
