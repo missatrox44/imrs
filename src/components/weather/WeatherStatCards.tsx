@@ -10,7 +10,12 @@ interface SparklineProps {
   height?: number
 }
 
-function Sparkline({ data, color, width = 120, height = 32 }: SparklineProps) {
+export function Sparkline({
+  data,
+  color,
+  width = 120,
+  height = 32,
+}: SparklineProps) {
   if (data.length < 2) return null
 
   const min = Math.min(...data)

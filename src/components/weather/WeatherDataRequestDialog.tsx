@@ -303,7 +303,12 @@ export default function WeatherDataRequestDialog() {
       }}
     >
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="cursor-pointer">
+        <Button
+          id="request-weather-data"
+          variant="outline"
+          size="sm"
+          className="cursor-pointer"
+        >
           <Download className="size-4" aria-hidden="true" />
           Request raw weather data
         </Button>
