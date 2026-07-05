@@ -97,7 +97,7 @@ export const Home = () => {
         <GazetteerRolodex />
       </div>
 
-      <section className="max-w-4xl mx-auto mt-20 pb-12">
+      <section className="max-w-4xl mx-auto mt-20 pb-12 px-4">
         <WeatherMiniDashboard />
       </section>
     </div>

@@ -37,13 +37,16 @@ export function WeatherMiniDashboard() {
                 hash="request-weather-data"
                 className="text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground"
               >
-                Researchers: request the raw dataset →
+                <span className="hidden sm:inline">
+                  Researchers: request the raw dataset →
+                </span>
+                <span className="sm:hidden">Request the raw dataset →</span>
               </Link>
             </div>
           </div>
 
           {showStats ? (
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div
                 className="border-t-2 p-3"
                 style={{ borderTopColor: WEATHER_COLORS.temp }}
@@ -150,7 +153,7 @@ export function WeatherMiniDashboard() {
               </div>
             </div>
           ) : isLoading ? (
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {Array.from({ length: 4 }).map((_, i) => (
                 <div key={i} className="animate-pulse bg-muted rounded h-20" />
               ))}
