@@ -15,7 +15,7 @@ const CSP = [
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "font-src 'self' https://fonts.gstatic.com",
   "img-src 'self' data: https://server.arcgisonline.com https://*.tile.openstreetmap.org https://inaturalist-open-data.s3.amazonaws.com https://static.inaturalist.org",
-  "connect-src 'self' https://api.inaturalist.org",
+  "connect-src 'self' https://api.inaturalist.org https://formspree.io",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",
