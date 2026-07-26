@@ -1,6 +1,6 @@
 import type { Category } from '@/types/category'
 
-export const SITE_URL = 'https://imrs.vercel.app'
+export const SITE_URL = 'https://imrs.bio'
 
 export const STATS = [
   {

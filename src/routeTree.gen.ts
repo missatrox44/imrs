@@ -9,29 +9,19 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as WeatherRouteImport } from './routes/weather'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as ObservationsRouteImport } from './routes/observations'
-import { Route as GazetteerRouteImport } from './routes/gazetteer'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as GazetteerRouteImport } from './routes/gazetteer'
+import { Route as ObservationsRouteImport } from './routes/observations'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as WeatherRouteImport } from './routes/weather'
+import { Route as ApiSpeciesRouteImport } from './routes/api/species'
+import { Route as ApiWeatherRouteImport } from './routes/api/weather'
 import { Route as SpeciesIndexRouteImport } from './routes/species.index'
 import { Route as SpeciesSpeciesIdRouteImport } from './routes/species.$speciesId'
-import { Route as ApiWeatherRouteImport } from './routes/api/weather'
-import { Route as ApiSpeciesRouteImport } from './routes/api/species'
 
-const WeatherRoute = WeatherRouteImport.update({
-  id: '/weather',
-  path: '/weather',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ObservationsRoute = ObservationsRouteImport.update({
-  id: '/observations',
-  path: '/observations',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GazetteerRoute = GazetteerRouteImport.update({
@@ -39,9 +29,29 @@ const GazetteerRoute = GazetteerRouteImport.update({
   path: '/gazetteer',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const ObservationsRoute = ObservationsRouteImport.update({
+  id: '/observations',
+  path: '/observations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WeatherRoute = WeatherRouteImport.update({
+  id: '/weather',
+  path: '/weather',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSpeciesRoute = ApiSpeciesRouteImport.update({
+  id: '/api/species',
+  path: '/api/species',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiWeatherRoute = ApiWeatherRouteImport.update({
+  id: '/api/weather',
+  path: '/api/weather',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SpeciesIndexRoute = SpeciesIndexRouteImport.update({
@@ -52,16 +62,6 @@ const SpeciesIndexRoute = SpeciesIndexRouteImport.update({
 const SpeciesSpeciesIdRoute = SpeciesSpeciesIdRouteImport.update({
   id: '/species/$speciesId',
   path: '/species/$speciesId',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiWeatherRoute = ApiWeatherRouteImport.update({
-  id: '/api/weather',
-  path: '/api/weather',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiSpeciesRoute = ApiSpeciesRouteImport.update({
-  id: '/api/species',
-  path: '/api/species',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -149,25 +149,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/weather': {
-      id: '/weather'
-      path: '/weather'
-      fullPath: '/weather'
-      preLoaderRoute: typeof WeatherRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/observations': {
-      id: '/observations'
-      path: '/observations'
-      fullPath: '/observations'
-      preLoaderRoute: typeof ObservationsRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/gazetteer': {
@@ -177,11 +163,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GazetteerRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/observations': {
+      id: '/observations'
+      path: '/observations'
+      fullPath: '/observations'
+      preLoaderRoute: typeof ObservationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/weather': {
+      id: '/weather'
+      path: '/weather'
+      fullPath: '/weather'
+      preLoaderRoute: typeof WeatherRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/species': {
+      id: '/api/species'
+      path: '/api/species'
+      fullPath: '/api/species'
+      preLoaderRoute: typeof ApiSpeciesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/weather': {
+      id: '/api/weather'
+      path: '/api/weather'
+      fullPath: '/api/weather'
+      preLoaderRoute: typeof ApiWeatherRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/species/': {
@@ -196,20 +210,6 @@ declare module '@tanstack/react-router' {
       path: '/species/$speciesId'
       fullPath: '/species/$speciesId'
       preLoaderRoute: typeof SpeciesSpeciesIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/weather': {
-      id: '/api/weather'
-      path: '/api/weather'
-      fullPath: '/api/weather'
-      preLoaderRoute: typeof ApiWeatherRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/species': {
-      id: '/api/species'
-      path: '/api/species'
-      fullPath: '/api/species'
-      preLoaderRoute: typeof ApiSpeciesRouteImport
       parentRoute: typeof rootRouteImport
     }
   }

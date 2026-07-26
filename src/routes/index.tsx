@@ -23,7 +23,7 @@ export const Route = createFileRoute('/')({
           name: 'IMRS Biodiversity Explorer',
           description:
             'An open biodiversity archive powered by iNaturalist observations from Indio Mountains Research Station.',
-          url: 'https://imrs.vercel.app/',
+          url: 'https://imrs.bio',
         }),
       },
     ],

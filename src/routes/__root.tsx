@@ -51,7 +51,7 @@ export const Route = createRootRoute({
       },
       {
         property: 'og:url',
-        content: 'https://imrs.vercel.app/',
+        content: 'https://imrs.bio',
       },
       {
         name: 'twitter:card',
