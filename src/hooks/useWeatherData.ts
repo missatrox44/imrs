@@ -4,9 +4,7 @@ import type {
   WeatherFilters,
   WeatherSummary,
 } from '@/types/weather'
-
-const WEATHER_STALE_TIME = 1000 * 60 * 60 * 24 * 30 // 30 days
-const WEATHER_GC_TIME = 1000 * 60 * 60 * 24 * 60 // 60 days
+import { GC_TIME, STALE_TIME } from '@/data/constants'
 
 function weatherUrl(view: string, filters: WeatherFilters): string {
   const params = new URLSearchParams({
@@ -34,8 +32,8 @@ export function useWeatherSummary(filters: WeatherFilters) {
   return useQuery({
     queryKey: weatherQueryKey('summary', filters),
     queryFn: () => fetchWeather<WeatherSummary>('summary', filters),
-    staleTime: WEATHER_STALE_TIME,
-    gcTime: WEATHER_GC_TIME,
+    staleTime: STALE_TIME,
+    gcTime: GC_TIME,
     placeholderData: keepPreviousData,
   })
 }
@@ -44,8 +42,8 @@ export function useWeatherDaily(filters: WeatherFilters) {
   return useQuery({
     queryKey: weatherQueryKey('daily', filters),
     queryFn: () => fetchWeather<Array<WeatherDailyRow>>('daily', filters),
-    staleTime: WEATHER_STALE_TIME,
-    gcTime: WEATHER_GC_TIME,
+    staleTime: STALE_TIME,
+    gcTime: GC_TIME,
     placeholderData: keepPreviousData,
   })
 }

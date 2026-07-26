@@ -12,7 +12,8 @@
     "test:watch": "vitest",
     "lint": "eslint",
     "format": "prettier",
-    "check": "prettier --write . && eslint --fix"
+    "check": "pnpm check:dupes && prettier --write . && eslint --fix",
+    "check:dupes": "test $(grep -oE \"'@tanstack/react-router@[0-9.]+'\" pnpm-lock.yaml | sort -u | wc -l) -eq 1 || (echo 'ERROR: multiple @tanstack/react-router versions in lockfile - TanStack packages are out of lockstep; run pnpm update to renegotiate' && exit 1)"
   },
   "dependencies": {
     "@libsql/client": "^0.17.3",
@@ -23,13 +24,13 @@
     "@tanstack/react-devtools": "^0.2.2",
     "@tanstack/react-query": "^5.90.12",
     "@tanstack/react-query-devtools": "^5.91.1",
-    "@tanstack/react-router": "1.170.1",
-    "@tanstack/react-router-devtools": "1.167.0",
-    "@tanstack/react-router-ssr-query": "1.167.0",
-    "@tanstack/react-start": "^1.168.1",
+    "@tanstack/react-router": "^1.170.18",
+    "@tanstack/react-router-devtools": "^1.167.0",
+    "@tanstack/react-router-ssr-query": "^1.167.1",
+    "@tanstack/react-start": "^1.168.32",
     "@tanstack/react-table": "^8.21.3",
     "@tanstack/react-virtual": "^3.13.24",
-    "@tanstack/router-plugin": "1.168.1",
+    "@tanstack/router-plugin": "^1.168.23",
     "@uidotdev/usehooks": "^2.4.1",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",

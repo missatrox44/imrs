@@ -1,6 +1,6 @@
 # IMRS Biodiversity Explorer
 
-[Live Deployment](https://imrs.vercel.app/)
+[Live Deployment](https://imrs.bio/)
 
 ## The Challenge
 
