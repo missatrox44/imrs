@@ -32,6 +32,11 @@ This project uses **pnpm** (pinned via the `packageManager` field in `package.js
 - Single table `specimens` with full taxonomic hierarchy (kingdom through species).
 - `src/server/speciesMapper.ts` maps raw DB rows to the `Species` TypeScript type.
 
+### CLI tools
+
+- `turso` — Turso CLI for the cloud SQLite DB: `turso db shell`, `db list`, token/URL management. Reach for it for ad-hoc queries against the live DB instead of writing one-off `@libsql/client` scripts.
+- `sqlite3` — inspect the local `imrs-species.db` / `imrs-weather.db` build artifacts directly (schema, row counts, sanity checks before pushing to Turso).
+
 ### External API
 
 - iNaturalist API v1 for recent observations. Place ID `225419` (IMRS). Constants in `src/data/constants.ts`.
