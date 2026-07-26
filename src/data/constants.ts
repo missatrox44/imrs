@@ -33,8 +33,12 @@ export const ORDER_BY = 'observed_on'
 // Floor for the observations Year filter (iNaturalist's inception year), so no
 // real observation year is ever excluded from the dropdown.
 export const FIRST_OBSERVATION_YEAR = 2008
-export const STALE_TIME = 1000 * 60 * 60 * 24 * 30 // 30 days
-export const GC_TIME = 1000 * 60 * 60 * 24 * 60 // 60 days
+// KEY-DECISION 2026-07-26: TanStack Query feeds both into setTimeout (gc
+// scheduling, stale notification), so anything past the 32-bit signed int
+// ceiling truncates to 1ms — gcTime then evicts the cache on unmount.
+const MAX_TIMER_MS = 2 ** 31 - 1 // ~24.8 days
+export const STALE_TIME = MAX_TIMER_MS
+export const GC_TIME = MAX_TIMER_MS
 
 export const TAXONOMIC_RANKS = [
   { key: 'kingdom' as const, label: 'Kingdom' },
