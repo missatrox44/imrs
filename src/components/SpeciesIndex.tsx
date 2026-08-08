@@ -110,7 +110,7 @@ const SpeciesIndex = () => {
               onClick={() => setView('grid')}
               aria-label="Grid view"
               aria-pressed={view === 'grid'}
-              className={`p-2 transition-all ${
+              className={`p-2 cursor-pointer transition-all ${
                 view === 'grid'
                   ? 'bg-background shadow-sm text-foreground'
                   : 'text-muted-foreground hover:text-foreground'
@@ -122,7 +122,7 @@ const SpeciesIndex = () => {
               onClick={() => setView('table')}
               aria-label="Table view"
               aria-pressed={view === 'table'}
-              className={`p-2 transition-all ${
+              className={`p-2 cursor-pointer transition-all ${
                 view === 'table'
                   ? 'bg-background shadow-sm text-foreground'
                   : 'text-muted-foreground hover:text-foreground'
