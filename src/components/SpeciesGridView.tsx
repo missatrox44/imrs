@@ -51,6 +51,9 @@ const SpeciesCard = memo(function SpeciesCard({ item }: { item: Species }) {
     <Link
       to="/species/$speciesId"
       params={{ speciesId: speciesPath(item) }}
+      // No hover preload: the detail loader calls iNaturalist, and scanning
+      // the grid would burn through its rate limit.
+      preload={false}
       className="h-full block group"
       onMouseEnter={activate}
       onMouseLeave={deactivate}

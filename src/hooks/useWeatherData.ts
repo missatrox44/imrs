@@ -1,10 +1,11 @@
-import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { keepPreviousData, queryOptions, useQuery } from '@tanstack/react-query'
 import type {
   WeatherDailyRow,
   WeatherFilters,
   WeatherSummary,
 } from '@/types/weather'
 import { GC_TIME, STALE_TIME } from '@/data/constants'
+import { fetchWeatherSummary } from '@/server/weatherService'
 
 function weatherUrl(view: string, filters: WeatherFilters): string {
   const params = new URLSearchParams({
@@ -28,22 +29,42 @@ async function fetchWeather<T>(
   return res.json()
 }
 
-export function useWeatherSummary(filters: WeatherFilters) {
-  return useQuery({
+// Shared by the /weather loader (ensureQueryData) and useWeatherSummary —
+// one definition, one cache entry.
+export function weatherSummaryQuery(filters: WeatherFilters) {
+  return queryOptions({
     queryKey: weatherQueryKey('summary', filters),
-    queryFn: () => fetchWeather<WeatherSummary>('summary', filters),
+    // An SSR loader cannot fetch a relative URL, so the server takes the
+    // direct server-fn path; the browser keeps /api/weather for its
+    // Cache-Control CDN headers.
+    queryFn: () =>
+      typeof window === 'undefined'
+        ? fetchWeatherSummary({ data: filters })
+        : fetchWeather<WeatherSummary>('summary', filters),
     staleTime: STALE_TIME,
     gcTime: GC_TIME,
+  })
+}
+
+export function weatherDailyQuery(filters: WeatherFilters) {
+  return queryOptions({
+    queryKey: weatherQueryKey('daily', filters),
+    queryFn: () => fetchWeather<Array<WeatherDailyRow>>('daily', filters),
+    staleTime: STALE_TIME,
+    gcTime: GC_TIME,
+  })
+}
+
+export function useWeatherSummary(filters: WeatherFilters) {
+  return useQuery({
+    ...weatherSummaryQuery(filters),
     placeholderData: keepPreviousData,
   })
 }
 
 export function useWeatherDaily(filters: WeatherFilters) {
   return useQuery({
-    queryKey: weatherQueryKey('daily', filters),
-    queryFn: () => fetchWeather<Array<WeatherDailyRow>>('daily', filters),
-    staleTime: STALE_TIME,
-    gcTime: GC_TIME,
+    ...weatherDailyQuery(filters),
     placeholderData: keepPreviousData,
   })
 }

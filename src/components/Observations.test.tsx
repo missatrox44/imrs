@@ -9,6 +9,7 @@ import {
 } from '@tanstack/react-router'
 import Observations from './Observations'
 import type { Observation } from '@/types/observation'
+import { observationsQuery } from '@/lib/inat'
 
 // jsdom lacks IntersectionObserver, which react-intersection-observer needs
 // for the infinite-scroll sentinel. Stub it so the sentinel never intersects
@@ -89,7 +90,7 @@ async function renderObservations(results: Array<Observation>) {
     results,
   }
   const rootRoute = createRootRoute({
-    component: () => <Observations initialPage={initialPage} />,
+    component: () => <Observations />,
   })
   const router = createRouter({
     routeTree: rootRoute,
@@ -98,6 +99,12 @@ async function renderObservations(results: Array<Observation>) {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false } },
   })
+  // Seed the unfiltered cache entry the way the route loader does in the app
+  // (the query is fresh within STALE_TIME, so no refetch fires).
+  queryClient.setQueryData(
+    observationsQuery({ group: 'all', mediaType: 'all', year: 'all' }).queryKey,
+    { pages: [initialPage], pageParams: [1] },
+  )
   const utils = render(
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router as never} />

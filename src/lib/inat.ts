@@ -1,5 +1,15 @@
 import { z } from 'zod'
-import { ORDER, ORDER_BY, PER_PAGE, PLACE_ID } from '@/data/constants'
+import { infiniteQueryOptions } from '@tanstack/react-query'
+import type { TaxonGroup } from '@/types/taxon'
+import {
+  GC_TIME,
+  ORDER,
+  ORDER_BY,
+  PER_PAGE,
+  PLACE_ID,
+  STALE_TIME,
+} from '@/data/constants'
+import { GROUP_TO_TAXON_ID } from '@/types/taxon'
 
 // Zod v4's JIT compiles schemas with `new Function`, which our CSP
 // (script-src without 'unsafe-eval') blocks in the browser.
@@ -118,4 +128,56 @@ export async function fetchObservations(
 
   const json = await res.json()
   return ObservationsResponseSchema.parse(json)
+}
+
+export interface ObservationFilters {
+  group: TaxonGroup
+  mediaType: 'all' | 'photos' | 'audio'
+  year: string
+}
+
+// One shared definition for the observations feed: the /observations loader
+// prefetches it (ensureInfiniteQueryData) and the component reads the same
+// cache entry (useInfiniteQuery).
+export function observationsQuery(filters: ObservationFilters) {
+  return infiniteQueryOptions({
+    queryKey: ['observations', filters.group, filters.mediaType, filters.year],
+
+    initialPageParam: 1,
+
+    queryFn: async ({ pageParam, signal }) => {
+      const response = await fetchObservations(
+        {
+          page: pageParam,
+          per_page: PER_PAGE,
+          taxon_id:
+            filters.group === 'all'
+              ? undefined
+              : GROUP_TO_TAXON_ID[filters.group],
+          photos: filters.mediaType === 'photos' ? true : undefined,
+          sounds: filters.mediaType === 'audio' ? true : undefined,
+          year: filters.year === 'all' ? undefined : filters.year,
+        },
+        signal,
+      )
+
+      return {
+        page: pageParam,
+        per_page: PER_PAGE,
+        total_results: response.total_results,
+        results: response.results,
+      }
+    },
+
+    getNextPageParam: (lastPage) => {
+      const loaded = lastPage.page * lastPage.per_page
+      // iNaturalist caps results at a 10,000-record window
+      if (loaded >= 10_000) return undefined
+      return loaded < lastPage.total_results ? lastPage.page + 1 : undefined
+    },
+
+    // monthly updates → long cache
+    staleTime: STALE_TIME,
+    gcTime: GC_TIME,
+  })
 }
