@@ -1,21 +1,19 @@
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import Observations from '@/components/Observations'
 import { Loader } from '@/components/Loader'
-import { PER_PAGE, SITE_URL } from '@/data/constants'
-import { fetchObservations } from '@/lib/inat'
+import { SITE_URL } from '@/data/constants'
+import { observationsQuery } from '@/lib/inat'
 
 export const Route = createFileRoute('/observations')({
   ssr: 'data-only',
 
-  loader: async () => {
-    const data = await fetchObservations({ page: 1, per_page: PER_PAGE })
-
-    return {
-      page: 1,
-      per_page: PER_PAGE,
-      total_results: data.total_results,
-      results: data.results,
-    }
+  // Prefetch page 1 of the unfiltered feed into the Query cache; the
+  // component's useInfiniteQuery reads the same entry, so nothing is fetched
+  // twice and no data is threaded through props.
+  loader: async ({ context }) => {
+    await context.queryClient.ensureInfiniteQueryData(
+      observationsQuery({ group: 'all', mediaType: 'all', year: 'all' }),
+    )
   },
   head: () => ({
     meta: [
@@ -43,7 +41,7 @@ export const Route = createFileRoute('/observations')({
 
   pendingComponent: () => <Loader dataTitle="observations" />,
   errorComponent: ObservationsErrorComponent,
-  component: RouteComponent,
+  component: Observations,
 })
 
 function ObservationsErrorComponent() {
@@ -70,10 +68,4 @@ function ObservationsErrorComponent() {
       </div>
     </main>
   )
-}
-
-function RouteComponent() {
-  const data = Route.useLoaderData()
-
-  return <Observations initialPage={data} />
 }

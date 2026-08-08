@@ -1,11 +1,43 @@
-import {
-  ErrorComponent,
-  Link,
-  rootRouteId,
-  useMatch,
-  useRouter,
-} from '@tanstack/react-router'
+import { useState } from 'react'
+import { Link, rootRouteId, useMatch, useRouter } from '@tanstack/react-router'
 import type { ErrorComponentProps } from '@tanstack/react-router'
+
+// Replaces TanStack Router's default ErrorComponent, whose <pre> uses
+// `overflow: auto` without wrapping and causes horizontal scroll on long
+// error messages.
+function WrappedError({ error }: { error: Error }) {
+  const [show, setShow] = useState(import.meta.env.DEV)
+
+  return (
+    <div>
+      <div className="flex items-center gap-2">
+        <strong className="text-sm">Something went wrong!</strong>
+        <button
+          onClick={() => setShow((prev) => !prev)}
+          className="
+            rounded border border-current
+            px-1 py-0.5 text-xs font-bold
+            cursor-pointer
+          "
+        >
+          {show ? 'Hide Error' : 'Show Error'}
+        </button>
+      </div>
+
+      {show && error.message && (
+        <pre
+          className="
+            mt-2 rounded border border-destructive
+            p-2 text-destructive text-xs
+            whitespace-pre-wrap break-words
+          "
+        >
+          <code>{error.message}</code>
+        </pre>
+      )}
+    </div>
+  )
+}
 
 export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
   const router = useRouter()
@@ -39,7 +71,7 @@ export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
         </h1>
 
         <div className="text-muted-foreground leading-relaxed">
-          <ErrorComponent error={error} />
+          <WrappedError error={error} />
         </div>
 
         <div className="flex gap-4 items-center flex-wrap pt-4">

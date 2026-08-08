@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import type { Season } from '@/types/weather'
 import { Loader } from '@/components/Loader'
 import WeatherDashboard from '@/components/weather/WeatherDashboard'
-import { fetchWeatherSummary } from '@/server/weatherService'
+import { weatherSummaryQuery } from '@/hooks/useWeatherData'
 import { SITE_URL } from '@/data/constants'
 
 type WeatherSearch = {
@@ -18,11 +18,18 @@ export const Route = createFileRoute('/weather')({
 
   ssr: 'data-only',
 
-  loader: ({ location }) => {
-    const search = location.search as WeatherSearch
-    return fetchWeatherSummary({
-      data: { year: search.year, season: search.season },
-    })
+  // Prefetch the summary into the Query cache; useWeatherSummary in
+  // WeatherDashboard reads the same entry instead of fetching it again.
+  // During hover preload location.search skips validateSearch, so apply the
+  // same defaults here.
+  loader: async ({ context, location }) => {
+    const search = location.search as Partial<WeatherSearch>
+    await context.queryClient.ensureQueryData(
+      weatherSummaryQuery({
+        year: search.year ?? 'all',
+        season: search.season ?? 'all',
+      }),
+    )
   },
 
   pendingComponent: () => <Loader dataTitle="weather data" />,

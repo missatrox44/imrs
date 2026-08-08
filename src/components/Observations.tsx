@@ -4,7 +4,6 @@ import { Link } from '@tanstack/react-router'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useInView } from 'react-intersection-observer'
 
-import type { Observation } from '@/types/observation'
 import type { TaxonGroup } from '@/types/taxon'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import {
@@ -22,15 +21,8 @@ import { getCategoryIcon } from '@/lib/getCategoryIcon'
 import { getPhotoUrl } from '@/lib/getPhotoUrl'
 import { getSoundUrl } from '@/lib/getSoundUrl'
 import { ObservationCardSkeleton } from '@/components/ObservationCardSkeleton'
-import {
-  FIRST_OBSERVATION_YEAR,
-  GC_TIME,
-  PER_PAGE,
-  SKELETON_COUNT,
-  STALE_TIME,
-} from '@/data/constants'
-import { fetchObservations } from '@/lib/inat'
-import { GROUP_TO_TAXON_ID } from '@/types/taxon'
+import { FIRST_OBSERVATION_YEAR, SKELETON_COUNT } from '@/data/constants'
+import { observationsQuery } from '@/lib/inat'
 
 // Filterable groups shown in the dropdown (fungi, fish, and other
 // invertebrates are intentionally omitted for now).
@@ -60,17 +52,7 @@ const YEAR_OPTIONS = Array.from(
   (_, i) => String(CURRENT_YEAR - i),
 )
 
-interface ObservationsPage {
-  page: number
-  per_page: number
-  total_results: number
-  results: Array<Observation>
-}
-interface ObservationsProps {
-  initialPage: ObservationsPage
-}
-
-const Observations = ({ initialPage }: ObservationsProps) => {
+const Observations = () => {
   const [selectedGroup, setSelectedGroup] = useState<TaxonGroup>('all')
   // Media filter hidden from UI for now; stays wired into the query (always
   // 'all') so re-enabling only means restoring the setter + the Select below.
@@ -82,55 +64,16 @@ const Observations = ({ initialPage }: ObservationsProps) => {
     rootMargin: '200px',
   })
 
+  // The unfiltered entry is prefetched by the route loader; filtered
+  // combinations fetch on first use. Same cache either way.
   const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } =
-    useInfiniteQuery({
-      queryKey: ['observations', selectedGroup, mediaType, selectedYear],
-
-      initialPageParam: 1,
-
-      queryFn: async ({ pageParam, signal }) => {
-        const response = await fetchObservations(
-          {
-            page: pageParam,
-            per_page: PER_PAGE,
-            taxon_id:
-              selectedGroup === 'all'
-                ? undefined
-                : GROUP_TO_TAXON_ID[selectedGroup],
-            photos: mediaType === 'photos' ? true : undefined,
-            sounds: mediaType === 'audio' ? true : undefined,
-            year: selectedYear === 'all' ? undefined : selectedYear,
-          },
-          signal,
-        )
-
-        // IMPORTANT: must match initialData.pages shape
-        return {
-          page: pageParam,
-          per_page: PER_PAGE,
-          total_results: response.total_results,
-          results: response.results,
-        }
-      },
-
-      // Seed page 1 from SSR loader — only for the unfiltered view, so filtered
-      // queries fetch fresh from the API rather than reusing the seeded page.
-      // Function form keeps `data` typed as possibly undefined (it is, while a
-      // filtered query loads its first page).
-      initialData: () =>
-        isUnfiltered ? { pages: [initialPage], pageParams: [1] } : undefined,
-
-      getNextPageParam: (lastPage) => {
-        const loaded = lastPage.page * lastPage.per_page
-        // iNaturalist caps results at a 10,000-record window
-        if (loaded >= 10_000) return undefined
-        return loaded < lastPage.total_results ? lastPage.page + 1 : undefined
-      },
-
-      // monthly updates → long cache
-      staleTime: STALE_TIME,
-      gcTime: GC_TIME,
-    })
+    useInfiniteQuery(
+      observationsQuery({
+        group: selectedGroup,
+        mediaType,
+        year: selectedYear,
+      }),
+    )
 
   // flatten pages (data is undefined while a freshly-filtered query loads)
   const observations = data?.pages.flatMap((page) => page.results) ?? []

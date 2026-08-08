@@ -51,6 +51,9 @@ const SpeciesRow = memo(function SpeciesRow({
         <Link
           to="/species/$speciesId"
           params={{ speciesId: speciesPath(item) }}
+          // No hover preload: the detail loader calls iNaturalist, and scanning
+          // the table would burn through its rate limit.
+          preload={false}
           className="before:absolute before:inset-0 before:z-10 truncate"
         >
           <span className="scientific-name relative z-20 group-hover:underline">

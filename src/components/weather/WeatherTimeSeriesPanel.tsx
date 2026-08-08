@@ -250,6 +250,7 @@ export default function WeatherTimeSeriesPanel({
                     fillOpacity={s.fillOpacity ?? 0.6}
                     name={s.name}
                     barSize={s.barSize ?? 3}
+                    // isAnimationActive={false}
                   />
                 )
               }
