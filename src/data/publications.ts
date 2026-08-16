@@ -29,6 +29,23 @@ export interface Publication {
 export const publications: Array<Publication> = [
   // --- Theses & dissertations ---
   {
+    id: 'baqla-2017-thesis',
+    title:
+      'Grasshopper (Orthoptera: Caelifera) And Plant Community Relationships On Indio Mountains Research Station, Hudspeth County, Texas.',
+    authors: 'Baqla, S. E.',
+    year: 2017,
+    type: 'thesis',
+    url: 'https://digitalcommons.utep.edu/open_etd/604',
+    speciesIds: [
+      327, 348, 350, 355, 383, 400, 402, 404, 406, 416, 434, 435, 436, 438,
+      454, 464, 477, 488, 491, 493, 496, 503, 522, 531, 560, 579, 584, 592,
+      594, 604, 605, 608, 611, 614, 615, 616, 617, 618, 619, 620, 632, 634,
+      636, 642, 1193, 1194, 1198, 1199, 1200, 1201, 1202, 1203, 1204, 1211,
+      1213, 1217, 1222, 1223, 1228, 1230, 1231, 1233, 1234, 1235, 1236, 1237,
+      1238, 1239,
+    ],
+  },
+  {
     id: 'alva-2014-thesis',
     title:
       'Thermal Ecology of Urosaurus ornatus (Ornate Tree Lizard), in the Northern Chihuahuan Desert on Indio Mountains Research Station, Texas.',
@@ -127,6 +144,23 @@ export const publications: Array<Publication> = [
     type: 'thesis',
     url: 'https://scholarworks.utep.edu/cgi/viewcontent.cgi?article=3174&context=open_etd',
     speciesIds: [214],
+  },
+  {
+    id: 'wiseman-2014-thesis',
+    title:
+      'An Avian Survey Conducted At Five Water Sources Within The Northern Chihuahuan Desert On Indio Mountains Research Station, Texas.',
+    authors: 'Wiseman, G. H.',
+    year: 2014,
+    type: 'thesis',
+    url: 'https://digitalcommons.utep.edu/open_etd/1378',
+    speciesIds: [
+      48, 63, 73, 76, 78, 79, 80, 82, 83, 90, 91, 93, 96, 97, 98, 99, 100, 101,
+      102, 103, 104, 105, 107, 108, 109, 111, 112, 113, 114, 115, 116, 118,
+      119, 120, 121, 124, 127, 129, 130, 131, 132, 135, 136, 137, 138, 139,
+      140, 144, 145, 146, 150, 151, 152, 153, 154, 155, 156, 158, 159, 162,
+      168, 169, 176, 180, 181, 182, 183, 185, 187, 189, 190, 191, 192, 195,
+      200, 201, 202, 203, 204, 206, 207, 208, 209, 210, 1232,
+    ],
   },
 
   // --- Papers & natural-history notes ---
