@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { MapPin, Mountain } from 'lucide-react'
 import type { GazetteerEntry } from '@/types/gazetteer'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -15,14 +16,16 @@ interface GazetteerCardListProps {
   searchTerm: string
 }
 
-export const GazetteerCardList = ({
+// Memoized so keystrokes in the gazetteer search box (which re-render the
+// parent) don't re-render every card between debounce ticks.
+export const GazetteerCardList = memo(function GazetteerCardList({
   entries,
   totalCount,
   selectedId,
   onSelect,
   cardRefs,
   searchTerm,
-}: GazetteerCardListProps) => {
+}: GazetteerCardListProps) {
   return (
     <>
       <section>
@@ -113,4 +116,4 @@ export const GazetteerCardList = ({
       )}
     </>
   )
-}
+})

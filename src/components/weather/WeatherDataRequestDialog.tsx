@@ -137,7 +137,28 @@ const MAX_LENGTHS = {
   endDate: 10,
 } as const
 
-type TextField = keyof typeof MAX_LENGTHS
+type TextFieldName = keyof typeof MAX_LENGTHS
+
+const ACKNOWLEDGMENTS = [
+  {
+    name: 'ackCite',
+    label:
+      'I agree to cite / acknowledge the Indio Mountains Research Station in any resulting publication.',
+  },
+  {
+    name: 'ackShare',
+    label: 'I agree to share a copy of any resulting publications.',
+  },
+  {
+    name: 'ackAsIs',
+    label: 'I understand the data is provided “as is,” with no warranty.',
+  },
+  {
+    name: 'consent',
+    label:
+      'I consent to the above (a timestamp will be recorded with this request).',
+  },
+] as const
 
 const initialValues = {
   fullName: '',
@@ -174,6 +195,13 @@ function blurredError(field: AnyFieldApi) {
 
 function touchedError(field: AnyFieldApi) {
   return field.state.meta.isTouched ? issueMessage(field) : undefined
+}
+
+// Pickers, radios, and checkboxes commit on interaction: change and blur in
+// one step, so their errors surface immediately (see touchedError above).
+function commit(field: AnyFieldApi, value: unknown) {
+  field.handleChange(value)
+  field.handleBlur()
 }
 
 export default function WeatherDataRequestDialog() {
@@ -254,23 +282,6 @@ export default function WeatherDataRequestDialog() {
 
   const role = useStore(form.store, (state) => state.values.role)
 
-  // Shared props for free-text inputs: controlled value, blur tracking,
-  // a hard length cap, and accessible error wiring.
-  function textProps(field: AnyFieldApi, key: TextField) {
-    const error = blurredError(field)
-    return {
-      id: ids[key],
-      value: field.state.value,
-      maxLength: MAX_LENGTHS[key],
-      'aria-invalid': error ? true : undefined,
-      'aria-describedby': error ? `${ids[key]}-error` : undefined,
-      onChange: (
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-      ) => field.handleChange(e.target.value),
-      onBlur: field.handleBlur,
-    }
-  }
-
   function resetForm() {
     form.reset()
     setStatus('idle')
@@ -348,99 +359,65 @@ export default function WeatherDataRequestDialog() {
                 </legend>
                 <form.Field name="fullName">
                   {(field) => (
-                    <Field
+                    <TextField
+                      field={field}
                       id={ids.fullName}
                       label="Full name"
                       required
-                      error={blurredError(field)}
-                    >
-                      <Input {...textProps(field, 'fullName')} />
-                    </Field>
+                    />
                   )}
                 </form.Field>
                 <form.Field name="email">
                   {(field) => (
-                    <Field
+                    <TextField
+                      field={field}
                       id={ids.email}
                       label="Email"
                       required
-                      error={blurredError(field)}
-                    >
-                      <Input
-                        type="email"
-                        inputMode="email"
-                        {...textProps(field, 'email')}
-                      />
-                    </Field>
+                      type="email"
+                      inputMode="email"
+                    />
                   )}
                 </form.Field>
                 <form.Field name="organization">
                   {(field) => (
-                    <Field
+                    <TextField
+                      field={field}
                       id={ids.organization}
                       label="Organization / institution"
-                      error={blurredError(field)}
-                    >
-                      <Input {...textProps(field, 'organization')} />
-                    </Field>
+                    />
                   )}
                 </form.Field>
                 <form.Field name="role">
                   {(field) => (
-                    <Field
+                    <SelectField
+                      field={field}
                       id={ids.role}
                       label="Role"
-                      required
-                      error={touchedError(field)}
-                    >
-                      <Select
-                        value={field.state.value}
-                        onValueChange={(v) => {
-                          field.handleChange(v)
-                          field.handleBlur()
-                        }}
-                      >
-                        <SelectTrigger
-                          id={ids.role}
-                          className="cursor-pointer"
-                          aria-invalid={touchedError(field) ? true : undefined}
-                        >
-                          <SelectValue placeholder="Select a role" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {ROLES.map((r) => (
-                            <SelectItem key={r.value} value={r.value}>
-                              {r.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </Field>
+                      placeholder="Select a role"
+                      options={ROLES}
+                    />
                   )}
                 </form.Field>
                 {role === 'student' && (
                   <form.Field name="pi">
                     {(field) => (
-                      <Field
+                      <TextField
+                        field={field}
                         id={ids.pi}
                         label="Major professor / PI"
-                        error={blurredError(field)}
-                      >
-                        <Input {...textProps(field, 'pi')} />
-                      </Field>
+                      />
                     )}
                   </form.Field>
                 )}
                 {role === 'other' && (
                   <form.Field name="roleOther">
                     {(field) => (
-                      <Field
+                      <TextField
+                        field={field}
                         id={ids.roleOther}
                         label="Please specify your role"
-                        error={blurredError(field)}
-                      >
-                        <Input {...textProps(field, 'roleOther')} />
-                      </Field>
+                      />
                     )}
                   </form.Field>
                 )}
@@ -453,47 +430,24 @@ export default function WeatherDataRequestDialog() {
                 </legend>
                 <form.Field name="purpose">
                   {(field) => (
-                    <Field
+                    <SelectField
+                      field={field}
                       id={ids.purpose}
                       label="Purpose"
-                      required
-                      error={touchedError(field)}
-                    >
-                      <Select
-                        value={field.state.value}
-                        onValueChange={(v) => {
-                          field.handleChange(v)
-                          field.handleBlur()
-                        }}
-                      >
-                        <SelectTrigger
-                          id={ids.purpose}
-                          className="cursor-pointer"
-                          aria-invalid={touchedError(field) ? true : undefined}
-                        >
-                          <SelectValue placeholder="Select a purpose" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {PURPOSES.map((p) => (
-                            <SelectItem key={p.value} value={p.value}>
-                              {p.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </Field>
+                      placeholder="Select a purpose"
+                      options={PURPOSES}
+                    />
                   )}
                 </form.Field>
                 <form.Field name="description">
                   {(field) => (
-                    <Field
+                    <TextField
+                      field={field}
                       id={ids.description}
                       label="Brief description of how the data will be used"
                       required
-                      error={blurredError(field)}
-                    >
-                      <Textarea {...textProps(field, 'description')} />
-                    </Field>
+                      multiline
+                    />
                   )}
                 </form.Field>
                 <fieldset>
@@ -505,34 +459,32 @@ export default function WeatherDataRequestDialog() {
                     </span>
                   </legend>
                   <form.Field name="published">
-                    {(field) => (
-                      <>
-                        <div className="flex gap-6">
-                          {(['yes', 'no'] as const).map((option) => (
-                            <label
-                              key={option}
-                              className="flex cursor-pointer items-center gap-2 text-sm"
-                            >
-                              <input
-                                type="radio"
-                                name="published"
-                                value={option}
-                                checked={field.state.value === option}
-                                onChange={() => {
-                                  field.handleChange(option)
-                                  field.handleBlur()
-                                }}
-                                className="size-4 cursor-pointer accent-primary"
-                              />
-                              {option === 'yes' ? 'Yes' : 'No'}
-                            </label>
-                          ))}
-                        </div>
-                        {touchedError(field) && (
-                          <FieldError message={touchedError(field)!} />
-                        )}
-                      </>
-                    )}
+                    {(field) => {
+                      const error = touchedError(field)
+                      return (
+                        <>
+                          <div className="flex gap-6">
+                            {(['yes', 'no'] as const).map((option) => (
+                              <label
+                                key={option}
+                                className="flex cursor-pointer items-center gap-2 text-sm"
+                              >
+                                <input
+                                  type="radio"
+                                  name="published"
+                                  value={option}
+                                  checked={field.state.value === option}
+                                  onChange={() => commit(field, option)}
+                                  className="size-4 cursor-pointer accent-primary"
+                                />
+                                {option === 'yes' ? 'Yes' : 'No'}
+                              </label>
+                            ))}
+                          </div>
+                          {error && <FieldError message={error} />}
+                        </>
+                      )
+                    }}
                   </form.Field>
                 </fieldset>
               </fieldset>
@@ -555,133 +507,92 @@ export default function WeatherDataRequestDialog() {
                     </span>
                   </legend>
                   <form.Field name="variables">
-                    {(field) => (
-                      <>
-                        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                          {VARIABLES.map((variable) => (
-                            <label
-                              key={variable}
-                              className="flex cursor-pointer items-center gap-2 text-sm"
-                            >
-                              <input
-                                type="checkbox"
-                                checked={field.state.value.includes(variable)}
-                                onChange={() => {
-                                  field.handleChange(
-                                    field.state.value.includes(variable)
-                                      ? field.state.value.filter(
-                                          (v) => v !== variable,
-                                        )
-                                      : [...field.state.value, variable],
-                                  )
-                                  field.handleBlur()
-                                }}
-                                className="size-4 cursor-pointer accent-primary"
-                              />
-                              {variable}
-                            </label>
-                          ))}
-                        </div>
-                        {touchedError(field) && (
-                          <FieldError message={touchedError(field)!} />
-                        )}
-                      </>
-                    )}
+                    {(field) => {
+                      const error = touchedError(field)
+                      return (
+                        <>
+                          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                            {VARIABLES.map((variable) => {
+                              const checked =
+                                field.state.value.includes(variable)
+                              return (
+                                <label
+                                  key={variable}
+                                  className="flex cursor-pointer items-center gap-2 text-sm"
+                                >
+                                  <input
+                                    type="checkbox"
+                                    checked={checked}
+                                    onChange={() =>
+                                      commit(
+                                        field,
+                                        checked
+                                          ? field.state.value.filter(
+                                              (v) => v !== variable,
+                                            )
+                                          : [...field.state.value, variable],
+                                      )
+                                    }
+                                    className="size-4 cursor-pointer accent-primary"
+                                  />
+                                  {variable}
+                                </label>
+                              )
+                            })}
+                          </div>
+                          {error && <FieldError message={error} />}
+                        </>
+                      )
+                    }}
                   </form.Field>
                 </fieldset>
 
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <form.Field name="startDate">
                     {(field) => (
-                      <Field
+                      <TextField
+                        field={field}
                         id={ids.startDate}
                         label="Start date"
                         required
-                        error={blurredError(field)}
-                      >
-                        <Input type="date" {...textProps(field, 'startDate')} />
-                      </Field>
+                        type="date"
+                      />
                     )}
                   </form.Field>
                   <form.Field name="endDate">
                     {(field) => (
-                      <Field
+                      <TextField
+                        field={field}
                         id={ids.endDate}
                         label="End date"
                         required
-                        error={blurredError(field)}
-                      >
-                        <Input type="date" {...textProps(field, 'endDate')} />
-                      </Field>
+                        type="date"
+                      />
                     )}
                   </form.Field>
                 </div>
 
                 <form.Field name="resolution">
                   {(field) => (
-                    <Field
+                    <SelectField
+                      field={field}
                       id={ids.resolution}
                       label="Temporal resolution"
-                      required
-                      error={touchedError(field)}
-                    >
-                      <Select
-                        value={field.state.value}
-                        onValueChange={(v) => {
-                          field.handleChange(v)
-                          field.handleBlur()
-                        }}
-                      >
-                        <SelectTrigger
-                          id={ids.resolution}
-                          className="cursor-pointer"
-                          aria-invalid={touchedError(field) ? true : undefined}
-                        >
-                          <SelectValue placeholder="Select a resolution" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {RESOLUTIONS.map((r) => (
-                            <SelectItem key={r.value} value={r.value}>
-                              {r.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </Field>
+                      placeholder="Select a resolution"
+                      options={RESOLUTIONS}
+                    />
                   )}
                 </form.Field>
 
                 <form.Field name="format">
                   {(field) => (
-                    <Field
+                    <SelectField
+                      field={field}
                       id={ids.format}
                       label="File format"
-                      required
-                      error={touchedError(field)}
-                    >
-                      <Select
-                        value={field.state.value}
-                        onValueChange={(v) => {
-                          field.handleChange(v)
-                          field.handleBlur()
-                        }}
-                      >
-                        <SelectTrigger
-                          id={ids.format}
-                          className="cursor-pointer"
-                          aria-invalid={touchedError(field) ? true : undefined}
-                        >
-                          <SelectValue placeholder="Select a format" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {FORMATS.map((f) => (
-                            <SelectItem key={f.value} value={f.value}>
-                              {f.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </Field>
+                      placeholder="Select a format"
+                      options={FORMATS}
+                    />
                   )}
                 </form.Field>
               </fieldset>
@@ -691,65 +602,13 @@ export default function WeatherDataRequestDialog() {
                 <legend className="text-sm font-semibold text-foreground mb-2">
                   Acknowledgment
                 </legend>
-                <form.Field name="ackCite">
-                  {(field) => (
-                    <CheckboxRow
-                      checked={field.state.value}
-                      onChange={(c) => {
-                        field.handleChange(c)
-                        field.handleBlur()
-                      }}
-                      error={touchedError(field)}
-                    >
-                      I agree to cite / acknowledge the Indio Mountains Research
-                      Station in any resulting publication.
-                    </CheckboxRow>
-                  )}
-                </form.Field>
-                <form.Field name="ackShare">
-                  {(field) => (
-                    <CheckboxRow
-                      checked={field.state.value}
-                      onChange={(c) => {
-                        field.handleChange(c)
-                        field.handleBlur()
-                      }}
-                      error={touchedError(field)}
-                    >
-                      I agree to share a copy of any resulting publications.
-                    </CheckboxRow>
-                  )}
-                </form.Field>
-                <form.Field name="ackAsIs">
-                  {(field) => (
-                    <CheckboxRow
-                      checked={field.state.value}
-                      onChange={(c) => {
-                        field.handleChange(c)
-                        field.handleBlur()
-                      }}
-                      error={touchedError(field)}
-                    >
-                      I understand the data is provided &ldquo;as is,&rdquo;
-                      with no warranty.
-                    </CheckboxRow>
-                  )}
-                </form.Field>
-                <form.Field name="consent">
-                  {(field) => (
-                    <CheckboxRow
-                      checked={field.state.value}
-                      onChange={(c) => {
-                        field.handleChange(c)
-                        field.handleBlur()
-                      }}
-                      error={touchedError(field)}
-                    >
-                      I consent to the above (a timestamp will be recorded with
-                      this request).
-                    </CheckboxRow>
-                  )}
-                </form.Field>
+                {ACKNOWLEDGMENTS.map(({ name, label }) => (
+                  <form.Field key={name} name={name}>
+                    {(field) => (
+                      <CheckboxRow field={field}>{label}</CheckboxRow>
+                    )}
+                  </form.Field>
+                ))}
               </fieldset>
 
               {status === 'error' && (
@@ -832,28 +691,102 @@ function FieldError({ id, message }: { id?: string; message: string }) {
 }
 
 function CheckboxRow({
-  checked,
-  onChange,
-  error,
+  field,
   children,
 }: {
-  checked: boolean
-  onChange: (checked: boolean) => void
-  error?: string
+  field: AnyFieldApi
   children: React.ReactNode
 }) {
+  const error = touchedError(field)
   return (
     <div>
       <label className="flex cursor-pointer items-start gap-2 text-sm">
         <input
           type="checkbox"
-          checked={checked}
-          onChange={(e) => onChange(e.target.checked)}
+          checked={field.state.value}
+          onChange={(e) => commit(field, e.target.checked)}
           className="mt-0.5 size-4 shrink-0 cursor-pointer accent-primary"
         />
         <span>{children}</span>
       </label>
       {error && <FieldError message={error} />}
     </div>
+  )
+}
+
+// Shared free-text field: controlled value, blur tracking, a hard length cap
+// (keyed off the field name), and accessible error wiring.
+function TextField({
+  field,
+  id,
+  label,
+  required,
+  multiline,
+  type,
+  inputMode,
+}: {
+  field: AnyFieldApi
+  id: string
+  label: string
+  required?: boolean
+  multiline?: boolean
+  type?: React.HTMLInputTypeAttribute
+  inputMode?: React.HTMLAttributes<HTMLInputElement>['inputMode']
+}) {
+  const error = blurredError(field)
+  const shared = {
+    id,
+    value: field.state.value,
+    maxLength: MAX_LENGTHS[field.name as TextFieldName],
+    'aria-invalid': error ? true : undefined,
+    'aria-describedby': error ? `${id}-error` : undefined,
+    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+      field.handleChange(e.target.value),
+    onBlur: field.handleBlur,
+  }
+  return (
+    <Field id={id} label={label} required={required} error={error}>
+      {multiline ? (
+        <Textarea {...shared} />
+      ) : (
+        <Input type={type} inputMode={inputMode} {...shared} />
+      )}
+    </Field>
+  )
+}
+
+function SelectField({
+  field,
+  id,
+  label,
+  placeholder,
+  options,
+}: {
+  field: AnyFieldApi
+  id: string
+  label: string
+  placeholder: string
+  options: ReadonlyArray<{ value: string; label: string }>
+}) {
+  const error = touchedError(field)
+  return (
+    <Field id={id} label={label} required error={error}>
+      <Select value={field.state.value} onValueChange={(v) => commit(field, v)}>
+        <SelectTrigger
+          id={id}
+          className="cursor-pointer"
+          aria-invalid={error ? true : undefined}
+        >
+          <SelectValue placeholder={placeholder} />
+        </SelectTrigger>
+        <SelectContent>
+          {options.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </Field>
   )
 }

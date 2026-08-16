@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useMediaQuery } from '@uidotdev/usehooks'
 import { useDebouncedValue } from '@tanstack/react-pacer'
 import { Layers } from 'lucide-react'
@@ -57,9 +57,12 @@ const Gazetteer = () => {
     }
   }, [selectedId])
 
-  // Clicking the already-selected entry toggles it off.
-  const toggleSelected = (id: string) =>
-    setSelectedId((prev) => (prev === id ? null : id))
+  // Clicking the already-selected entry toggles it off. Stable identity so
+  // the memoized map and card list don't re-render on parent renders.
+  const toggleSelected = useCallback(
+    (id: string) => setSelectedId((prev) => (prev === id ? null : id)),
+    [],
+  )
 
   // On mobile, selecting a card drops the sheet to half height so the
   // flown-to pin is visible above it; deselecting leaves the sheet as-is.
