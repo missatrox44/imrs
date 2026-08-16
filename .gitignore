@@ -25,3 +25,4 @@ specimens.json
 .agents
 .playwright-mcp
 tpwd-sgcn-list.csv
+/ignore-docs
