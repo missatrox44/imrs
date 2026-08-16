@@ -1,7 +1,8 @@
-import { memo, useEffect, useRef, useState } from 'react'
+import { memo, useRef, useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import { m, useReducedMotion } from 'framer-motion'
 import { useMediaQuery } from '@uidotdev/usehooks'
+import { useDebouncer } from '@tanstack/react-pacer'
 import { useWindowVirtualizer } from '@tanstack/react-virtual'
 import type { Species } from '@/types/species'
 import { Card, CardContent } from '@/components/ui/card'
@@ -23,23 +24,15 @@ const SpeciesCard = memo(function SpeciesCard({ item }: { item: Species }) {
   // Hover/focus intent: only flip `active` after a short delay so sweeping the
   // mouse across the grid doesn't fire a burst of iNaturalist requests.
   const [active, setActive] = useState(false)
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const hoverIntent = useDebouncer(() => setActive(true), {
+    wait: HOVER_INTENT_MS,
+  })
 
-  const activate = () => {
-    if (timerRef.current) clearTimeout(timerRef.current)
-    timerRef.current = setTimeout(() => setActive(true), HOVER_INTENT_MS)
-  }
+  const activate = () => hoverIntent.maybeExecute()
   const deactivate = () => {
-    if (timerRef.current) clearTimeout(timerRef.current)
+    hoverIntent.cancel()
     setActive(false)
   }
-
-  useEffect(
-    () => () => {
-      if (timerRef.current) clearTimeout(timerRef.current)
-    },
-    [],
-  )
 
   const { url } = useSpeciesHoverImage(item, active)
   const onPhoto = active && !!url
