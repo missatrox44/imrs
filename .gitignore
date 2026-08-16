@@ -17,7 +17,6 @@ specimens.csv
 *.db-shm
 *.db-wal
 specimens.tsv
-.claude
 /imrs_boundary.kml
 *.sql
 specimens.json
