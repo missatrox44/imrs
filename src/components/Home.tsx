@@ -82,13 +82,9 @@ export const Home = () => {
           */}
         </section>
 
-
-
         {/* Stats Section */}
         <StatsCounter />
       </main>
-
-
 
       {/* Carousel sits outside the container so it spans the full viewport width */}
       <ImageCarousel />

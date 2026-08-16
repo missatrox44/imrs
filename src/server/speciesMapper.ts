@@ -32,8 +32,7 @@ export function rowToSpecies(row: Record<string, unknown>): Species | null {
     species: row.species as string | undefined,
     authorship: row.authorship as string | undefined,
     collectors_field_numbers: row.collectors_field_numbers as
-      | string
-      | undefined,
+      string | undefined,
     note: row.note as string | undefined,
     species_common_name: row.species_common_name as string | undefined,
     records: row.records as string | undefined,
