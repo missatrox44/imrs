@@ -30,8 +30,8 @@ Query with the turso CLI (`turso db shell imrs`), not one-off `@libsql/client` s
 
 A name that returns no row is usually NOT missing. Check, in order:
 
-1. **DB misspelling** — query by genus alone or `like` fragments (found: `Chrysactina` for *Chrysactinia*, `trifololiata` for *trifoliolata*, `Peratettix` for *Paratettix*, `equs` for *eques*)
-2. **Synonym / modern genus** — the DB stores accepted names (*Acacia constricta* → *Vachellia constricta*, *Acacia greggii* → *Senegalia greggii*)
+1. **DB misspelling** — query by genus alone or `like` fragments (found: `Chrysactina` for _Chrysactinia_, `trifololiata` for _trifoliolata_, `Peratettix` for _Paratettix_, `equs` for _eques_)
+2. **Synonym / modern genus** — the DB stores accepted names (_Acacia constricta_ → _Vachellia constricta_, _Acacia greggii_ → _Senegalia greggii_)
 3. **Genuinely absent** — only then insert
 
 ### 4. Insert missing species
@@ -40,16 +40,16 @@ The `.env.local` `TURSO_AUTH_TOKEN` is **read-only**. Writes go through `turso a
 
 Before writing INSERTs, SELECT a sibling row (same family) and copy its conventions exactly:
 
-| Convention | Example |
-| --- | --- |
-| id | `max(id) + 1`, sequential |
-| family/subfamily | UPPERCASE (`ACRIDIDAE`, `POACEAE`) |
-| authorship | `(Surname)` parenthesized per original combination; `(Michaux) Torrey` style for plants |
-| collectors_field_numbers | `[Surname (UTEP)]` |
-| species_common_name | curly apostrophes (`Thomas’s`) |
-| records | starts lowercase: `it was collected...`; name the collector, site, survey |
-| empty taxonomy levels | `''` if sibling rows use `''`, else NULL |
-| conservation columns | leave NULL |
+| Convention               | Example                                                                                 |
+| ------------------------ | --------------------------------------------------------------------------------------- |
+| id                       | `max(id) + 1`, sequential                                                               |
+| family/subfamily         | UPPERCASE (`ACRIDIDAE`, `POACEAE`)                                                      |
+| authorship               | `(Surname)` parenthesized per original combination; `(Michaux) Torrey` style for plants |
+| collectors_field_numbers | `[Surname (UTEP)]`                                                                      |
+| species_common_name      | curly apostrophes (`Thomas’s`)                                                          |
+| records                  | starts lowercase: `it was collected...`; name the collector, site, survey               |
+| empty taxonomy levels    | `''` if sibling rows use `''`, else NULL                                                |
+| conservation columns     | leave NULL                                                                              |
 
 Verify with a SELECT after inserting.
 
@@ -68,10 +68,10 @@ Leave `publications.ts` and the `.md` file uncommitted; report paths. Report any
 
 ## Common Mistakes
 
-| Mistake | Fix |
-| --- | --- |
-| Inserting a "missing" species that is a misspelling or synonym in the DB | Run the step-3 checks first |
-| Writing with the `.env.local` token | It is read-only; use `turso auth login` + CLI shell |
-| Linking genus-only or unidentified records | List them in the .md, exclude from `speciesIds` |
-| Inventing row formatting | Copy a sibling row's conventions verbatim |
-| Committing the result | Never; commits are manual-trigger only |
+| Mistake                                                                  | Fix                                                 |
+| ------------------------------------------------------------------------ | --------------------------------------------------- |
+| Inserting a "missing" species that is a misspelling or synonym in the DB | Run the step-3 checks first                         |
+| Writing with the `.env.local` token                                      | It is read-only; use `turso auth login` + CLI shell |
+| Linking genus-only or unidentified records                               | List them in the .md, exclude from `speciesIds`     |
+| Inventing row formatting                                                 | Copy a sibling row's conventions verbatim           |
+| Committing the result                                                    | Never; commits are manual-trigger only              |

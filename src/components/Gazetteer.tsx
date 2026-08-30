@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useMediaQuery } from '@uidotdev/usehooks'
+import { useDebouncedValue } from '@tanstack/react-pacer'
 import { Layers } from 'lucide-react'
 import type { ComponentType } from 'react'
 import type { GazetteerMapProps } from '@/components/GazetteerMap'
@@ -15,6 +16,9 @@ import {
 
 const Gazetteer = () => {
   const [searchTerm, setSearchTerm] = useState('')
+  // Keep the input instant; debounce the value the map and list consume so
+  // typing doesn't rebuild Leaflet markers on every keystroke.
+  const [debouncedSearchTerm] = useDebouncedValue(searchTerm, { wait: 200 })
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const cardRefs = useRef<Record<string, HTMLLIElement | null>>({})
   const [MapComponent, setMapComponent] =
@@ -31,9 +35,9 @@ const Gazetteer = () => {
 
   const filteredAndSortedEntries = useMemo(() => {
     return GAZETTEER_ENTRIES.filter((entry) =>
-      entry.name.toLowerCase().includes(searchTerm.toLowerCase()),
+      entry.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()),
     ).sort((a, b) => a.name.localeCompare(b.name))
-  }, [searchTerm])
+  }, [debouncedSearchTerm])
 
   // Clear selectedId when it's no longer in filtered results
   useEffect(() => {
@@ -53,9 +57,12 @@ const Gazetteer = () => {
     }
   }, [selectedId])
 
-  // Clicking the already-selected entry toggles it off.
-  const toggleSelected = (id: string) =>
-    setSelectedId((prev) => (prev === id ? null : id))
+  // Clicking the already-selected entry toggles it off. Stable identity so
+  // the memoized map and card list don't re-render on parent renders.
+  const toggleSelected = useCallback(
+    (id: string) => setSelectedId((prev) => (prev === id ? null : id)),
+    [],
+  )
 
   // On mobile, selecting a card drops the sheet to half height so the
   // flown-to pin is visible above it; deselecting leaves the sheet as-is.
@@ -170,7 +177,7 @@ const Gazetteer = () => {
                 selectedId={selectedId}
                 onSelect={toggleSelected}
                 cardRefs={cardRefs}
-                searchTerm={searchTerm}
+                searchTerm={debouncedSearchTerm}
               />
             </div>
           </div>

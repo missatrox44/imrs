@@ -3,6 +3,7 @@ import { AudioLines, Calendar, MapPin, User } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useInView } from 'react-intersection-observer'
+import { useThrottledCallback } from '@tanstack/react-pacer'
 
 import type { TaxonGroup } from '@/types/taxon'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
@@ -79,12 +80,20 @@ const Observations = () => {
   const observations = data?.pages.flatMap((page) => page.results) ?? []
   const totalResults = data?.pages[0]?.total_results ?? 0
 
+  // Cap chained page requests at 1/s so fling-scrolling past the sentinel
+  // can't burst-fetch against iNaturalist.
+  const throttledFetchNextPage = useThrottledCallback(fetchNextPage, {
+    wait: 1000,
+    leading: true,
+    trailing: false,
+  })
+
   // Infinite scroll trigger
   useEffect(() => {
     if (inView && hasNextPage && !isFetching) {
-      fetchNextPage()
+      throttledFetchNextPage()
     }
-  }, [inView, hasNextPage, isFetching, fetchNextPage])
+  }, [inView, hasNextPage, isFetching, throttledFetchNextPage])
 
   // Genuinely empty feed (no filters applied) → friendly empty state.
   if (isUnfiltered && !isFetching && observations.length === 0) {

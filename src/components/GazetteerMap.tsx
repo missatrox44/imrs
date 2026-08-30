@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { memo, useEffect } from 'react'
 import {
   GeoJSON,
   LayersControl,
@@ -149,7 +149,9 @@ export interface GazetteerMapProps {
   onPinClick: (id: string) => void
 }
 
-export function GazetteerMap({
+// Memoized so keystrokes in the gazetteer search box (which re-render the
+// parent) don't reconcile the full Leaflet marker tree between debounce ticks.
+export const GazetteerMap = memo(function GazetteerMap({
   entries,
   selectedId,
   onPinClick,
@@ -263,4 +265,4 @@ export function GazetteerMap({
       </MapContainer>
     </div>
   )
-}
+})

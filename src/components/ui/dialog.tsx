@@ -72,10 +72,7 @@ const DialogHeader = ({
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
-    className={cn(
-      'grid gap-1.5 px-6 py-4 border-b border-border',
-      className,
-    )}
+    className={cn('grid gap-1.5 px-6 py-4 border-b border-border', className)}
     {...props}
   />
 )

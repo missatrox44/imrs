@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { LayoutGrid, Table as TableIcon } from 'lucide-react'
-import { useDebounce, useMediaQuery } from '@uidotdev/usehooks'
+import { useMediaQuery } from '@uidotdev/usehooks'
+import { useDebouncedValue } from '@tanstack/react-pacer'
 import { useNavigate } from '@tanstack/react-router'
 import { SpeciesGridView } from './SpeciesGridView'
 import type { Species } from '@/types/species'
@@ -39,7 +40,7 @@ const SpeciesIndex = () => {
   const { category } = Route.useSearch()
   const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState('')
-  const debouncedSearchTerm = useDebounce(searchTerm, 300)
+  const [debouncedSearchTerm] = useDebouncedValue(searchTerm, { wait: 300 })
   const [view, setView] = useState<'grid' | 'table'>('grid')
   const [taxonomicFilters, setTaxonomicFilters] = useState<TaxonomicFilters>(
     EMPTY_TAXONOMIC_FILTERS,

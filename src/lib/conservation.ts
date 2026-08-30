@@ -8,18 +8,10 @@ import type { Species } from '@/types/species'
 // source-faithful and the UI never re-derives status logic.
 
 export type ConservationSource =
-  | 'iucn'
-  | 'natureserve-global'
-  | 'natureserve-tx'
-  | 'texas-sgcn'
+  'iucn' | 'natureserve-global' | 'natureserve-tx' | 'texas-sgcn'
 
 export type ConservationTier =
-  | 'critical'
-  | 'high'
-  | 'moderate'
-  | 'secure'
-  | 'flag'
-  | 'unknown'
+  'critical' | 'high' | 'moderate' | 'secure' | 'flag' | 'unknown'
 
 export interface ConservationRank {
   source: ConservationSource

@@ -1,5 +1,6 @@
 import { Suspense, lazy, useMemo, useState } from 'react'
 import { useMediaQuery } from '@uidotdev/usehooks'
+import { useThrottledCallback } from '@tanstack/react-pacer'
 import WeatherChartCard from './WeatherChartCard'
 import type { WeatherDailyRow } from '@/types/weather'
 import { WEATHER_COLORS } from '@/lib/weatherColors'
@@ -70,9 +71,14 @@ export default function WeatherTimeSeries({
       ? Math.floor(chartData.length / 12)
       : Math.floor(chartData.length / 6)
 
-  const handleBrushChange = (start: number, end: number) => {
-    setBrushIndex([start, end])
-  }
+  // Each brush update re-renders all four synced recharts panels, so cap the
+  // drag to ~10 updates/s; trailing ensures the final position always lands.
+  const handleBrushChange = useThrottledCallback(
+    (start: number, end: number) => {
+      setBrushIndex([start, end])
+    },
+    { wait: 100, leading: true, trailing: true },
+  )
 
   return (
     <WeatherChartCard
