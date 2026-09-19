@@ -215,6 +215,19 @@
   .shadow-hover {
     box-shadow: var(--shadow-hover);
   }
+
+  /* Torn-paper top/bottom edges (Figma stats band). Masks are 1440x24 alpha PNGs
+     cut from the Figma export; stretching them to 100% width keeps the seam-free. */
+  .torn-edges {
+    mask-image:
+      url('/torn-top.png'), url('/torn-bottom.png'), linear-gradient(#000, #000);
+    mask-size:
+      100% 24px,
+      100% 24px,
+      100% calc(100% - 48px);
+    mask-position: top, bottom, center;
+    mask-repeat: no-repeat;
+  }
 }
 
 /* Leaflet popup theming */

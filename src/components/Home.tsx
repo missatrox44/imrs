@@ -1,6 +1,6 @@
 import { BookOpen, Eye } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
-import { StatsCounter } from './StatsCounter'
+import { IMRS_StatsCounter as StatsCounter } from './IMRS_StatsCounter'
 import { GazetteerRolodex } from './GazetteerRolodex'
 import { WeatherMiniDashboard } from './WeatherMiniDashboard'
 import { Button } from '@/components/ui/button'
@@ -81,12 +81,10 @@ export const Home = () => {
           <WeatherActionCard />
           */}
         </section>
-
-        {/* Stats Section */}
-        <StatsCounter />
       </main>
 
-      {/* Carousel sits outside the container so it spans the full viewport width */}
+      {/* Stats band and carousel sit outside the container so they span the full viewport width */}
+      <StatsCounter />
       <ImageCarousel />
 
       <div className="mx-auto px-4 container">
