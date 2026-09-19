@@ -1,21 +1,6 @@
-/* @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap'); */
 @import 'leaflet/dist/leaflet.css';
 @import 'tailwindcss';
 @plugin 'tailwindcss-animate';
-/* @import 'tw-animate-css'; */
-
-/* @custom-variant dark (&:is(.dark *)); */
-
-/* body {
-  @apply m-0;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
-} */
 
 @theme {
   --font-mono:
@@ -59,6 +44,39 @@ code {
   /* Optional: expose radius if you consume it with utilities that reference tokens */
   --radius: var(--radius);
 }
+
+
+/* RESkin start =================================================== */
+
+/* Emitted with `static` so unused tokens still reach :root for dynamic var() lookups */
+@theme static {
+  /* Reskin palette — Figma "IMRS Website Design" 38:2032. Additive; old tokens stay until cutover. */
+  --color-brand-green: #3c5b4b;
+  --color-brand-green-dark: #273d22;
+  --color-brand-green-light: #8bb270;
+  --color-brand-cream: #f8f5f1;
+  --color-brand-ink: #0a090b;
+
+  --color-category-plants: var(--color-brand-green-light);
+  --color-category-fish: #3840b0;
+  --color-category-fungi: #a52f31;
+  --color-category-reptiles: #8560cf;
+  --color-category-birds: #e7c53d;
+  --color-category-arthropods: #eeb035;
+  --color-category-mammals: #e7753d;
+  --color-category-amphibians: #74c0d9;
+  --color-category-inverts: #349989;
+
+  --radius-pill: 2.5rem; /* 40px pill buttons */
+
+  --font-brand-mono: 'DM Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-brand-sans:
+    'DM Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    Arial, sans-serif;
+  --font-brand-hand: 'Just Me Again Down Here', cursive;
+}
+
+/* RESkin end =================================================== */
 
 /* IMRS Biodiversity Explorer Design System - Vintage Research Archive */
 @layer base {
