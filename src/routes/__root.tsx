@@ -14,7 +14,7 @@ import { LazyMotion, domAnimation } from 'framer-motion'
 
 import appCss from '../styles.css?url'
 import type { QueryClient } from '@tanstack/react-query'
-import Header from '@/components/layout/Header'
+import Header from '@/components/layout/IMRS_Header'
 import { Footer } from '@/components/layout/Footer'
 import { SITE_URL } from '@/data/constants'
 
