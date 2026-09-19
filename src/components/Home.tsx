@@ -2,7 +2,7 @@ import { BookOpen, Eye } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { IMRS_StatsCounter as StatsCounter } from './IMRS_StatsCounter'
 import { GazetteerRolodex } from './GazetteerRolodex'
-import { WeatherMiniDashboard } from './WeatherMiniDashboard'
+import { IMRS_WeatherMiniDashboard as WeatherMiniDashboard } from './IMRS_WeatherMiniDashboard'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { IMRS_ImageCarousel as ImageCarousel } from '@/components/IMRS_ImageCarousel'
@@ -91,9 +91,7 @@ export const Home = () => {
         <GazetteerRolodex />
       </div>
 
-      <section className="max-w-4xl mx-auto mt-20 pb-12 px-4">
-        <WeatherMiniDashboard />
-      </section>
+      <WeatherMiniDashboard />
     </div>
   )
 }

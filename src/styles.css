@@ -228,6 +228,16 @@
     mask-position: top, bottom, center;
     mask-repeat: no-repeat;
   }
+
+  /* Torn-paper top edge only (Figma weather band, node 80:1112). 1440x16 alpha PNG. */
+  .torn-edge-top {
+    mask-image: url('/torn-weather-top.png'), linear-gradient(#000, #000);
+    mask-size:
+      100% 16px,
+      100% calc(100% - 16px);
+    mask-position: top, bottom;
+    mask-repeat: no-repeat;
+  }
 }
 
 /* Leaflet popup theming */
