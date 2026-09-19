@@ -15,7 +15,7 @@ import { LazyMotion, domAnimation } from 'framer-motion'
 import appCss from '../styles.css?url'
 import type { QueryClient } from '@tanstack/react-query'
 import Header from '@/components/layout/IMRS_Header'
-import { Footer } from '@/components/layout/Footer'
+import { IMRS_Footer as Footer } from '@/components/layout/IMRS_Footer'
 import { SITE_URL } from '@/data/constants'
 
 export const Route = createRootRouteWithContext<{
