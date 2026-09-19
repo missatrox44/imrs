@@ -5,7 +5,7 @@ import { GazetteerRolodex } from './GazetteerRolodex'
 import { WeatherMiniDashboard } from './WeatherMiniDashboard'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { ImageCarousel } from '@/components/ImageCarousel'
+import { IMRS_ImageCarousel as ImageCarousel } from '@/components/IMRS_ImageCarousel'
 
 export const Home = () => {
   return (
