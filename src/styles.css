@@ -56,6 +56,7 @@
   --color-brand-cream: #f8f5f1;
   --color-brand-ink: #0a090b;
   --color-brand-light: #fffefb; /* Figma "Light": text on dark green */
+  --color-brand-paper: #fffcf7; /* Figma "Documented Wildlife" section background */
 
   --color-category-plants: var(--color-brand-green-light);
   --color-category-fish: #3840b0;

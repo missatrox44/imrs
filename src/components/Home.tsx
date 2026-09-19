@@ -1,17 +1,16 @@
-import { BookOpen, Eye } from 'lucide-react'
-import { Link } from '@tanstack/react-router'
 import { IMRS_StatsCounter as StatsCounter } from './IMRS_StatsCounter'
 import { GazetteerRolodex } from './GazetteerRolodex'
 import { IMRS_WeatherMiniDashboard as WeatherMiniDashboard } from './IMRS_WeatherMiniDashboard'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { IMRS_ImageCarousel as ImageCarousel } from '@/components/IMRS_ImageCarousel'
+import { IMRS_DocumentedWildlife as DocumentedWildlife } from './IMRS_DocumentedWildlife'
 
 export const Home = () => {
   return (
     <div className="min-h-screen bg-background">
+      {/* Legacy hero + action cards, replaced by IMRS_DocumentedWildlife (Figma 80:1006).
+          Restore imports if re-enabled: BookOpen, Eye (lucide-react); Link (@tanstack/react-router);
+          Button (@/components/ui/button); Card, CardContent (@/components/ui/card).
       <main id="home-main" className="mx-auto px-4 py-12 container">
-        {/* Hero Section */}
+        Hero Section
         <section className="text-center max-w-4xl mx-auto mb-16">
           <h1 className="text-4xl md:text-6xl font-semibold text-foreground mb-6">
             IMRS Biodiversity
@@ -27,7 +26,7 @@ export const Home = () => {
           </p>
         </section>
 
-        {/* Action Cards */}
+        Action Cards
         <section className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           <Link to="/observations" className="no-underline">
             <Card className="gradient-card shadow-md hover:shadow-xl transition-shadow duration-300 group cursor-pointer">
@@ -77,15 +76,17 @@ export const Home = () => {
             </Card>
           </Link>
 
-          {/* Variant 1: third action card — uncomment this AND change md:grid-cols-2 to md:grid-cols-3 on this section:
+          Variant 1: third action card — uncomment this AND change md:grid-cols-2 to md:grid-cols-3 on this section:
           <WeatherActionCard />
-          */}
         </section>
       </main>
+      */}
 
-      {/* Stats band and carousel sit outside the container so they span the full viewport width */}
-      <StatsCounter />
-      <ImageCarousel />
+      <main id="home-main">
+        <DocumentedWildlife />
+        {/* Stats band spans the full viewport width */}
+        <StatsCounter />
+      </main>
 
       <div className="mx-auto px-4 container">
         <GazetteerRolodex />
