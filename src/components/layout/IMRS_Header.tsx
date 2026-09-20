@@ -1,6 +1,7 @@
 import { Link, useRouterState } from '@tanstack/react-router'
 import { IMRS_MobileNav } from './IMRS_MobileNav'
 import { navItems } from '@/data/constants'
+import { useScrollDirection } from '@/hooks/useScrollDirection'
 
 // Figma "IMRS Website Design" node 110:737. Four destinations only; Home is the logo.
 export const imrsNavItems = navItems.filter((item) => item.to !== '/')
@@ -11,9 +12,14 @@ export function isActivePath(pathname: string, to: string) {
 
 export default function IMRS_Header() {
   const pathname = useRouterState({ select: (s) => s.location.pathname })
+  const hidden = useScrollDirection() === 'down'
 
   return (
-    <header className="relative z-10 px-4 pt-4 lg:px-16 lg:pt-8">
+    <header
+      className={`sticky top-0 z-30 px-4 pt-4 transition-transform duration-300 motion-reduce:transition-none lg:px-16 lg:pt-8 ${
+        hidden ? '-translate-y-full' : 'translate-y-0'
+      }`}
+    >
       <nav
         aria-label="Primary navigation"
         className="mx-auto flex h-[77px] max-w-[1310px] items-center justify-between rounded-[10px] bg-brand-cream pr-4 pl-4 shadow-[0_4px_18px_rgba(0,0,0,0.08)] lg:pr-[57px] lg:pl-[46px]"
