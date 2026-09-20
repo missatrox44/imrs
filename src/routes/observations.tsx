@@ -1,5 +1,7 @@
 import { createFileRoute, useRouter } from '@tanstack/react-router'
-import Observations from '@/components/Observations'
+// Legacy header + grid, replaced by IMRS_ObservationsFeed (Figma 80:1185).
+// import Observations from '@/components/Observations'
+import { IMRS_ObservationsFeed as ObservationsFeed } from '@/components/IMRS_ObservationsFeed'
 import { Loader } from '@/components/Loader'
 import { SITE_URL } from '@/data/constants'
 import { observationsQuery } from '@/lib/inat'
@@ -41,8 +43,17 @@ export const Route = createFileRoute('/observations')({
 
   pendingComponent: () => <Loader dataTitle="observations" />,
   errorComponent: ObservationsErrorComponent,
-  component: Observations,
+  component: ObservationsPage,
 })
+
+function ObservationsPage() {
+  return (
+    <main>
+      {/* Reskinned hero (Figma 80:1179) mounts here, above the feed. */}
+      <ObservationsFeed />
+    </main>
+  )
+}
 
 function ObservationsErrorComponent() {
   const router = useRouter()

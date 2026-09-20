@@ -58,6 +58,7 @@
   --color-brand-light: #fffefb; /* Figma "Light": text on dark green */
   --color-brand-paper: #fffcf7; /* Figma "Documented Wildlife" section background */
   --color-brand-sand: #ece8e1; /* Figma hero + "Explore Locations" background */
+  --color-brand-gray: #8e8e8e; /* Figma "Gray": observations result count */
 
   --color-category-plants: var(--color-brand-green-light);
   --color-category-fish: #3840b0;
