@@ -13,7 +13,7 @@ export default function IMRS_Header() {
   const pathname = useRouterState({ select: (s) => s.location.pathname })
 
   return (
-    <header className="px-4 pt-4 lg:px-16 lg:pt-8">
+    <header className="relative z-10 px-4 pt-4 lg:px-16 lg:pt-8">
       <nav
         aria-label="Primary navigation"
         className="mx-auto flex h-[77px] max-w-[1310px] items-center justify-between rounded-[10px] bg-brand-cream pr-4 pl-4 shadow-[0_4px_18px_rgba(0,0,0,0.08)] lg:pr-[57px] lg:pl-[46px]"
