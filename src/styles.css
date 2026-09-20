@@ -231,6 +231,16 @@
     mask-repeat: no-repeat;
   }
 
+  /* Dot grid (Figma 28:46 "Group 2917"): 3.76px dots on a 61.17px grid. */
+  .dot-grid {
+    background-image: radial-gradient(
+      circle,
+      rgb(0 0 0 / 0.12) 1.9px,
+      transparent 2.1px
+    );
+    background-size: 61px 61px;
+  }
+
   /* Torn-paper top edge only (Figma weather band, node 80:1112). 1440x16 alpha PNG. */
   .torn-edge-top {
     mask-image: url('/torn-weather-top.png'), linear-gradient(#000, #000);

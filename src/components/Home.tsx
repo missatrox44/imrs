@@ -1,5 +1,5 @@
 import { IMRS_StatsCounter as StatsCounter } from './IMRS_StatsCounter'
-import { GazetteerRolodex } from './GazetteerRolodex'
+import { IMRS_GazetteerRolodex as GazetteerRolodex } from './IMRS_GazetteerRolodex'
 import { IMRS_WeatherMiniDashboard as WeatherMiniDashboard } from './IMRS_WeatherMiniDashboard'
 import { IMRS_DocumentedWildlife as DocumentedWildlife } from './IMRS_DocumentedWildlife'
 import { IMRS_Homepage_Hero as HomepageHero } from './IMRS_Homepage_Hero'
@@ -90,9 +90,7 @@ export const Home = () => {
         <StatsCounter />
       </main>
 
-      <div className="mx-auto px-4 container">
-        <GazetteerRolodex />
-      </div>
+      <GazetteerRolodex />
 
       <WeatherMiniDashboard />
     </div>

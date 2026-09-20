@@ -52,7 +52,7 @@ export const IMRS_StatsCounter = () => {
   return (
     <m.section
       aria-label="Research station by the numbers"
-      className="torn-edges relative mt-20 overflow-hidden bg-brand-green-dark px-4 py-20 text-center lg:py-[114px]"
+      className="torn-edges relative z-10 mt-20 overflow-hidden bg-brand-green-dark px-4 py-20 text-center lg:py-[114px]"
       initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
