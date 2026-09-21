@@ -1,42 +1,25 @@
 // Reskin of the observations filter bar + infinite grid (Figma 80:1185).
 // Data flow mirrors components/Observations.tsx; only presentation changes.
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AudioLines, Calendar, MapPin, User } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useInView } from 'react-intersection-observer'
 import { useThrottledCallback } from '@tanstack/react-pacer'
+import { useReducedMotion } from 'framer-motion'
 
 import type { TaxonGroup } from '@/types/taxon'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 import EmptyState from '@/components/EmptyState'
+import { IMRS_BackToTop } from '@/components/IMRS_BackToTop'
+import { IMRS_ObservationsFilters } from '@/components/IMRS_ObservationsFilters'
 import { ObservationCardSkeleton } from '@/components/ObservationCardSkeleton'
 import { formatDate } from '@/lib/formatDate'
-import { getCategoryIcon } from '@/lib/getCategoryIcon'
 import { getObservationGroup } from '@/lib/getObservationGroup'
 import { getPhotoUrl } from '@/lib/getPhotoUrl'
 import { getSoundUrl } from '@/lib/getSoundUrl'
 import { observationsQuery } from '@/lib/inat'
 import { cn } from '@/lib/utils'
-import { FIRST_OBSERVATION_YEAR, SKELETON_COUNT } from '@/data/constants'
-
-// Filterable groups shown in the dropdown (fungi, fish, and other
-// invertebrates are intentionally omitted for now).
-const GROUP_OPTIONS: Array<{ value: TaxonGroup; label: string }> = [
-  { value: 'plants', label: 'Plants' },
-  { value: 'mammals', label: 'Mammals' },
-  { value: 'birds', label: 'Birds' },
-  { value: 'reptiles', label: 'Reptiles' },
-  { value: 'amphibians', label: 'Amphibians' },
-  { value: 'insects', label: 'Insects' },
-  { value: 'arachnid', label: 'Arachnids' },
-]
+import { SKELETON_COUNT } from '@/data/constants'
 
 // Static class strings so Tailwind v4 emits them.
 const GROUP_BAR_CLASS: Record<TaxonGroup, string> = {
@@ -55,18 +38,6 @@ const GROUP_BAR_CLASS: Record<TaxonGroup, string> = {
 
 type MediaType = 'all' | 'photos' | 'audio'
 
-const CURRENT_YEAR = new Date().getFullYear()
-const YEAR_OPTIONS = Array.from(
-  { length: CURRENT_YEAR - FIRST_OBSERVATION_YEAR + 1 },
-  (_, i) => String(CURRENT_YEAR - i),
-)
-
-const TRIGGER_CLASS =
-  'h-auto w-full cursor-pointer rounded-[4px] border-0 bg-brand-light px-4 py-0.5 font-brand-sans text-base tracking-[0.04em] text-brand-ink shadow-none focus:ring-1 focus:ring-brand-green sm:w-[198px] [&>svg]:size-3 [&>svg]:opacity-100'
-const CONTENT_CLASS =
-  'rounded-[4px] border-0 bg-brand-light shadow-[0_4px_22px_rgba(0,0,0,0.14)] [&>[data-radix-select-viewport]]:p-0'
-const ITEM_CLASS =
-  'rounded-none border-b border-brand-ink/10 px-4 py-2 font-brand-sans text-base tracking-[0.04em] text-brand-ink last:border-b-0 hover:bg-brand-green hover:text-brand-light data-[highlighted]:bg-brand-green data-[highlighted]:text-brand-light focus:bg-brand-green focus:text-brand-light'
 const META_ROW_CLASS = 'flex items-center gap-2 whitespace-nowrap'
 
 export const IMRS_ObservationsFeed = () => {
@@ -77,6 +48,21 @@ export const IMRS_ObservationsFeed = () => {
   const isUnfiltered =
     selectedGroup === 'all' && mediaType === 'all' && selectedYear === 'all'
   const { ref, inView } = useInView({ rootMargin: '200px' })
+  const filtersEl = useRef<HTMLDivElement>(null)
+  const { ref: filtersInViewRef, inView: filtersInView } = useInView({
+    initialInView: true,
+  })
+  const shouldReduceMotion = useReducedMotion()
+
+  const scrollToFilters = () => {
+    const el = filtersEl.current
+    if (!el) return
+    el.scrollIntoView({
+      behavior: shouldReduceMotion ? 'auto' : 'smooth',
+      block: 'start',
+    })
+    el.querySelector<HTMLElement>('button')?.focus({ preventScroll: true })
+  }
 
   // The unfiltered entry is prefetched by the route loader; filtered
   // combinations fetch on first use. Same cache either way.
@@ -128,61 +114,17 @@ export const IMRS_ObservationsFeed = () => {
       />
 
       <div className="relative px-4 sm:px-8 lg:px-16">
-        <div className="sticky top-16 z-40 -mx-4 mb-8 flex flex-wrap items-center gap-4 bg-brand-paper/90 px-4 py-4 backdrop-blur-sm sm:-mx-8 sm:px-8 lg:-mx-16 lg:gap-6 lg:px-16">
-          <Select
-            value={selectedGroup}
-            onValueChange={(value) => setSelectedGroup(value as TaxonGroup)}
-          >
-            <SelectTrigger
-              aria-label="Filter by group"
-              className={TRIGGER_CLASS}
-            >
-              <SelectValue placeholder="Filter by group" />
-            </SelectTrigger>
-            <SelectContent className={CONTENT_CLASS}>
-              <SelectItem value="all" className={ITEM_CLASS}>
-                All Groups
-              </SelectItem>
-              {GROUP_OPTIONS.map(({ value, label }) => (
-                <SelectItem key={value} value={value} className={ITEM_CLASS}>
-                  <span className="flex items-center gap-2">
-                    {getCategoryIcon(value)}
-                    {label}
-                  </span>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          <Select value={selectedYear} onValueChange={setSelectedYear}>
-            <SelectTrigger
-              aria-label="Filter by year"
-              className={TRIGGER_CLASS}
-            >
-              <SelectValue placeholder="Filter by year" />
-            </SelectTrigger>
-            <SelectContent className={CONTENT_CLASS}>
-              <SelectItem value="all" className={ITEM_CLASS}>
-                All Years
-              </SelectItem>
-              {YEAR_OPTIONS.map((year) => (
-                <SelectItem key={year} value={year} className={ITEM_CLASS}>
-                  {year}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          {!isUnfiltered && (
-            <span
-              className="font-brand-mono text-base tracking-[0.04em] text-brand-gray"
-              role="status"
-              aria-live="polite"
-            >
-              Showing {totalResults} matching observations
-            </span>
-          )}
-        </div>
+        <IMRS_ObservationsFilters
+          ref={(node) => {
+            filtersEl.current = node
+            filtersInViewRef(node)
+          }}
+          selectedGroup={selectedGroup}
+          selectedYear={selectedYear}
+          onGroupChange={setSelectedGroup}
+          onYearChange={setSelectedYear}
+          totalResults={isUnfiltered ? null : totalResults}
+        />
 
         {observations.length === 0 ? (
           isFetching ? (
@@ -334,6 +276,8 @@ export const IMRS_ObservationsFeed = () => {
         {/* infinite scroll sentinel */}
         <div ref={ref} className="h-12" />
       </div>
+
+      <IMRS_BackToTop visible={!filtersInView} onClick={scrollToFilters} />
     </section>
   )
 }
