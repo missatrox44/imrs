@@ -1,5 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
-import Gazetteer from '@/components/Gazetteer'
+// Legacy layout, replaced by IMRS_Gazetteer (Figma 80:1716).
+// import Gazetteer from '@/components/Gazetteer'
+import { IMRS_Gazetteer as Gazetteer } from '@/components/IMRS_Gazetteer'
 import { SITE_URL } from '@/data/constants'
 
 export const Route = createFileRoute('/gazetteer')({
