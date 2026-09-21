@@ -1,7 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router'
 import type { Season } from '@/types/weather'
+// Legacy dashboard (own h1 + header), replaced by IMRS_Page_Hero + IMRS_WeatherDashboard (Figma 80:1803).
+// import WeatherDashboard from '@/components/weather/WeatherDashboard'
+import { IMRS_Page_Hero } from '@/components/IMRS_Page_Hero'
+import { IMRS_WeatherDashboard as WeatherDashboard } from '@/components/IMRS_WeatherDashboard'
 import { Loader } from '@/components/Loader'
-import WeatherDashboard from '@/components/weather/WeatherDashboard'
 import { weatherSummaryQuery } from '@/hooks/useWeatherData'
 import { SITE_URL } from '@/data/constants'
 
@@ -60,5 +63,22 @@ export const Route = createFileRoute('/weather')({
 })
 
 function WeatherPage() {
-  return <WeatherDashboard />
+  return (
+    <main>
+      <IMRS_Page_Hero
+        image="/imgs/hero-weather.webp"
+        imageWidth={1600}
+        imageHeight={1200}
+        title={
+          <>
+            Climate &amp;
+            <br />
+            Weather
+          </>
+        }
+        subtitle="Hill Station · Indio Mountains Research Station · 2020–2024"
+      />
+      <WeatherDashboard />
+    </main>
+  )
 }
