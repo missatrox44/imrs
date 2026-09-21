@@ -117,7 +117,9 @@ export const IMRS_ObservationsFeed = () => {
   ))
 
   return (
-    <section className="relative overflow-clip rounded-t-[32px] bg-brand-paper pt-16 pb-16 lg:rounded-t-[64px] lg:pt-[120px]">
+    // The rounded top only reads against the hero photo, so the section rides
+    // up over it — 106px at the 1440 frame, halved below lg with the radius.
+    <section className="relative -mt-[53px] overflow-clip rounded-t-[32px] bg-brand-paper pt-16 pb-16 lg:-mt-[106px] lg:rounded-t-[64px] lg:pt-[120px]">
       <img
         src="/footer-texture.webp"
         alt=""

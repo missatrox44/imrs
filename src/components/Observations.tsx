@@ -21,7 +21,6 @@ import { formatDate } from '@/lib/formatDate'
 import { getCategoryIcon } from '@/lib/getCategoryIcon'
 import { getPhotoUrl } from '@/lib/getPhotoUrl'
 import { getSoundUrl } from '@/lib/getSoundUrl'
-import { IMRS_Page_Hero } from '@/components/IMRS_Page_Hero'
 import { ObservationCardSkeleton } from '@/components/ObservationCardSkeleton'
 import { FIRST_OBSERVATION_YEAR, SKELETON_COUNT } from '@/data/constants'
 import { observationsQuery } from '@/lib/inat'
@@ -103,32 +102,6 @@ const Observations = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <IMRS_Page_Hero
-        image="/imgs/hero-observations.webp"
-        imageWidth={1600}
-        imageHeight={1200}
-        title={
-          <>
-            Recent
-            <br />
-            Observations
-          </>
-        }
-        subtitle={
-          <>
-            Biodiversity observations on Indio Mountains Research Station from{' '}
-            <a
-              className="underline"
-              rel="noreferrer noopener"
-              target="_blank"
-              href="https://www.inaturalist.org/"
-            >
-              iNaturalist<span className="sr-only"> (opens in new tab)</span>
-            </a>
-            .
-          </>
-        }
-      />
       <main className="container mx-auto px-4 py-8">
         <div className="sticky top-16 z-40 bg-background py-4 flex flex-col gap-3">
           {!isUnfiltered && (

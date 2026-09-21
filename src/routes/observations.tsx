@@ -2,6 +2,7 @@ import { createFileRoute, useRouter } from '@tanstack/react-router'
 // Legacy header + grid, replaced by IMRS_ObservationsFeed (Figma 80:1185).
 // import Observations from '@/components/Observations'
 import { IMRS_ObservationsFeed as ObservationsFeed } from '@/components/IMRS_ObservationsFeed'
+import { IMRS_Page_Hero } from '@/components/IMRS_Page_Hero'
 import { Loader } from '@/components/Loader'
 import { SITE_URL } from '@/data/constants'
 import { observationsQuery } from '@/lib/inat'
@@ -49,7 +50,33 @@ export const Route = createFileRoute('/observations')({
 function ObservationsPage() {
   return (
     <main>
-      {/* Reskinned hero (Figma 80:1179) mounts here, above the feed. */}
+      {/* Hero sits outside the feed so the empty state keeps the page <h1>. */}
+      <IMRS_Page_Hero
+        image="/imgs/hero-observations.webp"
+        imageWidth={1600}
+        imageHeight={1200}
+        title={
+          <>
+            Recent
+            <br />
+            Observations
+          </>
+        }
+        subtitle={
+          <>
+            Biodiversity observations on Indio Mountains Research Station from{' '}
+            <a
+              className="underline"
+              rel="noreferrer noopener"
+              target="_blank"
+              href="https://www.inaturalist.org/"
+            >
+              iNaturalist<span className="sr-only"> (opens in new tab)</span>
+            </a>
+            .
+          </>
+        }
+      />
       <ObservationsFeed />
     </main>
   )
