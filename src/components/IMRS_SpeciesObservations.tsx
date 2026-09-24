@@ -1,4 +1,4 @@
-// Figma "IMRS Website Design" node 80:2738. Torn-edge dark green band with a
+// Torn-edge dark green band with a
 // horizontal scroll-snap carousel of recent observation cards.
 import { useEffect, useId, useRef, useState } from 'react'
 import {

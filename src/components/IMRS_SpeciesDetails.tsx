@@ -1,5 +1,4 @@
-// Reskin of SpeciesDetails (Figma 80:1922). Each section hides itself when it
-// has no data.
+// Each section hides itself when it has no data.
 import { IMRS_SpeciesHero } from '@/components/IMRS_SpeciesHero'
 import { IMRS_SpeciesObservations } from '@/components/IMRS_SpeciesObservations'
 import { IMRS_SpeciesPublications } from '@/components/IMRS_SpeciesPublications'

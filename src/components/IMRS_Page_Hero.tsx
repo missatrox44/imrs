@@ -1,4 +1,4 @@
-// Figma "IMRS Website Design" hero frame shared by Observations (80:1179), Species Index, Gazetteer and Weather.
+// Hero shared by Observations, Species Index, Gazetteer and Weather.
 // Tucks under IMRS_Header (negative top margin); geometry is in cqw against the 1440-wide frame, clamp() below @3xl.
 import type { ReactNode } from 'react'
 
@@ -45,7 +45,7 @@ export const IMRS_Page_Hero = ({
         />
 
         <div className="relative z-10 flex flex-col items-start px-8 pt-[calc(93px+3.5rem)] pb-24 text-brand-light sm:pt-[calc(93px+4.5rem)] lg:px-[5.5cqw] lg:pt-[12.4cqw] lg:pb-[7cqw]">
-          {/* Blur sits behind the text only. -m/p cancel so the text keeps its Figma position; the mask feathers the blur out over the 64px padding so no panel edge shows. */}
+          {/* Blur sits behind the text only. -m/p cancel so the text keeps its position; the mask feathers the blur out over the 64px padding so no panel edge shows. */}
           <div className="-m-16 flex w-fit flex-col gap-4 p-16 backdrop-blur-[7px] [mask-composite:intersect] [mask-image:linear-gradient(to_right,transparent,black_4rem,black_calc(100%-4rem),transparent),linear-gradient(to_bottom,transparent,black_4rem,black_calc(100%-4rem),transparent)] sm:gap-5 lg:gap-6">
             <h1
               id={headingId}

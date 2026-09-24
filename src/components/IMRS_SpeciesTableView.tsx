@@ -1,4 +1,4 @@
-// Reskin of SpeciesTableView. No Figma frame; container queries (not
+// No design frame; container queries (not
 // viewport breakpoints) drive column visibility since this table sits beside
 // a sidebar — the parent page wraps results in an `@container` element.
 import { memo, useRef } from 'react'

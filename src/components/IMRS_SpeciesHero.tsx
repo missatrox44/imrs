@@ -1,5 +1,4 @@
-// Figma "IMRS Website Design" Species Detail hero (80:1923): back link,
-// specimen card (80:1972) and taxonomy column (80:1987).
+// Species Detail hero: back link, specimen card and taxonomy column.
 import {
   ArrowLeft,
   Bird,
@@ -47,8 +46,6 @@ const CATEGORY_ICON: Record<string, LucideIcon> = {
   inverts: Snail,
 }
 
-// KEY-DECISION 2026-09-23: light text passes WCAG AA (4.5:1) only on these
-// category colors; every other category pill uses ink text.
 const LIGHT_TEXT_CATEGORIES = new Set(['fish', 'fungi', 'reptiles'])
 
 interface TaxonomyRow {
@@ -58,8 +55,6 @@ interface TaxonomyRow {
   level: number
 }
 
-// Copied from SpeciesDetails.tsx's buildTaxonomyHierarchy (not imported — reskin files
-// stay independent of the components they are replacing).
 function buildTaxonomyHierarchy(species: Species): Array<TaxonomyRow> {
   const rows: Array<TaxonomyRow> = []
 
@@ -214,12 +209,11 @@ export const IMRS_SpeciesHero = ({
         </Link>
 
         <div className="flex flex-col gap-8 xl:flex-row xl:items-start xl:justify-between">
-          {/* Specimen card (Figma 80:1972) */}
+          {/* Specimen card */}
           <div className="overflow-hidden rounded-[20px] bg-brand-light shadow-[0px_4px_10px_rgba(0,0,0,0.13)] xl:w-[867px] xl:shrink-0">
             <div className={cn('h-[3rem]', barClass)} aria-hidden="true" />
 
             <div className="flex flex-col gap-8 p-6 sm:p-10 md:grid md:grid-cols-[1fr_320px] md:items-start lg:p-12">
-              {/* Photo */}
               <div className="order-1 mx-auto w-[240px] rotate-[3deg] sm:w-[280px] md:order-2 md:rotate-[6.6deg] md:justify-self-end lg:w-[320px]">
                 <div className="relative rounded-[2px] border-[8px] border-brand-light bg-brand-light shadow-[0_4px_4px_rgba(0,0,0,0.25)]">
                   <div className="aspect-[366/258] overflow-hidden rounded-[1px] bg-brand-sand">
@@ -251,7 +245,6 @@ export const IMRS_SpeciesHero = ({
                 </div>
               </div>
 
-              {/* Text */}
               <div className="order-2 flex flex-col items-start gap-5 md:order-1">
                 <span
                   className={cn(
@@ -332,7 +325,7 @@ export const IMRS_SpeciesHero = ({
             </div>
           </div>
 
-          {/* Taxonomy column (Figma 80:1987) */}
+          {/* Taxonomy column */}
           <div className="xl:w-[357px] xl:shrink-0">
             <h2 className="font-brand-sans text-base uppercase tracking-[0.08em] text-brand-ink">
               Taxonomic Classification

@@ -1,4 +1,3 @@
-// Reskin of SpeciesGridView (Figma desktop 1440, 2-col 866px frame).
 import { memo, useRef, useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import { m, useReducedMotion } from 'framer-motion'
@@ -110,7 +109,7 @@ const IMRS_SpeciesCard = memo(function IMRS_SpeciesCard({
                 'none'
             }}
           />
-          {/* KEY-DECISION 2026-09-24: black/55 floor keeps 12px white text ≥4.5:1 even over a pure-white photo. */}
+          {/* black/55 floor keeps 12px white text ≥4.5:1 even over a pure-white photo. */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/60 to-black/55" />
         </m.div>
       )}
@@ -209,7 +208,7 @@ export const IMRS_SpeciesGridView = ({
     estimateSize: () => ESTIMATED_ROW_HEIGHT,
     overscan: 4,
     scrollMargin: parentRef.current?.offsetTop ?? 0,
-    // KEY-DECISION 2026-09-24: mounting mid-page (table→grid, scroll kept) measures rows during render; flushSync there errors.
+    // mounting mid-page (table→grid, scroll kept) measures rows during render; flushSync there errors.
     useFlushSync: false,
   })
 

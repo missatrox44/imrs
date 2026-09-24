@@ -1,4 +1,4 @@
-// Row of active-filter chips above the species results (Figma).
+// Row of active-filter chips above the species results.
 import { X } from 'lucide-react'
 import type { Category } from '@/types/category'
 import type { TaxonRankKey, TaxonSelection } from '@/types/speciesIndex'

@@ -1,5 +1,4 @@
-// Reskin of Gazetteer (Figma 80:1716). The Leaflet map itself lives in
-// GazetteerMap.
+// The Leaflet map itself lives in GazetteerMap.
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDebouncedValue } from '@tanstack/react-pacer'
 import { useInView } from 'react-intersection-observer'
@@ -67,7 +66,6 @@ export const IMRS_Gazetteer = () => {
     ).sort((a, b) => a.name.localeCompare(b.name))
   }, [debouncedSearchTerm])
 
-  // Clear selectedId when it's no longer in filtered results
   useEffect(() => {
     if (
       selectedId &&
@@ -77,7 +75,6 @@ export const IMRS_Gazetteer = () => {
     }
   }, [filteredAndSortedEntries, selectedId])
 
-  // Scroll card into view when pin is clicked
   useEffect(() => {
     const el = selectedId ? cardRefs.current[selectedId] : null
     if (el) {
@@ -302,14 +299,14 @@ export const IMRS_Gazetteer = () => {
           </div>
         </div>
 
-        {/* Panel outdents 30px past the content gutter (Figma x=34 vs 64). */}
+        {/* Panel outdents 30px past the content gutter. */}
         <div className="relative mx-4 mt-8 flex flex-col gap-6 rounded-2xl bg-brand-sand p-6 lg:mx-[34px] lg:flex-row lg:px-[31px]">
           <div className="isolate h-[clamp(467px,55vh,640px)] flex-1 overflow-hidden rounded-[5px]">
             {mapInner}
             {mapHint}
           </div>
 
-          {/* 491px of cards + 30px gap + 11px scrollbar track (Figma 80:1779). WebKit-only styling: a standard scrollbar-color would make Chrome ignore it. */}
+          {/* 491px of cards + 30px gap + 11px scrollbar track. WebKit-only styling: a standard scrollbar-color would make Chrome ignore it. */}
           <div className="max-h-[clamp(467px,55vh,640px)] overflow-y-auto pr-[30px] lg:w-[532px] lg:shrink-0 [&::-webkit-scrollbar]:w-[11px] [&::-webkit-scrollbar-thumb]:rounded-[3px] [&::-webkit-scrollbar-thumb]:bg-brand-green [&::-webkit-scrollbar-track]:rounded-[3px] [&::-webkit-scrollbar-track]:bg-brand-light">
             <IMRS_GazetteerCardList
               entries={filteredAndSortedEntries}

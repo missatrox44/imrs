@@ -1,5 +1,5 @@
-// Reskin of ObservationCardSkeleton; mirrors the card shell in
-// IMRS_ObservationsFeed so the swap to loaded cards doesn't jump.
+// Mirrors the card shell in IMRS_ObservationsFeed so the swap to loaded
+// cards doesn't jump.
 import { Skeleton } from '@/components/ui/skeleton'
 
 const BAR_CLASS = 'rounded-md bg-brand-sand'
@@ -12,7 +12,6 @@ export function IMRS_ObservationCardSkeleton() {
         className="absolute inset-x-0 top-0 h-2 bg-brand-sand"
       />
 
-      {/* image */}
       <Skeleton className="h-[201px] w-full rounded-lg bg-brand-sand" />
 
       <div className="flex flex-col gap-6">

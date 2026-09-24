@@ -1,4 +1,4 @@
-// "Filters & Sorting" panel (Figma, desktop column 417px). Rendered both
+// "Filters & Sorting" panel. Rendered both
 // inline in a desktop aside and inside a mobile drawer; the page owns the
 // landmark and open/close state.
 import { PanelLeftClose } from 'lucide-react'

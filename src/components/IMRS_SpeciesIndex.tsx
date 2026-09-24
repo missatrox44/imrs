@@ -1,5 +1,5 @@
-// Reskin of SpeciesIndex (Figma 80:1396). Every filter lives in the URL; the
-// filter panel is an inline aside at xl and a left drawer below it.
+// Every filter lives in the URL; the filter panel is an inline aside at xl
+// and a left drawer below it.
 import { useMemo, useRef, useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { useDebouncedValue } from '@tanstack/react-pacer'
@@ -85,7 +85,7 @@ export const IMRS_SpeciesIndex = () => {
     sort,
   )
 
-  // KEY-DECISION 2026-09-24: filter/sort/view changes keep the scroll position; the router resets it by default.
+  // filter/sort/view changes keep the scroll position; the router resets it by default.
   const setSelection = (next: TaxonSelection) =>
     navigate({
       search: { category, view: search.view, sort, ...next },

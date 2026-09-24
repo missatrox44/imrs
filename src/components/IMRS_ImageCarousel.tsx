@@ -1,7 +1,6 @@
 import { m, useReducedMotion } from 'framer-motion'
 import { CAROUSEL_IMAGES } from '@/data/constants'
 
-// Figma "IMRS Website Design" node 80:1026: 356x368 tiles, 8px radius, 33px gap.
 export const IMRS_ImageCarousel = () => {
   const shouldReduceMotion = useReducedMotion()
 

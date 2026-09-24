@@ -23,7 +23,7 @@ const CAPTION =
 const arrowClass =
   'flex size-8 cursor-pointer items-center justify-center rounded-full border border-brand-ink text-brand-ink transition-colors hover:bg-brand-sand'
 
-// Figma "IMRS Website Design" node 28:845. Full-bleed sand band; -my-20 slides it
+// Full-bleed sand band; -my-20 slides it
 // under the torn edges of the stats and weather sections so sand shows through.
 export const IMRS_GazetteerRolodex = () => {
   const [activeIndex, setActiveIndex] = useState(0)
@@ -208,7 +208,7 @@ export const IMRS_GazetteerRolodex = () => {
           </Link>
         </div>
 
-        {/* Decorative scrapbook collage (Figma 28:895–28:904). Hidden from AT like the hero's. */}
+        {/* Decorative scrapbook collage. Hidden from AT like the hero's. */}
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0"

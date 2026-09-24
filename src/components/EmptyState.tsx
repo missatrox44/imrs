@@ -1,4 +1,3 @@
-// AI TEMPLATE
 import { Leaf } from 'lucide-react'
 
 const EmptyState = () => {

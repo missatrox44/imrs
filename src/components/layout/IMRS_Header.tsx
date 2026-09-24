@@ -3,7 +3,7 @@ import { IMRS_MobileNav } from './IMRS_MobileNav'
 import { navItems } from '@/data/constants'
 import { useScrollDirection } from '@/hooks/useScrollDirection'
 
-// Figma "IMRS Website Design" node 110:737. Four destinations only; Home is the logo.
+// Four destinations only; Home is the logo.
 export const imrsNavItems = navItems.filter((item) => item.to !== '/')
 
 export function isActivePath(pathname: string, to: string) {

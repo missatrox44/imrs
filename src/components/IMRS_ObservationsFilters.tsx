@@ -1,4 +1,4 @@
-// Static filter row for the observations feed (Figma 80:1185). Sits on the
+// Static filter row for the observations feed. Sits on the
 // section's paper background; the feed owns the state and passes it down.
 import type { Ref } from 'react'
 

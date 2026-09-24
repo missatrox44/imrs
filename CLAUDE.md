@@ -49,10 +49,6 @@ This project uses **pnpm** (pinned via the `packageManager` field in `package.js
 - Maps use Leaflet/React-Leaflet with GeoJSON boundary data in `src/data/imrs-boundary.geojson`.
 - Vite config includes a custom GeoJSON loader plugin.
 
-## Reskin components (branch `reskin`)
-
-The Figma reskin is additive. Build every reskinned component as a new `IMRS_`-prefixed file (`IMRS_Header.tsx`, `IMRS_Footer.tsx`, `IMRS_StatsCounter.tsx`) and swap the import at the mount point. Never edit or delete the original component until the reskin is complete and the swap is approved.
-
 ## Code Style
 
 Prettier enforced: no semicolons, single quotes, trailing commas.

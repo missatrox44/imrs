@@ -1,4 +1,4 @@
-// One accordion section of the "Taxonomic Filters" list (Figma). Single-select
+// One accordion section of the "Taxonomic Filters" list. Single-select
 // per rank via real radios so screen readers get arrow-key nav for free.
 import { useId, useState } from 'react'
 import { ChevronUp } from 'lucide-react'

@@ -1,4 +1,4 @@
-// Reskin of Research & Publications (Figma 80:2802): collapsible publication cards, real data only.
+// Research & Publications: collapsible publication cards, real data only.
 import { useId, useState } from 'react'
 import { AnimatePresence, m, useReducedMotion } from 'framer-motion'
 import { ChevronUp, ExternalLink } from 'lucide-react'

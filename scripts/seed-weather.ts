@@ -13,7 +13,7 @@
  * NOTE: The `xlsx` (SheetJS) package was removed because the npm registry only
  * carries vulnerable versions (prototype pollution + ReDoS). This script will
  * not run until re-tooled with a maintained Excel reader (e.g. `exceljs`) or
- * the patched SheetJS CDN build. Excluded from tsconfig until then.
+ * the patched SheetJS CDN build.
  */
 
 import path from 'node:path'
@@ -45,7 +45,6 @@ function isWithinBounds(
   return value >= min && value <= max
 }
 
-// Excel serial date → ISO string
 // Excel epoch: Dec 30, 1899 (due to the 1900 leap year bug)
 function excelDateToISO(serial: number): string {
   const excelEpoch = new Date(1899, 11, 30)
@@ -253,7 +252,6 @@ function aggregateHourly(db: Database.Database) {
 }
 
 function main() {
-  // Remove existing db
   if (fs.existsSync(DB_PATH)) {
     fs.unlinkSync(DB_PATH)
     console.log('Removed existing imrs-weather.db')
@@ -275,7 +273,6 @@ function main() {
   console.log('Creating indexes...')
   createIndexes(db)
 
-  // Reset synchronous for normal usage
   db.pragma('synchronous = NORMAL')
   db.close()
 
@@ -287,6 +284,3 @@ function main() {
 }
 
 main()
-
-// TO RUN:
-// npx tsx scripts/seed-weather.ts

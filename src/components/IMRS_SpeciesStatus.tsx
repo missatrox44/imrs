@@ -1,4 +1,4 @@
-// Reskin of the Species Status section (Figma 80:2802): collapsible
+// Species Status section: collapsible
 // conservation-assessment table. Always shows all 4 sources; a source with no
 // rank shows "Not assessed" instead of being omitted.
 import { useId, useState } from 'react'

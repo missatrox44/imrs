@@ -1,4 +1,4 @@
-// Figma "IMRS Website Design" node 28:735. Tucks under IMRS_Header (negative top margin) so the grid runs behind the nav.
+// Tucks under IMRS_Header (negative top margin) so the grid runs behind the nav.
 // Collage geometry is in cqw against the 1440-wide frame; the section is a 16:9 container from @3xl up.
 // Below @3xl (no Figma source) the collage mirrors: cutouts flank a band above the H1, polaroids share the bottom row with captions above them.
 // Beetle rotation differs from the Figma export (113.18deg) because the raw fill is stored in a different orientation.
@@ -7,7 +7,7 @@ const POLAROID =
   'absolute aspect-[190/123] w-[clamp(190px,30cqw,240px)] rounded-[1px] border-[5px] border-brand-light bg-brand-light shadow-[0_4px_4px_rgba(0,0,0,0.25)] @3xl:bottom-auto @3xl:-translate-x-1/2 @3xl:-translate-y-1/2 @3xl:border-[0.64cqw]'
 const CUTOUT =
   'absolute [filter:drop-shadow(0_3px_4px_rgba(0,0,0,0.35))] -translate-x-1/2 -translate-y-1/2'
-// Tape sits inside its polaroid so it scales with it; the counter-rotation keeps it page-aligned as in Figma (nodes 28:972, 28:973).
+// Tape sits inside its polaroid so it scales with it; the counter-rotation keeps it page-aligned.
 const TAPE =
   'absolute -translate-x-1/2 -translate-y-1/2 object-cover drop-shadow-[0_1px_1px_rgba(0,0,0,0.15)]'
 const CAPTION =

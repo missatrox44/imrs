@@ -1,4 +1,4 @@
-// Reskin of the observations filter bar + infinite grid (Figma 80:1185).
+// Observations filter bar + infinite grid.
 import { useEffect, useRef, useState } from 'react'
 import { AudioLines, Calendar, MapPin, User } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
@@ -283,7 +283,6 @@ export const IMRS_ObservationsFeed = () => {
           </span>
         )}
 
-        {/* infinite scroll sentinel */}
         <div ref={ref} className="h-12" />
       </div>
 

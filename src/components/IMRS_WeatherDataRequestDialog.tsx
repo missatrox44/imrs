@@ -1,6 +1,5 @@
-// Reskin of weather/WeatherDataRequestDialog (Figma 80:1852 trigger; no dialog
-// frame). Schema, form state and the Formspree post are unchanged; the trigger,
-// dialog surfaces and fields take the brand palette and faces.
+// No dialog design frame; the trigger, dialog surfaces and fields use the
+// brand palette and faces.
 import { useId, useState } from 'react'
 import { z } from 'zod'
 import { useForm, useStore } from '@tanstack/react-form'

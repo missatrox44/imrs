@@ -4,7 +4,7 @@ import { Menu, X } from 'lucide-react'
 import { Drawer } from 'vaul'
 import { imrsNavItems, isActivePath } from './IMRS_Header'
 
-// No mobile frame in Figma yet; this mirrors the desktop card (cream, 10px radius, DM Mono).
+// No mobile design; this mirrors the desktop card.
 export function IMRS_MobileNav({ pathname }: { pathname: string }) {
   const [open, setOpen] = useState(false)
 

@@ -1,5 +1,4 @@
-// Reskin of weather/WeatherFilterBar (Figma 80:1810, 80:1832): Year and
-// Season chip groups. Same URL-search navigation; only presentation changes.
+// Year and Season chip groups; selections navigate via URL search.
 import { useId } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import type { Season } from '@/types/weather'

@@ -8,7 +8,7 @@ const weatherSearch = { year: 'all', season: 'all' } as const
 const pillClass =
   'inline-flex items-center justify-center rounded-pill px-6 py-3 font-brand-mono text-base leading-[31px] transition-colors'
 
-// Figma "IMRS Website Design" node 80:1109. Full-bleed paper band with a torn
+// Full-bleed paper band with a torn
 // top edge; the footer's rounded top overlaps the bottom 71px (negative margin).
 export function IMRS_WeatherMiniDashboard() {
   const { data: summary, isLoading } = useWeatherSummary(weatherSearch)

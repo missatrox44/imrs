@@ -3,8 +3,7 @@ import { imrsNavItems } from './IMRS_Header'
 import type { ReactNode } from 'react'
 import { externalLinks } from '@/data/constants'
 
-// Figma "IMRS Website Design" node 110:1229 (desktop only).
-// footer-texture.webp is the Figma fill (11.8 MB JPEG) downscaled to 1440px wide.
+// footer-texture.webp is downscaled to 1440px wide from an 11.8 MB source.
 const socialLinks = [
   {
     href: 'https://www.instagram.com/indio_mountains_utep/',

@@ -10,7 +10,6 @@ export const Home = () => {
       <main id="home-main">
         <HomepageHero />
         <DocumentedWildlife />
-        {/* Stats band spans the full viewport width */}
         <StatsCounter />
       </main>
 

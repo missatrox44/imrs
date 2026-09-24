@@ -44,7 +44,7 @@ const AnimatedCounter = ({
   )
 }
 
-// Figma "IMRS Website Design" node 80:1031. Full-bleed band; the torn-paper
+// Full-bleed band; the torn-paper
 // edges come from the .torn-edges mask, the texture is shared with the footer.
 export const IMRS_StatsCounter = () => {
   const shouldReduceMotion = useReducedMotion()

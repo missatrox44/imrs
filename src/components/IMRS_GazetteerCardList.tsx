@@ -1,5 +1,5 @@
-// Reskin of GazetteerCardList (Figma 80:1737). Same selection contract; the
-// selected card gets a 4px green border and its siblings drop to 50% opacity.
+// The selected card gets a 4px green border and its siblings drop to 50%
+// opacity.
 import { memo } from 'react'
 import type { GazetteerEntry } from '@/types/gazetteer'
 import { formatCoordinates } from '@/lib/formatCoordinates'

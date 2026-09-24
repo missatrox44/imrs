@@ -74,7 +74,6 @@ export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
         </div>
 
         <div className="flex gap-4 items-center flex-wrap pt-4">
-          {/* Try Again */}
           <button
             onClick={() => router.invalidate()}
             className="
@@ -90,7 +89,6 @@ export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
             Try Again
           </button>
 
-          {/* Conditional Links */}
           {isRoot ? (
             <Link
               to="/"

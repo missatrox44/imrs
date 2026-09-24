@@ -1,4 +1,3 @@
-// Reskin of SearchInput (Figma 80:1781): 48px light pill with the icon inset 21px.
 import { useId } from 'react'
 import { Search, X } from 'lucide-react'
 

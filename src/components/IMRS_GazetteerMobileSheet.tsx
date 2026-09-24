@@ -1,5 +1,5 @@
-// Reskin of GazetteerMobileSheet (no Figma frame): same vaul snap-point sheet
-// over the full-screen map, on the paper background with the reskin cards.
+// No design frame: a vaul snap-point sheet over the full-screen map, on the
+// paper background with the reskin cards.
 import { useRef, useState } from 'react'
 import { Drawer as Vaul } from 'vaul'
 import { useReducedMotion } from 'framer-motion'

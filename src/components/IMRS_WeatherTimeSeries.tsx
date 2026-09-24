@@ -1,5 +1,4 @@
-// Reskin of weather/WeatherTimeSeries (Figma 80:1883): same series config,
-// monsoon bands and throttled brush; wrapped in the reskin card.
+// Monsoon bands and a throttled brush, wrapped in the reskin card.
 import { Suspense, lazy, useMemo, useState } from 'react'
 import { useMediaQuery } from '@uidotdev/usehooks'
 import { useThrottledCallback } from '@tanstack/react-pacer'

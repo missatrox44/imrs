@@ -10,7 +10,6 @@ import { getPhotoUrl } from '@/lib/getPhotoUrl'
 import { parseSpeciesId, speciesPath } from '@/lib/speciesSlug'
 
 export const Route = createFileRoute('/species/$speciesId')({
-  // Fetch the species + recent observations for this ID
   loader: async ({ params }) => {
     const id = parseSpeciesId(params.speciesId)
     if (id == null) {

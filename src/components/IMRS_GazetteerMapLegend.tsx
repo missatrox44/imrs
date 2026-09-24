@@ -1,5 +1,5 @@
-// Reskin of GazetteerMapLegend (Figma 80:1784). Swatch colors are the Figma
-// values; the map layers in GazetteerMap render close hsl equivalents.
+// Swatch colors are the design values; the map layers in GazetteerMap render
+// close hsl equivalents.
 import { Star } from 'lucide-react'
 
 const ITEM_CLASS = 'flex items-center gap-[7px]'

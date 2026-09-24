@@ -1,6 +1,4 @@
-// Reskin of weather/WeatherTimeSeriesPanel (Figma 80:1883): same recharts
-// composition, brush sync and screen-reader summary; axis, legend and tooltip
-// text use the brand sans face and ink color.
+// Axis, legend and tooltip text use the brand sans face and ink color.
 import { useMemo } from 'react'
 import {
   Area,
