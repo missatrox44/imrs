@@ -26,3 +26,4 @@ specimens.json
 .playwright-mcp
 tpwd-sgcn-list.csv
 /ignore-docs
+/cyc

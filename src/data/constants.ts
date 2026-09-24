@@ -33,9 +33,8 @@ export const ORDER_BY = 'observed_on'
 // Floor for the observations Year filter (iNaturalist's inception year), so no
 // real observation year is ever excluded from the dropdown.
 export const FIRST_OBSERVATION_YEAR = 2008
-// KEY-DECISION 2026-07-26: TanStack Query feeds both into setTimeout (gc
-// scheduling, stale notification), so anything past the 32-bit signed int
-// ceiling truncates to 1ms — gcTime then evicts the cache on unmount.
+// TanStack Query passes both to setTimeout; values
+// past 2**31-1 ms truncate to 1ms and gcTime evicts the cache on unmount.
 const MAX_TIMER_MS = 2 ** 31 - 1 // ~24.8 days
 export const STALE_TIME = MAX_TIMER_MS
 export const GC_TIME = MAX_TIMER_MS
@@ -87,16 +86,11 @@ export const navItems = [
 
 export const externalLinks = [
   { to: 'https://www.utep.edu/science/indio/', label: 'IMRS' },
-  // { to: 'https://www.inaturalist.org/', label: 'iNaturalist' },
   {
     to: 'https://www.inaturalist.org/places/indio-mountains-research-station',
     label: 'iNaturalist',
   },
 ]
-
-// export const otherLinks = [
-//   { to: 'https://github.com/missatrox44/imrs/issues', label: 'Report an issue' }
-// ]
 
 export const CACHE_HEADERS = {
   'Content-Type': 'application/json',

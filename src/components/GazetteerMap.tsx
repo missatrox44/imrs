@@ -248,7 +248,7 @@ export const GazetteerMap = memo(function GazetteerMap({
             }}
           >
             <Popup>
-              <div className="font-mono text-sm">
+              <div className="font-brand-mono text-sm">
                 <p className="font-bold mb-1">{entry.name}</p>
                 <p className="text-xs">
                   {formatCoordinates(entry.latitude, entry.longitude)}

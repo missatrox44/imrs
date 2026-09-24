@@ -15,8 +15,9 @@ function WrappedError({ error }: { error: Error }) {
         <button
           onClick={() => setShow((prev) => !prev)}
           className="
-            rounded border border-current
-            px-1 py-0.5 text-xs font-bold
+            rounded-pill border border-brand-green
+            px-3 py-0.5 font-brand-mono text-xs text-brand-green
+            transition-colors hover:bg-brand-green/10
             cursor-pointer
           "
         >
@@ -27,8 +28,8 @@ function WrappedError({ error }: { error: Error }) {
       {show && error.message && (
         <pre
           className="
-            mt-2 rounded border border-destructive
-            p-2 text-destructive text-xs
+            mt-2 rounded-[4px] border border-destructive
+            p-2 font-brand-mono text-destructive text-xs
             whitespace-pre-wrap break-words
           "
         >
@@ -59,53 +60,46 @@ export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
       <div
         className="
           max-w-2xl w-full
-          bg-card text-card-foreground
-          border border-border
-          p-10
-          shadow-card
+          rounded-[20px] bg-brand-light
+          p-8 sm:p-10
+          shadow-[0px_4px_10px_rgba(0,0,0,0.13)]
           space-y-6
+          font-brand-sans tracking-[0.04em] text-brand-ink
         "
       >
-        <h1 className="text-2xl font-semibold tracking-tight">
-          An Error Occurred
-        </h1>
+        <h1 className="text-[32px] leading-[31px]">An Error Occurred</h1>
 
-        <div className="text-muted-foreground leading-relaxed">
+        <div className="leading-[1.55]">
           <WrappedError error={error} />
         </div>
 
         <div className="flex gap-4 items-center flex-wrap pt-4">
-          {/* Try Again */}
           <button
             onClick={() => router.invalidate()}
             className="
               inline-flex items-center gap-2
-              px-4 py-2
-              bg-primary text-primary-foreground
-              border border-border
-              font-medium tracking-wide
-              shadow-card
+              rounded-pill border-[0.5px] border-brand-ink bg-brand-green
+              px-6 py-3
+              font-brand-mono text-base leading-[31px] text-brand-cream
               transition-colors
-              hover:bg-primary-hover
+              hover:bg-brand-green-dark
               cursor-pointer
             "
           >
             Try Again
           </button>
 
-          {/* Conditional Links */}
           {isRoot ? (
             <Link
               to="/"
               className="
                 inline-flex items-center gap-2
-                px-4 py-2
-                bg-secondary text-secondary-foreground
-                border border-border
-                font-medium tracking-wide
-                shadow-card
+                rounded-pill border-2 border-brand-green
+                px-6 py-3
+                font-brand-mono text-base leading-[31px] text-brand-green
+                no-underline
                 transition-colors
-                hover:bg-accent
+                hover:bg-brand-green/10
 
               "
             >
@@ -116,13 +110,12 @@ export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
               to="/"
               className="
                 inline-flex items-center gap-2
-                px-4 py-2
-                bg-secondary text-secondary-foreground
-                border border-border
-                font-medium tracking-wide
-                shadow-card
+                rounded-pill border-2 border-brand-green
+                px-6 py-3
+                font-brand-mono text-base leading-[31px] text-brand-green
+                no-underline
                 transition-colors
-                hover:bg-accent
+                hover:bg-brand-green/10
                 cursor-pointer
 
               "

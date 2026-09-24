@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import Gazetteer from '@/components/Gazetteer'
+import { IMRS_Gazetteer as Gazetteer } from '@/components/IMRS_Gazetteer'
 import { SITE_URL } from '@/data/constants'
 
 export const Route = createFileRoute('/gazetteer')({

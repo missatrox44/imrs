@@ -2,7 +2,7 @@ import { createFileRoute, notFound, redirect } from '@tanstack/react-router'
 import type { DisplayObservation } from '@/types/observation'
 
 import { Loader } from '@/components/Loader'
-import { SpeciesDetails } from '@/components/SpeciesDetails'
+import { IMRS_SpeciesDetails } from '@/components/IMRS_SpeciesDetails'
 import { fetchAllSpecies } from '@/server/speciesService'
 import { fetchObservations, taxonQueryName } from '@/lib/inat'
 import { PLACE_ID, SITE_URL } from '@/data/constants'
@@ -10,7 +10,6 @@ import { getPhotoUrl } from '@/lib/getPhotoUrl'
 import { parseSpeciesId, speciesPath } from '@/lib/speciesSlug'
 
 export const Route = createFileRoute('/species/$speciesId')({
-  // Fetch the species + recent observations for this ID
   loader: async ({ params }) => {
     const id = parseSpeciesId(params.speciesId)
     if (id == null) {
@@ -47,22 +46,22 @@ export const Route = createFileRoute('/species/$speciesId')({
           taxon_name: scientificName,
           place_id: PLACE_ID,
           photos: true,
-          per_page: 4,
+          per_page: 10,
         })
         const imrsTagged = imrs.results.map((o) => ({ ...o, atImrs: true }))
-        if (imrsTagged.length < 4) {
+        if (imrsTagged.length < 10) {
           const general = await fetchObservations({
             taxon_name: scientificName,
             photos: true,
-            per_page: 8,
+            per_page: 20,
           })
           const imrsIds = new Set(imrsTagged.map((o) => o.id))
           const fill = general.results
             .filter((o) => !imrsIds.has(o.id))
             .map((o) => ({ ...o, atImrs: false }))
-          observations = [...imrsTagged, ...fill].slice(0, 4)
+          observations = [...imrsTagged, ...fill].slice(0, 10)
         } else {
-          observations = imrsTagged.slice(0, 4)
+          observations = imrsTagged.slice(0, 10)
         }
       } catch {
         // Keep the page renderable even if iNaturalist is unreachable.
@@ -133,5 +132,5 @@ export const Route = createFileRoute('/species/$speciesId')({
 
   pendingComponent: () => <Loader dataTitle="species details" />,
 
-  component: SpeciesDetails,
+  component: IMRS_SpeciesDetails,
 })

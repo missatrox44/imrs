@@ -14,8 +14,8 @@
  * --force to reprocess every species.
  *
  * Usage:
- *   IUCN_API_TOKEN=xxxx npx tsx scripts/seed-conservation.ts
- *   npx tsx scripts/seed-conservation.ts --force
+ *   IUCN_API_TOKEN=xxxx pnpm dlx tsx scripts/seed-conservation.ts
+ *   pnpm dlx tsx scripts/seed-conservation.ts --force
  *
  * Then push to Turso (production):
  *   sqlite3 imrs-species.db "PRAGMA wal_checkpoint(TRUNCATE);"

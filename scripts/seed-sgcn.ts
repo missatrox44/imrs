@@ -15,7 +15,7 @@
  * drops it) and is safe to re-run: it recomputes the flag for every specimen.
  *
  * Usage:
- *   npx tsx scripts/seed-sgcn.ts
+ *   pnpm dlx tsx scripts/seed-sgcn.ts
  *
  * Then push to Turso (production):
  *   sqlite3 imrs-species.db "PRAGMA wal_checkpoint(TRUNCATE);"

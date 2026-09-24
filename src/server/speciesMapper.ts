@@ -1,4 +1,3 @@
-// fixes type errors when mapping Turso rows to Species
 import type { Species } from '@/types/species'
 
 export function rowToSpecies(row: Record<string, unknown>): Species | null {

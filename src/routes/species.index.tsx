@@ -1,16 +1,31 @@
-import { createFileRoute } from '@tanstack/react-router'
-import type { Category } from '@/types/category'
-import SpeciesIndex from '@/components/SpeciesIndex'
+import { createFileRoute, stripSearchParams } from '@tanstack/react-router'
+import type { SearchSchemaInput } from '@tanstack/react-router'
+import type { SpeciesSearch, TaxonSelection } from '@/types/speciesIndex'
+import { IMRS_SpeciesIndex as SpeciesIndex } from '@/components/IMRS_SpeciesIndex'
 import { Loader } from '@/components/Loader'
 import { fetchAllSpecies } from '@/server/speciesService'
-import { SITE_URL } from '@/data/constants'
+import { SITE_URL, TAXONOMIC_RANKS } from '@/data/constants'
+
+const SEARCH_DEFAULTS = { category: 'all', view: 'grid', sort: 'asc' } as const
 
 export const Route = createFileRoute('/species/')({
+  // Partial input keeps `search={{ category: 'all' }}` links valid; output is complete.
   validateSearch: (
-    search: Record<string, unknown>,
-  ): { category: Category } => ({
-    category: (search.category || 'all') as Category,
-  }),
+    search: Partial<SpeciesSearch> & SearchSchemaInput,
+  ): SpeciesSearch => {
+    const ranks: TaxonSelection = {}
+    for (const { key } of TAXONOMIC_RANKS) {
+      const value: unknown = search[key]
+      if (typeof value === 'string' && value.trim()) ranks[key] = value.trim()
+    }
+    return {
+      category: search.category || 'all',
+      view: search.view === 'table' ? 'table' : 'grid',
+      sort: search.sort === 'desc' ? 'desc' : 'asc',
+      ...ranks,
+    }
+  },
+  search: { middlewares: [stripSearchParams(SEARCH_DEFAULTS)] },
 
   ssr: 'data-only',
 

@@ -32,7 +32,11 @@ export function ConservationBadge({
 
   return (
     <Badge
-      className={cn(TIER_CLASSES[rank.tier], className)}
+      className={cn(
+        'rounded-full px-[10px] py-0.5 font-brand-mono text-xs font-normal',
+        TIER_CLASSES[rank.tier],
+        className,
+      )}
       title={accessibleName}
       aria-label={accessibleName}
     >

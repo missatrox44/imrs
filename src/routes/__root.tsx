@@ -4,8 +4,6 @@ import {
   Scripts,
   createRootRouteWithContext,
 } from '@tanstack/react-router'
-// import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-// import { TanstackDevtools } from '@tanstack/react-devtools'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { Analytics } from '@vercel/analytics/react'
@@ -14,8 +12,8 @@ import { LazyMotion, domAnimation } from 'framer-motion'
 
 import appCss from '../styles.css?url'
 import type { QueryClient } from '@tanstack/react-query'
-import Header from '@/components/layout/Header'
-import { Footer } from '@/components/layout/Footer'
+import Header from '@/components/layout/IMRS_Header'
+import { IMRS_Footer as Footer } from '@/components/layout/IMRS_Footer'
 import { SITE_URL } from '@/data/constants'
 
 export const Route = createRootRouteWithContext<{
@@ -82,11 +80,30 @@ export const Route = createRootRouteWithContext<{
         rel: 'stylesheet',
         href: appCss,
       },
+      {
+        rel: 'apple-touch-icon',
+        sizes: '180x180',
+        href: '/apple-touch-icon.png',
+      },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '32x32',
+        href: '/favicon-32x32.png',
+      },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '16x16',
+        href: '/favicon-16x16.png',
+      },
+      { rel: 'icon', href: '/favicon.ico', sizes: '48x48' },
+      { rel: 'manifest', href: '/manifest.json' },
       { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
       { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: '' },
       {
         rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap',
+        href: 'https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Just+Me+Again+Down+Here&display=swap',
       },
     ],
   }),
@@ -113,17 +130,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           <Footer />
           <TanStackRouterDevtools position="bottom-right" />
           <ReactQueryDevtools buttonPosition="bottom-left" />
-          {/* <TanstackDevtools
-          config={{
-            position: 'bottom-left',
-          }}
-          plugins={[
-            {
-              name: 'Tanstack Router',
-              render: <TanStackRouterDevtoolsPanel />,
-            },
-          ]}
-        />  */}
           <Scripts />
           <Analytics />
           <SpeedInsights />
