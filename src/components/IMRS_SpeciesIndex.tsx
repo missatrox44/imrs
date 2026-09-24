@@ -85,13 +85,20 @@ export const IMRS_SpeciesIndex = () => {
     sort,
   )
 
+  // KEY-DECISION 2026-09-24: filter/sort/view changes keep the scroll position; the router resets it by default.
   const setSelection = (next: TaxonSelection) =>
-    navigate({ search: { category, view: search.view, sort, ...next } })
+    navigate({
+      search: { category, view: search.view, sort, ...next },
+      resetScroll: false,
+    })
   const setRankValue = (key: TaxonRankKey, value: string | null) =>
     setSelection(setRank(selection, key, value))
   // Rank options cascade from the category, so a new category starts clean.
   const setCategory = (next: Category) =>
-    navigate({ search: { category: next, view: search.view, sort } })
+    navigate({
+      search: { category: next, view: search.view, sort },
+      resetScroll: false,
+    })
   const clearAll = () => setCategory('all')
 
   const activeFilterCount =
@@ -142,11 +149,17 @@ export const IMRS_SpeciesIndex = () => {
               onSearchChange={setSearchTerm}
               sort={sort}
               onSortChange={(next) =>
-                navigate({ search: (prev) => ({ ...prev, sort: next }) })
+                navigate({
+                  search: (prev) => ({ ...prev, sort: next }),
+                  resetScroll: false,
+                })
               }
               view={view}
               onViewChange={(next) =>
-                navigate({ search: (prev) => ({ ...prev, view: next }) })
+                navigate({
+                  search: (prev) => ({ ...prev, view: next }),
+                  resetScroll: false,
+                })
               }
               showViewToggle={isSm}
               onOpenFilters={isXl ? undefined : () => setDrawerOpen(true)}

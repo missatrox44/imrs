@@ -10,6 +10,7 @@ import { SOURCE_LABELS, getMostAtRiskRank } from '@/lib/conservation'
 import { speciesPath } from '@/lib/speciesSlug'
 import { capitalize } from '@/components/speciesFilter'
 import { useSpeciesHoverImage } from '@/lib/useSpeciesHoverImage'
+import { IMRS_ScientificName } from '@/components/IMRS_ScientificName'
 
 const HOVER_INTENT_MS = 150
 
@@ -48,9 +49,6 @@ const IMRS_SpeciesCard = memo(function IMRS_SpeciesCard({
 
   const scientificName = `${item.genus ?? ''} ${item.species ?? ''}`.trim()
   const hasCommonName = !!item.species_common_name
-  const titleText = hasCommonName
-    ? item.species_common_name
-    : scientificName || 'Unidentified species'
 
   const familyLabel =
     item.family_common_name || (item.family && capitalize(item.family))
@@ -146,13 +144,13 @@ const IMRS_SpeciesCard = memo(function IMRS_SpeciesCard({
               <h2
                 className={`font-brand-sans text-[clamp(1.5rem,1.1rem+1vw,2rem)] leading-[31px] tracking-[0.04em] ${textColor}`}
               >
-                {titleText}
+                {item.species_common_name}
               </h2>
               {scientificName && (
                 <p
                   className={`font-brand-mono text-base tracking-[0.04em] ${textColor}`}
                 >
-                  {scientificName}
+                  <IMRS_ScientificName name={scientificName} />
                 </p>
               )}
             </>
@@ -160,7 +158,11 @@ const IMRS_SpeciesCard = memo(function IMRS_SpeciesCard({
             <h2
               className={`font-brand-sans text-[clamp(1.5rem,1.1rem+1vw,2rem)] leading-[31px] tracking-[0.04em] ${textColor}`}
             >
-              {titleText}
+              {scientificName ? (
+                <IMRS_ScientificName name={scientificName} />
+              ) : (
+                'Unidentified species'
+              )}
             </h2>
           )}
         </div>
@@ -207,6 +209,8 @@ export const IMRS_SpeciesGridView = ({
     estimateSize: () => ESTIMATED_ROW_HEIGHT,
     overscan: 4,
     scrollMargin: parentRef.current?.offsetTop ?? 0,
+    // KEY-DECISION 2026-09-24: mounting mid-page (table→grid, scroll kept) measures rows during render; flushSync there errors.
+    useFlushSync: false,
   })
 
   const virtualItems = virtualizer.getVirtualItems()

@@ -9,6 +9,7 @@ import type { Species } from '@/types/species'
 import { getCategoryIcon } from '@/lib/getCategoryIcon'
 import { speciesPath } from '@/lib/speciesSlug'
 import { capitalize } from '@/components/speciesFilter'
+import { IMRS_ScientificName } from '@/components/IMRS_ScientificName'
 
 const ROW_HEIGHT = 57
 
@@ -63,7 +64,13 @@ const IMRS_SpeciesRow = memo(function IMRS_SpeciesRow({
           className="truncate before:absolute before:inset-0 before:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-green"
         >
           <span className="relative z-20 group-hover:underline">
-            {item.genus ? `${item.genus} ${item.species}` : '-'}
+            {item.genus ? (
+              <IMRS_ScientificName
+                name={`${item.genus} ${item.species ?? ''}`}
+              />
+            ) : (
+              '-'
+            )}
           </span>
         </Link>
       </div>

@@ -14,6 +14,8 @@ type Props = {
   value: string | undefined
   onChange: (value: string | null) => void
   defaultOpen?: boolean
+  /** Genus names are italic by nomenclature convention. */
+  italic?: boolean
 }
 
 export const IMRS_TaxonRankGroup = ({
@@ -23,11 +25,14 @@ export const IMRS_TaxonRankGroup = ({
   value,
   onChange,
   defaultOpen = false,
+  italic = false,
 }: Props) => {
   const name = useId()
   const filterId = useId()
   const [open, setOpen] = useState(defaultOpen || value != null)
   const [filter, setFilter] = useState('')
+
+  const valueClass = italic ? 'italic' : ''
 
   const showFilterInput = options.length > 10
   const lowerFilter = filter.toLowerCase()
@@ -50,7 +55,9 @@ export const IMRS_TaxonRankGroup = ({
             {label}
           </span>
           {!open && value != null && (
-            <span className="font-brand-mono text-xs text-brand-gray">
+            <span
+              className={`font-brand-mono text-xs text-brand-gray ${valueClass}`}
+            >
               {value}
             </span>
           )}
@@ -107,10 +114,7 @@ export const IMRS_TaxonRankGroup = ({
               ) : (
                 <div className="flex max-h-60 flex-col gap-[5px] overflow-y-auto">
                   {visibleOptions.map((opt) => (
-                    <label
-                      key={opt.value}
-                      className="flex items-center gap-2"
-                    >
+                    <label key={opt.value} className="flex items-center gap-2">
                       <input
                         type="radio"
                         name={name}
@@ -119,7 +123,9 @@ export const IMRS_TaxonRankGroup = ({
                         onChange={() => onChange(opt.value)}
                         className={RADIO_CLASS}
                       />
-                      <span className="font-brand-sans text-base leading-6 tracking-[0.04em] text-brand-ink">
+                      <span
+                        className={`font-brand-sans text-base leading-6 tracking-[0.04em] text-brand-ink ${valueClass}`}
+                      >
                         {opt.value}
                       </span>
                       <span className="ml-auto font-brand-mono text-xs tabular-nums text-brand-gray">

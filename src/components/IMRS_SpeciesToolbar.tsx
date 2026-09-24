@@ -41,12 +41,13 @@ export const IMRS_SpeciesToolbar = ({
   onOpenFilters,
   activeFilterCount,
 }: Props) => (
-  <div className="flex flex-wrap items-center justify-between gap-4">
+  // Below xl the search takes a full-width row; the controls wrap under it.
+  <div className="flex flex-col gap-4 xl:flex-row xl:flex-wrap xl:items-center xl:justify-between">
     <IMRS_SearchInput
       value={searchTerm}
       onChange={onSearchChange}
       placeholder="Search species index"
-      className="max-w-[978px] flex-1"
+      className="w-full xl:w-auto xl:max-w-[978px] xl:flex-1"
     />
 
     <div className="flex flex-wrap items-center gap-3">
@@ -54,7 +55,10 @@ export const IMRS_SpeciesToolbar = ({
         value={sort}
         onValueChange={(value) => onSortChange(value as SortDirection)}
       >
-        <SelectTrigger aria-label="Sort species" className={TRIGGER_CLASS}>
+        <SelectTrigger
+          aria-label="Sort species"
+          className={`${TRIGGER_CLASS} min-w-0 flex-1 sm:flex-none`}
+        >
           <SelectValue placeholder="Sort Species by" />
         </SelectTrigger>
         <SelectContent className={CONTENT_CLASS}>

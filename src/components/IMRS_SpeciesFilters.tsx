@@ -117,6 +117,7 @@ export const IMRS_SpeciesFilters = ({
             value={selection[key]}
             onChange={(value) => onRankChange(key, value)}
             defaultOpen={key === 'kingdom'}
+            italic={key === 'genus'}
           />
         </div>
       ))}

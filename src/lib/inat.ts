@@ -62,6 +62,7 @@ export const ObservationSchema = z.object({
       id: z.number().nullish(),
       name: z.string().nullish(),
       preferred_common_name: z.string().nullish(),
+      rank_level: z.number().nullish(),
       ancestor_ids: z.array(z.number()).nullish(),
     })
     .nullish(),

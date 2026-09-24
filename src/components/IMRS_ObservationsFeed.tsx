@@ -20,6 +20,10 @@ import { getSoundUrl } from '@/lib/getSoundUrl'
 import { observationsQuery } from '@/lib/inat'
 import { cn } from '@/lib/utils'
 import { SKELETON_COUNT } from '@/data/constants'
+import { IMRS_ScientificName } from '@/components/IMRS_ScientificName'
+
+// iNaturalist rank_level: genus is 20; genus and below are italic.
+const GENUS_RANK_LEVEL = 20
 
 // Static class strings so Tailwind v4 emits them.
 const GROUP_BAR_CLASS: Record<TaxonGroup, string> = {
@@ -212,7 +216,14 @@ export const IMRS_ObservationsFeed = () => {
                           </h2>
                           {observation.taxon?.name && (
                             <p className="line-clamp-1 font-brand-mono text-base tracking-[0.04em]">
-                              {observation.taxon.name}
+                              {(observation.taxon.rank_level ?? Infinity) <=
+                              GENUS_RANK_LEVEL ? (
+                                <IMRS_ScientificName
+                                  name={observation.taxon.name}
+                                />
+                              ) : (
+                                observation.taxon.name
+                              )}
                             </p>
                           )}
                         </div>

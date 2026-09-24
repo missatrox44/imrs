@@ -20,6 +20,7 @@ import type { Species } from '@/types/species'
 import type { DisplayObservation } from '@/types/observation'
 import { getPhotoUrl } from '@/lib/getPhotoUrl'
 import { cn } from '@/lib/utils'
+import { IMRS_ScientificName } from '@/components/IMRS_ScientificName'
 
 // Static so Tailwind v4 emits the full class strings (see IMRS_ObservationsFeed's GROUP_BAR_CLASS).
 const CATEGORY_BAR_CLASS: Record<string, string> = {
@@ -265,12 +266,16 @@ export const IMRS_SpeciesHero = ({
                 </span>
 
                 <h1 className="font-brand-mono text-[clamp(2.5rem,1rem+4.5cqw,5rem)] leading-[1.0625] tracking-[-0.07em] break-words text-brand-ink">
-                  {heading}
+                  {!hasCommonName && scientificName ? (
+                    <IMRS_ScientificName name={scientificName} />
+                  ) : (
+                    heading
+                  )}
                 </h1>
 
                 {hasCommonName && scientificName && (
-                  <p className="font-brand-sans text-2xl italic tracking-[0.04em] text-brand-ink lg:text-[32px]">
-                    {scientificName}
+                  <p className="font-brand-sans text-2xl tracking-[0.04em] text-brand-ink lg:text-[32px]">
+                    <IMRS_ScientificName name={scientificName} />
                   </p>
                 )}
 
@@ -348,7 +353,11 @@ export const IMRS_SpeciesHero = ({
                       {row.rank}
                     </span>
                     <span className="font-brand-mono text-sm tracking-[0.02em] text-brand-ink">
-                      {row.scientificName}
+                      {row.rank === 'Genus' || row.rank === 'Species' ? (
+                        <IMRS_ScientificName name={row.scientificName} />
+                      ) : (
+                        row.scientificName
+                      )}
                       {row.commonName && (
                         <span className="text-brand-gray">
                           {' '}

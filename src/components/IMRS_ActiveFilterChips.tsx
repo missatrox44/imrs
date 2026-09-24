@@ -48,7 +48,7 @@ export const IMRS_ActiveFilterChips = ({
             type="button"
             onClick={() => onRemoveRank(key)}
             aria-label={`Remove ${label}: ${value} filter`}
-            className={`${CHIP_CLASS} bg-brand-sand text-brand-ink`}
+            className={`${CHIP_CLASS} bg-brand-sand text-brand-ink ${key === 'genus' ? 'italic' : ''}`}
           >
             {value}
             <X className="size-3" aria-hidden="true" />
