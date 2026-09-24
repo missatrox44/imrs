@@ -1,6 +1,5 @@
-// Reskin of Gazetteer (Figma 80:1716). State and data flow mirror
-// components/Gazetteer.tsx; only presentation changes. The Leaflet map itself
-// (GazetteerMap) is shared with the legacy page.
+// Reskin of Gazetteer (Figma 80:1716). The Leaflet map itself lives in
+// GazetteerMap.
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDebouncedValue } from '@tanstack/react-pacer'
 import { useInView } from 'react-intersection-observer'

@@ -1,6 +1,4 @@
 import { createFileRoute, useRouter } from '@tanstack/react-router'
-// Legacy header + grid, replaced by IMRS_ObservationsFeed (Figma 80:1185).
-// import Observations from '@/components/Observations'
 import { IMRS_ObservationsFeed as ObservationsFeed } from '@/components/IMRS_ObservationsFeed'
 import { IMRS_Page_Hero } from '@/components/IMRS_Page_Hero'
 import { Loader } from '@/components/Loader'

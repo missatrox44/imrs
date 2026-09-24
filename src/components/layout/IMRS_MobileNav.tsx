@@ -5,7 +5,6 @@ import { Drawer } from 'vaul'
 import { imrsNavItems, isActivePath } from './IMRS_Header'
 
 // No mobile frame in Figma yet; this mirrors the desktop card (cream, 10px radius, DM Mono).
-// Uses vaul directly: the shared ui/drawer.tsx hard-codes the legacy toad header.
 export function IMRS_MobileNav({ pathname }: { pathname: string }) {
   const [open, setOpen] = useState(false)
 

@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { useWeatherSummary } from '@/hooks/useWeatherData'
-import { Sparkline } from '@/components/weather/WeatherStatCards'
+import { Sparkline } from '@/components/weather/Sparkline'
 import { WEATHER_COLORS } from '@/lib/weatherColors'
 
 const weatherSearch = { year: 'all', season: 'all' } as const

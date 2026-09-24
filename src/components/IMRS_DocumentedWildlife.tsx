@@ -24,7 +24,7 @@ const CARDS = [
   },
 ] as const
 
-// Figma "IMRS Website Design" node 80:1006. Replaces the legacy hero + action cards in Home.tsx.
+// Figma "IMRS Website Design" node 80:1006.
 export const IMRS_DocumentedWildlife = () => {
   return (
     <section

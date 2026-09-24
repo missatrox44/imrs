@@ -9,9 +9,9 @@ import {
   sortSpecies,
 } from './speciesFilter'
 import type { Species } from '@/types/species'
-import type { TaxonomicFilters } from '@/components/SpeciesIndex'
+import type { TaxonRankKey } from '@/types/speciesIndex'
 
-const EMPTY_FILTERS: TaxonomicFilters = {
+const EMPTY_FILTERS: Record<TaxonRankKey, string | null> = {
   kingdom: null,
   phylum: null,
   class_name: null,

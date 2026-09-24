@@ -1,6 +1,5 @@
 // Reskin of weather/WeatherDashboard (Figma 80:1809): the paper section under
-// IMRS_Page_Hero. Data hooks, hash-to-dialog handoff and the mobile note
-// mirror the legacy dashboard; only presentation changes.
+// IMRS_Page_Hero.
 import { useEffect } from 'react'
 import { useMediaQuery } from '@uidotdev/usehooks'
 import { useLocation, useNavigate } from '@tanstack/react-router'

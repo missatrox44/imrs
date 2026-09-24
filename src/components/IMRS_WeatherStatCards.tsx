@@ -1,9 +1,9 @@
 // Reskin of weather/WeatherStatCards (Figma 80:1855–80:1876): white cards with
-// a 3px top rule in the series color. Sparkline and colors come from the
-// legacy module so the cards match the charts.
+// a 3px top rule in the series color. Sparkline and colors are shared with
+// the charts so the cards match them.
 import { CloudRain, Droplets, Thermometer, Wind } from 'lucide-react'
 import type { WeatherSummary } from '@/types/weather'
-import { Sparkline } from '@/components/weather/WeatherStatCards'
+import { Sparkline } from '@/components/weather/Sparkline'
 import { WEATHER_COLORS } from '@/lib/weatherColors'
 
 const GRID_CLASS = 'grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4'

@@ -2,8 +2,6 @@ import { createFileRoute, notFound, redirect } from '@tanstack/react-router'
 import type { DisplayObservation } from '@/types/observation'
 
 import { Loader } from '@/components/Loader'
-// Legacy detail layout, replaced by IMRS_SpeciesDetails (Figma 80:1922).
-// import { SpeciesDetails } from '@/components/SpeciesDetails'
 import { IMRS_SpeciesDetails } from '@/components/IMRS_SpeciesDetails'
 import { fetchAllSpecies } from '@/server/speciesService'
 import { fetchObservations, taxonQueryName } from '@/lib/inat'

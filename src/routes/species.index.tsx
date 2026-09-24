@@ -1,8 +1,6 @@
 import { createFileRoute, stripSearchParams } from '@tanstack/react-router'
 import type { SearchSchemaInput } from '@tanstack/react-router'
 import type { SpeciesSearch, TaxonSelection } from '@/types/speciesIndex'
-// Legacy index (plain header + AdvancedSearch), replaced by IMRS_SpeciesIndex (Figma 80:1396).
-// import SpeciesIndex from '@/components/SpeciesIndex'
 import { IMRS_SpeciesIndex as SpeciesIndex } from '@/components/IMRS_SpeciesIndex'
 import { Loader } from '@/components/Loader'
 import { fetchAllSpecies } from '@/server/speciesService'

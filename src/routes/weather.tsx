@@ -1,7 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
 import type { Season } from '@/types/weather'
-// Legacy dashboard (own h1 + header), replaced by IMRS_Page_Hero + IMRS_WeatherDashboard (Figma 80:1803).
-// import WeatherDashboard from '@/components/weather/WeatherDashboard'
 import { IMRS_Page_Hero } from '@/components/IMRS_Page_Hero'
 import { IMRS_WeatherDashboard as WeatherDashboard } from '@/components/IMRS_WeatherDashboard'
 import { Loader } from '@/components/Loader'

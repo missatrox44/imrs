@@ -49,7 +49,7 @@
 
 /* Emitted with `static` so unused tokens still reach :root for dynamic var() lookups */
 @theme static {
-  /* Reskin palette — Figma "IMRS Website Design" 38:2032. Additive; old tokens stay until cutover. */
+  /* Reskin palette — Figma "IMRS Website Design" 38:2032. */
   --color-brand-green: #3c5b4b;
   --color-brand-green-dark: #273d22;
   --color-brand-green-light: #8bb270;

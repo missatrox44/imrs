@@ -1,5 +1,4 @@
 // Reskin of the observations filter bar + infinite grid (Figma 80:1185).
-// Data flow mirrors components/Observations.tsx; only presentation changes.
 import { useEffect, useRef, useState } from 'react'
 import { AudioLines, Calendar, MapPin, User } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
