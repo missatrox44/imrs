@@ -12,7 +12,7 @@ import type { TaxonGroup } from '@/types/taxon'
 import EmptyState from '@/components/EmptyState'
 import { IMRS_BackToTop } from '@/components/IMRS_BackToTop'
 import { IMRS_ObservationsFilters } from '@/components/IMRS_ObservationsFilters'
-import { ObservationCardSkeleton } from '@/components/ObservationCardSkeleton'
+import { IMRS_ObservationCardSkeleton } from '@/components/IMRS_ObservationCardSkeleton'
 import { formatDate } from '@/lib/formatDate'
 import { getObservationGroup } from '@/lib/getObservationGroup'
 import { getPhotoUrl } from '@/lib/getPhotoUrl'
@@ -98,7 +98,7 @@ export const IMRS_ObservationsFeed = () => {
 
   const skeletons = Array.from({ length: SKELETON_COUNT }).map((_, i) => (
     <li key={`skeleton-${i}`}>
-      <ObservationCardSkeleton />
+      <IMRS_ObservationCardSkeleton />
     </li>
   ))
 
