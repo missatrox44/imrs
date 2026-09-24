@@ -10,6 +10,7 @@ import type {
 } from '@/types/speciesIndex'
 import { ALL_CATEGORIES, TAXONOMIC_RANKS } from '@/data/constants'
 import { CATEGORY_LABELS, categoryPillStyle } from '@/lib/categoryPill'
+import { getCategoryIcon } from '@/lib/getCategoryIcon'
 import { IMRS_TaxonRankGroup } from '@/components/IMRS_TaxonRankGroup'
 
 const PLURAL_LABELS: Record<TaxonRankKey, string> = {
@@ -22,7 +23,7 @@ const PLURAL_LABELS: Record<TaxonRankKey, string> = {
 }
 
 const PILL_CLASS =
-  'cursor-pointer rounded-full px-2.5 font-brand-mono text-xs leading-6 focus-visible:ring-2 focus-visible:ring-brand-green focus-visible:outline-none'
+  'inline-flex cursor-pointer items-center gap-1.5 rounded-full px-2.5 font-brand-mono text-xs leading-6 focus-visible:ring-2 focus-visible:ring-brand-green focus-visible:outline-none'
 const PILL_INACTIVE_CLASS =
   'border border-brand-ink bg-transparent text-brand-ink hover:bg-brand-sand'
 
@@ -91,6 +92,7 @@ export const IMRS_SpeciesFilters = ({
             }
             style={category === cat ? categoryPillStyle(cat) : undefined}
           >
+            <span aria-hidden="true">{getCategoryIcon(cat)}</span>
             {CATEGORY_LABELS[cat]}
           </button>
         ))}

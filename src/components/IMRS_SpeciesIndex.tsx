@@ -1,9 +1,11 @@
 // Reskin of SpeciesIndex (Figma 80:1396). Every filter lives in the URL; the
 // filter panel is an inline aside at xl and a left drawer below it.
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { useDebouncedValue } from '@tanstack/react-pacer'
 import { useMediaQuery } from '@uidotdev/usehooks'
+import { useInView } from 'react-intersection-observer'
+import { useReducedMotion } from 'framer-motion'
 import { PanelLeftOpen } from 'lucide-react'
 import { Drawer as Vaul } from 'vaul'
 import type { Species } from '@/types/species'
@@ -28,6 +30,7 @@ import { IMRS_ActiveFilterChips } from '@/components/IMRS_ActiveFilterChips'
 import { IMRS_SpeciesFilters } from '@/components/IMRS_SpeciesFilters'
 import { IMRS_SpeciesGridView } from '@/components/IMRS_SpeciesGridView'
 import { IMRS_SpeciesTableView } from '@/components/IMRS_SpeciesTableView'
+import { IMRS_BackToTop } from '@/components/IMRS_BackToTop'
 import { Route } from '@/routes/species.index'
 
 function pickSelection(search: SpeciesSearch): TaxonSelection {
@@ -49,6 +52,21 @@ export const IMRS_SpeciesIndex = () => {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const isXl = useMediaQuery('(min-width: 1280px)')
   const isSm = useMediaQuery('(min-width: 640px)')
+  const shouldReduceMotion = useReducedMotion()
+  const toolbarEl = useRef<HTMLDivElement>(null)
+  const { ref: toolbarInViewRef, inView: toolbarInView } = useInView({
+    initialInView: true,
+  })
+
+  const scrollToToolbar = () => {
+    const el = toolbarEl.current
+    if (!el) return
+    el.scrollIntoView({
+      behavior: shouldReduceMotion ? 'auto' : 'smooth',
+      block: 'start',
+    })
+    el.querySelector<HTMLElement>('input')?.focus({ preventScroll: true })
+  }
 
   const { category, sort } = search
   const view = isSm ? search.view : 'grid'
@@ -111,21 +129,30 @@ export const IMRS_SpeciesIndex = () => {
         />
 
         <div className="relative px-4 sm:px-8 lg:px-16">
-          <IMRS_SpeciesToolbar
-            searchTerm={searchTerm}
-            onSearchChange={setSearchTerm}
-            sort={sort}
-            onSortChange={(next) =>
-              navigate({ search: (prev) => ({ ...prev, sort: next }) })
-            }
-            view={view}
-            onViewChange={(next) =>
-              navigate({ search: (prev) => ({ ...prev, view: next }) })
-            }
-            showViewToggle={isSm}
-            onOpenFilters={isXl ? undefined : () => setDrawerOpen(true)}
-            activeFilterCount={activeFilterCount}
-          />
+          {/* scroll-mt clears the sticky header when Back to top lands here. */}
+          <div
+            ref={(node) => {
+              toolbarEl.current = node
+              toolbarInViewRef(node)
+            }}
+            className="scroll-mt-28 lg:scroll-mt-36"
+          >
+            <IMRS_SpeciesToolbar
+              searchTerm={searchTerm}
+              onSearchChange={setSearchTerm}
+              sort={sort}
+              onSortChange={(next) =>
+                navigate({ search: (prev) => ({ ...prev, sort: next }) })
+              }
+              view={view}
+              onViewChange={(next) =>
+                navigate({ search: (prev) => ({ ...prev, view: next }) })
+              }
+              showViewToggle={isSm}
+              onOpenFilters={isXl ? undefined : () => setDrawerOpen(true)}
+              activeFilterCount={activeFilterCount}
+            />
+          </div>
 
           <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-b border-brand-ink/40 pb-8 lg:mt-12 lg:pb-12">
             <IMRS_ActiveFilterChips
@@ -192,6 +219,8 @@ export const IMRS_SpeciesIndex = () => {
           </div>
         </div>
       </section>
+
+      <IMRS_BackToTop visible={!toolbarInView} onClick={scrollToToolbar} />
 
       {!isXl && (
         <Vaul.Root

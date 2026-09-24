@@ -10,7 +10,7 @@ export const CATEGORY_LABELS: Record<Category, string> = {
   plants: 'Plants',
   fungi: 'Fungi',
   arthropods: 'Arthropods',
-  inverts: 'Inverts',
+  inverts: 'Invertebrates',
 }
 
 /** Inline colors for an active category pill (Tailwind can't see runtime var() names). */

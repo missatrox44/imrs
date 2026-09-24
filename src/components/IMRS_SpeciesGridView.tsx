@@ -112,7 +112,8 @@ const IMRS_SpeciesCard = memo(function IMRS_SpeciesCard({
                 'none'
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/35 to-black/10" />
+          {/* KEY-DECISION 2026-09-24: black/55 floor keeps 12px white text ≥4.5:1 even over a pure-white photo. */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/60 to-black/55" />
         </m.div>
       )}
 
