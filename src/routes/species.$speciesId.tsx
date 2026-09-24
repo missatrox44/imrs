@@ -2,7 +2,9 @@ import { createFileRoute, notFound, redirect } from '@tanstack/react-router'
 import type { DisplayObservation } from '@/types/observation'
 
 import { Loader } from '@/components/Loader'
-import { SpeciesDetails } from '@/components/SpeciesDetails'
+// Legacy detail layout, replaced by IMRS_SpeciesDetails (Figma 80:1922).
+// import { SpeciesDetails } from '@/components/SpeciesDetails'
+import { IMRS_SpeciesDetails } from '@/components/IMRS_SpeciesDetails'
 import { fetchAllSpecies } from '@/server/speciesService'
 import { fetchObservations, taxonQueryName } from '@/lib/inat'
 import { PLACE_ID, SITE_URL } from '@/data/constants'
@@ -133,5 +135,5 @@ export const Route = createFileRoute('/species/$speciesId')({
 
   pendingComponent: () => <Loader dataTitle="species details" />,
 
-  component: SpeciesDetails,
+  component: IMRS_SpeciesDetails,
 })
