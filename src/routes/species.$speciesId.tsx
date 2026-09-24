@@ -47,22 +47,22 @@ export const Route = createFileRoute('/species/$speciesId')({
           taxon_name: scientificName,
           place_id: PLACE_ID,
           photos: true,
-          per_page: 4,
+          per_page: 10,
         })
         const imrsTagged = imrs.results.map((o) => ({ ...o, atImrs: true }))
-        if (imrsTagged.length < 4) {
+        if (imrsTagged.length < 10) {
           const general = await fetchObservations({
             taxon_name: scientificName,
             photos: true,
-            per_page: 8,
+            per_page: 20,
           })
           const imrsIds = new Set(imrsTagged.map((o) => o.id))
           const fill = general.results
             .filter((o) => !imrsIds.has(o.id))
             .map((o) => ({ ...o, atImrs: false }))
-          observations = [...imrsTagged, ...fill].slice(0, 4)
+          observations = [...imrsTagged, ...fill].slice(0, 10)
         } else {
-          observations = imrsTagged.slice(0, 4)
+          observations = imrsTagged.slice(0, 10)
         }
       } catch {
         // Keep the page renderable even if iNaturalist is unreachable.
