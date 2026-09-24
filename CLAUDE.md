@@ -45,7 +45,7 @@ This project uses **pnpm** (pinned via the `packageManager` field in `package.js
 ### UI
 
 - Tailwind CSS + ShadCN UI (New York style) components in `src/components/ui/`.
-- Custom fonts: Courier Prime, IBM Plex Mono (legacy); DM Mono, DM Sans, Just Me Again Down Here (reskin).
+- Custom fonts: DM Mono (body default), DM Sans, Just Me Again Down Here - the `--font-brand-*` tokens in `src/styles.css`.
 - Maps use Leaflet/React-Leaflet with GeoJSON boundary data in `src/data/imrs-boundary.geojson`.
 - Vite config includes a custom GeoJSON loader plugin.
 

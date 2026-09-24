@@ -3,12 +3,6 @@
 @plugin 'tailwindcss-animate';
 
 @theme {
-  --font-mono:
-    'Courier Prime', 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo,
-    monospace;
-  --font-sans:
-    'Courier Prime', 'IBM Plex Mono', ui-sans-serif, system-ui, -apple-system,
-    Segoe UI, Roboto, Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji';
   /* Core palette mapped from your CSS variables */
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
@@ -30,16 +24,6 @@
   --color-ring: hsl(var(--ring));
   --color-destructive: hsl(var(--destructive));
   --color-destructive-foreground: hsl(var(--destructive-foreground));
-
-  /* Sidebar tokens */
-  --color-sidebar-background: hsl(var(--sidebar-background));
-  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
-  --color-sidebar-primary: hsl(var(--sidebar-primary));
-  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
-  --color-sidebar-accent: hsl(var(--sidebar-accent));
-  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
-  --color-sidebar-border: hsl(var(--sidebar-border));
-  --color-sidebar-ring: hsl(var(--sidebar-ring));
 
   /* Optional: expose radius if you consume it with utilities that reference tokens */
   --radius: var(--radius);
@@ -119,70 +103,8 @@
 
     --radius: 0.125rem;
 
-    /* Vintage gradients */
-    --gradient-hero: linear-gradient(180deg, hsl(42 45% 94%), hsl(40 40% 90%));
-    --gradient-card: linear-gradient(180deg, hsl(42 40% 96%), hsl(40 35% 92%));
-
     /* Paper shadows */
     --shadow-card: 0 2px 8px -2px hsl(25 20% 15% / 0.15);
-    --shadow-hover: 0 4px 12px -3px hsl(25 20% 15% / 0.2);
-
-    /* Sidebar colors - keeping existing */
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
-    --background: 25 25% 12%; /* Dark aged paper */
-    --foreground: 42 30% 85%;
-
-    --card: 25 20% 14%;
-    --card-foreground: 42 30% 85%;
-
-    --popover: 25 20% 14%;
-    --popover-foreground: 42 30% 85%;
-
-    --primary: 42 30% 85%;
-    --primary-foreground: 25 25% 12%;
-    --primary-hover: 42 30% 75%;
-
-    --secondary: 25 15% 22%;
-    --secondary-foreground: 42 30% 85%;
-
-    --muted: 25 15% 18%;
-    --muted-foreground: 40 20% 58%;
-
-    --accent: 35 40% 50%;
-    --accent-foreground: 42 30% 85%;
-
-    --destructive: 0 50% 50%;
-    --destructive-foreground: 42 30% 85%;
-
-    --border: 25 15% 25%;
-    --input: 25 15% 22%;
-    --ring: 42 30% 85%;
-
-    /* Dark vintage gradients */
-    --gradient-hero: linear-gradient(180deg, hsl(25 25% 12%), hsl(25 20% 10%));
-    --gradient-card: linear-gradient(180deg, hsl(25 20% 14%), hsl(25 15% 12%));
-
-    --shadow-card: 0 2px 8px -2px hsl(0 0% 0% / 0.4);
-    --shadow-hover: 0 4px 12px -3px hsl(0 0% 0% / 0.5);
-
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
@@ -192,31 +114,14 @@
   }
 
   body {
-    @apply bg-background text-foreground font-mono;
+    @apply bg-background text-foreground font-brand-mono;
     letter-spacing: 0.02em;
-  }
-
-  /* Custom styles for scientific names */
-  .scientific-name {
-    @apply italic font-medium text-muted-foreground;
   }
 }
 
 @layer components {
-  .gradient-hero {
-    background: var(--gradient-hero);
-  }
-
-  .gradient-card {
-    background: var(--gradient-card);
-  }
-
   .shadow-card {
     box-shadow: var(--shadow-card);
-  }
-
-  .shadow-hover {
-    box-shadow: var(--shadow-hover);
   }
 
   /* Torn-paper top/bottom edges (Figma stats band). Masks are 1440x24 alpha PNGs
@@ -286,25 +191,3 @@
   border-top: none;
   border-left: none;
 }
-
-/* Dark mode map tile dimming */
-.dark .leaflet-tile-pane {
-  filter: brightness(0.8) contrast(1.1) saturate(0.7);
-}
-
-/* @keyframes scroll {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-.animate-scroll {
-  animation: scroll 25s linear infinite;
-}
-
-.animate-scroll:hover {
-  animation-play-state: paused;
-} */
