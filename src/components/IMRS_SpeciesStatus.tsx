@@ -117,11 +117,7 @@ export const IMRS_SpeciesStatus = ({ species }: { species: Species }) => {
                   </th>
                   <td className="py-4 pr-4 text-right sm:pr-6">
                     {rank ? (
-                      <ConservationBadge
-                        rank={rank}
-                        variant="full"
-                        className="rounded-full px-[10px] py-0.5 font-brand-mono text-xs font-normal"
-                      />
+                      <ConservationBadge rank={rank} variant="full" />
                     ) : (
                       <span className="font-brand-mono text-xs text-brand-gray">
                         Not assessed

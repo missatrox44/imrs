@@ -8,7 +8,6 @@
   --color-foreground: hsl(var(--foreground));
   --color-primary: hsl(var(--primary));
   --color-primary-foreground: hsl(var(--primary-foreground));
-  --color-primary-hover: hsl(var(--primary-hover));
   --color-secondary: hsl(var(--secondary));
   --color-secondary-foreground: hsl(var(--secondary-foreground));
   --color-accent: hsl(var(--accent));
@@ -74,7 +73,6 @@
     /* Vintage typewriter colors */
     --primary: 25 20% 15%; /* Dark brown/black */
     --primary-foreground: 42 45% 94%;
-    --primary-hover: 25 20% 25%;
 
     /* Faded paper tones */
     --secondary: 40 30% 80%; /* Light tan */

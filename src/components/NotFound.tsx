@@ -13,18 +13,16 @@ export function NotFound({ children }: { children?: any }) {
       <section
         className="
           max-w-2xl w-full
-          bg-card text-card-foreground
-          border border-border
-          p-10
-          shadow-card
+          rounded-[20px] bg-brand-light
+          p-8 sm:p-10
+          shadow-[0px_4px_10px_rgba(0,0,0,0.13)]
           space-y-6
+          font-brand-sans tracking-[0.04em] text-brand-ink
         "
       >
-        <h1 className="text-2xl font-semibold tracking-tight">
-          Page Not Found
-        </h1>
+        <h1 className="text-[32px] leading-[31px]">Page Not Found</h1>
 
-        <p className="text-muted-foreground leading-relaxed">
+        <p className="leading-[1.55]">
           {children || (
             <>
               The trail you were following doesn’t seem to lead anywhere.
@@ -39,13 +37,11 @@ export function NotFound({ children }: { children?: any }) {
             onClick={() => window.history.back()}
             className="
               inline-flex items-center gap-2
-              px-4 py-2
-              bg-primary text-primary-foreground
-              font-medium tracking-wide
-              border border-border
-              shadow-card
+              rounded-pill border-[0.5px] border-brand-ink bg-brand-green
+              px-6 py-3
+              font-brand-mono text-base leading-[31px] text-brand-cream
               transition-colors
-              hover:bg-primary-hover
+              hover:bg-brand-green-dark
               cursor-pointer
             "
           >
@@ -57,13 +53,12 @@ export function NotFound({ children }: { children?: any }) {
             to="/"
             className="
               inline-flex items-center gap-2
-              px-4 py-2
-              bg-secondary text-secondary-foreground
-              border border-border
-              font-medium tracking-wide
-              shadow-card
+              rounded-pill border-2 border-brand-green
+              px-6 py-3
+              font-brand-mono text-base leading-[31px] text-brand-green
+              no-underline
               transition-colors
-              hover:bg-accent
+              hover:bg-brand-green/10
             "
           >
             <Home size={16} />
