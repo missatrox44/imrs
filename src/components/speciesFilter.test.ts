@@ -3,6 +3,9 @@ import {
   applySearchTerm,
   applyTaxonomicFilters,
   filterByCategory,
+  getLineage,
+  getRankOptions,
+  setRank,
   sortSpecies,
 } from './speciesFilter'
 import type { Species } from '@/types/species'
@@ -150,5 +153,56 @@ describe('sortSpecies', () => {
     const before = sample.map((s) => s.id)
     sortSpecies(sample, 'desc')
     expect(sample.map((s) => s.id)).toEqual(before)
+  })
+})
+
+describe('getRankOptions', () => {
+  it('counts every value at a rank with no selection', () => {
+    const { family } = getRankOptions(sample, {})
+    expect(family).toContainEqual({ value: 'Canidae', count: 1 })
+    expect(family).toContainEqual({ value: 'Felidae', count: 1 })
+  })
+
+  it('narrows lower ranks by higher selections, not its own rank', () => {
+    const opts = getRankOptions(sample, { class_name: 'Aves' })
+    expect(opts.family.map((o) => o.value)).toEqual(['Falconidae'])
+    // the selected rank still lists its siblings so the user can switch
+    expect(opts.class_name.map((o) => o.value)).toContain('Mammalia')
+  })
+
+  it('merges casing drift into one capitalized option', () => {
+    const drift = [
+      { id: 10, class_name: 'MAGNOLIOPSIDA' },
+      { id: 11, class_name: 'Magnoliopsida' },
+    ]
+    expect(getRankOptions(drift, {}).class_name).toEqual([
+      { value: 'Magnoliopsida', count: 2 },
+    ])
+  })
+})
+
+describe('setRank', () => {
+  it('clears every rank below the one set', () => {
+    expect(
+      setRank(
+        { kingdom: 'Animalia', class_name: 'Mammalia', family: 'Canidae' },
+        'class_name',
+        'Aves',
+      ),
+    ).toEqual({ kingdom: 'Animalia', class_name: 'Aves' })
+  })
+
+  it('removes the rank when value is null', () => {
+    expect(
+      setRank({ kingdom: 'Animalia', phylum: 'Chordata' }, 'phylum', null),
+    ).toEqual({ kingdom: 'Animalia' })
+  })
+})
+
+describe('getLineage', () => {
+  it('returns selections in kingdom → genus order', () => {
+    expect(
+      getLineage({ family: 'Canidae', kingdom: 'Animalia' }).map((l) => l.key),
+    ).toEqual(['kingdom', 'family'])
   })
 })
