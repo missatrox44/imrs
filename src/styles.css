@@ -232,6 +232,15 @@
     mask-repeat: no-repeat;
   }
 
+  /* Torn top only, for a band that runs straight into the footer. */
+  .torn-edges.torn-top-only {
+    mask-size:
+      100% 24px,
+      0 0,
+      100% calc(100% - 24px);
+    mask-position: top, bottom, bottom;
+  }
+
   /* Dot grid (Figma 28:46 "Group 2917"): 3.76px dots on a 61.17px grid. */
   .dot-grid {
     background-image: radial-gradient(

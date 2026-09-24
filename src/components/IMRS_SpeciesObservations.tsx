@@ -14,6 +14,7 @@ import { useReducedMotion } from 'framer-motion'
 import type { DisplayObservation } from '@/types/observation'
 import { formatDate } from '@/lib/formatDate'
 import { getPhotoUrl } from '@/lib/getPhotoUrl'
+import { cn } from '@/lib/utils'
 
 const CARD_CLASS =
   'relative flex w-[85vw] shrink-0 snap-start flex-col gap-6 rounded-lg bg-brand-light p-6 text-brand-ink transition-shadow duration-300 hover:shadow-[0_4px_22px_rgba(0,0,0,0.14)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green-light focus-visible:ring-offset-2 focus-visible:ring-offset-brand-green-dark md:w-[320px] xl:w-[380px]'
@@ -90,8 +91,10 @@ const ObservationCard = ({
 
 export const IMRS_SpeciesObservations = ({
   observations,
+  runsIntoFooter = false,
 }: {
   observations: Array<DisplayObservation>
+  runsIntoFooter?: boolean
 }) => {
   const trackId = useId()
   const trackRef = useRef<HTMLDivElement>(null)
@@ -139,7 +142,14 @@ export const IMRS_SpeciesObservations = ({
   if (observations.length === 0) return null
 
   return (
-    <section className="torn-edges relative -mt-6 overflow-hidden bg-brand-green-dark py-20 lg:py-[120px]">
+    <section
+      className={cn(
+        'torn-edges relative -mt-6 overflow-hidden bg-brand-green-dark py-20 lg:py-[120px]',
+        // Run under the footer's rounded top (32px / 64px); bottom padding plus the footer's
+        // top padding matches the band's top padding.
+        runsIntoFooter && 'torn-top-only -mb-8 pb-16 lg:-mb-16 lg:pb-[88px]',
+      )}
+    >
       <img
         src="/footer-texture.webp"
         alt=""

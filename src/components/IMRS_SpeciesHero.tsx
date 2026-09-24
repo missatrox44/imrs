@@ -199,9 +199,10 @@ export const IMRS_SpeciesHero = ({
   return (
     <section
       aria-label="Species detail"
-      className="@container line-grid bg-brand-cream"
+      // Pull up under the sticky header (93px / 109px) so the grid runs to the top.
+      className="@container line-grid -mt-[93px] bg-brand-cream lg:-mt-[109px]"
     >
-      <div className="mx-auto max-w-[1440px] px-4 pt-10 pb-16 sm:px-8 lg:px-16 lg:pt-16 lg:pb-[120px]">
+      <div className="mx-auto max-w-[1440px] px-4 pt-[133px] pb-16 sm:px-8 lg:px-16 lg:pt-[173px] lg:pb-[120px]">
         <Link
           to="/species"
           search={{ category: 'all' }}
