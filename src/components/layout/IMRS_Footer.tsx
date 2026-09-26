@@ -57,7 +57,7 @@ export function IMRS_Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="relative overflow-hidden rounded-t-[32px] bg-brand-green-dark px-4 pt-12 text-brand-light lg:rounded-t-[64px] lg:px-[66px] lg:pt-[95px]">
+    <footer className="relative overflow-hidden rounded-t-4xl bg-brand-green-dark px-4 pt-12 text-brand-light lg:rounded-t-[64px] lg:px-[66px] lg:pt-[95px]">
       <img
         src="/footer-texture.webp"
         alt=""

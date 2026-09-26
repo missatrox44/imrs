@@ -72,7 +72,7 @@ export const IMRS_GazetteerMobileSheet = ({
       setActiveSnapPoint={setSnap}
     >
       <Vaul.Portal>
-        <Vaul.Content className="fixed inset-x-0 bottom-0 z-50 flex h-full max-h-[88dvh] flex-col overflow-clip rounded-t-[32px] bg-brand-sand text-brand-ink shadow-[0_-4px_24px_rgba(0,0,0,0.12)]">
+        <Vaul.Content className="fixed inset-x-0 bottom-0 z-50 flex h-full max-h-[88dvh] flex-col overflow-clip rounded-t-4xl bg-brand-sand text-brand-ink shadow-[0_-4px_24px_rgba(0,0,0,0.12)]">
           <img
             src="/footer-texture.webp"
             alt=""
@@ -115,7 +115,7 @@ export const IMRS_GazetteerMobileSheet = ({
           </div>
         </Vaul.Content>
         {/* Outside the transformed sheet so the pill fixes to the viewport; the zero-size wrapper only lifts it above the sheet's z-50. */}
-        <div className="fixed z-[60]">
+        <div className="fixed z-60">
           <IMRS_BackToTop
             visible={open && showBackToTop}
             onClick={scrollToTop}

@@ -28,7 +28,7 @@ export const IMRS_DocumentedWildlife = () => {
   return (
     <section
       aria-labelledby="documented-wildlife-heading"
-      className="relative overflow-hidden rounded-t-[32px] bg-brand-paper pt-16 pb-16 lg:rounded-t-[64px] lg:pt-[120px] lg:pb-[120px]"
+      className="relative overflow-hidden rounded-t-4xl bg-brand-paper pt-16 pb-16 lg:rounded-t-[64px] lg:pt-[120px] lg:pb-[120px]"
     >
       <img
         src="/footer-texture.webp"
