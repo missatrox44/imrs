@@ -238,9 +238,9 @@ export const IMRS_SpeciesHero = ({
           Back to Species Index
         </Link>
 
-        <div className="flex flex-col gap-8 xl:flex-row xl:items-start xl:justify-between">
+        <div className="flex flex-col gap-8 xl:flex-row xl:items-start xl:justify-between xl:gap-13">
           {/* Specimen card */}
-          <div className="@container rounded-[20px] bg-brand-light shadow-[0px_4px_10px_rgba(0,0,0,0.13)] xl:w-[867px] xl:shrink-0">
+          <div className="@container rounded-[20px] bg-brand-light shadow-[0px_4px_10px_rgba(0,0,0,0.13)] xl:w-[867px] xl:min-w-0">
             <div
               className={cn('h-[3rem] rounded-t-[20px]', barClass)}
               aria-hidden="true"
