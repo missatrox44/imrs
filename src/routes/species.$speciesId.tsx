@@ -124,7 +124,8 @@ export const Route = createFileRoute('/species/$speciesId')({
       scripts: [
         {
           type: 'application/ld+json',
-          children: JSON.stringify(taxonLd),
+          // Escape `<` so DB/iNat strings cannot close the inline <script>.
+          children: JSON.stringify(taxonLd).replace(/</g, '\\u003c'),
         },
       ],
     }
