@@ -98,6 +98,17 @@
   }
 }
 
+/* Soft bottom edge for scroll containers. The padding matches the fade so the
+   last item clears it at scroll end and non-overflowing lists stay unfaded. */
+@utility fade-bottom {
+  padding-bottom: 1.5rem;
+  mask-image: linear-gradient(
+    to bottom,
+    black calc(100% - 1.5rem),
+    transparent
+  );
+}
+
 /* RESkin end =================================================== */
 
 /* IMRS Biodiversity Explorer Design System - Vintage Research Archive */

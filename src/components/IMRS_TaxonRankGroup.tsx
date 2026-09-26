@@ -112,7 +112,7 @@ export const IMRS_TaxonRankGroup = ({
                   No matches
                 </p>
               ) : (
-                <div className="flex max-h-60 flex-col gap-[5px] overflow-y-auto">
+                <div className="flex max-h-60 flex-col gap-[5px] overflow-y-auto pr-4 fade-bottom">
                   {visibleOptions.map((opt) => (
                     <label key={opt.value} className="flex items-center gap-2">
                       <input

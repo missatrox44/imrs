@@ -189,7 +189,7 @@ export const IMRS_SpeciesIndex = () => {
               (sidebarOpen ? (
                 <aside
                   aria-label="Species filters"
-                  className="sticky top-28 max-h-[calc(100dvh-8rem)] w-[clamp(300px,29%,417px)] shrink-0 overflow-y-auto pr-1"
+                  className="sticky top-28 max-h-[calc(100dvh-8rem)] w-[clamp(300px,29%,417px)] shrink-0 overflow-y-auto pr-4 fade-bottom"
                 >
                   {filters(() => setSidebarOpen(false), 'Hide filters')}
                 </aside>
