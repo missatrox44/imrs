@@ -2,7 +2,6 @@ import { defineConfig } from 'vite'
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 import { nitro } from 'nitro/vite'
 import viteReact from '@vitejs/plugin-react'
-import viteTsConfigPaths from 'vite-tsconfig-paths'
 import tailwindcss from '@tailwindcss/vite'
 
 // Content-Security-Policy and related headers, applied at build time only.
@@ -31,6 +30,7 @@ const securityHeaders = {
 }
 
 const config = defineConfig(({ command }) => ({
+  resolve: { tsconfigPaths: true },
   plugins: [
     // treat .geojson files as JSON
     {
@@ -44,9 +44,6 @@ const config = defineConfig(({ command }) => ({
         }
       },
     },
-    viteTsConfigPaths({
-      projects: ['./tsconfig.json'],
-    }),
     tailwindcss(),
     tanstackStart({
       router: {
