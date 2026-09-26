@@ -68,6 +68,7 @@ const IMRS_SpeciesCard = memo(function IMRS_SpeciesCard({
     <Link
       to="/species/$speciesId"
       params={{ speciesId: speciesPath(item) }}
+      state={{ fromSpeciesIndex: true }}
       // No hover preload: the detail loader calls iNaturalist, and scanning
       // the grid would burn through its rate limit.
       preload={false}

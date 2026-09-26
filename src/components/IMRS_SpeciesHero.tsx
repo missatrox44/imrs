@@ -13,7 +13,7 @@ import {
   Sprout,
   Turtle,
 } from 'lucide-react'
-import { Link } from '@tanstack/react-router'
+import { Link, useLocation, useRouter } from '@tanstack/react-router'
 import type { LucideIcon } from 'lucide-react'
 import type { Species } from '@/types/species'
 import type { DisplayObservation } from '@/types/observation'
@@ -194,6 +194,10 @@ export const IMRS_SpeciesHero = ({
   species: Species
   observations: Array<DisplayObservation>
 }) => {
+  const router = useRouter()
+  const fromIndex = useLocation({
+    select: (location) => location.state.fromSpeciesIndex === true,
+  })
   const category = species.category?.toLowerCase()
   const barClass = category
     ? (CATEGORY_BAR_CLASS[category] ?? 'bg-brand-sand')
@@ -232,6 +236,12 @@ export const IMRS_SpeciesHero = ({
         <Link
           to="/species"
           search={{ category: 'all' }}
+          // From the index, pop history so its filters and scroll position return.
+          onClick={(e) => {
+            if (!fromIndex || e.metaKey || e.ctrlKey || e.shiftKey) return
+            e.preventDefault()
+            router.history.back()
+          }}
           className="mb-8 inline-flex items-center gap-2 font-brand-mono text-base text-brand-ink hover:underline"
         >
           <ArrowLeft className="size-5" aria-hidden="true" />

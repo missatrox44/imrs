@@ -18,10 +18,12 @@ export const Route = createFileRoute('/species/')({
       const value: unknown = search[key]
       if (typeof value === 'string' && value.trim()) ranks[key] = value.trim()
     }
+    const q = typeof search.q === 'string' ? search.q.trim() : ''
     return {
       category: search.category || 'all',
       view: search.view === 'table' ? 'table' : 'grid',
       sort: search.sort === 'desc' ? 'desc' : 'asc',
+      ...(q && { q }),
       ...ranks,
     }
   },

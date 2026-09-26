@@ -2,7 +2,7 @@
 // and a left drawer below it.
 import { useMemo, useRef, useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
-import { useDebouncedValue } from '@tanstack/react-pacer'
+import { useDebouncedCallback } from '@tanstack/react-pacer'
 import { useMediaQuery } from '@uidotdev/usehooks'
 import { useInView } from 'react-intersection-observer'
 import { useReducedMotion } from 'framer-motion'
@@ -46,8 +46,17 @@ export const IMRS_SpeciesIndex = () => {
   const species: Array<Species> = Route.useLoaderData()
   const navigate = useNavigate({ from: Route.fullPath })
 
-  const [searchTerm, setSearchTerm] = useState('')
-  const [debouncedSearchTerm] = useDebouncedValue(searchTerm, { wait: 300 })
+  // The input echoes keystrokes; the URL `q` (trimmed) drives the filter.
+  const [searchTerm, setSearchTerm] = useState(search.q ?? '')
+  const commitSearchTerm = useDebouncedCallback(
+    (next: string) =>
+      navigate({
+        search: (prev) => ({ ...prev, q: next.trim() || undefined }),
+        replace: true,
+        resetScroll: false,
+      }),
+    { wait: 300 },
+  )
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const isXl = useMediaQuery('(min-width: 1280px)')
@@ -68,7 +77,7 @@ export const IMRS_SpeciesIndex = () => {
     el.querySelector<HTMLElement>('input')?.focus({ preventScroll: true })
   }
 
-  const { category, sort } = search
+  const { category, sort, q } = search
   const view = isSm ? search.view : 'grid'
   const selection = pickSelection(search)
 
@@ -80,7 +89,7 @@ export const IMRS_SpeciesIndex = () => {
   const results = sortSpecies(
     applySearchTerm(
       applyTaxonomicFilters(inCategory, selection),
-      debouncedSearchTerm,
+      q ?? '',
     ),
     sort,
   )
@@ -88,7 +97,7 @@ export const IMRS_SpeciesIndex = () => {
   // filter/sort/view changes keep the scroll position; the router resets it by default.
   const setSelection = (next: TaxonSelection) =>
     navigate({
-      search: { category, view: search.view, sort, ...next },
+      search: { category, view: search.view, sort, q, ...next },
       resetScroll: false,
     })
   const setRankValue = (key: TaxonRankKey, value: string | null) =>
@@ -96,7 +105,7 @@ export const IMRS_SpeciesIndex = () => {
   // Rank options cascade from the category, so a new category starts clean.
   const setCategory = (next: Category) =>
     navigate({
-      search: { category: next, view: search.view, sort },
+      search: { category: next, view: search.view, sort, q },
       resetScroll: false,
     })
   const clearAll = () => setCategory('all')
@@ -146,7 +155,10 @@ export const IMRS_SpeciesIndex = () => {
           >
             <IMRS_SpeciesToolbar
               searchTerm={searchTerm}
-              onSearchChange={setSearchTerm}
+              onSearchChange={(next) => {
+                setSearchTerm(next)
+                commitSearchTerm(next)
+              }}
               sort={sort}
               onSortChange={(next) =>
                 navigate({
@@ -209,8 +221,8 @@ export const IMRS_SpeciesIndex = () => {
               {results.length === 0 ? (
                 <div className="rounded-lg bg-brand-light px-6 py-16 text-center">
                   <p className="font-brand-sans text-base tracking-[0.04em] text-brand-ink">
-                    {debouncedSearchTerm
-                      ? `No species match “${debouncedSearchTerm}” with these filters.`
+                    {q
+                      ? `No species match “${q}” with these filters.`
                       : 'No species match these filters.'}
                   </p>
                   {activeFilterCount > 0 && (
