@@ -51,7 +51,7 @@ export const IMRS_SpeciesStatus = ({ species }: { species: Species }) => {
           aria-expanded={expanded}
           aria-controls={panelId}
           onClick={() => setExpanded((prev) => !prev)}
-          className="flex w-full items-center justify-between gap-4 text-left focus-visible:ring-2 focus-visible:ring-brand-green focus-visible:ring-offset-2 focus-visible:outline-none"
+          className="flex w-full cursor-pointer items-center justify-between gap-4 text-left focus-visible:ring-2 focus-visible:ring-brand-green focus-visible:ring-offset-2 focus-visible:outline-none"
         >
           <span>
             Species <span className="text-brand-green">Status</span>
