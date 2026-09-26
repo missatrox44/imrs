@@ -99,7 +99,7 @@ export const IMRS_SpeciesStatus = ({ species }: { species: Species }) => {
                 <tr key={source}>
                   <th
                     scope="row"
-                    className="py-4 pl-4 text-left font-brand-sans text-base font-normal tracking-[0.04em] sm:pl-6"
+                    className="py-4 pr-3 pl-4 text-left font-brand-sans text-base font-normal tracking-[0.04em] sm:pl-6"
                   >
                     {showLink ? (
                       <a
@@ -115,7 +115,7 @@ export const IMRS_SpeciesStatus = ({ species }: { species: Species }) => {
                       label
                     )}
                   </th>
-                  <td className="py-4 pr-4 text-right sm:pr-6">
+                  <td className="py-4 pr-4 text-right whitespace-nowrap sm:pr-6">
                     {rank ? (
                       <ConservationBadge rank={rank} variant="full" />
                     ) : (
