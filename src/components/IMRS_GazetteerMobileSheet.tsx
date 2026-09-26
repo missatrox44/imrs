@@ -1,6 +1,6 @@
 // No design frame: a vaul snap-point sheet over the full-screen map, on the
 // paper background with the reskin cards.
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Drawer as Vaul } from 'vaul'
 import { useReducedMotion } from 'framer-motion'
 import type { GazetteerEntry } from '@/types/gazetteer'
@@ -41,6 +41,16 @@ export const IMRS_GazetteerMobileSheet = ({
   const searchEl = useRef<HTMLDivElement>(null)
   const [showBackToTop, setShowBackToTop] = useState(false)
   const shouldReduceMotion = useReducedMotion()
+
+  // KEY-DECISION 2026-09-26: vaul 1.1.2 leaves Radix's modal `pointer-events: none` on <body> when
+  // `open` is controlled; reset it as vaul does internally, or the map and its exit button go dead.
+  useEffect(() => {
+    if (!open) return
+    const frame = requestAnimationFrame(() => {
+      document.body.style.pointerEvents = 'auto'
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [open])
 
   // The list scrolls inside the sheet, so "Back to top" rewinds that
   // container and hands focus back to the search field.
