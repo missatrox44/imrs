@@ -269,11 +269,11 @@ export const IMRS_SpeciesHero = ({
                     )}
                   </div>
                   <img
-                    src="/imgs/tape-1.webp"
+                    src="/imgs/scotch-tape.webp"
                     alt=""
                     aria-hidden="true"
-                    width={364}
-                    height={210}
+                    width={178}
+                    height={73}
                     className="absolute top-0 left-1/2 w-[42%] -translate-x-1/2 -translate-y-1/2 drop-shadow-[0_1px_1px_rgba(0,0,0,0.15)]"
                   />
                 </div>
