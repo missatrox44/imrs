@@ -144,7 +144,7 @@ export const IMRS_SpeciesObservations = ({
   return (
     <section
       className={cn(
-        'torn-edges relative -mt-6 overflow-hidden bg-brand-green-dark py-20 lg:py-[120px]',
+        'torn-edges relative -mt-6 overflow-hidden bg-brand-green-dark py-20 md:pt-24 lg:py-[120px]',
         // Run under the footer's rounded top (32px / 64px); bottom padding plus the footer's
         // top padding matches the band's top padding.
         runsIntoFooter && 'torn-top-only -mb-8 pb-16 lg:-mb-16 lg:pb-[88px]',
@@ -158,10 +158,10 @@ export const IMRS_SpeciesObservations = ({
       />
 
       <div className="relative px-4 text-center text-brand-light sm:px-8 lg:px-16">
-        <h2 className="font-brand-sans text-4xl tracking-[0.04em] lg:text-[56px] lg:leading-[63px]">
+        <h2 className="font-brand-sans type-section-title tracking-[0.04em]">
           Recent <span className="text-brand-green-light">Observations</span>
         </h2>
-        <p className="mt-4 font-brand-mono text-base tracking-[0.04em] lg:text-xl">
+        <p className="mt-4 font-brand-mono text-base tracking-[0.04em] md:text-lg lg:text-xl">
           Sourced from iNaturalist
         </p>
       </div>

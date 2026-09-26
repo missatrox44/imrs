@@ -26,7 +26,7 @@ const socialLinks = [
 ]
 
 const headingClass =
-  'font-brand-mono text-xl leading-[31px] tracking-[0.04em] text-brand-green-light'
+  'font-brand-mono text-lg leading-[31px] tracking-[0.04em] text-brand-green-light lg:text-xl'
 const listClass =
   'mt-[7px] flex flex-col gap-1 font-brand-mono text-base leading-6 tracking-[0.04em]'
 const linkClass = 'transition-colors hover:text-brand-green-light'
@@ -74,7 +74,7 @@ export function IMRS_Footer() {
                 className="h-[89px] w-auto"
               />
             </Link>
-            <p className="mt-8 max-w-[327px] font-brand-sans text-xl leading-[31px] tracking-[0.04em]">
+            <p className="mt-6 max-w-[327px] font-brand-sans text-lg leading-[1.55] tracking-[0.04em] lg:mt-8 lg:text-xl lg:leading-[31px]">
               A digital resource for exploring the biodiversity of Indio
               Mountains Research Station.
             </p>
@@ -82,7 +82,7 @@ export function IMRS_Footer() {
 
           <nav
             aria-label="Footer navigation"
-            className="mt-10 lg:mt-0 lg:pt-[25px]"
+            className="mt-8 lg:mt-0 lg:pt-[25px]"
           >
             <h2 className={headingClass}>Quick Links</h2>
             <ul className={listClass}>
@@ -96,7 +96,7 @@ export function IMRS_Footer() {
             </ul>
           </nav>
 
-          <div className="mt-10 lg:mt-0 lg:pt-[25px]">
+          <div className="mt-8 lg:mt-0 lg:pt-[25px]">
             <h2 className={headingClass}>External Resources</h2>
             <ul className={listClass}>
               {externalLinks.map((link) => (
@@ -108,7 +108,7 @@ export function IMRS_Footer() {
               ))}
             </ul>
 
-            <h2 className={`${headingClass} mt-[39px]`}>Support</h2>
+            <h2 className={`${headingClass} mt-8 lg:mt-[39px]`}>Support</h2>
             <ul className={listClass}>
               <li>
                 <ExternalAnchor

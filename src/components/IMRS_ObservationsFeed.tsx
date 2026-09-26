@@ -108,7 +108,7 @@ export const IMRS_ObservationsFeed = () => {
   return (
     // The rounded top only reads against the hero photo, so the section rides
     // up over it — 106px at the 1440 frame, halved below lg with the radius.
-    <section className="relative -mt-[53px] overflow-clip rounded-t-4xl bg-brand-paper pt-16 pb-16 lg:-mt-[106px] lg:rounded-t-[64px] lg:pt-[120px]">
+    <section className="relative -mt-[53px] overflow-clip rounded-t-4xl bg-brand-paper pt-16 pb-16 md:pt-22 lg:-mt-[106px] lg:rounded-t-[64px] lg:pt-[120px]">
       <img
         src="/footer-texture.webp"
         alt=""
@@ -156,7 +156,7 @@ export const IMRS_ObservationsFeed = () => {
 
               return (
                 <li key={observation.id}>
-                  <article className="relative flex h-full flex-col gap-8 overflow-hidden rounded-lg bg-brand-light p-6 pt-8 transition-shadow duration-300 hover:shadow-[0_4px_22px_rgba(0,0,0,0.14)]">
+                  <article className="relative flex h-full flex-col gap-8 overflow-hidden rounded-lg bg-brand-light p-5 pt-6 transition-shadow md:p-6 md:pt-8 duration-300 hover:shadow-[0_4px_22px_rgba(0,0,0,0.14)]">
                     <span
                       aria-hidden="true"
                       className={cn(
@@ -208,7 +208,7 @@ export const IMRS_ObservationsFeed = () => {
 
                       <div className="flex flex-col gap-6">
                         <div className="flex flex-col gap-2 text-brand-ink">
-                          <h2 className="line-clamp-2 font-brand-sans text-2xl leading-tight tracking-[0.04em] lg:text-[32px] lg:leading-[31px]">
+                          <h2 className="line-clamp-2 font-brand-sans type-card-title tracking-[0.04em]">
                             {observation.species_guess ||
                               observation.taxon?.preferred_common_name ||
                               'Unknown Species'}

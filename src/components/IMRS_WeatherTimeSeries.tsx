@@ -102,7 +102,7 @@ export const IMRS_WeatherTimeSeries = ({ data, isLoading }: Props) => {
         <div className="flex flex-wrap items-center gap-5">
           <h2
             id="weather-time-series-heading"
-            className="font-brand-sans text-[40px] leading-none tracking-[0.04em] lg:text-[56px] lg:leading-[63px]"
+            className="font-brand-sans type-section-title tracking-[0.04em]"
           >
             Time Series
           </h2>

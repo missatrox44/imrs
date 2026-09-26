@@ -22,7 +22,7 @@ const CHIP_ACTIVE =
 const CHIP_IDLE = 'border-brand-ink text-brand-ink hover:bg-brand-sand'
 
 const HEADING_CLASS =
-  'font-brand-sans text-2xl leading-[31px] tracking-[0.04em] text-brand-ink lg:text-[32px]'
+  'font-brand-sans type-card-title tracking-[0.04em] text-brand-ink'
 
 export const IMRS_WeatherFilterBar = () => {
   const navigate = useNavigate()

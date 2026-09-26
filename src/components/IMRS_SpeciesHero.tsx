@@ -198,7 +198,7 @@ export const IMRS_SpeciesHero = ({
       // Pull up under the sticky header (93px / 109px) so the grid runs to the top.
       className="@container line-grid -mt-[93px] bg-brand-cream lg:-mt-[109px]"
     >
-      <div className="mx-auto max-w-[1440px] px-4 pt-[133px] pb-16 sm:px-8 lg:px-16 lg:pt-[173px] lg:pb-[120px]">
+      <div className="mx-auto max-w-[1440px] px-4 pt-[133px] pb-16 sm:px-8 md:pb-22 lg:px-16 lg:pt-[173px] lg:pb-[120px]">
         <Link
           to="/species"
           search={{ category: 'all' }}
@@ -267,7 +267,7 @@ export const IMRS_SpeciesHero = ({
                 </h1>
 
                 {hasCommonName && scientificName && (
-                  <p className="font-brand-sans text-2xl tracking-[0.04em] text-brand-ink lg:text-[32px]">
+                  <p className="font-brand-sans type-card-title tracking-[0.04em] text-brand-ink">
                     <IMRS_ScientificName name={scientificName} />
                   </p>
                 )}

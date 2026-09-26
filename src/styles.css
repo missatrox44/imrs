@@ -60,6 +60,44 @@
   --font-brand-hand: 'Just Me Again Down Here', cursive;
 }
 
+/* Responsive type scale. The lg values are the Figma desktop sizes; Figma has
+   no mobile or tablet frames, so the base and md steps are ours. */
+@utility type-section-title {
+  font-size: 2.25rem;
+  line-height: 1.1;
+  @variant md {
+    font-size: 2.75rem;
+  }
+  @variant lg {
+    font-size: 3.5rem;
+    line-height: 63px;
+  }
+}
+
+@utility type-card-title {
+  font-size: 1.5rem;
+  line-height: 1.25;
+  @variant md {
+    font-size: 1.75rem;
+  }
+  @variant lg {
+    font-size: 2rem;
+    line-height: 31px;
+  }
+}
+
+@utility type-lead {
+  font-size: 1rem;
+  line-height: 1.55;
+  @variant md {
+    font-size: 1.125rem;
+  }
+  @variant lg {
+    font-size: 1.25rem;
+    line-height: 31px;
+  }
+}
+
 /* RESkin end =================================================== */
 
 /* IMRS Biodiversity Explorer Design System - Vintage Research Archive */

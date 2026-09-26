@@ -35,7 +35,7 @@ export const IMRS_WeatherDashboard = () => {
   return (
     // Rides up over the hero like the observations feed (106px at the 1440
     // frame, halved below lg with the radius).
-    <section className="relative -mt-[53px] overflow-clip rounded-t-4xl bg-brand-paper pt-16 pb-16 text-brand-ink lg:-mt-[106px] lg:rounded-t-[64px] lg:pt-[120px] lg:pb-[190px]">
+    <section className="relative -mt-[53px] overflow-clip rounded-t-4xl bg-brand-paper pt-16 pb-16 text-brand-ink md:pt-22 lg:-mt-[106px] lg:rounded-t-[64px] lg:pt-[120px] lg:pb-[190px]">
       <img
         src="/footer-texture.webp"
         alt=""

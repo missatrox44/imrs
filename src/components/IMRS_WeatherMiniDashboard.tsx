@@ -49,7 +49,7 @@ export function IMRS_WeatherMiniDashboard() {
   return (
     <section
       aria-labelledby="weather-mini-heading"
-      className="torn-edge-top relative -mb-10 mt-20 overflow-hidden bg-brand-light pt-16 pb-[104px] lg:-mb-[71px] lg:pt-[120px] lg:pb-[174px]"
+      className="torn-edge-top relative -mb-10 mt-20 overflow-hidden bg-brand-light pt-16 pb-[104px] md:pt-22 lg:-mb-[71px] lg:pt-[120px] lg:pb-[174px]"
     >
       <img
         src="/footer-texture.webp"
@@ -61,11 +61,11 @@ export function IMRS_WeatherMiniDashboard() {
         <div>
           <h2
             id="weather-mini-heading"
-            className="font-brand-sans text-[40px] leading-tight tracking-[0.04em] lg:text-[56px] lg:leading-[63px]"
+            className="font-brand-sans type-section-title tracking-[0.04em]"
           >
             <span className="text-brand-green">Climate</span> & Weather
           </h2>
-          <p className="mt-6 font-brand-mono text-xl leading-[31px] tracking-[0.04em] lg:text-2xl">
+          <p className="mt-6 font-brand-mono text-base leading-[31px] tracking-[0.04em] md:text-xl lg:text-2xl">
             Hill Station · 2020–2024
           </p>
           <div className="mt-8 flex flex-wrap gap-4">

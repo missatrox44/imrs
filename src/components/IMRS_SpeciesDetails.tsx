@@ -22,7 +22,7 @@ export const IMRS_SpeciesDetails = () => {
       />
       {/* Empty sections render nothing, so the divider only appears between two
           visible sections. */}
-      <div className="bg-brand-cream px-4 py-16 empty:hidden sm:px-8 lg:px-16 lg:py-[120px] [&>section+section]:mt-14 [&>section+section]:border-t [&>section+section]:border-brand-gray [&>section+section]:pt-14">
+      <div className="bg-brand-cream px-4 py-16 empty:hidden sm:px-8 md:py-22 lg:px-16 lg:py-[120px] [&>section+section]:mt-14 [&>section+section]:border-t [&>section+section]:border-brand-gray [&>section+section]:pt-14">
         <IMRS_SpeciesStatus species={species} />
         <IMRS_SpeciesPublications speciesId={species.id} />
       </div>

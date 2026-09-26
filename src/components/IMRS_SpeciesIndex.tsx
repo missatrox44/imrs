@@ -127,7 +127,7 @@ export const IMRS_SpeciesIndex = () => {
         subtitle="Comprehensive database of species documented on IMRS."
       />
 
-      <section className="relative -mt-[53px] overflow-clip rounded-t-4xl bg-brand-paper pt-16 pb-16 lg:-mt-[106px] lg:rounded-t-[64px] lg:pt-[120px]">
+      <section className="relative -mt-[53px] overflow-clip rounded-t-4xl bg-brand-paper pt-16 pb-16 md:pt-22 lg:-mt-[106px] lg:rounded-t-[64px] lg:pt-[120px]">
         <img
           src="/footer-texture.webp"
           alt=""
