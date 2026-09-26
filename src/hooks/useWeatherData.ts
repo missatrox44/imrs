@@ -46,7 +46,7 @@ export function weatherSummaryQuery(filters: WeatherFilters) {
   })
 }
 
-export function weatherDailyQuery(filters: WeatherFilters) {
+function weatherDailyQuery(filters: WeatherFilters) {
   return queryOptions({
     queryKey: weatherQueryKey('daily', filters),
     queryFn: () => fetchWeather<Array<WeatherDailyRow>>('daily', filters),

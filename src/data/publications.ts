@@ -8,7 +8,7 @@
 // tagged. Omit `url` (or set it to '') until a link is available; the entry
 // still renders as a non-clickable citation until then.
 
-export type PublicationType = 'thesis' | 'dissertation' | 'article' | 'note'
+type PublicationType = 'thesis' | 'dissertation' | 'article' | 'note'
 
 export interface Publication {
   /** Stable slug used as the React key, e.g. 'worthington-1972-thesis'. */

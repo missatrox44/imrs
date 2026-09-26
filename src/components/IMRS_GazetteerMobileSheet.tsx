@@ -8,7 +8,7 @@ import { IMRS_BackToTop } from '@/components/IMRS_BackToTop'
 import { IMRS_SearchInput } from '@/components/IMRS_SearchInput'
 import { IMRS_GazetteerCardList } from '@/components/IMRS_GazetteerCardList'
 
-export const SHEET_SNAP_POINTS: Array<number | string> = ['180px', 0.5, 1]
+const SHEET_SNAP_POINTS: Array<number | string> = ['180px', 0.5, 1]
 export const SHEET_PEEK = SHEET_SNAP_POINTS[0]
 export const SHEET_MID = SHEET_SNAP_POINTS[1]
 
