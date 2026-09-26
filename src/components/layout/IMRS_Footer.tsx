@@ -122,10 +122,10 @@ export function IMRS_Footer() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col gap-4 border-t border-brand-green-light pt-6 pb-8 font-brand-mono text-base leading-6 tracking-[0.04em] sm:flex-row sm:items-center sm:justify-between lg:mt-[70px] lg:pb-[47px]">
-          <span>© {year} IMRS Biodiversity Explorer</span>
+        <div className="mt-12 border-t border-brand-green-light pt-6 pb-8 font-brand-mono text-base leading-6 tracking-[0.04em] lg:mt-[70px] lg:pb-[47px]">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <span>© {year} IMRS Biodiversity Explorer</span>
 
-          <div className="flex items-center gap-6">
             <ul className="flex items-center gap-4">
               {socialLinks.map((s) => (
                 <li key={s.href}>
@@ -139,10 +139,21 @@ export function IMRS_Footer() {
                 </li>
               ))}
             </ul>
-            <ExternalAnchor href="https://sarabaqla.dev" className={linkClass}>
-              sarabaqla.dev
-            </ExternalAnchor>
           </div>
+
+          <p className="mt-4 text-sm leading-5 sm:text-right">
+            Designed by{' '}
+            <ExternalAnchor
+              href="https://www.jillianndesign.com/"
+              className={linkClass}
+            >
+              J. Nalezny
+            </ExternalAnchor>{' '}
+            · Built by{' '}
+            <ExternalAnchor href="https://sarabaqla.dev" className={linkClass}>
+              S. Baqla
+            </ExternalAnchor>
+          </p>
         </div>
       </div>
     </footer>
