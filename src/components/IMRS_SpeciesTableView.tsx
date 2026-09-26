@@ -48,12 +48,17 @@ const IMRS_SpeciesRow = memo(function IMRS_SpeciesRow({
     >
       <div role="cell" className="flex items-center p-4 text-brand-ink">
         {item.category && (
-          <span aria-hidden="true">{getCategoryIcon(item.category)}</span>
+          <span
+            aria-hidden="true"
+            className="inline-block transition-transform group-hover:scale-125 motion-reduce:transition-none"
+          >
+            {getCategoryIcon(item.category)}
+          </span>
         )}
       </div>
       <div
         role="cell"
-        className="relative flex min-w-0 items-center p-4 font-brand-mono text-brand-green-dark"
+        className="flex min-w-0 items-center p-4 font-brand-mono text-brand-green-dark"
       >
         <Link
           to="/species/$speciesId"
@@ -114,7 +119,7 @@ const IMRS_SpeciesRow = memo(function IMRS_SpeciesRow({
       </div>
       <div role="cell" className="flex items-center p-4">
         <ChevronRight
-          className="relative z-20 size-4 text-brand-gray group-hover:text-brand-green-dark"
+          className="size-4 text-brand-gray transition-transform group-hover:translate-x-1 group-hover:text-brand-green-dark motion-reduce:transition-none"
           aria-hidden="true"
         />
       </div>
