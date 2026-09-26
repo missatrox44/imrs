@@ -1,6 +1,6 @@
 // No dialog design frame; the trigger, dialog surfaces and fields use the
 // brand palette and faces.
-import { useId, useState } from 'react'
+import { useId, useRef, useState } from 'react'
 import { z } from 'zod'
 import { useForm, useStore } from '@tanstack/react-form'
 import { Download, Loader2 } from 'lucide-react'
@@ -236,11 +236,14 @@ export const IMRS_WeatherDataRequestDialog = () => {
     endDate: useId(),
     resolution: useId(),
     format: useId(),
+    gotcha: useId(),
   }
 
   const [open, setOpen] = useState(false)
   const [status, setStatus] = useState<SubmitStatus>('idle')
   const [errorMessage, setErrorMessage] = useState('')
+  // Formspree honeypot: bots fill every field; Formspree drops non-empty _gotcha.
+  const gotchaRef = useRef<HTMLInputElement>(null)
 
   const form = useForm({
     defaultValues: initialValues,
@@ -279,6 +282,7 @@ export const IMRS_WeatherDataRequestDialog = () => {
             ...parsed,
             station: 'Hill Station — Indio Mountains Research Station',
             submittedAt: new Date().toISOString(),
+            _gotcha: gotchaRef.current?.value ?? '',
           }),
         })
         if (!response.ok) {
@@ -362,6 +366,17 @@ export const IMRS_WeatherDataRequestDialog = () => {
             noValidate
             className="contents"
           >
+            <div aria-hidden="true" className="absolute -left-[9999px]">
+              <label htmlFor={ids.gotcha}>Leave this field empty</label>
+              <input
+                ref={gotchaRef}
+                id={ids.gotcha}
+                name="_gotcha"
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+              />
+            </div>
             <div className="flex-1 overflow-y-auto px-6 py-4 space-y-8">
               {/* Requester */}
               <fieldset className="space-y-4">
