@@ -76,33 +76,41 @@ const IMRS_SpeciesRow = memo(function IMRS_SpeciesRow({
       </div>
       <div
         role="cell"
-        className="flex items-center truncate p-4 font-brand-sans tracking-[0.04em] text-brand-green-dark"
+        className="flex min-w-0 items-center p-4 font-brand-sans tracking-[0.04em] text-brand-green-dark"
       >
-        {item.species_common_name || '-'}
+        <span className="truncate">{item.species_common_name || '-'}</span>
       </div>
       <div
         role="cell"
-        className="hidden items-center truncate p-4 font-brand-sans tracking-[0.04em] text-brand-green-dark @5xl:flex"
+        className="hidden min-w-0 items-center p-4 font-brand-sans tracking-[0.04em] text-brand-green-dark @5xl:flex"
       >
-        {item.phylum ? capitalize(item.phylum) : '-'}
+        <span className="truncate">
+          {item.phylum ? capitalize(item.phylum) : '-'}
+        </span>
       </div>
       <div
         role="cell"
-        className="flex items-center truncate p-4 font-brand-sans tracking-[0.04em] text-brand-green-dark"
+        className="flex min-w-0 items-center p-4 font-brand-sans tracking-[0.04em] text-brand-green-dark"
       >
-        {item.class_name ? capitalize(item.class_name) : '-'}
+        <span className="truncate">
+          {item.class_name ? capitalize(item.class_name) : '-'}
+        </span>
       </div>
       <div
         role="cell"
-        className="hidden items-center truncate p-4 font-brand-sans tracking-[0.04em] text-brand-green-dark @5xl:flex"
+        className="hidden min-w-0 items-center p-4 font-brand-sans tracking-[0.04em] text-brand-green-dark @5xl:flex"
       >
-        {item.order_name ? capitalize(item.order_name) : '-'}
+        <span className="truncate">
+          {item.order_name ? capitalize(item.order_name) : '-'}
+        </span>
       </div>
       <div
         role="cell"
-        className="hidden items-center truncate p-4 font-brand-sans tracking-[0.04em] text-brand-green-dark @3xl:flex"
+        className="hidden min-w-0 items-center p-4 font-brand-sans tracking-[0.04em] text-brand-green-dark @3xl:flex"
       >
-        {item.family ? capitalize(item.family) : '-'}
+        <span className="truncate">
+          {item.family ? capitalize(item.family) : '-'}
+        </span>
       </div>
       <div role="cell" className="flex items-center p-4">
         <ChevronRight
