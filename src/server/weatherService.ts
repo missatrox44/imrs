@@ -2,6 +2,7 @@ import { createServerFn } from '@tanstack/react-start'
 import type { Season, WeatherSummary } from '@/types/weather'
 import { getTurso } from '@/server/turso'
 import { buildWeatherSummary } from '@/server/weatherTransforms'
+import { isValidYearFilter } from '@/server/weatherQueries'
 
 const VALID_SEASONS: ReadonlyArray<Season> = [
   'all',
@@ -21,8 +22,10 @@ function validateWeatherInput(input: unknown): WeatherFilterInput {
     throw new Error('Weather input must be an object')
   }
   const { year, season } = input as Record<string, unknown>
-  if (typeof year !== 'string') {
-    throw new Error('year must be a string')
+  if (typeof year !== 'string' || !isValidYearFilter(year)) {
+    throw new Error(
+      'year must be "all" or ascending, unique years with weather data',
+    )
   }
   if (typeof season !== 'string' || !VALID_SEASONS.includes(season as Season)) {
     throw new Error(`season must be one of: ${VALID_SEASONS.join(', ')}`)

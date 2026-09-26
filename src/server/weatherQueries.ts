@@ -1,4 +1,5 @@
 import { getSeasonMonthsClause } from '@/lib/weatherUtils'
+import { FIRST_WEATHER_YEAR } from '@/data/constants'
 
 interface WhereClause {
   sql: string
@@ -12,6 +13,19 @@ function parseYears(year: string): Array<number> {
     if (!Number.isNaN(n)) acc.push(n)
     return acc
   }, [])
+}
+
+// KEY-DECISION 2026-09-26: reject (not normalize) non-canonical year lists —
+// each spelling is a distinct CDN cache key and a fresh billed Turso read.
+export function isValidYearFilter(year: string): boolean {
+  if (year === 'all') return true
+  if (!/^\d{4}(,\d{4})*$/.test(year)) return false
+  const years = year.split(',').map(Number)
+  const lastYear = new Date().getUTCFullYear()
+  return years.every(
+    (y, i) =>
+      y >= FIRST_WEATHER_YEAR && y <= lastYear && (i === 0 || y > years[i - 1]),
+  )
 }
 
 function buildWhereClause(year: string, season: string): WhereClause {

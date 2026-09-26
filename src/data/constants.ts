@@ -33,6 +33,7 @@ export const ORDER_BY = 'observed_on'
 // Floor for the observations Year filter (iNaturalist's inception year), so no
 // real observation year is ever excluded from the dropdown.
 export const FIRST_OBSERVATION_YEAR = 2008
+export const FIRST_WEATHER_YEAR = 2020
 // TanStack Query passes both to setTimeout; values
 // past 2**31-1 ms truncate to 1ms and gcTime evicts the cache on unmount.
 const MAX_TIMER_MS = 2 ** 31 - 1 // ~24.8 days

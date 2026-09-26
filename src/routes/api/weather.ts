@@ -10,6 +10,7 @@ import {
 import {
   dailyQuery,
   hourlyQuery,
+  isValidYearFilter,
   monsoonQuery,
   windDistributionQueryFromReadings,
 } from '@/server/weatherQueries'
@@ -20,10 +21,7 @@ const querySchema = z.object({
   view: z
     .enum(['summary', 'daily', 'hourly', 'monsoon', 'wind'])
     .default('daily'),
-  year: z
-    .string()
-    .regex(/^(all|\d{4}(,\d{4})*)$/)
-    .default('all'),
+  year: z.string().refine(isValidYearFilter).default('all'),
   season: z
     .enum(['all', 'winter', 'premonsoon', 'monsoon', 'postmonsoon'])
     .default('all'),

@@ -50,6 +50,17 @@ describe('GET /api/weather', () => {
     expect(execute).toHaveBeenCalledTimes(1)
   })
 
+  it.each([
+    ['duplicate years', '2023,2023'],
+    ['unsorted years', '2024,2023'],
+    ['a year before the data', '2019'],
+    ['a future year', String(new Date().getUTCFullYear() + 1)],
+  ])('returns 400 for %s', async (_, year) => {
+    const res = await callGet({ view: 'daily', year })
+    expect(res.status).toBe(400)
+    expect(execute).not.toHaveBeenCalled()
+  })
+
   it('daily view returns mapped daily rows with cache headers', async () => {
     execute.mockResolvedValueOnce({
       rows: [
