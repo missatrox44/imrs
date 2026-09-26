@@ -114,7 +114,7 @@ export const Route = createFileRoute('/species/$speciesId')({
 
     return {
       meta: [
-        { title: `${scientificName} | IMRS` },
+        { title: `${scientificName || 'Species Details'} | IMRS` },
         {
           name: 'description',
           content: `Explore ${scientificName}${commonSuffix} — taxonomy, recent iNaturalist observations, and field photos from Indio Mountains Research Station.`,
