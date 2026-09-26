@@ -129,7 +129,11 @@ export const IMRS_SpeciesTableView = ({ items }: { items: Array<Species> }) => {
     count: items.length,
     estimateSize: () => ROW_HEIGHT,
     overscan: 8,
-    scrollMargin: parentRef.current?.offsetTop ?? 0,
+    // Document offset, not offsetTop: offsetTop is relative to the nearest
+    // positioned ancestor, which undercounts by the hero and toolbar height.
+    scrollMargin: parentRef.current
+      ? parentRef.current.getBoundingClientRect().top + window.scrollY
+      : 0,
   })
 
   const virtualItems = virtualizer.getVirtualItems()
