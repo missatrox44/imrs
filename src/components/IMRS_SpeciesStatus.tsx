@@ -51,7 +51,7 @@ export const IMRS_SpeciesStatus = ({ species }: { species: Species }) => {
           aria-expanded={expanded}
           aria-controls={panelId}
           onClick={() => setExpanded((prev) => !prev)}
-          className="flex w-full items-center justify-between gap-4 text-left focus-visible:ring-2 focus-visible:ring-brand-green focus-visible:ring-offset-2 focus-visible:outline-none"
+          className="flex w-full cursor-pointer items-center justify-between gap-4 text-left focus-visible:ring-2 focus-visible:ring-brand-green focus-visible:ring-offset-2 focus-visible:outline-none"
         >
           <span>
             Species <span className="text-brand-green">Status</span>
@@ -99,7 +99,7 @@ export const IMRS_SpeciesStatus = ({ species }: { species: Species }) => {
                 <tr key={source}>
                   <th
                     scope="row"
-                    className="py-4 pl-4 text-left font-brand-sans text-base font-normal tracking-[0.04em] sm:pl-6"
+                    className="py-4 pr-3 pl-4 text-left font-brand-sans text-base font-normal tracking-[0.04em] sm:pl-6"
                   >
                     {showLink ? (
                       <a
@@ -115,7 +115,7 @@ export const IMRS_SpeciesStatus = ({ species }: { species: Species }) => {
                       label
                     )}
                   </th>
-                  <td className="py-4 pr-4 text-right sm:pr-6">
+                  <td className="py-4 pr-4 text-right whitespace-nowrap sm:pr-6">
                     {rank ? (
                       <ConservationBadge rank={rank} variant="full" />
                     ) : (

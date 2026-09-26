@@ -95,7 +95,7 @@ export const IMRS_SpeciesToolbar = ({
         <div
           role="group"
           aria-label="View mode"
-          className="inline-flex rounded-full border border-brand-ink p-0.5"
+          className="inline-flex rounded-full border border-brand-ink p-0.5 sm:ml-auto"
         >
           <button
             type="button"

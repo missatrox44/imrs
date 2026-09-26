@@ -17,7 +17,7 @@ import { getPhotoUrl } from '@/lib/getPhotoUrl'
 import { cn } from '@/lib/utils'
 
 const CARD_CLASS =
-  'relative flex w-[85vw] shrink-0 snap-start flex-col gap-6 rounded-lg bg-brand-light p-6 text-brand-ink transition-shadow duration-300 hover:shadow-[0_4px_22px_rgba(0,0,0,0.14)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green-light focus-visible:ring-offset-2 focus-visible:ring-offset-brand-green-dark md:w-[320px] xl:w-[380px]'
+  'group relative flex w-[85vw] shrink-0 snap-start flex-col gap-6 rounded-lg bg-brand-light p-6 text-brand-ink transition-shadow duration-300 hover:shadow-[0_4px_22px_rgba(0,0,0,0.14)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green-light focus-visible:ring-offset-2 focus-visible:ring-offset-brand-green-dark md:w-[320px] xl:w-[380px]'
 
 const ObservationCard = ({
   observation,
@@ -47,7 +47,7 @@ const ObservationCard = ({
             alt={label}
             loading="lazy"
             decoding="async"
-            className="size-full object-cover"
+            className="size-full object-cover transition-transform duration-500 ease-out group-hover:scale-105 group-focus-visible:scale-105 motion-reduce:transition-none"
           />
         ) : (
           <div
@@ -144,7 +144,7 @@ export const IMRS_SpeciesObservations = ({
   return (
     <section
       className={cn(
-        'torn-edges relative -mt-6 overflow-hidden bg-brand-green-dark py-20 lg:py-[120px]',
+        'torn-edges relative -mt-6 overflow-hidden bg-brand-green-dark py-20 md:pt-24 lg:py-[120px]',
         // Run under the footer's rounded top (32px / 64px); bottom padding plus the footer's
         // top padding matches the band's top padding.
         runsIntoFooter && 'torn-top-only -mb-8 pb-16 lg:-mb-16 lg:pb-[88px]',
@@ -158,10 +158,10 @@ export const IMRS_SpeciesObservations = ({
       />
 
       <div className="relative px-4 text-center text-brand-light sm:px-8 lg:px-16">
-        <h2 className="font-brand-sans text-4xl tracking-[0.04em] lg:text-[56px] lg:leading-[63px]">
+        <h2 className="font-brand-sans type-section-title tracking-[0.04em]">
           Recent <span className="text-brand-green-light">Observations</span>
         </h2>
-        <p className="mt-4 font-brand-mono text-base tracking-[0.04em] lg:text-xl">
+        <p className="mt-4 font-brand-mono text-base tracking-[0.04em] md:text-lg lg:text-xl">
           Sourced from iNaturalist
         </p>
       </div>
@@ -202,7 +202,7 @@ export const IMRS_SpeciesObservations = ({
             aria-controls={trackId}
             disabled={atStart}
             onClick={() => scrollByCard(-1)}
-            className="flex size-12 items-center justify-center rounded-full border border-brand-light text-brand-light transition-colors hover:bg-brand-light hover:text-brand-green-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green-light focus-visible:ring-offset-2 focus-visible:ring-offset-brand-green-dark disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-brand-light"
+            className="flex size-12 cursor-pointer items-center justify-center rounded-full border border-brand-light text-brand-light transition-colors hover:bg-brand-light hover:text-brand-green-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green-light focus-visible:ring-offset-2 focus-visible:ring-offset-brand-green-dark disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-brand-light"
           >
             <ArrowLeft className="size-5" aria-hidden="true" />
           </button>
@@ -212,7 +212,7 @@ export const IMRS_SpeciesObservations = ({
             aria-controls={trackId}
             disabled={atEnd}
             onClick={() => scrollByCard(1)}
-            className="flex size-12 items-center justify-center rounded-full border border-brand-light text-brand-light transition-colors hover:bg-brand-light hover:text-brand-green-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green-light focus-visible:ring-offset-2 focus-visible:ring-offset-brand-green-dark disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-brand-light"
+            className="flex size-12 cursor-pointer items-center justify-center rounded-full border border-brand-light text-brand-light transition-colors hover:bg-brand-light hover:text-brand-green-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green-light focus-visible:ring-offset-2 focus-visible:ring-offset-brand-green-dark disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-brand-light"
           >
             <ArrowRight className="size-5" aria-hidden="true" />
           </button>

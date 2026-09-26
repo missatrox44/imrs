@@ -6,7 +6,7 @@ const BAR_CLASS = 'rounded-md bg-brand-sand'
 
 export function IMRS_ObservationCardSkeleton() {
   return (
-    <div className="relative flex h-full flex-col gap-8 overflow-hidden rounded-lg bg-brand-light p-6 pt-8">
+    <div className="relative flex h-full flex-col gap-8 overflow-hidden rounded-lg bg-brand-light p-5 pt-6 md:p-6 md:pt-8">
       <span
         aria-hidden="true"
         className="absolute inset-x-0 top-0 h-2 bg-brand-sand"

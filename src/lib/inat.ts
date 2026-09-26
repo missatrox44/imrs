@@ -15,7 +15,7 @@ import { GROUP_TO_TAXON_ID } from '@/types/taxon'
 // (script-src without 'unsafe-eval') blocks in the browser.
 z.config({ jitless: true })
 
-export const INAT_TIMEOUT_MS = 10_000
+const INAT_TIMEOUT_MS = 10_000
 
 // Placeholder epithets that denote an unidentified species within a genus.
 // These are not real taxon names, so iNaturalist rejects them in taxon_name
@@ -68,7 +68,7 @@ export const ObservationSchema = z.object({
     .nullish(),
 })
 
-export const ObservationsResponseSchema = z.object({
+const ObservationsResponseSchema = z.object({
   total_results: z.number(),
   results: z.array(ObservationSchema),
 })

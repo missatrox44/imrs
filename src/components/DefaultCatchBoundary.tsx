@@ -5,8 +5,9 @@ import type { ErrorComponentProps } from '@tanstack/react-router'
 // Replaces TanStack Router's default ErrorComponent, whose <pre> uses
 // `overflow: auto` without wrapping and causes horizontal scroll on long
 // error messages.
-function WrappedError({ error }: { error: Error }) {
+function WrappedError({ error }: { error: unknown }) {
   const [show, setShow] = useState(import.meta.env.DEV)
+  const message = error instanceof Error ? error.message : String(error)
 
   return (
     <div>
@@ -25,7 +26,7 @@ function WrappedError({ error }: { error: Error }) {
         </button>
       </div>
 
-      {show && error.message && (
+      {show && message && (
         <pre
           className="
             mt-2 rounded-[4px] border border-destructive
@@ -33,7 +34,7 @@ function WrappedError({ error }: { error: Error }) {
             whitespace-pre-wrap break-words
           "
         >
-          <code>{error.message}</code>
+          <code>{message}</code>
         </pre>
       )}
     </div>

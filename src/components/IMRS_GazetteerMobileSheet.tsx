@@ -1,6 +1,6 @@
 // No design frame: a vaul snap-point sheet over the full-screen map, on the
 // paper background with the reskin cards.
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Drawer as Vaul } from 'vaul'
 import { useReducedMotion } from 'framer-motion'
 import type { GazetteerEntry } from '@/types/gazetteer'
@@ -8,7 +8,7 @@ import { IMRS_BackToTop } from '@/components/IMRS_BackToTop'
 import { IMRS_SearchInput } from '@/components/IMRS_SearchInput'
 import { IMRS_GazetteerCardList } from '@/components/IMRS_GazetteerCardList'
 
-export const SHEET_SNAP_POINTS: Array<number | string> = ['180px', 0.5, 1]
+const SHEET_SNAP_POINTS: Array<number | string> = ['180px', 0.5, 1]
 export const SHEET_PEEK = SHEET_SNAP_POINTS[0]
 export const SHEET_MID = SHEET_SNAP_POINTS[1]
 
@@ -42,6 +42,16 @@ export const IMRS_GazetteerMobileSheet = ({
   const [showBackToTop, setShowBackToTop] = useState(false)
   const shouldReduceMotion = useReducedMotion()
 
+  // KEY-DECISION 2026-09-26: vaul 1.1.2 leaves Radix's modal `pointer-events: none` on <body> when
+  // `open` is controlled; reset it as vaul does internally, or the map and its exit button go dead.
+  useEffect(() => {
+    if (!open) return
+    const frame = requestAnimationFrame(() => {
+      document.body.style.pointerEvents = 'auto'
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [open])
+
   // The list scrolls inside the sheet, so "Back to top" rewinds that
   // container and hands focus back to the search field.
   const scrollToTop = () => {
@@ -62,7 +72,7 @@ export const IMRS_GazetteerMobileSheet = ({
       setActiveSnapPoint={setSnap}
     >
       <Vaul.Portal>
-        <Vaul.Content className="fixed inset-x-0 bottom-0 z-50 flex h-full max-h-[88dvh] flex-col overflow-clip rounded-t-[32px] bg-brand-sand text-brand-ink shadow-[0_-4px_24px_rgba(0,0,0,0.12)]">
+        <Vaul.Content className="fixed inset-x-0 bottom-0 z-50 flex h-full max-h-[88dvh] flex-col overflow-clip rounded-t-4xl bg-brand-sand text-brand-ink shadow-[0_-4px_24px_rgba(0,0,0,0.12)]">
           <img
             src="/footer-texture.webp"
             alt=""
@@ -105,7 +115,7 @@ export const IMRS_GazetteerMobileSheet = ({
           </div>
         </Vaul.Content>
         {/* Outside the transformed sheet so the pill fixes to the viewport; the zero-size wrapper only lifts it above the sheet's z-50. */}
-        <div className="fixed z-[60]">
+        <div className="fixed z-60">
           <IMRS_BackToTop
             visible={open && showBackToTop}
             onClick={scrollToTop}

@@ -13,7 +13,7 @@ import {
   Sprout,
   Turtle,
 } from 'lucide-react'
-import { Link } from '@tanstack/react-router'
+import { Link, useLocation, useRouter } from '@tanstack/react-router'
 import type { LucideIcon } from 'lucide-react'
 import type { Species } from '@/types/species'
 import type { DisplayObservation } from '@/types/observation'
@@ -154,6 +154,39 @@ function capitalizeFirst(text: string): string {
   return text.length === 0 ? text : text[0].toUpperCase() + text.slice(1)
 }
 
+export function getSpeciesTitle(species: Species) {
+  const scientificName = [species.genus, species.species]
+    .filter(Boolean)
+    .join(' ')
+
+  if (species.species_common_name) {
+    return {
+      heading: species.species_common_name,
+      headingIsScientific: false,
+      subtitle: scientificName || null,
+      subtitleIsScientific: Boolean(scientificName),
+    }
+  }
+  if (scientificName) {
+    return {
+      heading: scientificName,
+      headingIsScientific: true,
+      subtitle: null,
+      subtitleIsScientific: false,
+    }
+  }
+  // Some rows are identified only to family or order; the DB stores those in caps.
+  const lowestRank = buildTaxonomyHierarchy(species).at(-1)
+  return {
+    heading: 'Unidentified Specimen',
+    headingIsScientific: false,
+    subtitle: lowestRank
+      ? `${capitalizeFirst(lowestRank.scientificName.toLowerCase())} (${lowestRank.rank.toLowerCase()})`
+      : null,
+    subtitleIsScientific: false,
+  }
+}
+
 export const IMRS_SpeciesHero = ({
   species,
   observations,
@@ -161,6 +194,10 @@ export const IMRS_SpeciesHero = ({
   species: Species
   observations: Array<DisplayObservation>
 }) => {
+  const router = useRouter()
+  const fromIndex = useLocation({
+    select: (location) => location.state.fromSpeciesIndex === true,
+  })
   const category = species.category?.toLowerCase()
   const barClass = category
     ? (CATEGORY_BAR_CLASS[category] ?? 'bg-brand-sand')
@@ -170,12 +207,8 @@ export const IMRS_SpeciesHero = ({
   const scientificName = [species.genus, species.species]
     .filter(Boolean)
     .join(' ')
-  const hasCommonName = Boolean(species.species_common_name)
   const taxonomyRows = buildTaxonomyHierarchy(species)
-  // Some rows are identified only to family, so fall back to the lowest rank.
-  const heading = hasCommonName
-    ? species.species_common_name
-    : scientificName || taxonomyRows.at(-1)?.scientificName
+  const title = getSpeciesTitle(species)
 
   const observationWithPhoto = observations.find(
     (observation) => getPhotoUrl(observation.photos) !== null,
@@ -196,25 +229,36 @@ export const IMRS_SpeciesHero = ({
     <section
       aria-label="Species detail"
       // Pull up under the sticky header (93px / 109px) so the grid runs to the top.
-      className="@container line-grid -mt-[93px] bg-brand-cream lg:-mt-[109px]"
+      // overflow-x-clip: the polaroid bleeds past the card into the narrow tablet gutter.
+      className="line-grid -mt-[93px] overflow-x-clip bg-brand-cream lg:-mt-[109px]"
     >
-      <div className="mx-auto max-w-[1440px] px-4 pt-[133px] pb-16 sm:px-8 lg:px-16 lg:pt-[173px] lg:pb-[120px]">
+      <div className="mx-auto max-w-[1440px] px-4 pt-[133px] pb-16 sm:px-8 md:pb-22 lg:px-16 lg:pt-[173px] lg:pb-[120px]">
         <Link
           to="/species"
           search={{ category: 'all' }}
+          // From the index, pop history so its filters and scroll position return.
+          onClick={(e) => {
+            if (!fromIndex || e.metaKey || e.ctrlKey || e.shiftKey) return
+            e.preventDefault()
+            router.history.back()
+          }}
           className="mb-8 inline-flex items-center gap-2 font-brand-mono text-base text-brand-ink hover:underline"
         >
           <ArrowLeft className="size-5" aria-hidden="true" />
           Back to Species Index
         </Link>
 
-        <div className="flex flex-col gap-8 xl:flex-row xl:items-start xl:justify-between">
+        <div className="flex flex-col gap-8 xl:flex-row xl:items-start xl:justify-between xl:gap-13">
           {/* Specimen card */}
-          <div className="overflow-hidden rounded-[20px] bg-brand-light shadow-[0px_4px_10px_rgba(0,0,0,0.13)] xl:w-[867px] xl:shrink-0">
-            <div className={cn('h-[3rem]', barClass)} aria-hidden="true" />
+          <div className="@container rounded-[20px] bg-brand-light shadow-[0px_4px_10px_rgba(0,0,0,0.13)] xl:w-[867px] xl:min-w-0">
+            <div
+              className={cn('h-[3rem] rounded-t-[20px]', barClass)}
+              aria-hidden="true"
+            />
 
-            <div className="flex flex-col gap-8 p-6 sm:p-10 md:grid md:grid-cols-[1fr_320px] md:items-start lg:p-12">
-              <div className="order-1 mx-auto w-[240px] rotate-[3deg] sm:w-[280px] md:order-2 md:rotate-[6.6deg] md:justify-self-end lg:w-[320px]">
+            {/* At lg+ the 43.5cqw track is narrower than the 47cqw photo, so it bleeds into the wider page gutter. */}
+            <div className="flex flex-col gap-8 p-6 sm:p-10 lg:p-12 @2xl:grid @2xl:grid-cols-[minmax(0,1fr)_44cqw] lg:@2xl:grid-cols-[minmax(0,1fr)_43.5cqw] @2xl:items-start @2xl:pr-0">
+              <div className="order-1 mx-auto w-full max-w-[360px] rotate-[3deg] @2xl:order-2 @2xl:mx-0 @2xl:w-[44cqw] @2xl:max-w-none lg:@2xl:w-[47cqw] @2xl:rotate-[5deg]">
                 <div className="relative rounded-[2px] border-[8px] border-brand-light bg-brand-light shadow-[0_4px_4px_rgba(0,0,0,0.25)]">
                   <div className="aspect-[366/258] overflow-hidden rounded-[1px] bg-brand-sand">
                     {photoUrl ? (
@@ -235,17 +279,17 @@ export const IMRS_SpeciesHero = ({
                     )}
                   </div>
                   <img
-                    src="/imgs/tape-1.webp"
+                    src="/imgs/scotch-tape.webp"
                     alt=""
                     aria-hidden="true"
-                    width={364}
-                    height={210}
-                    className="absolute -top-5 left-1/2 w-20 -translate-x-1/2 -rotate-[8deg] drop-shadow-[0_1px_1px_rgba(0,0,0,0.15)]"
+                    width={178}
+                    height={73}
+                    className="absolute top-0 left-1/2 w-[42%] -translate-x-1/2 -translate-y-1/2 drop-shadow-[0_1px_1px_rgba(0,0,0,0.15)]"
                   />
                 </div>
               </div>
 
-              <div className="order-2 flex flex-col items-start gap-5 md:order-1">
+              <div className="order-2 flex flex-col items-start gap-5 @2xl:order-1">
                 <span
                   className={cn(
                     'rounded-full px-[10px] py-px font-brand-mono text-base tracking-[0.04em] capitalize',
@@ -258,17 +302,21 @@ export const IMRS_SpeciesHero = ({
                   {species.category ? capitalizeFirst(species.category) : ''}
                 </span>
 
-                <h1 className="font-brand-mono text-[clamp(2.5rem,1rem+4.5cqw,5rem)] leading-[1.0625] tracking-[-0.07em] break-words text-brand-ink">
-                  {!hasCommonName && scientificName ? (
-                    <IMRS_ScientificName name={scientificName} />
+                <h1 className="font-brand-mono text-[clamp(2.25rem,0.75rem+5.75cqw,4rem)] max-w-full leading-[1.0625] tracking-[-0.07em] break-words hyphens-auto text-brand-ink">
+                  {title.headingIsScientific ? (
+                    <IMRS_ScientificName name={title.heading} />
                   ) : (
-                    heading
+                    title.heading
                   )}
                 </h1>
 
-                {hasCommonName && scientificName && (
-                  <p className="font-brand-sans text-2xl tracking-[0.04em] text-brand-ink lg:text-[32px]">
-                    <IMRS_ScientificName name={scientificName} />
+                {title.subtitle && (
+                  <p className="font-brand-sans type-card-title tracking-[0.04em] text-brand-ink">
+                    {title.subtitleIsScientific ? (
+                      <IMRS_ScientificName name={title.subtitle} />
+                    ) : (
+                      title.subtitle
+                    )}
                   </p>
                 )}
 

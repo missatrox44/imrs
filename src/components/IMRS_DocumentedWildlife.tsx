@@ -28,7 +28,7 @@ export const IMRS_DocumentedWildlife = () => {
   return (
     <section
       aria-labelledby="documented-wildlife-heading"
-      className="relative overflow-hidden rounded-t-[32px] bg-brand-paper pt-16 pb-16 lg:rounded-t-[64px] lg:pt-[120px] lg:pb-[120px]"
+      className="relative overflow-hidden rounded-t-4xl bg-brand-paper py-16 md:py-22 lg:rounded-t-[64px] lg:py-[120px]"
     >
       <img
         src="/footer-texture.webp"
@@ -40,7 +40,7 @@ export const IMRS_DocumentedWildlife = () => {
       <div className="relative mx-auto flex max-w-[1044px] flex-col items-center gap-10 px-4">
         <h2
           id="documented-wildlife-heading"
-          className="text-center font-brand-sans text-4xl tracking-[0.04em] text-brand-ink lg:text-[56px] lg:leading-[63px]"
+          className="text-center font-brand-sans type-section-title tracking-[0.04em] text-brand-ink"
         >
           Documented <span className="text-brand-green">Wildlife</span>
         </h2>
@@ -51,7 +51,7 @@ export const IMRS_DocumentedWildlife = () => {
               key={card.to}
               to={card.to}
               search={card.search}
-              className="group flex flex-col gap-10 rounded-lg bg-brand-light p-6 no-underline shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition-shadow hover:shadow-[0_8px_24px_rgba(0,0,0,0.12)]"
+              className="group flex flex-col gap-10 rounded-lg bg-brand-light p-5 no-underline md:p-6 shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition-shadow hover:shadow-[0_8px_24px_rgba(0,0,0,0.12)]"
             >
               <img
                 src={card.img}
@@ -64,12 +64,10 @@ export const IMRS_DocumentedWildlife = () => {
               />
               <div className="flex flex-col gap-6 lg:max-w-[408px]">
                 <div className="flex flex-col gap-4 font-brand-sans text-brand-ink">
-                  <h3 className="text-2xl tracking-[0.04em] lg:text-[32px] lg:leading-[31px]">
+                  <h3 className="type-card-title tracking-[0.04em]">
                     {card.title}
                   </h3>
-                  <p className="text-lg leading-[31px] tracking-[0.04em] lg:text-xl">
-                    {card.body}
-                  </p>
+                  <p className="type-lead tracking-[0.04em]">{card.body}</p>
                 </div>
                 <span className="self-start rounded-pill border-[0.5px] border-brand-ink bg-brand-green px-6 py-3 font-brand-mono text-base leading-[31px] text-brand-cream transition-colors group-hover:bg-brand-green-dark">
                   {card.cta}

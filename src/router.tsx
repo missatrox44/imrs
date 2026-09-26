@@ -7,6 +7,13 @@ import { routeTree } from './routeTree.gen'
 import { NotFound } from './components/NotFound'
 import { DefaultCatchBoundary } from './components/DefaultCatchBoundary'
 
+declare module '@tanstack/react-router' {
+  interface HistoryState {
+    // Set by index → detail links so "Back to Species Index" can pop history.
+    fromSpeciesIndex?: boolean
+  }
+}
+
 // You must export a getRouter function that returns a new router instance
 // each time it is called. TanStack Start registers the router type for type
 // safety via the generated routeTree.gen.ts.

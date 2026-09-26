@@ -57,11 +57,11 @@ export const IMRS_GazetteerRolodex = () => {
           <div className="flex flex-col items-center gap-6 text-center font-brand-sans text-brand-ink">
             <h2
               id="explore-locations-heading"
-              className="text-4xl tracking-[0.04em] lg:text-[56px] lg:leading-[63px]"
+              className="type-section-title tracking-[0.04em]"
             >
               Explore <span className="text-brand-green">Locations</span>
             </h2>
-            <p className="max-w-[354px] text-xl leading-[31px] tracking-[0.04em]">
+            <p className="max-w-[354px] type-lead tracking-[0.04em]">
               Discover the diverse locations on Indio Mountains Research
               Station.
             </p>
@@ -127,7 +127,7 @@ export const IMRS_GazetteerRolodex = () => {
                       </div>
 
                       <div
-                        className={`grid gap-6 p-6 md:gap-12 md:px-[49px] md:py-[47px] ${hide}`}
+                        className={`grid gap-6 p-5 md:gap-12 md:px-[49px] md:py-[47px] ${hide}`}
                       >
                         {/* Placeholder: featured location image (no asset yet). Hidden until
                             the asset exists; to restore, also add back md:grid-cols-[220px_1fr]
@@ -137,7 +137,7 @@ export const IMRS_GazetteerRolodex = () => {
                           className="aspect-square w-full max-w-[220px] rounded-[7px] bg-[#d9d9d9]"
                         /> */}
                         <div className="flex flex-col gap-4 text-brand-ink">
-                          <h3 className="font-brand-sans text-2xl tracking-[0.04em] lg:text-[32px] lg:leading-[31px]">
+                          <h3 className="font-brand-sans type-card-title tracking-[0.04em]">
                             {entry.name}
                           </h3>
                           <ul className="font-brand-mono text-base leading-6 tracking-[0.04em] text-brand-green-dark">
@@ -163,7 +163,7 @@ export const IMRS_GazetteerRolodex = () => {
                               )}
                             </li>
                           </ul>
-                          <p className="line-clamp-4 font-brand-sans text-lg leading-[31px] tracking-[0.04em] lg:text-xl">
+                          <p className="line-clamp-4 font-brand-sans type-lead tracking-[0.04em]">
                             {entry.description}
                           </p>
                         </div>

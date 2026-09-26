@@ -14,6 +14,7 @@ export type SpeciesSearch = {
   category: Category
   view: SpeciesView
   sort: SortDirection
+  q?: string
 } & TaxonSelection
 
 export type RankOption = { value: string; count: number }

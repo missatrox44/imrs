@@ -32,8 +32,9 @@ export function ConservationBadge({
 
   return (
     <Badge
+      variant="outline"
       className={cn(
-        'rounded-full px-[10px] py-0.5 font-brand-mono text-xs font-normal',
+        'rounded-full px-[10px] py-0.5 font-brand-mono text-xs font-normal shadow',
         TIER_CLASSES[rank.tier],
         className,
       )}

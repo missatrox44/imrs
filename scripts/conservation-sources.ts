@@ -7,12 +7,12 @@
 
 // --- NatureServe Explorer (POST /api/data/speciesSearch) ---
 
-export interface NatureServeSubnation {
+interface NatureServeSubnation {
   subnationCode?: string
   roundedSRank?: string
 }
 
-export interface NatureServeNation {
+interface NatureServeNation {
   nationCode?: string
   subnations?: Array<NatureServeSubnation>
 }

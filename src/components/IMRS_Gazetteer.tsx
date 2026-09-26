@@ -163,7 +163,7 @@ export const IMRS_Gazetteer = () => {
         {hero}
 
         {/* Paper section rides 53px up over the hero (half the desktop overlap and radius). */}
-        <section className="relative -mt-[53px] overflow-clip rounded-t-[32px] bg-brand-paper px-4 pt-10 pb-16">
+        <section className="relative -mt-[53px] overflow-clip rounded-t-4xl bg-brand-paper px-4 pt-10 pb-16">
           <img
             src="/footer-texture.webp"
             alt=""

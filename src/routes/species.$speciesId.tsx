@@ -114,7 +114,7 @@ export const Route = createFileRoute('/species/$speciesId')({
 
     return {
       meta: [
-        { title: `${scientificName} | IMRS` },
+        { title: `${scientificName || 'Species Details'} | IMRS` },
         {
           name: 'description',
           content: `Explore ${scientificName}${commonSuffix} — taxonomy, recent iNaturalist observations, and field photos from Indio Mountains Research Station.`,
@@ -124,7 +124,8 @@ export const Route = createFileRoute('/species/$speciesId')({
       scripts: [
         {
           type: 'application/ld+json',
-          children: JSON.stringify(taxonLd),
+          // Escape `<` so DB/iNat strings cannot close the inline <script>.
+          children: JSON.stringify(taxonLd).replace(/</g, '\\u003c'),
         },
       ],
     }

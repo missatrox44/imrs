@@ -39,7 +39,7 @@ export const IMRS_SpeciesPublications = ({
           aria-expanded={isOpen}
           aria-controls={contentId}
           onClick={() => setIsOpen((open) => !open)}
-          className="flex w-full items-center justify-between gap-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green focus-visible:ring-offset-2 focus-visible:ring-offset-brand-paper"
+          className="flex w-full cursor-pointer items-center justify-between gap-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green focus-visible:ring-offset-2 focus-visible:ring-offset-brand-paper"
         >
           <span>
             <span className="text-brand-green">Research</span> &amp;
@@ -80,7 +80,7 @@ export const IMRS_SpeciesPublications = ({
                       rel="noopener noreferrer"
                       className={cn(
                         CARD_CLASS,
-                        'transition-colors hover:bg-brand-sand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green focus-visible:ring-offset-2 focus-visible:ring-offset-brand-paper',
+                        'group transition-colors hover:bg-brand-sand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green focus-visible:ring-offset-2 focus-visible:ring-offset-brand-paper',
                       )}
                     >
                       <span className="flex min-w-0 flex-col gap-2 sm:gap-4">
@@ -94,7 +94,7 @@ export const IMRS_SpeciesPublications = ({
                       </span>
                       <ExternalLink
                         aria-hidden="true"
-                        className="size-5 shrink-0 sm:size-6"
+                        className="size-5 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:scale-110 motion-reduce:transition-none sm:size-6"
                       />
                     </a>
                   ) : (
